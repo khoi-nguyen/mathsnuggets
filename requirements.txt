@@ -1,0 +1,17 @@
+Sphinx
+black
+flake8
+flake8-absolute-import
+flake8-bugbear
+flake8-builtins
+flake8-isort
+flake8-rst-docstrings
+flake8-use-fstring
+flask
+matplotlib
+pep8-naming
+pypandoc
+pytest-cov
+pytest-xdist
+sphinx-rtd-theme
+sympy
