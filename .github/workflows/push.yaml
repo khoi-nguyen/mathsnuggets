@@ -1,0 +1,17 @@
+name: Tests
+
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://bknguyen/mathsnuggets:latest
+        with:
+          args: "lint tests"
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests

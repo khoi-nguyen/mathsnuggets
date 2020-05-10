@@ -1,0 +1,50 @@
+{
+  "name": "mathsnuggets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.html",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Khoi Nguyen",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.2",
+    "eslint": "^7.0.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "html-webpack-plugin": "^4.3.0",
+    "parcel-bundler": "^1.12.4",
+    "pug": "^2.0.4",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@shower/cli": "^0.3.0",
+    "@shower/core": "^3.0.0",
+    "@shower/ribbon": "^3.3.0",
+    "@shower/shower": "^3.0.0",
+    "animate.css": "^4.1.0",
+    "bootstrap": "^4.5.0",
+    "bulma": "^0.8.2",
+    "eagle.js": "^0.6.1",
+    "fuse.js": "^6.0.0",
+    "jquery": "^3.5.1",
+    "katex": "^0.11.1",
+    "popper.js": "^1.16.1",
+    "typeface-fira-sans": "0.0.75",
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4",
+    "vuedraggable": "^2.23.2"
+  }
+}

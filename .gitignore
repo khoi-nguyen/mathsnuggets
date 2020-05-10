@@ -1,0 +1,10 @@
+.cache
+.coverage
+__pycache__/
+coverage.xml
+dist/
+docs/build/
+docs/source/apidoc
+env/
+htmlcov/
+node_modules/
