@@ -135,8 +135,8 @@ def computed(*args, **kwargs):
     return decorator
 
 
-class RealNumber(Field):
-    """Real number field"""
+class Expression(Field):
+    """Mathematical expression"""
 
     # TODO: Remove latex
     latex = True

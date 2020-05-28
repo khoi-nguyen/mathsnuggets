@@ -13,10 +13,10 @@ from mathsnuggets.core import fields, form
 class Plot(form.Form):
     """Plot functions"""
 
-    function = fields.RealNumber("Function")
-    x = fields.RealNumber("Variable", default="x")
-    x_min = fields.RealNumber("x min", default="-10")
-    x_max = fields.RealNumber("x max", default="10")
+    function = fields.Expression("Function")
+    x = fields.Expression("Variable", default="x")
+    x_min = fields.Expression("x min", default="-10")
+    x_max = fields.Expression("x max", default="10")
 
     template = """
         Plot `function` for `x` between `x_min` and `x_max`

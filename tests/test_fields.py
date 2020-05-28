@@ -7,7 +7,7 @@ from mathsnuggets.core import fields, form
 class Foo(form.Form):
     field = fields.Field("Field", desc="description")
     equation = fields.Equation("Equation")
-    real = fields.RealNumber("Real number")
+    real = fields.Expression("Real number")
     markdown = fields.Markdown("Markdown")
 
     @fields.constraint("Contraint", default=True)
