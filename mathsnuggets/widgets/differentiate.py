@@ -7,13 +7,13 @@ class Differentiate(form.Form):
     """Differentiate"""
 
     template = """
-        Differentiate `function` with respect to `x` `differentiate`
+        Differentiate `function` with respect to `x` `derivative`
     """
 
     function = fields.Expression("Function")
     x = fields.Expression("x", default="x")
 
-    @fields.computed("Differentiate")
-    def differentiate(self):
+    @fields.computed("Derivative")
+    def derivative(self):
         derivative = sympy.Derivative(self.function, self.x)
         return sympy.Eq(derivative, derivative.doit())
