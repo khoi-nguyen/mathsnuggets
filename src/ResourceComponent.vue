@@ -30,6 +30,7 @@ div
             span Add
         Generator(
           :fields.sync="fields"
+          v-if="(constraints || []).length"
           @button-click="formValidate(true)"
         )
     div.column.is-size-3
