@@ -41,7 +41,7 @@ lint: env node_modules
 	@npx eslint --fix --ignore-path .gitignore src/*
 
 node_modules: package.json
-	npm install
+	@npm install
 
 precommit:
 	@$(ENV) isort -c --skip env
