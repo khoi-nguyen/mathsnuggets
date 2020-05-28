@@ -10,3 +10,8 @@ jobs:
       - uses: docker://bknguyen/mathsnuggets:latest
         with:
           args: "lint tests"
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
