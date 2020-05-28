@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+div.widget-container
   div.columns
     div.widget-col.column.is-narrow(
       :class="edit ? '' : 'hidden'"
@@ -94,9 +94,6 @@ export default {
       getComponentFields(type, function (data) {
         this.$emit('update:fields', data)
       }.bind(this))
-    },
-    toggleModal () {
-      this.$refs.modal.classList.toggle('is-active')
     }
   },
   components: {
@@ -108,6 +105,9 @@ export default {
 </script>
 
 <style scoped>
+.widget-container {
+  padding: 0 10px;
+}
 .widget-col {
   border-left: lightgray 10px solid;
 }
