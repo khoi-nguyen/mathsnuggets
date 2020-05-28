@@ -88,6 +88,7 @@ export default {
       validateField(this.type, { value: value }, data => {
         this.$emit('update:html', data.sanitized)
         this.$emit('update:value', data.value)
+        this.valid = data.valid
         if (validateForm) {
           this.$nextTick(() => { this.$emit('form-validate') })
         }
