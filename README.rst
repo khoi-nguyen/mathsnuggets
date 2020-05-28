@@ -12,7 +12,7 @@ MathsNuggets
 .. image:: https://camo.githubusercontent.com/ec385922fa349d9c349f34b7f3bf311843e35ba8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d47504c76332d626c75652e737667
 
 Slideshow builder for mathematics teachers with automatic solving
-and exercise generator.
+and an exercise generator.
 
 Try it
 ======
