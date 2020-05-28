@@ -109,7 +109,7 @@ export default {
 
 <style scoped>
 .widget-col {
-  border-left: lightgray 20px solid;
+  border-left: lightgray 10px solid;
 }
 .hidden {
   width: 1px;
