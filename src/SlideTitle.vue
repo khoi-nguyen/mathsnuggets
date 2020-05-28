@@ -1,10 +1,9 @@
 <template lang="pug">
 div
-  h2
+  h2.title
     .columns
       .column
         input(
-          autofocus
           placeholder="Slide Title"
           :value="value"
           @click="$event.target.select()"
@@ -41,6 +40,7 @@ h2 input, h2 input:focus {
   border: 0 !important;
   color: inherit;
   font-family: inherit;
+  font-size: inherit;
   padding-left: 0.4em;
   text-align: left;
   width: 100%;
@@ -50,7 +50,7 @@ div h2 {
   background-color: #213332;
   color: #ebf0ef;
   font-family: "Fira Sans";
-  font-size: 1.4em;
+  font-size: 3em;
   margin-bottom: 0.5em;
   padding: 0.1em;
 }

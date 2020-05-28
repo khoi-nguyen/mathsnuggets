@@ -28,7 +28,7 @@ env/bin/activate: requirements.txt
 	@touch env/bin/activate
 
 frontend: node_modules
-	npx parcel watch src/index.html --no-source-maps
+	@npx parcel watch src/index.html
 
 hooks:
 	@echo "make precommit" > .git/hooks/pre-commit
