@@ -1,16 +1,24 @@
 <template lang="pug">
 div
   SlideTitle(:value="title" @update:value="$emit('update:title', $event)")
-  draggable(
-    v-model="localComponents"
+  .columns
+    div.column(v-for="i in [0, 1]")
+      draggable(v-model="localComponents[i]")
+        ResourceComponent(
+          v-for="(component, index) in localComponents[i]"
+          :type.sync="component.type"
+          :fields.sync="component.fields"
+          @add-component="addComponent(component, i, index)"
+          @delete="localComponents[i].splice(index, 1)"
+        )
+  button.button.is-success.is-outlined(
+    v-if="colsCount != 2"
+    tabindex="-1"
+    @click="localComponents.push([{type: '', fields: []}])"
   )
-    ResourceComponent(
-      v-for="(component, index) in localComponents"
-      :type.sync="component.type"
-      :fields.sync="component.fields"
-      @add-component="addComponent(component, index)"
-      @delete="localComponents.splice(index, 1)"
-    )
+    span.icon
+      i.fas.fa-plus-circle
+    span Add column
 </template>
 
 <script>
@@ -23,14 +31,19 @@ export default {
     title: String,
     components: Array
   },
+  computed: {
+    colsCount () {
+      return (this.localComponents || []).length
+    }
+  },
   data () {
     return {
       localComponents: this.components || []
     }
   },
   methods: {
-    addComponent (component, position) {
-      this.localComponents.splice(position + 1, 0, JSON.parse(JSON.stringify(component)))
+    addComponent (component, col, position) {
+      this.localComponents[col].splice(position + 1, 0, JSON.parse(JSON.stringify(component)))
     }
   },
   watch: {

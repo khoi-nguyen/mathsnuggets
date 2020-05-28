@@ -22,11 +22,11 @@ export default {
   data () {
     return {
       emptySlide: [
-        { title: '', components: [{ type: '', fields: [] }] }
+        { title: '', components: [[{ type: '', fields: [] }]] }
       ],
       data: [
-        { title: 'Your first slide', components: [{ type: '', fields: [] }] },
-        { title: 'Your second slide', components: [{ type: '', fields: [] }] }
+        { title: 'Your first slide', components: [[{ type: '', fields: [] }]] },
+        { title: 'Your second slide', components: [[{ type: '', fields: [] }]] }
       ]
     }
   },
