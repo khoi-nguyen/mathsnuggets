@@ -29,6 +29,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "bulma": "^0.8.2",
     "katex": "^0.11.1",
+    "moment": "^2.26.0",
     "reveal.js": "3.9.1",
     "typeface-fira-sans": "0.0.75",
     "vue": "^2.6.11",
