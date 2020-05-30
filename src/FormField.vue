@@ -10,10 +10,9 @@ span
     :value="value"
     @dblclick="$event.target.select()"
     @focus="valid = false"
-    @keydown.stop=""
-    @keydown.enter="keyboardEvent"
-    @keydown.tab="keyboardEvent"
+    @keydown.enter="blur"
     @input="$emit('update:value', $event.target.value)"
+    @blur="blur"
   )
   span(
     v-html="renderedHtml"
@@ -79,7 +78,7 @@ export default {
     }
   },
   methods: {
-    keyboardEvent (ev) {
+    blur (ev) {
       if (ev.target.value) {
         this.validate(ev.target.value, ev.key === 'Enter')
       }
