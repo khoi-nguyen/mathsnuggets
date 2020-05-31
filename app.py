@@ -2,8 +2,11 @@
 BACK-END
 ========
 """
+import json
 
+import bson.json_util
 import flask
+import pymongo
 
 from mathsnuggets import widgets
 from mathsnuggets.core import fields, form
@@ -19,6 +22,14 @@ def form_patch(form, constraint):
         for (name, field) in form.export().items()
         if constraint(field)
     }
+
+
+@app.route("/_slideshow")
+def slideshow():
+    client = pymongo.MongoClient(port=27017)
+    col = client.mathsnuggets.slideshows
+    document = bson.json_util.dumps(col.find_one())
+    return flask.jsonify(json.loads(document))
 
 
 @app.route("/_components")

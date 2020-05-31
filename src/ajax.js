@@ -2,6 +2,10 @@ export function getComponentList (callback) {
   fetch('/_components', { method: 'GET' }).then(r => r.json()).then(callback)
 }
 
+export function getSlideShow (callback) {
+  fetch('/_slideshow', { method: 'GET' }).then(r => r.json()).then(callback)
+}
+
 export function getComponentFields (path, callback) {
   fetch('/_form/' + path, { method: 'GET' }).then(r => r.json()).then(callback)
 }

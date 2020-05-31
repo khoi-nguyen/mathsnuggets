@@ -2,16 +2,18 @@
 div.reveal
   div.slides
     section(
-      v-for="slideData in data"
+      v-for="slide in data"
     )
       SlideEditor(
-        :title.sync="slideData.title"
-        :components.sync="slideData.components"
+        :id="id"
+        :title.sync="slide.title"
+        :components.sync="slide.widgets"
       )
 </template>
 
 <script>
 import Reveal from 'reveal.js/js/reveal'
+import { getSlideShow } from './ajax'
 import 'reveal.js/css/reveal.css'
 import 'bulma/css/bulma.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -25,14 +27,11 @@ export default {
     width: String
   },
   data () {
+    const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
-      emptySlide: [
-        { title: '', components: [[{ type: '', fields: [] }]] }
-      ],
-      data: [
-        { title: 'Your first slide', components: [[{ type: '', fields: [] }]] },
-        { title: 'Your second slide', components: [[{ type: '', fields: [] }]] }
-      ]
+      id: {},
+      emptySlide: emptySlide,
+      data: [emptySlide]
     }
   },
   mounted () {
@@ -44,6 +43,10 @@ export default {
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
+    getSlideShow(function (data) {
+      this.id = data._id
+      this.data = data.slides
+    }.bind(this))
   },
   components: {
     SlideEditor
