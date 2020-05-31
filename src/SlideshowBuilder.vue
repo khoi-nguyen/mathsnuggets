@@ -45,6 +45,12 @@ export default {
 }
 </script>
 
+<style>
+body, html {
+  overflow: hidden;
+}
+</style>
+
 <style scoped>
 .slides section {
   padding: 0;

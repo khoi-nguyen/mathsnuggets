@@ -10,10 +10,9 @@ span
     :value="value"
     @dblclick="$event.target.select()"
     @focus="valid = false"
-    @keydown.stop=""
-    @keydown.enter="keyboardEvent"
-    @keydown.tab="keyboardEvent"
+    @keydown.enter="blur"
     @input="$emit('update:value', $event.target.value)"
+    @blur="blur"
   )
   span(
     v-html="renderedHtml"
@@ -45,6 +44,7 @@ export default {
     after: String,
     before: String,
     computed: Boolean,
+    default: String,
     html: String,
     label: String,
     latex: Boolean,
@@ -74,12 +74,13 @@ export default {
     }
   },
   mounted () {
-    if (this.value && !this.computed) {
-      this.validate(this.value)
+    const value = this.value ? this.value : this.default
+    if (value && !this.computed) {
+      this.validate(value)
     }
   },
   methods: {
-    keyboardEvent (ev) {
+    blur (ev) {
       if (ev.target.value) {
         this.validate(ev.target.value, ev.key === 'Enter')
       }

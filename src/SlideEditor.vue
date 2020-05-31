@@ -2,7 +2,7 @@
 div
   SlideTitle(:value="title" @update:value="$emit('update:title', $event)")
   .columns
-    div.column(v-for="i in [0, 1]")
+    div.column(v-for="i in [0, 1]" v-if="i < colsCount")
       draggable(v-model="localComponents[i]")
         ResourceComponent(
           v-for="(component, index) in localComponents[i]"

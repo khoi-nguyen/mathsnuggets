@@ -3,7 +3,7 @@ div
   h2.title
     .columns
       .column
-        input(
+        input.slide-title(
           placeholder="Slide Title"
           :value="value"
           @click="$event.target.select()"
@@ -11,11 +11,13 @@ div
           @input="$emit('update:value', $event.target.value)"
         )
       .column.is-narrow.field.date
-        div {{ new Date().toLocaleString('en-GB', dateOptions) }}
+        div {{ today }}
+        div {{ time }}
 </template>
 
 <script>
 import 'typeface-fira-sans'
+var moment = require('moment')
 
 export default {
   props: {
@@ -23,12 +25,18 @@ export default {
   },
   data () {
     return {
-      dateOptions: {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }
+      today: moment().format('dddd Do MMM'),
+      interval: false,
+      time: moment().format('hh:mm a')
+    }
+  },
+  mounted () {
+    this.updateTime()
+    this.interval = setInterval(this.updateTime, 1000)
+  },
+  methods: {
+    updateTime () {
+      this.time = moment().format('h.mma')
     }
   }
 }
@@ -55,7 +63,7 @@ div h2 {
   padding: 0.1em;
 }
 .date {
-  font-family: "Fira Sans Thin";
+  font-family: "Fira Sans Thin", "Fira Sans";
   font-size: 0.5em;
   text-align: right;
   margin-right: 0.4em;

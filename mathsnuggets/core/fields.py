@@ -64,9 +64,6 @@ class Field:
         if invalid_keys:
             raise KeyError(f"Invalid kwargs for {repr(self)}: {repr(invalid_keys)}")
         for key, val in kwargs.items():
-            # TODO: Get rid of this
-            if key == "default":
-                key = "value"
             setattr(self, key, val)
         if hasattr(self, "construct"):
             self.construct(*args, **kwargs)
