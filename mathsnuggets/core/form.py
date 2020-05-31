@@ -30,8 +30,8 @@ class Form:
     def __init__(self):
         """Fill in the form with default values"""
         for name, field in self.export(False).items():
-            if "value" in field:
-                setattr(self, name, field["value"])
+            if "default" in field:
+                setattr(self, name, field["default"])
 
     def generate(self):
         """Generate an exercise

@@ -44,6 +44,7 @@ export default {
     after: String,
     before: String,
     computed: Boolean,
+    default: String,
     html: String,
     label: String,
     latex: Boolean,
@@ -73,8 +74,9 @@ export default {
     }
   },
   mounted () {
-    if (this.value && !this.computed) {
-      this.validate(this.value)
+    const value = this.value ? this.value : this.default
+    if (value && !this.computed) {
+      this.validate(value)
     }
   },
   methods: {

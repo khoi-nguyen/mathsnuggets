@@ -3,7 +3,7 @@ div
   h2.title
     .columns
       .column
-        input(
+        input.slide-title(
           placeholder="Slide Title"
           :value="value"
           @click="$event.target.select()"
