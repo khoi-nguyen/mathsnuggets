@@ -11,7 +11,7 @@ div
         a.navbar-item
           i.fas.fa-home
           span Home
-        a.navbar-item
+        router-link(to="/slideshow_builder").navbar-item
           i.fas.fa-chalkboard-teacher
           span Lesson Builder
         div.navbar-item.has-dropdown.is-hoverable
@@ -32,13 +32,9 @@ div
 </template>
 
 <script>
-import SlideshowBuilder from './SlideshowBuilder'
 import 'bulma/css/bulma.css'
 
 export default {
-  name: 'HomePage',
-  components: {
-    SlideshowBuilder
-  }
+  name: 'HomePage'
 }
 </script>
