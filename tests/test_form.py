@@ -32,19 +32,16 @@ def test_validate():
     form.required = "Hello"
 
     assert form.required_2 is None
-    assert not form._is_valid()
+    assert not form.valid
 
     form.required_2 = "Hello"
-    assert not form._is_valid()
+    assert not form.valid
 
     form.equation = "x^2"
-    assert form._is_valid()
+    assert form.valid
 
 
 def test_export():
-    assert form._is_valid()
-    export = form.export(True)
+    assert form.valid
+    export = dict(form._fields())
     assert "_private" not in export.keys()
-
-    export = form.export(True, True)
-    assert len(export) == 1

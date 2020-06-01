@@ -24,7 +24,7 @@ class Plot(form.Form):
         `plot`
     """
 
-    @fields.computed("Plot", latex=False)
+    @fields.computed("Plot", field=fields.Html)
     def plot(self):
         """Use SymPy/matplotlib to generate an SVG graph"""
         data = (self.x, self.x_min, self.x_max)

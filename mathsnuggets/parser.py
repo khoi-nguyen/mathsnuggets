@@ -14,13 +14,11 @@ from sympy.parsing.sympy_parser import (
     standard_transformations,
 )
 
-from mathsnuggets.transforms import make_real
-
 
 def parse(expr, evaluate=False):
     """SymPy expression parser"""
     if isinstance(expr, Basic):
-        return make_real(expr)
+        return expr
     if isinstance(expr, bool) or not isinstance(expr, (int, float, str)):
         raise TypeError(
             f"{repr(expr)} is not an int, float or string but of type {type(expr)}"
@@ -44,4 +42,4 @@ def parse(expr, evaluate=False):
         result = parse_expr(expr, transformations=transformations, evaluate=evaluate)
     except (SyntaxError, TokenError, RecursionError):
         raise ValueError(f"{repr(expr)} is not a valid mathematical expression.")
-    return make_real(result)
+    return result

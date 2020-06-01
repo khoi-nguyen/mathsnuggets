@@ -16,7 +16,7 @@ span
   )
   span(
     v-html="renderedHtml"
-    v-if="valid && !computed"
+    v-if="valid && !computed && renderedHtml"
     @click="$refs.input.select()"
   )
   div.has-text-centered(
@@ -47,7 +47,7 @@ export default {
     default: String,
     html: String,
     label: String,
-    latex: Boolean,
+    latex: String,
     showComputed: Boolean,
     type: String,
     value: String
@@ -59,8 +59,8 @@ export default {
   },
   computed: {
     renderedHtml () {
-      if (this.latex && this.html) {
-        return katex.renderToString(this.html, { displayMode: this.computed })
+      if (this.latex) {
+        return katex.renderToString(this.latex, { displayMode: this.computed })
       }
       return this.html
     },
@@ -87,8 +87,11 @@ export default {
     },
     validate (value, validateForm) {
       validateField(this.type, { value: value }, data => {
-        this.$emit('update:html', data.sanitized)
-        this.$emit('update:value', data.value)
+        for (const prop in data) {
+          if (prop !== 'valid') {
+            this.$emit('update:' + prop, data[prop])
+          }
+        }
         this.valid = data.valid
         if (validateForm) {
           this.$nextTick(() => { this.$emit('form-validate') })

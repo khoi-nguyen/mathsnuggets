@@ -16,14 +16,6 @@ widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
 
 
-def form_patch(form, constraint):
-    return {
-        name: {key: field[key] for key in field.keys() if key in ["value", "html"]}
-        for (name, field) in form.export().items()
-        if constraint(field)
-    }
-
-
 @app.route("/_slideshow")
 def slideshow():
     client = pymongo.MongoClient(port=27017)
@@ -69,17 +61,14 @@ def form_route(form, generator=False):
                 )
         if generator:
             form.generate()
-
-            def constraint(field):
-                return not field.get("random") and not field.get("constraint")
-
+            data = form._fields(
+                lambda f: not field.get("random") and not f.get("constraint")
+            )
         else:
-
-            def constraint(field):
-                return field.get("computed")
-
-        return flask.jsonify(form_patch(form, constraint))
-    data = form.export(False, True)
+            data = form._fields(lambda f: f.get("computed"))
+        return flask.jsonify(dict(data))
+    data = [f for n, f in form._fields(lambda f: "order" in f)]
+    data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)
 
 

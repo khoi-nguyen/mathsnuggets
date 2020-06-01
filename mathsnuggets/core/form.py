@@ -3,12 +3,9 @@
 Form
 ====
 """
-import re
-from textwrap import dedent
+import textwrap
 
-import numpy as np
-from pypandoc import convert_text
-from sympy import latex
+import numpy
 
 from mathsnuggets.core import fields
 from mathsnuggets.parser import parse
@@ -29,9 +26,8 @@ class Form:
 
     def __init__(self):
         """Fill in the form with default values"""
-        for name, field in self.export(False).items():
-            if "default" in field:
-                setattr(self, name, field["default"])
+        for attr, field in self._fields(lambda f: "default" in f):
+            setattr(self, attr, field["default"])
 
     def generate(self):
         """Generate an exercise
@@ -46,97 +42,65 @@ class Form:
         - Stop the search for appropriate numbers after some time
         - Check for contradictory constraints
         """
-        fields = self.export(False)
-        constraints = [n for (n, f) in fields.items() if f.get("constraint")]
-        random = [
-            n for (n, f) in fields.items() if f.get("random") and not f.get("is_list")
-        ]
-        random_list = [n for (n, f) in fields.items() if f.get("is_list")]
+        constraints = self._fields(lambda f: f.get("constraint"))
+        random = list(self._fields(lambda f: f.get("random")))
         while True:
-            # TODO: Improve this
-            if random_list:
-                self._random = {
-                    random_list[0]: [int(n) for n in np.random.randint(10, 20, size=15)]
-                }
-            else:
-                values = np.random.randint(-10, 10, len(random))
-                values = [parse(str(n)) for n in values]
-                self._random = dict(zip(random, values))
-            if all([getattr(self, c) for c in constraints]):
+            values = numpy.random.randint(-10, 10, len(random))
+            values = [parse(str(n)) for n in values]
+            self._random = dict(zip(random, values))
+            if all([getattr(self, c) for c, _ in constraints]):
                 break
         if hasattr(self, "generator") and callable(self.generator):
             self.generator()
 
-    def _is_valid(self):
+    @property
+    def valid(self):
+        for attr, _ in self._fields(lambda f: f.get("required")):
+            if getattr(self, attr) is None:
+                return False
         if hasattr(self, "validate"):
             try:
                 self.validate()
-            except (AttributeError, ValueError, TypeError):
+            except (ValueError, AttributeError, TypeError, AssertionError):
                 return False
-        required = [n for (n, f) in self.export(False).items() if f.get("required")]
-        missing = [f for f in required if getattr(self, f) is None]
-        return not any(missing)
+        return True
 
-    def _is_field(self, name, cls=fields.Field):
-        return isinstance(getattr(type(self), name), cls)
+    def __iter__(self):
+        for attr in dir(self):
+            try:
+                assert not attr.startswith("_")
+                value = getattr(self, attr)
+                yield (attr, value)
+            except (ValueError, AttributeError, TypeError, AssertionError):
+                continue
 
-    def export(self, export_values=True, use_template=False):
-        """Get a dictionary of a form's fields
-
-        This is mostly used for communication with the front-end.
-        Example of such scenarios include:
-
-        - Getting the fields' list to display in the browser.
-        - Getting the values of all *computed* fields
-          (e.g. after calling a solver).
-        - Getting the fields' values to know
-          how the generator filled the form.
-
-        Parameters
-        ----------
-        export_values : bool
-            Whether we should export the fields' values
-            (e.g. solutions and completed fields).
-        use_template: bool
-            Whether to use the form's `template`
-            to provide context about the field
-            (e.g. surrounding text).
-
-        Todo
-        ----
-        There should not be any field-specific logic in this function.
-        It should be delegated to the fields,
-        who should specify how they should be exported.
-
-        Returns
-        -------
-        dict
-            Returns the names of all the form's fields with their respective data.
-        """
-        cls = type(self)
-        fields_info = {
-            n: getattr(cls, n).export() for n in dir(self) if self._is_field(n)
-        }
-        if export_values and self._is_valid():
-            for name, field in fields_info.items():
-                value = getattr(self, name)
-                field["html"] = str(value)
-                if not isinstance(value, str):
-                    field["html"] = latex(value)
-                    field["value"] = str(value)
-        if not use_template:
-            return fields_info
-        fields_list, before = [], ""
-        template = convert_text(dedent(self.template), "html", format="md")[3:-5]
-        for part in re.split("</?code>", template):
-            if part in fields_info:
-                field = fields_info[part]
-                field["before"] = before
-                fields_list.append(field)
-            else:
-                before = part
-        if part == before:
-            fields_list[-1]["after"] = part
-        constraints = [f for f in fields_info.values() if f["type"] == "Constraint"]
-        constraints.sort(key=lambda f: f["order"])
-        return fields_list + constraints
+    def _fields(self, callback=None):
+        """Iterates through all fields satisfying 'callback'"""
+        parts = []
+        if hasattr(self, "template"):
+            parts = textwrap.dedent(self.template).split("`")
+        for attr in dir(self):
+            # Exclude non-fields and filter with callback
+            if not isinstance(getattr(type(self), attr), fields.Field):
+                continue
+            field_object = getattr(type(self), attr)
+            field = dict(field_object)
+            # Add context
+            if attr in parts:
+                pos = parts.index(attr)
+                field["order"] = (pos - 1) // 2
+                field["before"] = parts[pos - 1]
+                if pos == len(parts) - 2:
+                    field["after"] = parts[-1]
+            # Add value
+            try:
+                value = getattr(self, attr)
+                assert value is not None
+                field.update(field_object.export(value))
+            except (ValueError, AttributeError, TypeError, AssertionError):
+                pass
+            # Check if callback is satisfied
+            # Callback may use context, so this is done last
+            if callable(callback) and not callback(field):
+                continue
+            yield (attr, field)

@@ -13,7 +13,7 @@ class Youtube(form.Form):
     url = fields.Field("URL")
     template = """`url` `video`"""
 
-    @fields.computed("Youtube Video", latex=False)
+    @fields.computed("Youtube Video", field=fields.Html)
     def video(self):
         """Get HTML code of embedded YouTube video"""
         url = self.url.replace("watch?v=", "embed/")
