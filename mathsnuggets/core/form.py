@@ -8,7 +8,7 @@ from textwrap import dedent
 
 import numpy as np
 from pypandoc import convert_text
-from sympy import Basic, latex
+from sympy import latex
 
 from mathsnuggets.core import fields
 from mathsnuggets.parser import parse
@@ -121,7 +121,7 @@ class Form:
             for name, field in fields_info.items():
                 value = getattr(self, name)
                 field["html"] = str(value)
-                if isinstance(value, Basic):
+                if not isinstance(value, str):
                     field["html"] = latex(value)
                     field["value"] = str(value)
         if not use_template:

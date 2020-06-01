@@ -2,21 +2,21 @@
 div
   nav.navbar
     div.navbar-brand
-      section.hero
-        div.hero-body
-          div.container
-            h1.title.has-text-black-bis MathsNuggets
+      a.navbar-item mathsnuggets
     div.navbar-menu
       div.navbar-start
         a.navbar-item
-          i.fas.fa-home
+          span.icon
+            i.fas.fa-home
           span Home
-        a.navbar-item
-          i.fas.fa-chalkboard-teacher
+        router-link(to="/slideshow_builder").navbar-item
+          span.icon
+            i.fas.fa-chalkboard-teacher
           span Lesson Builder
         div.navbar-item.has-dropdown.is-hoverable
           a.navbar-link
-            i.fas.fa-tools
+            span.icon
+              i.fas.fa-tools
             span Utilities
           div.navbar-dropdown
             a.navbar-item Generator
@@ -58,13 +58,18 @@ div
 </template>
 
 <script>
-import SlideshowBuilder from './SlideshowBuilder'
+import 'typeface-fira-sans'
 import 'bulma/css/bulma.css'
 
 export default {
-  name: 'HomePage',
-  components: {
-    SlideshowBuilder
-  }
+  name: 'HomePage'
 }
 </script>
+
+<style>
+.navbar-brand .navbar-item {
+  color: black;
+  font-family: "Fira Sans";
+  font-size: 1.5em;
+}
+</style>

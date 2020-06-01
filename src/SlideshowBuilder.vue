@@ -19,6 +19,11 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import SlideEditor from './SlideEditor'
 
 export default {
+  props: {
+    embedded: Boolean,
+    height: String,
+    width: String
+  },
   data () {
     return {
       emptySlide: [
@@ -33,10 +38,11 @@ export default {
   mounted () {
     Reveal.initialize({
       center: false,
-      height: '100%',
+      embedded: this.embedded,
+      height: this.height ? this.height : '100%',
       margin: 0,
       transition: 'none',
-      width: '100%'
+      width: this.width ? this.width : '100%'
     })
   },
   components: {
