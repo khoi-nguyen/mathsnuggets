@@ -4,7 +4,7 @@ nav.navbar
     a.navbar-item mathsnuggets
   div.navbar-menu
     div.navbar-start
-      a.navbar-item
+      router-link(to="/").navbar-item
         span.icon
           i.fas.fa-home
         span Home
@@ -21,7 +21,7 @@ nav.navbar
           a.navbar-item Generator
           a.navbar-item Solver
           a.navbar-item Plotter
-      a.navbar-item About us
+      router-link(to="/about").navbar-item About us
     div.navbar-end
       div.navbar-item
         div.buttons
