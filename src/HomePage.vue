@@ -29,6 +29,32 @@ div
             a.button.is-primary
               strong Signup
             a.button.is-light Log in
+  section.hero.is-primary
+    div.hero-body
+      div.container
+        h1.title.has-text-black-bis Welcome to MathsNuggets!
+        h2.subtitle.has-text-grey-darker.
+          An ingenious website designed to facilitate teaching and learning maths.
+
+    .card
+  .card-image
+  .card-content
+    .media
+      .media-left
+      .media-content
+        span.card-header-icon.is-large.is-left
+          i.fas.fa-chalkboard-teacher.fa-3x
+        p.card-header-title.is-4 Lesson Builder
+    .content
+      | Construct and save your own
+      br
+      | slideshow lessons using:
+      br
+      | Generator, Solver and Plotter
+      br
+      | and all other basic slideshow
+      br
+      | creating tools.
 </template>
 
 <script>
