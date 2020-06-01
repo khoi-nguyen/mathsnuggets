@@ -4,8 +4,9 @@ Fields
 ======
 """
 import numpy as np
+import sympy
 from pypandoc import convert_text
-from sympy import Basic, Eq, Tuple, latex
+from sympy import Eq, Tuple, latex
 
 from mathsnuggets.parser import parse
 
@@ -100,7 +101,7 @@ class Field:
             sanitized = value
             if hasattr(self, "sanitize"):
                 sanitized = self.sanitize(value)
-            if isinstance(sanitized, (Basic, Eq)):
+            if not isinstance(sanitized, str):
                 sanitized = latex(sanitized)
             return {
                 "sanitized": sanitized,
@@ -141,6 +142,11 @@ class Expression(Field):
     def sanitize(self, expr):
         """Transform expr into a real mathematical expression"""
         return parse(expr)
+
+
+class Matrix(Expression):
+    def sanitize(self, expr):
+        return sympy.Matrix(sympy.parse_expr(expr))
 
 
 class Equation(Field):
