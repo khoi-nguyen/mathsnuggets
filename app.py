@@ -48,25 +48,12 @@ def validate_field(field):
 def form_route(form, generator=False):
     if form not in widget_names:
         flask.abort(404)
-    form = getattr(widgets, form)()
-    # Getting fieds data and filling the form if necessary
-    if flask.request.get_json() or generator:
-        for field, value in flask.request.get_json().items():
-            try:
-                setattr(form, field, value)
-            except AttributeError:
-                raise AttributeError(
-                    f"Value {repr(value)} invalid "
-                    + f"for field {repr(field)} in {form.__doc__}",
-                )
-        if generator:
-            form.generate()
-            data = form._fields(
-                lambda f: not field.get("random") and not f.get("constraint")
-            )
-        else:
-            data = form._fields(lambda f: f.get("computed"))
-        return flask.jsonify(dict(data))
+    post = flask.request.get_json()
+    form = getattr(widgets, form)(**(post if post else {}))
+    if generator:
+        form.generate()
+    if post:
+        return flask.jsonify(dict(form._fields()))
     data = [f for n, f in form._fields(lambda f: "order" in f)]
     data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)

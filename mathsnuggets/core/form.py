@@ -24,10 +24,13 @@ class Form:
 
     _random = {}
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Fill in the form with default values"""
-        for attr, field in self._fields(lambda f: "default" in f):
-            setattr(self, attr, field["default"])
+        for attr, val in iter(self):
+            if isinstance(val, dict) and "default" in val:
+                setattr(self, attr, val["default"])
+            if attr in kwargs:
+                setattr(self, attr, kwargs[attr])
 
     def generate(self):
         """Generate an exercise
@@ -68,8 +71,8 @@ class Form:
     def __iter__(self):
         for attr in dir(self):
             try:
-                assert not attr.startswith("_")
                 value = getattr(self, attr)
+                assert not attr.startswith("_") and not callable(value)
                 yield (attr, value)
             except (ValueError, AttributeError, TypeError, AssertionError):
                 continue
@@ -80,7 +83,7 @@ class Form:
         if hasattr(self, "template"):
             parts = textwrap.dedent(self.template).split("`")
         for attr in dir(self):
-            # Exclude non-fields and filter with callback
+            # Exclude non-fields
             if not isinstance(getattr(type(self), attr), fields.Field):
                 continue
             field_object = getattr(type(self), attr)
