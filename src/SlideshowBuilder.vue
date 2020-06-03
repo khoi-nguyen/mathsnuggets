@@ -13,7 +13,6 @@ div.reveal
 
 <script>
 import Reveal from 'reveal.js/js/reveal'
-import { getSlideShow } from './ajax'
 import 'reveal.js/css/reveal.css'
 import 'bulma/css/bulma.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -43,10 +42,6 @@ export default {
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
-    getSlideShow(function (data) {
-      this.id = data._id
-      this.data = data.slides
-    }.bind(this))
   },
   components: {
     SlideEditor

@@ -2,11 +2,7 @@
 BACK-END
 ========
 """
-import json
-
-import bson.json_util
 import flask
-import pymongo
 
 from mathsnuggets import widgets
 from mathsnuggets.core import fields, form
@@ -14,14 +10,6 @@ from mathsnuggets.core import fields, form
 app = flask.Flask(__name__)
 widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
-
-
-@app.route("/_slideshow")
-def slideshow():
-    client = pymongo.MongoClient(port=27017)
-    col = client.mathsnuggets.slideshows
-    document = bson.json_util.dumps(col.find_one())
-    return flask.jsonify(json.loads(document))
 
 
 @app.route("/_components")

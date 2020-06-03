@@ -7,7 +7,7 @@ import textwrap
 
 import numpy
 
-from mathsnuggets.core import fields
+from mathsnuggets.core import db, fields
 from mathsnuggets.parser import parse
 
 
@@ -107,3 +107,9 @@ class Form:
             if callable(callback) and not callback(field):
                 continue
             yield (attr, field)
+
+    def _save(self):
+        if hasattr(self, "_id") and hasattr(self, "_position"):
+            db.slideshows.update_one(
+                {"_id": self._id}, {"$set": {self._position: dict(iter(self))}}
+            )
