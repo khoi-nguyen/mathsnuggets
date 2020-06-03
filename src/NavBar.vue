@@ -21,7 +21,10 @@ nav.navbar
           a.navbar-item Generator
           a.navbar-item Solver
           a.navbar-item Plotter
-      router-link(to="/about").navbar-item About us
+      router-link(to="/about").navbar-item
+          span.icon
+            i.fas.fa-info
+          span About us
     div.navbar-end
       div.navbar-item
         div.buttons
