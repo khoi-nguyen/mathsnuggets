@@ -26,9 +26,13 @@ def test_widgets():
 def test_field_validation():
     response = post("/api/fields/Equation", {"name": "eq", "value": "x^2"})
     data = flask.json.loads(response.get_data(as_text=True))
-
     assert response.status_code == 200
     assert data["valid"]
+
+    response = post("/api/fields/Equation", {"name": "eq", "value": "/"})
+    data = flask.json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert not data["valid"]
 
 
 def test_widget():
