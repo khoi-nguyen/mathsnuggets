@@ -38,6 +38,7 @@ div.widget-container
         FormField(
           v-bind="field"
           :value.sync="field.value"
+          :latex.sync="field.latex"
           :html.sync="field.html"
           :show-computed.sync="field.showComputed"
           @form-validate="formValidate"
@@ -80,14 +81,14 @@ export default {
         }
       }
       var path = useGenerator ? '/generator' : ''
-      validateForm(this.type + path, formData, data => {
+      validateForm(this.type + path, formData, function (data) {
         for (var name in data) {
           var field = this.fields.filter((f) => (f.name === name))[0]
           var position = this.fields.indexOf(field)
           field = Object.assign(field, data[name])
           this.$set(this.fields, position, field)
         }
-      })
+      }.bind(this))
     },
     loadFields (type) {
       this.$emit('update:type', type)

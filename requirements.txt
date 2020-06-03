@@ -10,6 +10,7 @@ flake8-use-fstring
 flask
 matplotlib
 pep8-naming
+pymongo
 pypandoc
 pytest-cov
 pytest-xdist

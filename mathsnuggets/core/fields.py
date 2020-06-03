@@ -3,10 +3,8 @@
 Fields
 ======
 """
-import numpy as np
+import pypandoc
 import sympy
-from pypandoc import convert_text
-from sympy import Eq, Tuple, latex
 
 from mathsnuggets.parser import parse
 
@@ -48,9 +46,6 @@ class Field:
         "validate",
     ]
 
-    # Remove
-    latex = False
-
     def __get__(self, instance, owner):
         if instance is None:
             return self
@@ -70,44 +65,32 @@ class Field:
             self.construct(*args, **kwargs)
 
     def __set__(self, instance, value):
-        if hasattr(self, "sanitize"):
-            try:
-                value = self.sanitize(value)
-            except (TypeError, ValueError):
-                raise AttributeError(
-                    f"{repr(self.name)} attribute cannot be set to {repr(value)}"
-                )
+        try:
+            value = self.sanitize(value)
+        except (TypeError, ValueError):
+            raise AttributeError(
+                f"{repr(self.name)} attribute cannot be set to {repr(value)}"
+            )
         instance.__dict__[self.name] = value
 
     def __set_name__(self, owner, name):
         self.name = name
 
-    def export(self):
+    def __iter__(self):
         """Export field attributes"""
-        export = {}
         for attr in dir(self):
             value = getattr(self, attr)
             if not attr.startswith("_") and not callable(value):
-                export[attr] = value
-        # TODO: Get rid of order
-        if "order" not in export:
-            export["order"] = export["name"]
-        return export
+                yield (attr, value)
+
+    def sanitize(self, value):
+        return value
 
     def validate(self, value):
         """Determines whether value is appropriate for the field"""
         try:
-            # TODO: Rewrite
-            sanitized = value
-            if hasattr(self, "sanitize"):
-                sanitized = self.sanitize(value)
-            if not isinstance(sanitized, str):
-                sanitized = latex(sanitized)
-            return {
-                "sanitized": sanitized,
-                "valid": True,
-                "value": value,
-            }
+            value = self.sanitize(value)
+            return self.export(value)
         except (TypeError, ValueError) as error:
             return {
                 "valid": False,
@@ -115,18 +98,21 @@ class Field:
                 "error": str(error),
             }
 
+    def export(self, value):
+        return {"value": value, "valid": True}
+
 
 def computed(*args, **kwargs):
     """Decorator to create a Field from a method"""
 
+    field = kwargs["field"] if "field" in kwargs else Expression
+
     def decorator(function):
-        class ComputedField(Field):
+        class ComputedField(field):
             """Computed Field"""
 
             computed = True
             callback = staticmethod(function)
-            # TODO: Remove latex
-            latex = kwargs["latex"] if "latex" in kwargs else True
 
         return ComputedField(*args, **kwargs)
 
@@ -136,12 +122,12 @@ def computed(*args, **kwargs):
 class Expression(Field):
     """Mathematical expression"""
 
-    # TODO: Remove latex
-    latex = True
-
     def sanitize(self, expr):
         """Transform expr into a real mathematical expression"""
         return parse(expr)
+
+    def export(self, value):
+        return {"value": f"{value}", "latex": sympy.latex(value), "valid": True}
 
 
 class Matrix(Expression):
@@ -149,23 +135,19 @@ class Matrix(Expression):
         return sympy.Matrix(sympy.parse_expr(expr))
 
 
-class Equation(Field):
+class Equation(Expression):
     """Equation field"""
-
-    # TODO: Remove latex
-    latex = True
 
     def sanitize(self, equation):
         """Transform string to a SymPy equality or a tuple of them"""
         equation = parse(equation)
-        if equation.func == Tuple:
+        if equation.func == sympy.Tuple:
             return equation.func(*[self.sanitize(eq) for eq in equation.args])
-        if equation.func != Eq:
-            equation = Eq(equation, 0, evaluate=False)
+        if equation.func != sympy.Eq:
+            equation = sympy.Eq(equation, 0, evaluate=False)
         return equation
 
 
-# TODO: Remove random field
 class RandomNumber(Field):
     """Random Number field"""
 
@@ -193,13 +175,6 @@ class RandomNumber(Field):
         return numbers
 
 
-# TODO: Remove
-class RandomList(RandomNumber):
-    """Random Number field"""
-
-    is_list = True
-
-
 def constraint(*args, **kwargs):
     # if set to False, get -> lambda x : True
     # set_val = instance.__dict__[self.name]
@@ -223,23 +198,23 @@ def constraint(*args, **kwargs):
     return decorator
 
 
+class Html(Field):
+    def export(self, value):
+        return {"html": value, "valid": True}
+
+
 class Markdown(Field):
     """Equation field"""
 
     fmt = "{value}"
 
     def sanitize(self, value):
-        """Transform string to a SymPy equality or a tuple of them"""
-        return convert_text(self.fmt.format(value=value), "html", format="md")
+        """Transform markdown to HTML"""
+        return pypandoc.convert_text(self.fmt.format(value=value), "html", format="md")
 
-
-class NumberList(Field):
-
-    latex = False
-
-    def sanitize(self, value):
-        if isinstance(value, str):
-            value = [int(n) for n in value.split(",")]
-        if isinstance(value, np.ndarray):
-            value = list(value)
-        return value
+    def export(self, value):
+        return {
+            "html": value,
+            "value": pypandoc.convert_text(value, "md", format="html"),
+            "valid": True,
+        }

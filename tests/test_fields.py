@@ -1,5 +1,5 @@
 import pytest
-from sympy import Eq, I, Symbol, evaluate, oo, symbols
+import sympy
 
 from mathsnuggets.core import fields, form
 
@@ -47,49 +47,42 @@ def test_field():
 
 
 def test_realnumber_field():
-    x_real = Symbol("x", real=True)
+    x = sympy.Symbol("x")
 
-    test.real = "x"
-    assert test.real == x_real
+    with sympy.evaluate(False):
+        test.real = "x"
+        assert test.real == x
 
-    test.real = "1 / (x + 1)"
-    assert test.real == 1 / (x_real + 1)
+        test.real = "1 / (x + 1)"
+        assert test.real == 1 / (x + 1)
 
-    assert "error" in Foo.real.validate(oo)
-    assert "error" in Foo.real.validate(I)
     assert "error" not in Foo.real.validate(5)
 
     with pytest.raises(AttributeError):
         test.real = False
     with pytest.raises(AttributeError):
         test.real = "/"
-    with pytest.raises(AttributeError):
-        test.real = I
-    with pytest.raises(AttributeError):
-        test.real = oo
-    with pytest.raises(AttributeError):
-        test.real = Symbol("x", imaginary=True)
 
 
 def test_equation_field():
-    x, y = symbols("x y", real=True)
+    x, y = sympy.symbols("x y")
 
-    with evaluate(False):
+    with sympy.evaluate(False):
         test.equation = "3 * x + 5 = 4"
-        assert test.equation == Eq(3 * x + 5, 4)
+        assert test.equation == sympy.Eq(3 * x + 5, 4)
 
         test.equation = "3 * x + 5"
-        assert test.equation == Eq(3 * x + 5, 0)
+        assert test.equation == sympy.Eq(3 * x + 5, 0)
 
         test.equation = 3 * x + 5
-        assert test.equation == Eq(3 * x + 5, 0)
+        assert test.equation == sympy.Eq(3 * x + 5, 0)
 
         test.equation = "2 x + 3 y = y = x + y"
-        assert test.equation == (Eq(2 * x + 3 * y, y), Eq(y, x + y))
+        assert test.equation == (sympy.Eq(2 * x + 3 * y, y), sympy.Eq(y, x + y))
 
         # If evaluate=True, Eq(1 / x) is False
         test.equation = "1 / x"
-        assert test.equation == Eq(1 / x, 0)
+        assert test.equation == sympy.Eq(1 / x, 0)
 
     with pytest.raises(AttributeError):
         test.equation = False
