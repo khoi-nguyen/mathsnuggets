@@ -17,9 +17,11 @@ $body-weight: 300;
 $family-sans-serif: "Fira Sans", sans-serif;
 $primary: #172838;
 
+@import "~reveal.js/css/reveal.scss";
 @import "../node_modules/bulma/bulma.sass";
 
-.container {
-  line-height: 1.5;
+html, body {
+  overflow: auto;
+  overflow-x: hidden;
 }
 </style>
