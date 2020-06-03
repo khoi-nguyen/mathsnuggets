@@ -92,6 +92,5 @@ export default {
 }
 .feature, .feature .title {
   color: #414141;
-  font-weight: 300;
 }
 </style>
