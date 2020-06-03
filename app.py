@@ -12,12 +12,12 @@ widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
 
 
-@app.route("/_components")
+@app.route("/api/widgets")
 def form_list():
     return flask.jsonify(widget_data)
 
 
-@app.route("/_field/<field>", methods=["POST"])
+@app.route("/api/fields/<field>", methods=["POST"])
 def validate_field(field):
     # TODO: error handling
     field_cls = getattr(fields, field)
@@ -31,8 +31,8 @@ def validate_field(field):
     return flask.jsonify(DummyForm.field.validate(value))
 
 
-@app.route("/_form/<path:form>", methods=["GET", "POST"])
-@app.route("/_form/<path:form>/<generator>", methods=["GET", "POST"])
+@app.route("/api/widgets/<path:form>", methods=["GET", "POST"])
+@app.route("/api/widgets/<path:form>/<generator>", methods=["GET", "POST"])
 def form_route(form, generator=False):
     if form not in widget_names:
         flask.abort(404)
