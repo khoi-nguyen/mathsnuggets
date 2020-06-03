@@ -14,7 +14,6 @@ div.reveal
 <script>
 import Reveal from 'reveal.js/js/reveal'
 import 'reveal.js/css/reveal.css'
-import 'bulma/css/bulma.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
 
@@ -58,7 +57,7 @@ body, html {
 <style scoped>
 .slides section {
   padding: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 400;
   line-height: 1;
   text-align: left;

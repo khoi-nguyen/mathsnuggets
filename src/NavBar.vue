@@ -1,20 +1,23 @@
 <template lang="pug">
-nav.navbar
+nav.navbar.container
   div.navbar-brand
-    a.navbar-item mathsnuggets
+    a.navbar-item
+      span.icon.has-text-info
+        i.fas.fa-square-root-alt
+      span mathsnuggets
   div.navbar-menu
     div.navbar-start
       router-link(to="/").navbar-item
-        span.icon
+        span.icon.has-text-info
           i.fas.fa-home
         span Home
       a(href="/slideshow_builder").navbar-item
-        span.icon
+        span.icon.has-text-info
           i.fas.fa-chalkboard-teacher
         span Lesson Builder
       div.navbar-item.has-dropdown.is-hoverable
         a.navbar-link
-          span.icon
+          span.icon.has-text-info
             i.fas.fa-tools
           span Utilities
         div.navbar-dropdown
@@ -22,7 +25,7 @@ nav.navbar
           a.navbar-item Solver
           a.navbar-item Plotter
       router-link(to="/about").navbar-item
-          span.icon
+          span.icon.has-text-info
             i.fas.fa-info
           span About us
     div.navbar-end
@@ -34,17 +37,16 @@ nav.navbar
 </template>
 
 <script>
-import 'typeface-fira-sans'
-import 'bulma/css/bulma.css'
-
 export default {
 }
 </script>
 
 <style scoped>
 .navbar-brand .navbar-item {
-  color: black;
-  font-family: "Fira Sans";
-  font-size: 1.5em;
+  font-weight: 400;
+  font-size: 1.3em;
+}
+span.icon {
+  margin-right: 0.25em;
 }
 </style>

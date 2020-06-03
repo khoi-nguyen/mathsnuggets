@@ -1,13 +1,13 @@
 <template lang="pug">
 div
-  .container
-    NavBar
+  NavBar
   section.hero.is-primary
-    div.hero-body
+    div.hero-body.has-text-centered
       div.container
-        h1.title.has-text-black-bis Welcome to MathsNuggets!
-        h2.subtitle.has-text-grey-darker.
-          An ingenious website designed to facilitate teaching and learning maths.
+        div.is-size-2.katex(v-html="formula")
+        h1.title.is-1 Welcome to MathsNuggets!
+        h2.subtitle.
+          A website designed to facilitate teaching and learning mathematics.
   .container
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
@@ -19,8 +19,9 @@ div
 
 <script>
 import 'typeface-fira-sans'
-import 'bulma/css/bulma.css'
 import NavBar from './NavBar'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 
 export default {
   name: 'HomePage',
@@ -29,6 +30,7 @@ export default {
   },
   data () {
     return {
+      formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
       features: [
         [
           {
@@ -90,10 +92,6 @@ export default {
 }
 .feature, .feature .title {
   color: #414141;
-  font-family: "Fira Sans";
   font-weight: 300;
-}
-.feature .content {
-  line-height: 1.4;
 }
 </style>

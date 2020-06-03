@@ -1,15 +1,18 @@
 <template lang="pug">
-.container
+div
   NavBar
-  .has-text-centered
-    div.is-large
-      i.fa-5x.fas.fa-info
-    h1.title.is-1 About Us
-  .columns
-    .column.has-text-centered
-      h3.title.is-3 Khoi Nguyen
-    .column.has-text-centered
-      h3.title.is-3 Tom Chambaud
+  section.hero.is-primary
+    div.hero-body.has-text-centered
+      div.container
+        div.is-large
+          i.fa-4x.fas.fa-info
+        h1.title.is-2 About us
+  .container
+    .columns
+      .column.has-text-centered
+        h3.title.is-3 Khoi Nguyen
+      .column.has-text-centered
+        h3.title.is-3 Tom Chambaud
 </template>
 
 <script>
@@ -22,4 +25,7 @@ export default {
 </script>
 
 <style scoped>
+section.hero {
+  margin-bottom: 1em;
+}
 </style>

@@ -58,17 +58,19 @@ h2 input, h2 input:focus {
   width: 100%;
   outline: none;
 }
+h2 input::placeholder {
+  color: #eeeeee;
+}
 div h2 {
-  background-color: #213332;
+  background-color: #172838;
   color: #ebf0ef;
-  font-family: "Fira Sans";
   font-size: 3em;
   margin-bottom: 0.5em;
   padding: 0.1em;
 }
 .date {
-  font-family: "Fira Sans Thin", "Fira Sans";
   font-size: 0.5em;
+  font-weight: 300;
   text-align: right;
   margin-right: 0.4em;
 }
