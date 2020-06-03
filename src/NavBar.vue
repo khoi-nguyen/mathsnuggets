@@ -31,7 +31,7 @@ nav.navbar.container
         div.navbar-dropdown
           a.navbar-item Generator
           a.navbar-item Solver
-          a.navbar-item Plotter
+          router-link(to="/plot").navbar-item Plotter
       router-link(to="/about").navbar-item
           span.icon.has-text-info
             i.fas.fa-info-circle

@@ -2,7 +2,7 @@
 div.widget-container
   div.columns
     div.widget-col.column.is-narrow(
-      :class="edit ? '' : 'hidden'"
+      :class="{'hidden': !edit, 'remove': hideWidgetMenu}"
       @mouseover="edit = true"
       @mouseleave="edit = false"
       tabindex=0
@@ -53,6 +53,7 @@ import Generator from './Generator'
 
 export default {
   props: {
+    hideWidgetMenu: Boolean,
     type: String,
     fields: Array
   },
@@ -67,6 +68,11 @@ export default {
     },
     realFields () {
       return this.fields.filter(field => { return !field.constraint })
+    }
+  },
+  mounted () {
+    if (this.type) {
+      this.loadFields(this.type)
     }
   },
   methods: {
@@ -119,6 +125,9 @@ export default {
   visibility: hidden;
 }
 .hidden > .buttons {
+  display: none;
+}
+.remove {
   display: none;
 }
 </style>
