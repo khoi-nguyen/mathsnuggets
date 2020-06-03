@@ -10,7 +10,7 @@ div
           @keydown.enter="$event.target.blur()"
           @input="$emit('update:value', $event.target.value)"
         )
-      .column.is-narrow.field.date
+      .column.is-narrow.date
         div {{ today }}
         div {{ time }}
       .column.is-narrow
