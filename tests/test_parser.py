@@ -5,7 +5,7 @@ from mathsnuggets.parser import parse
 
 
 def test_parse():
-    x = Symbol("x", real=True)
+    x = Symbol("x")
 
     with evaluate(False):
         assert parse("5 x + 3") == 5 * x + 3

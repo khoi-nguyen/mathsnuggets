@@ -2,7 +2,6 @@
 BACK-END
 ========
 """
-
 import flask
 
 from mathsnuggets import widgets
@@ -13,20 +12,12 @@ widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
 
 
-def form_patch(form, constraint):
-    return {
-        name: {key: field[key] for key in field.keys() if key in ["value", "html"]}
-        for (name, field) in form.export().items()
-        if constraint(field)
-    }
-
-
-@app.route("/_components")
+@app.route("/api/widgets")
 def form_list():
     return flask.jsonify(widget_data)
 
 
-@app.route("/_field/<field>", methods=["POST"])
+@app.route("/api/fields/<field>", methods=["POST"])
 def validate_field(field):
     # TODO: error handling
     field_cls = getattr(fields, field)
@@ -40,36 +31,26 @@ def validate_field(field):
     return flask.jsonify(DummyForm.field.validate(value))
 
 
-@app.route("/_form/<path:form>", methods=["GET", "POST"])
-@app.route("/_form/<path:form>/<generator>", methods=["GET", "POST"])
+@app.route("/api/widgets/<path:form>", methods=["GET", "POST"])
+@app.route("/api/widgets/<path:form>/<generator>", methods=["GET", "POST"])
 def form_route(form, generator=False):
     if form not in widget_names:
         flask.abort(404)
-    form = getattr(widgets, form)()
-    # Getting fieds data and filling the form if necessary
-    if flask.request.get_json() or generator:
-        for field, value in flask.request.get_json().items():
-            try:
-                setattr(form, field, value)
-            except AttributeError:
-                raise AttributeError(
-                    f"Value {repr(value)} invalid "
-                    + f"for field {repr(field)} in {form.__doc__}",
-                )
-        if generator:
-            form.generate()
-
-            def constraint(field):
-                return not field.get("random") and not field.get("constraint")
-
-        else:
-
-            def constraint(field):
-                return field.get("computed")
-
-        return flask.jsonify(form_patch(form, constraint))
-    data = form.export(False, True)
+    post = flask.request.get_json()
+    form = getattr(widgets, form)(**(post if post else {}))
+    if generator:
+        form.generate()
+    if post:
+        return flask.jsonify(dict(form._fields()))
+    data = [f for n, f in form._fields(lambda f: "order" in f)]
+    data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)
+
+
+@app.route("/about")
+@app.route("/slideshow_builder")
+def frontend():
+    return flask.send_from_directory("dist/", "index.html")
 
 
 @app.route("/")
