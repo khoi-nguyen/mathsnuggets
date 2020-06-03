@@ -26,11 +26,11 @@ class Form:
 
     def __init__(self, **kwargs):
         """Fill in the form with default values"""
-        for attr, val in iter(self):
-            if isinstance(val, dict) and "default" in val:
-                setattr(self, attr, val["default"])
-            if attr in kwargs:
-                setattr(self, attr, kwargs[attr])
+        for attr, field in self._fields(lambda f: "default" in f):
+            setattr(self, attr, field["default"])
+        for attr, value in kwargs.items():
+            if attr in dict(iter(self)):
+                setattr(self, attr, value)
 
     def generate(self):
         """Generate an exercise
