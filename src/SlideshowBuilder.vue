@@ -58,6 +58,9 @@ body, html {
 <style scoped>
 .slides section {
   padding: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
   text-align: left;
 }
 </style>
