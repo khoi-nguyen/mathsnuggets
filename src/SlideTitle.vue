@@ -13,6 +13,10 @@ div
       .column.is-narrow.field.date
         div {{ today }}
         div {{ time }}
+      .column.is-narrow
+        router-link(to="/")
+          span.icon.is-large
+            i.fas.fa-home
 </template>
 
 <script>
@@ -67,5 +71,8 @@ div h2 {
   font-size: 0.5em;
   text-align: right;
   margin-right: 0.4em;
+}
+a {
+  color: white
 }
 </style>
