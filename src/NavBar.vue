@@ -8,7 +8,7 @@ nav.navbar
         span.icon
           i.fas.fa-home
         span Home
-      router-link(to="/slideshow_builder").navbar-item
+      a(href="/slideshow_builder").navbar-item
         span.icon
           i.fas.fa-chalkboard-teacher
         span Lesson Builder
