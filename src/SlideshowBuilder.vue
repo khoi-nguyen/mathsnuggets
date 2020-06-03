@@ -16,6 +16,7 @@ import Reveal from 'reveal.js/js/reveal'
 import 'reveal.js/css/reveal.css'
 import 'bulma/css/bulma.css'
 import '@fortawesome/fontawesome-free/js/all.js'
+import _ from 'lodash'
 
 import SlideEditor from './SlideEditor'
 
@@ -29,8 +30,7 @@ export default {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
       id: {},
-      emptySlide: emptySlide,
-      data: [emptySlide]
+      data: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)]
     }
   },
   mounted () {

@@ -47,6 +47,12 @@ def form_route(form, generator=False):
     return flask.jsonify(data)
 
 
+@app.route("/about")
+@app.route("/slideshow_builder")
+def frontend():
+    return flask.send_from_directory("dist/", "index.html")
+
+
 @app.route("/")
 @app.route("/<path:path>")
 def default(path="index.html"):
