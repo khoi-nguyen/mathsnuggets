@@ -1,11 +1,19 @@
 <template lang="pug">
 nav.navbar.container
   div.navbar-brand
-    a.navbar-item
+    router-link(to="/").navbar-item
       span.icon.has-text-info
         i.fas.fa-square-root-alt
       span mathsnuggets
-  div.navbar-menu
+    a(
+      @click="forceShowMenu = !forceShowMenu"
+    ).navbar-burger.burger
+      span(aria-hidden="true")
+      span(aria-hidden="true")
+      span(aria-hidden="true")
+  div(
+    :class="{'is-active': forceShowMenu}"
+  )#navbarBasic.navbar-menu
     div.navbar-start
       router-link(to="/").navbar-item
         span.icon.has-text-info
@@ -26,7 +34,7 @@ nav.navbar.container
           a.navbar-item Plotter
       router-link(to="/about").navbar-item
           span.icon.has-text-info
-            i.fas.fa-info
+            i.fas.fa-info-circle
           span About us
     div.navbar-end
       div.navbar-item
@@ -38,6 +46,11 @@ nav.navbar.container
 
 <script>
 export default {
+  data () {
+    return {
+      forceShowMenu: false
+    }
+  }
 }
 </script>
 
