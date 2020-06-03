@@ -1,18 +1,20 @@
 <template lang="pug">
-.container
-  NavBar
+div
+  .container
+    NavBar
   section.hero.is-primary
     div.hero-body
       div.container
         h1.title.has-text-black-bis Welcome to MathsNuggets!
         h2.subtitle.has-text-grey-darker.
           An ingenious website designed to facilitate teaching and learning maths.
-  .columns(v-for="row in features")
-    .column(v-for="feature in row").feature.has-text-centered
-      div.is-large
-        i.fa-3x(:class="feature.icon")
-      h3.title(:class="row.length === 1 ? 'is-1' : 'is-3'") {{ feature.title }}
-      .content(:class="row.length === 1 ? 'is-size-3' : 'is-size-5'") {{ feature.text }}
+  .container
+    .columns(v-for="row in features")
+      .column(v-for="feature in row").feature.has-text-centered
+        div.is-large
+          i.fa-3x(:class="feature.icon")
+        h3.title(:class="row.length === 1 ? 'is-1' : 'is-3'") {{ feature.title }}
+        .content(:class="row.length === 1 ? 'is-size-3' : 'is-size-5'") {{ feature.text }}
 </template>
 
 <script>
