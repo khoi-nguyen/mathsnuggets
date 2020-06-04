@@ -12,7 +12,7 @@ div.reveal
 </template>
 
 <script>
-import Reveal from 'reveal.js/js/reveal'
+import Reveal from 'reveal.js'
 import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
 
