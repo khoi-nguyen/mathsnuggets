@@ -2,7 +2,7 @@
 div.reveal
   div.slides
     section(
-      v-for="slide in data"
+      v-for="slide in slideshow"
     )
       SlideEditor(
         :id="id"
@@ -28,7 +28,34 @@ export default {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
       id: {},
-      data: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)]
+      slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)]
+    }
+  },
+  computed: {
+    data () {
+      const transform = function (obj) {
+        return _.transform(obj, function (result, val, key) {
+          if ('type' in obj && obj.type === '') {
+            return
+          }
+          if (key === 'fields') {
+            const result = {}
+            _.forEach(val, function (field) {
+              if (field.value !== field.default && !field.computed) {
+                result[field.name] = field.value
+              }
+            })
+            val = result
+          }
+          if (_.isObject(val) || _.isArray(val)) {
+            val = transform(val)
+          }
+          if (!_.isEmpty(val)) {
+            result[key] = val
+          }
+        })
+      }
+      return transform(this.slideshow)
     }
   },
   mounted () {
