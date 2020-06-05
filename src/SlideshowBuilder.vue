@@ -49,9 +49,6 @@ export default {
 
 <style lang="scss" scoped>
 .reveal .slides section {
-  font-size: 0.9rem;
-  font-weight: 400;
-  line-height: 1;
   padding: 0;
   text-align: left;
 }
