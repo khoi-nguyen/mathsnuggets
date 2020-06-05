@@ -93,13 +93,13 @@ class Field:
             return self.export(value)
         except (TypeError, ValueError) as error:
             return {
-                "valid": False,
+                "valid": True if value else False,
                 "value": value,
                 "error": str(error),
             }
 
     def export(self, value):
-        return {"value": value, "valid": True}
+        return {"value": value, "valid": True if value else False}
 
 
 def computed(*args, **kwargs):
@@ -127,7 +127,11 @@ class Expression(Field):
         return parse(expr)
 
     def export(self, value):
-        return {"value": f"{value}", "latex": sympy.latex(value), "valid": True}
+        return {
+            "value": f"{value}",
+            "latex": sympy.latex(value),
+            "valid": True if value else False,
+        }
 
 
 class Matrix(Expression):
@@ -200,7 +204,7 @@ def constraint(*args, **kwargs):
 
 class Html(Field):
     def export(self, value):
-        return {"html": value, "valid": True}
+        return {"html": value, "valid": True if value else False}
 
 
 class Markdown(Field):
@@ -216,5 +220,5 @@ class Markdown(Field):
         return {
             "html": value,
             "value": pypandoc.convert_text(value, "md", format="html"),
-            "valid": True,
+            "valid": True if value else False,
         }
