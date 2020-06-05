@@ -1,7 +1,7 @@
 <template lang="pug">
 nav.navbar.container
   div.navbar-brand
-    router-link(to="/").navbar-item
+    a(href="/").navbar-item
       span.icon.has-text-info
         i.fas.fa-square-root-alt
       span mathsnuggets
@@ -15,7 +15,7 @@ nav.navbar.container
     :class="{'is-active': forceShowMenu}"
   )#navbarBasic.navbar-menu
     div.navbar-start
-      router-link(to="/").navbar-item
+      a(href="/").navbar-item
         span.icon.has-text-info
           i.fas.fa-home
         span Home
