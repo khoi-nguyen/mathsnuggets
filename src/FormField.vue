@@ -1,10 +1,9 @@
 <template lang="pug">
 span
   span(v-html="before")
-  input.has-text-danger.is-size-4.is-family-monospace(
-    v-if="!computed"
+  input.has-text-danger.is-family-monospace(
+    v-if="!computed && !valid"
     ref="input"
-    :class="{hidden: valid}"
     :placeholder="label"
     :size="size"
     :value="value"
@@ -15,9 +14,11 @@ span
     @blur="blur"
   )
   span(
+    tabindex="0"
     v-html="renderedHtml"
     v-if="valid && !computed && renderedHtml"
-    @click="$refs.input.select()"
+    @focus="enterEditMode"
+    @click="enterEditMode"
   )
   div.has-text-centered(
     v-if="computed && renderedHtml"
@@ -45,6 +46,7 @@ export default {
     before: String,
     computed: Boolean,
     default: String,
+    displayMode: Boolean,
     html: String,
     label: String,
     latex: String,
@@ -60,7 +62,7 @@ export default {
   computed: {
     renderedHtml () {
       if (this.latex) {
-        return katex.renderToString(this.latex, { displayMode: this.computed })
+        return katex.renderToString(this.latex, { displayMode: this.displayMode || this.computed })
       }
       return this.html
     },
@@ -85,6 +87,10 @@ export default {
         this.validate(ev.target.value, ev.key === 'Enter')
       }
     },
+    enterEditMode () {
+      this.valid = false
+      this.$nextTick(() => { this.$refs.input.select() })
+    },
     validate (value, validateForm) {
       validateField(this.type, { value: value }, data => {
         for (const prop in data) {
@@ -104,11 +110,10 @@ export default {
 
 <style scoped>
 input, input:focus {
+  background: transparent;
   border: 0px;
+  font-size: inherit;
   text-align: center;
   outline: none;
-}
-.hidden {
-  width: 1px
 }
 </style>

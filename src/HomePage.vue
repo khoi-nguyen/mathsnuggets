@@ -1,13 +1,22 @@
 <template lang="pug">
 div
   NavBar
-  section.hero.is-primary
-    div.hero-body.has-text-centered
-      div.container
-        div.is-size-2.katex(v-html="formula")
-        h1.title.is-1 Welcome to MathsNuggets!
-        h2.subtitle.
-          A website designed to facilitate teaching and learning mathematics.
+  div.hero.is-primary
+    .reveal.hero-body
+      .slides
+        section
+          div.is-size-2.content.katex(v-html="formula")
+          h1.title.is-1 Welcome to MathsNuggets
+        section
+          h1.title.is-1 Easily edit formulas
+          p.content.is-size-2
+            FormField(v-bind.sync="expressionField")
+          p.content.
+            Try it out by clicking the formula above.
+        section
+          h1.title.is-1 Automatic Solving
+          p.content
+            ResourceComponent(type="Equation" :fields.sync="equationWidget" :hide-widget-menu="true")
   .container
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
@@ -19,17 +28,30 @@ div
 
 <script>
 import 'typeface-fira-sans'
+import FormField from './FormField'
 import NavBar from './NavBar'
+import ResourceComponent from './ResourceComponent'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
+import Reveal from 'reveal.js'
 
 export default {
   name: 'HomePage',
   components: {
-    NavBar
+    FormField,
+    NavBar,
+    ResourceComponent
+  },
+  mounted () {
+    Reveal.initialize({
+      embedded: true,
+      height: '100%'
+    })
   },
   data () {
     return {
+      expressionField: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
+      equationWidget: [],
       formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
       features: [
         [
@@ -92,5 +114,10 @@ export default {
 }
 .feature, .feature .title {
   color: #414141;
+}
+.reveal {
+  background: inherit;
+  color: white;
+  height: 400px;
 }
 </style>

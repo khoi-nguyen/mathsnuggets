@@ -21,13 +21,9 @@ $weight-medium: 300;
 $weight-semibold: 400;
 $weight-bold: 500;
 
-@import "~reveal.js/css/reveal.scss";
+@import "reveal.js/dist/reveal.css";
 @import "../node_modules/bulma/bulma.sass";
 
-html, body {
-  overflow: auto;
-  overflow-x: hidden;
-}
 .title {
   font-weight: 400;
 }

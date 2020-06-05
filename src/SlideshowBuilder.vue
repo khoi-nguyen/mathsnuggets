@@ -12,7 +12,7 @@ div.reveal
 </template>
 
 <script>
-import Reveal from 'reveal.js/js/reveal'
+import Reveal from 'reveal.js'
 import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
 
@@ -49,9 +49,6 @@ export default {
 
 <style lang="scss" scoped>
 .reveal .slides section {
-  font-size: 0.9rem;
-  font-weight: 400;
-  line-height: 1;
   padding: 0;
   text-align: left;
 }
