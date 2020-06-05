@@ -10,13 +10,13 @@ div
         section
           h1.title.is-1 Easily edit formulas
           p.content.is-size-2
-            FormField(v-bind.sync="field")
+            FormField(v-bind.sync="expressionField")
           p.content.
             Try it out by clicking the formula above.
         section
           h1.title.is-1 Automatic Solving
           p.content
-            ResourceComponent(type="Equation" :fields.sync="fields" :hide-widget-menu="true")
+            ResourceComponent(type="Equation" :fields.sync="equationWidget" :hide-widget-menu="true")
   .container
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
@@ -50,8 +50,8 @@ export default {
   },
   data () {
     return {
-      field: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
-      fields: [],
+      expressionField: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
+      equationWidget: [],
       formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
       features: [
         [
