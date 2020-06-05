@@ -93,7 +93,7 @@ class Field:
             return self.export(value)
         except (TypeError, ValueError) as error:
             return {
-                "valid": True if value else False,
+                "valid": False,
                 "value": value,
                 "error": str(error),
             }
@@ -130,7 +130,7 @@ class Expression(Field):
         return {
             "value": f"{value}",
             "latex": sympy.latex(value),
-            "valid": True if value else False,
+            "valid": value is not None,
         }
 
 
@@ -220,5 +220,5 @@ class Markdown(Field):
         return {
             "html": value,
             "value": pypandoc.convert_text(value, "md", format="html"),
-            "valid": True if value else False,
+            "valid": value != "",
         }
