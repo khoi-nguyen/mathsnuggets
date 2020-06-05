@@ -55,7 +55,7 @@ export default {
     value: String
   },
   watch: {
-    html (value) {
+    renderedHtml (value) {
       this.valid = !!value
     }
   },
