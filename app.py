@@ -5,7 +5,7 @@ BACK-END
 import flask
 
 from mathsnuggets import widgets
-from mathsnuggets.core import fields, form
+from mathsnuggets.core import db, fields, form
 
 app = flask.Flask(__name__)
 widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
@@ -15,6 +15,28 @@ widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_
 @app.route("/api/widgets")
 def form_list():
     return flask.jsonify(widget_data)
+
+
+@app.route("/api/slideshows")
+def get_slideshow():
+    slideshow = db.slideshows.find_one()
+    slides = slideshow["slides"]
+    for slide in slides:
+        for col in slide["widgets"]:
+            for widget in col:
+                form = getattr(widgets, widget["type"])(**widget["fields"])
+                data = [f for n, f in form._fields(lambda f: "order" in f)]
+                data.sort(key=lambda f: f.get("order"))
+                widget["fields"] = data
+    return flask.jsonify(slides)
+
+
+@app.route("/api/slideshows/save", methods=["POST"])
+def save_slideshow():
+    post = flask.request.get_json()
+    new_vals = {"$set": {post["key"]: post["patch"]}}
+    db.slideshows.update_one({}, new_vals)
+    return flask.jsonify([post, new_vals])
 
 
 @app.route("/api/fields/<field>", methods=["POST"])

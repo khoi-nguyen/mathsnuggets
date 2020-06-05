@@ -13,3 +13,11 @@ export function validateForm (path, formData, callback) {
 export function validateField (field, fieldData, callback) {
   fetch('/api/fields/' + field, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fieldData) }).then(r => r.json()).then(callback)
 }
+
+export function getSlideshow (callback) {
+  fetch('/api/slideshows', { method: 'GET' }).then(r => r.json()).then(callback)
+}
+
+export function saveSlideshow (payload, callback) {
+  fetch('/api/slideshows/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(r => r.json()).then(callback)
+}

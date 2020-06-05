@@ -94,9 +94,13 @@ export default {
           field = Object.assign(field, data[name])
           this.$set(this.fields, position, field)
         }
+        this.$emit('validate:widget')
       }.bind(this))
     },
     loadFields (type) {
+      if (type === this.type) {
+        return false
+      }
       this.$emit('update:type', type)
       getComponentFields(type, function (data) {
         this.$emit('update:fields', data)

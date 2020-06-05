@@ -6,6 +6,7 @@ div
         input.slide-title(
           placeholder="Slide Title"
           :value="value"
+          @blur="$emit('validate:title', $event.target.value)"
           @click="$event.target.select()"
           @keydown.enter="$event.target.blur()"
           @input="$emit('update:value', $event.target.value)"

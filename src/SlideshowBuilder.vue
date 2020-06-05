@@ -2,12 +2,14 @@
 div.reveal
   div.slides
     section(
-      v-for="slide in slideshow"
+      v-for="(slide, index) in slideshow"
     )
       SlideEditor(
         :id="id"
         :title.sync="slide.title"
         :components.sync="slide.widgets"
+        @validate:title="saveTitle(index, $event)"
+        @validate:widget="saveWidget(index, $event[0], $event[1])"
       )
 </template>
 
@@ -15,6 +17,7 @@ div.reveal
 import Reveal from 'reveal.js'
 import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
+import { getSlideshow, saveSlideshow } from './ajax'
 
 import SlideEditor from './SlideEditor'
 
@@ -59,6 +62,9 @@ export default {
     }
   },
   mounted () {
+    getSlideshow(function (data) {
+      this.slideshow = data
+    }.bind(this))
     Reveal.initialize({
       center: false,
       embedded: this.embedded,
@@ -67,6 +73,22 @@ export default {
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
+  },
+  methods: {
+    saveWidget (slide, col, position) {
+      const payload = {
+        key: `slides.${slide}.widgets.${col}.${position}`,
+        patch: this.data[slide].widgets[col][position]
+      }
+      saveSlideshow(payload)
+    },
+    saveTitle (slide, title) {
+      const payload = {
+        key: `slides.${slide}.title`,
+        patch: title
+      }
+      saveSlideshow(payload)
+    }
   },
   components: {
     SlideEditor

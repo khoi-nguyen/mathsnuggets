@@ -1,6 +1,10 @@
 <template lang="pug">
 div
-  SlideTitle(:value="title" @update:value="$emit('update:title', $event)")
+  SlideTitle(
+    :value="title"
+    @update:value="$emit('update:title', $event)"
+    @validate:title="$emit('validate:title', $event)"
+  )
   .columns
     div.column(v-for="i in [0, 1]" v-if="i < colsCount")
       draggable(v-model="localComponents[i]")
@@ -10,6 +14,7 @@ div
           :fields.sync="component.fields"
           @add-component="addComponent(component, i, index)"
           @delete="localComponents[i].splice(index, 1)"
+          @validate:widget="$emit('validate:widget', [i, index])"
         )
   button.button.is-success.is-outlined(
     v-if="colsCount != 2"
