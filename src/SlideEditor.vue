@@ -16,12 +16,15 @@ div.slide
           @delete="deleteWidget(i, index)"
           @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
-  .add-col.is-size-2.has-text-grey(
-    v-if="colsCount != 2"
-    tabindex="-1"
-    @click="localComponents.push([{type: '', fields: []}])"
-  )
-    i.fas.fa-columns
+  .buttons.is-size-2.has-text-grey
+    a(href="/")
+      i.fas.fa-home
+    span(
+      v-if="colsCount != 2"
+      tabindex="-1"
+      @click="localComponents.push([{type: '', fields: []}])"
+    )
+      i.fas.fa-columns
 </template>
 
 <script>
@@ -70,11 +73,15 @@ export default {
 </script>
 
 <style scoped>
-.add-col {
-  bottom: 25px;
-  cursor: pointer;
+.buttons {
+  bottom: 35px;
   left: 10px;
   position: absolute;
+}
+.buttons span, .buttons a {
+  cursor: pointer;
+  color: inherit;
+  margin-right: 0.2em;
 }
 .slide {
   height: 100%;

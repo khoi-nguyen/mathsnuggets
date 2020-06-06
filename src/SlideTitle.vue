@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   h2.title
-    .columns
+    .columns.is-vcentered
       .column
         input.slide-title(
           placeholder="Slide Title"
@@ -14,10 +14,6 @@ div
       .column.is-narrow.date
         div {{ today }}
         div {{ time }}
-      .column.is-narrow
-        a(href="/")
-          span.icon.is-large
-            i.fas.fa-home
 </template>
 
 <script>
@@ -74,8 +70,5 @@ div h2 {
   font-weight: 300;
   text-align: right;
   margin-right: 0.4em;
-}
-a {
-  color: white
 }
 </style>
