@@ -41,5 +41,5 @@ def test_export():
     export = dict(form._fields())
     assert len(export) == 2
     assert export["equation"]["before"] == "Solve "
-    assert export["equation"]["order"] == 0
+    assert export["equation"]["order"] == -2
     assert "value" in export["equation"]
