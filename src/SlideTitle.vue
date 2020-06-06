@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+div.box
   h2.title
     .columns.is-vcentered
       .column
@@ -70,5 +70,8 @@ div h2 {
   font-weight: 300;
   text-align: right;
   margin-right: 0.4em;
+}
+.box {
+  padding: 0;
 }
 </style>
