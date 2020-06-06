@@ -17,10 +17,11 @@ div.slide
           @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
   .buttons.is-size-2.has-text-grey
-    a(href="/")
+    a(href="/" v-tooltip.right-start="'Home page'")
       i.fas.fa-home
     span(
       v-if="colsCount != 2"
+      v-tooltip.right-start="'Split in two columns'"
       tabindex="-1"
       @click="localComponents.push([{type: '', fields: []}])"
     )
@@ -39,7 +40,7 @@ export default {
   },
   computed: {
     colsCount () {
-      return (this.localComponents || []).length
+      return (this.components || []).length
     }
   },
   data () {

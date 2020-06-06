@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VTooltip from 'v-tooltip'
 
 import App from './App'
 import About from './About'
@@ -8,6 +9,7 @@ import Plot from './Plot'
 import SlideshowBuilder from './SlideshowBuilder'
 
 Vue.use(VueRouter)
+Vue.use(VTooltip)
 
 const routes = [
   { path: '/', component: HomePage },
