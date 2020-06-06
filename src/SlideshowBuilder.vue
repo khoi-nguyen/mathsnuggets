@@ -82,6 +82,7 @@ export default {
       embedded: this.embedded,
       height: this.height ? this.height : '100%',
       margin: 0,
+      slideNumber: 'c/t',
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
