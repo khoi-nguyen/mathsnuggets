@@ -37,7 +37,11 @@ def get_slideshow():
 @app.route("/api/slideshows/save", methods=["POST"])
 def save_slideshow():
     post = flask.request.get_json()
-    new_vals = {"$set": {post["key"]: post["patch"]}}
+    slideshow = db.slideshows.find_one()
+    if slideshow:
+        new_vals = {"$set": {post["key"]: post["patch"]}}
+    else:
+        new_vals = {"$set": {"slides": [post["patch"]]}}
     db.slideshows.update_one({}, new_vals, upsert=True)
     return flask.jsonify([post, new_vals])
 
