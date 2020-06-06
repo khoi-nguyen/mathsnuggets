@@ -20,7 +20,7 @@ def form_list():
 @app.route("/api/slideshows")
 def get_slideshow():
     slideshow = db.slideshows.find_one()
-    slides = slideshow["slides"]
+    slides = slideshow["slides"] if slideshow else [{"title": ""}]
     for slide in slides:
         if "widgets" not in slide:
             slide["widgets"] = [[{"type": "", "fields": []}]]
@@ -38,7 +38,7 @@ def get_slideshow():
 def save_slideshow():
     post = flask.request.get_json()
     new_vals = {"$set": {post["key"]: post["patch"]}}
-    db.slideshows.update_one({}, new_vals)
+    db.slideshows.update_one({}, new_vals, upsert=True)
     return flask.jsonify([post, new_vals])
 
 
