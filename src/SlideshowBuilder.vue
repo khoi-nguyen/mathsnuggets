@@ -8,8 +8,9 @@ div.reveal
         :id="id"
         :title.sync="slide.title"
         :components.sync="slide.widgets"
-        @validate:title="saveTitle(index, $event)"
-        @validate:widget="saveWidget(index, $event[0], $event[1])"
+        @validate:title="saveSlide(index)"
+        @validate:widget="saveSlide(index)"
+        @delete:widget="saveSlide(index)"
       )
 </template>
 
@@ -75,17 +76,10 @@ export default {
     })
   },
   methods: {
-    saveWidget (slide, col, position) {
+    saveSlide (slide, col, position) {
       const payload = {
-        key: `slides.${slide}.widgets.${col}.${position}`,
-        patch: this.data[slide].widgets[col][position]
-      }
-      saveSlideshow(payload)
-    },
-    saveTitle (slide, title) {
-      const payload = {
-        key: `slides.${slide}.title`,
-        patch: title
+        key: `slides.${slide}`,
+        patch: this.data[slide]
       }
       saveSlideshow(payload)
     }

@@ -13,8 +13,8 @@ div
           :type.sync="component.type"
           :fields.sync="component.fields"
           @add-component="addComponent(component, i, index)"
-          @delete="localComponents[i].splice(index, 1)"
-          @validate:widget="$emit('validate:widget', [i, index])"
+          @delete="deleteWidget(i, index)"
+          @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
   button.button.is-success.is-outlined(
     v-if="colsCount != 2"
@@ -49,6 +49,10 @@ export default {
   methods: {
     addComponent (component, col, position) {
       this.localComponents[col].splice(position + 1, 0, JSON.parse(JSON.stringify(component)))
+    },
+    deleteWidget (col, pos) {
+      this.localComponents[col].splice(pos, 1)
+      this.$emit('delete:widget', { col: col, pos: pos })
     }
   },
   watch: {
