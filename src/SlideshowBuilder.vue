@@ -103,6 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 .reveal .slides section {
+  height: 100%;
   padding: 0;
   text-align: left;
 }

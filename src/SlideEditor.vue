@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+div.slide
   SlideTitle(
     :value="title"
     @update:value="$emit('update:title', $event)"
@@ -16,14 +16,12 @@ div
           @delete="deleteWidget(i, index)"
           @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
-  button.button.is-success.is-outlined(
+  .add-col.is-size-2.has-text-grey(
     v-if="colsCount != 2"
     tabindex="-1"
     @click="localComponents.push([{type: '', fields: []}])"
   )
-    span.icon
-      i.fas.fa-plus-circle
-    span Add column
+    i.fas.fa-columns
 </template>
 
 <script>
@@ -70,3 +68,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.add-col {
+  bottom: 25px;
+  cursor: pointer;
+  left: 10px;
+  position: absolute;
+}
+.slide {
+  height: 100%;
+}
+</style>
