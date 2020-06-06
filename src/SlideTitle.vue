@@ -15,7 +15,7 @@ div
         div {{ today }}
         div {{ time }}
       .column.is-narrow
-        router-link(to="/")
+        a(href="/")
           span.icon.is-large
             i.fas.fa-home
 </template>
