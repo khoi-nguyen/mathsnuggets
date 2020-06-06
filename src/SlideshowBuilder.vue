@@ -68,6 +68,7 @@ export default {
       handler () {
         if (!_.isEqual(this.slideshow[this.slideshow.length - 1], this.emptySlide)) {
           this.slideshow.push(_.cloneDeep(this.emptySlide))
+          this.$nextTick(() => (Reveal.sync()))
         }
       },
       deep: true
@@ -76,6 +77,7 @@ export default {
   mounted () {
     getSlideshow(function (data) {
       this.slideshow = data
+      this.$nextTick(() => (Reveal.sync()))
     }.bind(this))
     Reveal.initialize({
       center: false,

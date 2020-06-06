@@ -82,16 +82,19 @@ class Form:
         parts = []
         if hasattr(self, "template"):
             parts = textwrap.dedent(self.template).split("`")
-        for attr in dir(self):
+        count = 0
+        for attr in self.__dir__():
             # Exclude non-fields
             if not isinstance(getattr(type(self), attr), fields.Field):
                 continue
             field_object = getattr(type(self), attr)
             field = dict(field_object)
+            field["order"] = count
+            count += 1
             # Add context
             if attr in parts:
                 pos = parts.index(attr)
-                field["order"] = (pos - 1) // 2
+                field["order"] = pos - len(parts)
                 field["before"] = parts[pos - 1]
                 if pos == len(parts) - 2:
                     field["after"] = parts[-1]

@@ -27,8 +27,10 @@ def get_slideshow():
             continue
         for col in slide["widgets"]:
             for widget in col:
+                if "fields" not in widget:
+                    continue
                 form = getattr(widgets, widget["type"])(**widget["fields"])
-                data = [f for n, f in form._fields(lambda f: "order" in f)]
+                data = [f for n, f in form._fields()]
                 data.sort(key=lambda f: f.get("order"))
                 widget["fields"] = data
     return flask.jsonify(slides)
@@ -71,7 +73,7 @@ def form_route(form, generator=False):
         form.generate()
     if post:
         return flask.jsonify(dict(form._fields()))
-    data = [f for n, f in form._fields(lambda f: "order" in f)]
+    data = [f for n, f in form._fields()]
     data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)
 

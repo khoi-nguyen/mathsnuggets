@@ -64,10 +64,10 @@ export default {
   },
   computed: {
     constraints () {
-      return this.fields.filter(field => { return field.constraint })
+      return (this.fields || []).filter(field => { return field.constraint })
     },
     realFields () {
-      return this.fields.filter(field => { return !field.constraint })
+      return (this.fields || []).filter(field => { return !field.constraint })
     }
   },
   mounted () {
