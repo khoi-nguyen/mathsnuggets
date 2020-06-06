@@ -22,6 +22,9 @@ def get_slideshow():
     slideshow = db.slideshows.find_one()
     slides = slideshow["slides"]
     for slide in slides:
+        if "widgets" not in slide:
+            slide["widgets"] = [[{"type": "", "fields": []}]]
+            continue
         for col in slide["widgets"]:
             for widget in col:
                 form = getattr(widgets, widget["type"])(**widget["fields"])
@@ -90,7 +93,6 @@ def default(path="index.html"):
 
 
 # TODO: Cleaner error handling: if _url, json
-@app.errorhandler(Exception)
 def handle_exception(exception):
     return flask.jsonify({"error": True, "errormessage": str(exception)})
 

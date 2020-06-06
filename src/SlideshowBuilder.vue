@@ -32,7 +32,8 @@ export default {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
       id: {},
-      slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)]
+      slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
+      emptySlide: emptySlide
     }
   },
   computed: {
@@ -60,6 +61,16 @@ export default {
         })
       }
       return transform(this.slideshow)
+    }
+  },
+  watch: {
+    slideshow: {
+      handler () {
+        if (!_.isEqual(this.slideshow[this.slideshow.length - 1], this.emptySlide)) {
+          this.slideshow.push(_.cloneDeep(this.emptySlide))
+        }
+      },
+      deep: true
     }
   },
   mounted () {
