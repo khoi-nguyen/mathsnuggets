@@ -7,7 +7,9 @@ import flask
 from mathsnuggets.core import api
 
 app = flask.Flask(__name__)
+app.secret_key = b"Test"
 app.register_blueprint(api.api, url_prefix="/api")
+api.login_manager.init_app(app)
 
 
 @app.route("/about")

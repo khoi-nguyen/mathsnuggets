@@ -1,7 +1,10 @@
+import bson.json_util
+import bson.objectid
 import flask
+import flask_login
 
 from mathsnuggets import widgets
-from mathsnuggets.core import db, fields, form
+from mathsnuggets.core import db, fields, form, models
 
 api = flask.Blueprint("api", __name__)
 
@@ -87,6 +90,49 @@ def form_route(form, generator=False):
     data = [f for n, f in form._fields()]
     data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)
+
+
+login_manager = flask_login.LoginManager()
+
+
+@login_manager.user_loader
+def load_user(identifier):
+    user = models.User(_id=bson.objectid.ObjectId(identifier))
+    if user.email:
+        return user
+    return None
+
+
+@api.route("/auth/register", methods=["POST"])
+def register():
+    payload = flask.request.get_json()
+    user = models.User(email=payload["email"])
+    if user.email:
+        raise InvalidUsage(f"User {user.email} already exists", 400, payload)
+    try:
+        user.email = payload["email"]
+        user.password = payload["password"]
+    except (AttributeError, ValueError) as error:
+        raise InvalidUsage(str(error), 400, payload)
+    user.save()
+    return flask.jsonify({"success": True})
+
+
+@api.route("/auth/login", methods=["POST"])
+def login():
+    payload = flask.request.get_json()
+    user = models.User(email=payload["email"])
+    if not user.email or not user.check_password(payload["password"]):
+        raise InvalidUsage("Incorrect email or password")
+    flask_login.login_user(user)
+    return flask.jsonify({"success": True})
+
+
+@api.route("/auth/logout")
+@flask_login.login_required
+def logout():
+    flask_login.logout_user()
+    return flask.jsonify({"success": True})
 
 
 class InvalidUsage(Exception):

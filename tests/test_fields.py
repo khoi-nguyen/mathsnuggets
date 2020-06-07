@@ -58,9 +58,9 @@ def test_realnumber_field():
 
     assert "error" not in Foo.real.validate(5)
 
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         test.real = False
-    with pytest.raises(AttributeError):
+    with pytest.raises(ValueError):
         test.real = "/"
 
 
@@ -84,9 +84,9 @@ def test_equation_field():
         test.equation = "1 / x"
         assert test.equation == sympy.Eq(1 / x, 0)
 
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         test.equation = False
-    with pytest.raises(AttributeError):
+    with pytest.raises(ValueError):
         test.equation = "3 x = **"
 
 
