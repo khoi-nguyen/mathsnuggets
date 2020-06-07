@@ -50,5 +50,5 @@ precommit:
 	@npx eslint --ignore-path .gitignore src/*
 
 tests: env
-	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml tests/
+	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml -n 4 tests/
 	@$(PYTHON) -m coverage html
