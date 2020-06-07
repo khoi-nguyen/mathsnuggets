@@ -1,23 +1,32 @@
+function callApi (url, method, callback, payload) {
+  const obj = { method: method }
+  if (method === 'POST') {
+    obj.headers = { 'Content-Type': 'application/json' }
+    obj.body = JSON.stringify(payload)
+  }
+  fetch(url, obj).then(r => r.json()).then(callback)
+}
+
 export function getComponentList (callback) {
-  fetch('/api/widgets', { method: 'GET' }).then(r => r.json()).then(callback)
+  callApi('/api/widgets', 'GET', callback)
 }
 
 export function getComponentFields (path, callback) {
-  fetch('/api/widgets/' + path, { method: 'GET' }).then(r => r.json()).then(callback)
+  callApi(`/api/widgets/${path}`, 'GET', callback)
 }
 
-export function validateForm (path, formData, callback) {
-  fetch('/api/widgets/' + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) }).then(r => r.json()).then(callback)
+export function validateForm (widget, payload, callback) {
+  callApi(`/api/widgets/${widget}`, 'POST', callback, payload)
 }
 
-export function validateField (field, fieldData, callback) {
-  fetch('/api/fields/' + field, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fieldData) }).then(r => r.json()).then(callback)
+export function validateField (field, payload, callback) {
+  callApi(`/api/fields/${field}`, 'POST', callback, payload)
 }
 
 export function getSlideshow (callback) {
-  fetch('/api/slideshows', { method: 'GET' }).then(r => r.json()).then(callback)
+  callApi('/api/slideshows', 'GET', callback)
 }
 
 export function saveSlideshow (payload, callback) {
-  fetch('/api/slideshows/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(r => r.json()).then(callback)
+  callApi('/api/slideshows/save', 'POST', callback, payload)
 }

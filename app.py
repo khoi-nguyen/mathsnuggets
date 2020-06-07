@@ -82,6 +82,10 @@ def form_route(form, generator=False):
     if generator:
         form.generate()
     if payload:
+        try:
+            form._validate()
+        except (AttributeError, ValueError, TypeError) as error:
+            raise InvalidUsage(str(error), 400, payload)
         return flask.jsonify(dict(form._fields()))
     data = [f for n, f in form._fields()]
     data.sort(key=lambda f: f.get("order"))
@@ -119,6 +123,7 @@ class InvalidUsage(Exception):
         self.payload = payload
 
     def __iter__(self):
+        yield ("error", True)
         yield ("status_code", self.status_code)
         yield ("payload", dict(self.payload or ()))
         yield ("message", self.message)

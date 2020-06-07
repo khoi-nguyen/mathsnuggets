@@ -22,6 +22,11 @@ span
     @focus="enterEditMode"
     @click="enterEditMode"
   )
+  .message.is-danger(v-if="error")
+    .message-body
+      span.icon
+        i.fas.fa-exclamation-triangle
+      |  {{ error }}
   div.has-text-centered(
     v-if="computed && renderedHtml"
     @click="$emit('update:show-computed', !showComputed)"
@@ -81,6 +86,7 @@ export default {
   },
   data () {
     return {
+      error: '',
       valid: false
     }
   },
@@ -101,7 +107,13 @@ export default {
       this.$nextTick(() => { this.$refs.field.select() })
     },
     validate (value, validateForm) {
-      validateField(this.type, { value: value }, data => {
+      validateField(this.type, { value: value }, function (data) {
+        if (data.error) {
+          this.error = data.message
+          this.valid = false
+          return false
+        }
+        this.error = ''
         for (const prop in data) {
           if (prop !== 'valid') {
             this.$emit('update:' + prop, data[prop])
@@ -111,7 +123,7 @@ export default {
         if (validateForm) {
           this.$nextTick(() => { this.$emit('form-validate') })
         }
-      })
+      }.bind(this))
     }
   }
 }

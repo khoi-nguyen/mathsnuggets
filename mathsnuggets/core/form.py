@@ -58,15 +58,18 @@ class Form:
 
     @property
     def valid(self):
+        try:
+            self._validate()
+            return True
+        except (ValueError, AttributeError, TypeError, AssertionError):
+            return False
+
+    def _validate(self):
         for attr, _ in self._fields(lambda f: f.get("required")):
             if getattr(self, attr) is None:
-                return False
+                raise AttributeError(f"Field {repr(attr)} is required")
         if hasattr(self, "validate"):
-            try:
-                self.validate()
-            except (ValueError, AttributeError, TypeError, AssertionError):
-                return False
-        return True
+            self.validate()
 
     def __iter__(self):
         for attr in dir(self):

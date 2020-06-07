@@ -43,6 +43,11 @@ div.widget-container
           :show-computed.sync="field.showComputed"
           @form-validate="formValidate"
         )
+      .message.is-danger(v-if="error")
+        .message-body
+          span.icon
+            i.fas.fa-exclamation-triangle
+          |  {{ error }}
 </template>
 
 <script>
@@ -59,7 +64,8 @@ export default {
   },
   data () {
     return {
-      edit: false
+      edit: false,
+      error: ''
     }
   },
   computed: {
@@ -88,6 +94,11 @@ export default {
       }
       var path = useGenerator ? '/generator' : ''
       validateForm(this.type + path, formData, function (data) {
+        if (data.error) {
+          this.error = data.message
+          return false
+        }
+        this.error = ''
         for (var name in data) {
           var field = this.fields.filter((f) => (f.name === name))[0]
           var position = this.fields.indexOf(field)
