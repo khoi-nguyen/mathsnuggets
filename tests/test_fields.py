@@ -9,6 +9,9 @@ class Foo(form.Form):
     equation = fields.Equation("Equation")
     real = fields.Expression("Real number")
     markdown = fields.Markdown("Markdown")
+    matrix = fields.Matrix("Matrix")
+    email = fields.Email("Email")
+    password = fields.Password("Email")
 
     @fields.constraint("Contraint", default=True)
     def constraint(self):
@@ -94,6 +97,16 @@ def test_markdown_field():
     test.markdown = "**strong**"
     assert test.markdown == "<p><strong>strong</strong></p>\n"
 
+    export = type(test).markdown.export(test.markdown)
+    assert export["valid"]
+    test.markdown = export["value"]
+    assert test.markdown == export["html"]
+
+
+def test_matrix():
+    test.matrix = "[1, 2], [2, 1]"
+    assert repr(test.matrix) == sympy.Matrix([[1, 2], [2, 1]])
+
 
 def test_constraints():
     test.real = 3
@@ -102,3 +115,25 @@ def test_constraints():
     assert not test.constraint
     test.constraint = False
     assert test.constraint
+
+
+def test_email():
+    test.email = "test@gmail.com"
+    assert test.email == "test@gmail.com"
+
+    with pytest.raises(ValueError):
+        test.email = "testgmail.com"
+    with pytest.raises(ValueError):
+        test.email = "test@gmail"
+
+
+def test_password():
+    test.password = "testtest"
+    assert test.password != "testtest"
+    assert type(test).password.check("testtest", test.password)
+    assert not type(test).password.check("test", test.password)
+
+    with pytest.raises(ValueError):
+        test.password = ""
+    with pytest.raises(ValueError):
+        test.password = "short"
