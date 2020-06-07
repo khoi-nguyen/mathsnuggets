@@ -50,28 +50,38 @@ def save_slideshow():
 
 @app.route("/api/fields/<field>", methods=["POST"])
 def validate_field(field):
-    # TODO: error handling
+    payload = flask.request.get_json()
+    if not hasattr(fields, field):
+        raise InvalidUsage(f"Field {repr(field)} does not exist", 404, payload=payload)
+    if "value" not in payload:
+        raise InvalidUsage("Missing 'value' field in payload", payload=payload)
     field_cls = getattr(fields, field)
-    data = flask.request.get_json()
-    value = data.pop("value")
-    kwargs = {k: v for k, v in data.items() if k not in field_cls._blacklist}
+    value = payload.get("value")
+    kwargs = {k: v for k, v in payload.items() if k not in field_cls._blacklist}
 
     class DummyForm(form.Form):
         field = field_cls("Dummy Field", **kwargs)
 
-    return flask.jsonify(DummyForm.field.validate(value))
+    try:
+        response = DummyForm.field.validate(value)
+        return flask.jsonify(response)
+    except (ValueError, TypeError, AttributeError) as error:
+        raise InvalidUsage(str(error), 400, payload)
 
 
 @app.route("/api/widgets/<path:form>", methods=["GET", "POST"])
 @app.route("/api/widgets/<path:form>/<generator>", methods=["GET", "POST"])
 def form_route(form, generator=False):
+    payload = flask.request.get_json()
     if form not in widget_names:
-        flask.abort(404)
-    post = flask.request.get_json()
-    form = getattr(widgets, form)(**(post if post else {}))
+        raise InvalidUsage(f"Widget {repr(form)} does not exist", 404, payload)
+    try:
+        form = getattr(widgets, form)(**(payload if payload else {}))
+    except (AttributeError, ValueError, TypeError) as error:
+        raise InvalidUsage(str(error), 400, payload)
     if generator:
         form.generate()
-    if post:
+    if payload:
         return flask.jsonify(dict(form._fields()))
     data = [f for n, f in form._fields()]
     data.sort(key=lambda f: f.get("order"))
@@ -98,9 +108,27 @@ def default(path="index.html"):
     return flask.send_from_directory(f"{folder}/{path[:slash]}", path[slash:])
 
 
-# TODO: Cleaner error handling: if _url, json
-def handle_exception(exception):
-    return flask.jsonify({"error": True, "errormessage": str(exception)})
+class InvalidUsage(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None):
+        super().__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def __iter__(self):
+        yield ("status_code", self.status_code)
+        yield ("payload", dict(self.payload or ()))
+        yield ("message", self.message)
+
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = flask.jsonify(dict(error))
+    response.status_code = error.status_code
+    return response
 
 
 if __name__ == "__main__":

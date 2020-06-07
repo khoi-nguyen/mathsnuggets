@@ -69,7 +69,7 @@ class Field:
             value = self.sanitize(value)
         except (TypeError, ValueError):
             raise AttributeError(
-                f"{repr(self.name)} attribute cannot be set to {repr(value)}"
+                f"{repr(self.name)} field cannot be set to {repr(value)}"
             )
         instance.__dict__[self.name] = value
 
@@ -88,15 +88,8 @@ class Field:
 
     def validate(self, value):
         """Determines whether value is appropriate for the field"""
-        try:
-            value = self.sanitize(value)
-            return self.export(value)
-        except (TypeError, ValueError) as error:
-            return {
-                "valid": False,
-                "value": value,
-                "error": str(error),
-            }
+        value = self.sanitize(value)
+        return self.export(value)
 
     def export(self, value):
         return {"value": value, "valid": True if value else False}
