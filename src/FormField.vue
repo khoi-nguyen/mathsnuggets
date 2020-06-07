@@ -26,7 +26,7 @@ span
     v-if="computed && renderedHtml"
     @click="$emit('update:show-computed', !showComputed)"
   )
-    button.button.is-small.is-success.is-outlined(v-if="!showComputed")
+    button.button.is-success.is-outlined(v-if="!showComputed")
       span.icon
         i.fas.fa-square-root-alt
       span {{ label }}
