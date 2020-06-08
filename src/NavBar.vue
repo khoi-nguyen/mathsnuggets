@@ -39,22 +39,22 @@ nav.navbar.container
     div.navbar-end
       div.navbar-item
         div.buttons
-          router-link(to="/login").button.is-primary Login
-          span(@click="logout").button.is-light Logout
+          router-link(to="/login" v-if="!authState.loggedIn").button.is-primary Login
+          span(@click="logout" v-if="authState.loggedIn").button.is-light Logout
 </template>
 
 <script>
-import { logout } from './ajax.js'
+import { auth } from './auth.js'
 
 export default {
   methods: {
     logout () {
-      logout(function (data) {
-      })
+      auth.logout()
     }
   },
   data () {
     return {
+      authState: auth.state,
       forceShowMenu: false
     }
   }

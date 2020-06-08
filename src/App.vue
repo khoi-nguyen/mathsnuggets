@@ -3,10 +3,14 @@ router-view
 </template>
 
 <script>
+import { auth } from './auth.js'
 import 'typeface-fira-sans'
 
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    auth.isLoggedIn()
+  }
 }
 </script>
 

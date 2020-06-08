@@ -118,9 +118,11 @@ def register():
     return flask.jsonify({"success": True})
 
 
-@api.route("/auth/login", methods=["POST"])
+@api.route("/auth/login", methods=["GET", "POST"])
 def login():
     payload = flask.request.get_json()
+    if not payload:
+        return {"is_authenticated": flask_login.current_user.is_authenticated}
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):
         raise InvalidUsage("Incorrect email or password")
