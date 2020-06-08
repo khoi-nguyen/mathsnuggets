@@ -96,7 +96,7 @@ export default {
         key: `slides.${slide}`,
         patch: this.data[slide]
       }
-      if (auth.loggedIn) {
+      if (auth.state.loggedIn) {
         saveSlideshow(payload)
       }
     }
