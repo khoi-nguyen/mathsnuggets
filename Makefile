@@ -52,6 +52,6 @@ precommit:
 	@$(PYTHON) -m flake8
 	@npx eslint --ignore-path .gitignore src/*
 
-tests: env docs build
+tests: env
 	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml -n 4 tests/
 	@$(PYTHON) -m coverage html
