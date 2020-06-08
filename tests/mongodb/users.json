@@ -1,0 +1,12 @@
+[{
+  "email": "test@test.com",
+  "is_active": true,
+  "is_anonymous": false,
+  "is_authenticated": true,
+  "password": {
+    "$binary": {
+      "base64": "JDJiJDEyJHNZWW9TcWsuLzF1RWN3VHpLSE5iTGVYaDQ2dGhZMHlLTElITWVTajJ2VWdjTTFxZFNkRDAy",
+      "subType": "00"
+    }
+  }
+}]

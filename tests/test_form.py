@@ -37,6 +37,8 @@ def test_validate():
 
 
 def test_export():
+    form.required = "Hello"
+    form.equation = "x^2"
     assert form.valid
     export = dict(form._fields())
     assert len(export) == 2

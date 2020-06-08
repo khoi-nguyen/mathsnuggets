@@ -1,26 +1,46 @@
 import flask
+import pytest
 
 from app import app
+from mathsnuggets.core import db
 
 
-def get(url, get_data=True):
-    response = app.test_client().get(url)
+@pytest.fixture
+def mock_mongo(mongodb, monkeypatch):
+    monkeypatch.setattr(db, "collections", mongodb)
+    monkeypatch.setattr(db, "slideshows", mongodb.slideshows)
+
+
+@pytest.fixture
+def client():
+    with app.test_client() as client:
+        yield client
+
+
+def test_mockmongo(mock_mongo):
+    assert "users" in db.collections.list_collection_names()
+    user = db.collections.users.find_one({"email": "test@test.com"})
+    assert user
+
+
+def get(client, url, get_data=True):
+    response = client.get(url)
     if not get_data:
         return response
     data = flask.json.loads(response.get_data(as_text=True))
     return (response, data)
 
 
-def post(url, payload):
-    response = app.test_client().post(
+def post(client, url, payload):
+    response = client.post(
         url, data=flask.json.dumps(payload), content_type="application/json",
     )
     data = flask.json.loads(response.get_data(as_text=True))
     return (response, data)
 
 
-def test_widgets():
-    response, data = get("/api/widgets")
+def test_widgets(client):
+    response, data = get(client, "/api/widgets")
 
     assert response.status_code == 200
     assert isinstance(data, list)
@@ -28,65 +48,99 @@ def test_widgets():
     assert "name" in data[0] and "path" in data[0]
 
 
-def test_field_validation():
-    response, data = post("/api/fields/Equation", {"name": "eq", "value": "x^2"})
+def test_field_validation(client):
+    response, data = post(
+        client, "/api/fields/Equation", {"name": "eq", "value": "x^2"}
+    )
     assert response.status_code == 200
     assert data["valid"]
 
-    response, data = post("/api/fields/Equation", {"name": "eq", "value": "/"})
+    response, data = post(client, "/api/fields/Equation", {"name": "eq", "value": "/"})
     assert response.status_code == 400
 
-    response, data = post("/api/fields/Eequation", {"name": "eq", "value": "/"})
+    response, data = post(client, "/api/fields/Eequation", {"name": "eq", "value": "/"})
     assert response.status_code == 404
 
-    response, data = post("/api/fields/Equation", {"name": "eq"})
+    response, data = post(client, "/api/fields/Equation", {"name": "eq"})
     assert response.status_code == 400
 
 
-def test_widget():
-    response, data = get("/api/widgets/Equation")
+def test_widget(client):
+    response, data = get(client, "/api/widgets/Equation")
     assert response.status_code == 200
     assert isinstance(data, list)
 
-    response, data = get("/api/widgets/Eequation")
+    response, data = get(client, "/api/widgets/Eequation")
     assert response.status_code == 404
 
 
-def test_widget_validation():
-    response, data = post("/api/widgets/Equation", {"equation": "x^2"})
+def test_widget_validation(client):
+    response, data = post(client, "/api/widgets/Equation", {"equation": "x^2"})
 
     assert response.status_code == 200
     assert data["solution"]["value"] == "FiniteSet(0)"
 
-    response, data = post("/api/widgets/Equation", {"equation": "sin("})
+    response, data = post(client, "/api/widgets/Equation", {"equation": "sin("})
     assert response.status_code == 400
 
-    response, data = post("/api/widgets/Equation", {"x": "x"})
+    response, data = post(client, "/api/widgets/Equation", {"x": "x"})
     assert response.status_code == 400
 
 
-def test_retrieve_slideshow():
-    response, data = get("/api/slideshows")
+def test_retrieve_slideshow(client, mock_mongo):
+    assert db.slideshows.count_documents({})
+    response, data = get(client, "/api/slideshows")
     assert response.status_code == 200
     assert isinstance(data, list)
 
 
-def test_register():
-    response, data = post("/api/auth/register", {"email": "", "password": ""})
+def test_save_slideshow(client, mock_mongo):
+    response, data = post(
+        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
+    )
+    assert response.status_code == 200
+
+
+def test_register(client, mock_mongo):
+    response, data = post(client, "/api/auth/register", {"email": "", "password": ""})
     assert response.status_code == 400
 
-
-def test_login():
-    response, data = post("/api/auth/login", {"email": "", "password": ""})
+    response, data = post(
+        client, "/api/auth/register", {"email": "test@test.com", "password": "testtest"}
+    )
     assert response.status_code == 400
 
+    response, data = post(
+        client,
+        "/api/auth/register",
+        {"email": "test2@test.com", "password": "testtest"},
+    )
+    assert response.status_code == 200
 
-def test_logout():
-    response = get("/api/auth/logout", False)
+
+def test_login_logout(client, mock_mongo):
+    response, data = post(client, "/api/auth/login", {"email": "", "password": ""})
+    assert response.status_code == 400
+
+    response, data = post(
+        client, "/api/auth/login", {"email": "test@test.com", "password": "hellohello"}
+    )
+    assert response.status_code == 400
+
+    response, data = post(
+        client, "/api/auth/login", {"email": "test@test.com", "password": "testtest"}
+    )
+    assert response.status_code == 200
+    response, data = get(client, "/api/auth/logout")
+    assert response.status_code == 200
+
+
+def test_logout(client):
+    response = get(client, "/api/auth/logout", False)
     assert response.status_code == 401
 
 
-def test_static_routes():
-    for route in ["/docs/", "/_static/jquery.js"]:
-        response = get(route, False)
+def test_static_routes(client):
+    for route in ["/docs/", "/_static/jquery.js", "/slideshow_builder"]:
+        response = get(client, route, False)
         assert response.status_code == 200

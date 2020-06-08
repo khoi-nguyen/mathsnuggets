@@ -1,0 +1,6 @@
+- slides:
+    - title: First slide
+      widgets:
+          - [{type: 'Equation'}]
+          - [{type: 'Equation', fields: {'equation': 'x^2'}}]
+    - title: Second slide

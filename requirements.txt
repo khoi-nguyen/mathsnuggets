@@ -15,6 +15,7 @@ pep8-naming
 pymongo
 pypandoc
 pytest-cov
+pytest-mongodb
 pytest-xdist
 sphinx-rtd-theme
 sympy
