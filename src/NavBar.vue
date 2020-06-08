@@ -39,13 +39,20 @@ nav.navbar.container
     div.navbar-end
       div.navbar-item
         div.buttons
-          a.button.is-primary
-            router-link(to="/login").has-text-white Signup
-          router-link(to="/login").button.is-light Login
+          router-link(to="/login").button.is-primary Login
+          span(@click="logout").button.is-light Logout
 </template>
 
 <script>
+import { logout } from './ajax.js'
+
 export default {
+  methods: {
+    logout () {
+      logout(function (data) {
+      })
+    }
+  },
   data () {
     return {
       forceShowMenu: false
