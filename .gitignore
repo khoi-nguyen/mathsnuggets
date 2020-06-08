@@ -8,3 +8,9 @@ docs/source/apidoc
 env/
 htmlcov/
 node_modules/
+/.idea/mathsnuggets.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
+/.idea/.gitignore
