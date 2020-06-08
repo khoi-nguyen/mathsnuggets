@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"function": "sin x"}
+
 
 class Integrate(form.Form):
     """Integrate"""

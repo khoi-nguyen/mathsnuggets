@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"function": "x^2", "a": "1"}
+
 
 class Tangent(form.Form):
     """Tangent"""
