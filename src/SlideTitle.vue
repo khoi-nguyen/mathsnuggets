@@ -1,11 +1,12 @@
 <template lang="pug">
-div
+div.box
   h2.title
-    .columns
+    .columns.is-vcentered
       .column
         input.slide-title(
           placeholder="Slide Title"
           :value="value"
+          @blur="$emit('validate:title', $event.target.value)"
           @click="$event.target.select()"
           @keydown.enter="$event.target.blur()"
           @input="$emit('update:value', $event.target.value)"
@@ -13,10 +14,6 @@ div
       .column.is-narrow.date
         div {{ today }}
         div {{ time }}
-      .column.is-narrow
-        router-link(to="/")
-          span.icon.is-large
-            i.fas.fa-home
 </template>
 
 <script>
@@ -74,7 +71,7 @@ div h2 {
   text-align: right;
   margin-right: 0.4em;
 }
-a {
-  color: white
+.box {
+  padding: 0;
 }
 </style>

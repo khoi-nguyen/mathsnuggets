@@ -3,6 +3,8 @@ import sympy
 from mathsnuggets.core import fields
 from mathsnuggets.widgets import equation
 
+test = {"equation": "x + 4 = 3"}
+
 
 class LinearEquation(equation.Equation):
     """Linear Equations"""

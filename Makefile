@@ -1,12 +1,15 @@
 ENV := . env/bin/activate;
 PYTHON := $(ENV) python3
 
-.PHONY: all backend clean docker docs env frontend hooks lint precommit tests
+.PHONY: all backend build clean docker docs env frontend hooks lint precommit tests
 
 all: docs lint tests
 
 backend: env
 	@$(PYTHON) -m app
+
+build: node_modules
+	@npx parcel build src/index.html
 
 clean:
 	@rm -fR docs/build docs/source/apidoc
@@ -49,6 +52,6 @@ precommit:
 	@$(PYTHON) -m flake8
 	@npx eslint --ignore-path .gitignore src/*
 
-tests: env
-	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml tests/
+tests: env docs build
+	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml -n 4 tests/
 	@$(PYTHON) -m coverage html

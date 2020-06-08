@@ -43,6 +43,11 @@ div.widget-container
           :show-computed.sync="field.showComputed"
           @form-validate="formValidate"
         )
+      .message.is-danger(v-if="error")
+        .message-body
+          span.icon
+            i.fas.fa-exclamation-triangle
+          |  {{ error }}
 </template>
 
 <script>
@@ -59,15 +64,16 @@ export default {
   },
   data () {
     return {
-      edit: false
+      edit: false,
+      error: ''
     }
   },
   computed: {
     constraints () {
-      return this.fields.filter(field => { return field.constraint })
+      return (this.fields || []).filter(field => { return field.constraint })
     },
     realFields () {
-      return this.fields.filter(field => { return !field.constraint })
+      return (this.fields || []).filter(field => { return !field.constraint })
     }
   },
   mounted () {
@@ -88,15 +94,24 @@ export default {
       }
       var path = useGenerator ? '/generator' : ''
       validateForm(this.type + path, formData, function (data) {
+        if (data.error) {
+          this.error = data.message
+          return false
+        }
+        this.error = ''
         for (var name in data) {
           var field = this.fields.filter((f) => (f.name === name))[0]
           var position = this.fields.indexOf(field)
           field = Object.assign(field, data[name])
           this.$set(this.fields, position, field)
         }
+        this.$emit('validate:widget')
       }.bind(this))
     },
     loadFields (type) {
+      if (type === this.type) {
+        return false
+      }
       this.$emit('update:type', type)
       getComponentFields(type, function (data) {
         this.$emit('update:fields', data)

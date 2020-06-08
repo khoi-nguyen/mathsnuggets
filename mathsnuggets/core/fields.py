@@ -3,6 +3,9 @@
 Fields
 ======
 """
+import re
+
+import bcrypt
 import pypandoc
 import sympy
 
@@ -65,12 +68,7 @@ class Field:
             self.construct(*args, **kwargs)
 
     def __set__(self, instance, value):
-        try:
-            value = self.sanitize(value)
-        except (TypeError, ValueError):
-            raise AttributeError(
-                f"{repr(self.name)} attribute cannot be set to {repr(value)}"
-            )
+        value = self.sanitize(value)
         instance.__dict__[self.name] = value
 
     def __set_name__(self, owner, name):
@@ -88,15 +86,8 @@ class Field:
 
     def validate(self, value):
         """Determines whether value is appropriate for the field"""
-        try:
-            value = self.sanitize(value)
-            return self.export(value)
-        except (TypeError, ValueError) as error:
-            return {
-                "valid": True if value else False,
-                "value": value,
-                "error": str(error),
-            }
+        value = self.sanitize(value)
+        return self.export(value)
 
     def export(self, value):
         return {"value": value, "valid": True if value else False}
@@ -130,7 +121,7 @@ class Expression(Field):
         return {
             "value": f"{value}",
             "latex": sympy.latex(value),
-            "valid": True if value else False,
+            "valid": value is not None,
         }
 
 
@@ -220,5 +211,29 @@ class Markdown(Field):
         return {
             "html": value,
             "value": pypandoc.convert_text(value, "md", format="html"),
-            "valid": True if value else False,
+            "valid": value != "",
         }
+
+
+class Email(Field):
+    """Email Field"""
+
+    def sanitize(self, value):
+        if not re.search(r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", value):
+            raise ValueError("Invalid email address")
+        return value
+
+
+class Password(Field):
+    """Password field"""
+
+    def sanitize(self, value):
+        if not value:
+            raise ValueError("Password field cannot be empty")
+        if len(value) <= 7:
+            raise ValueError("A valid password must have at least 8 characters")
+        return bcrypt.hashpw(value.encode("utf8"), bcrypt.gensalt())
+
+    @staticmethod
+    def check(value, hashed):
+        return bcrypt.checkpw(value.encode("utf8"), hashed)

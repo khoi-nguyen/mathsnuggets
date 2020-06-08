@@ -1,6 +1,10 @@
 <template lang="pug">
-div
-  SlideTitle(:value="title" @update:value="$emit('update:title', $event)")
+div.slide
+  SlideTitle(
+    :value="title"
+    @update:value="$emit('update:title', $event)"
+    @validate:title="$emit('validate:title', $event)"
+  )
   .columns
     div.column(v-for="i in [0, 1]" v-if="i < colsCount")
       draggable(v-model="localComponents[i]")
@@ -9,16 +13,19 @@ div
           :type.sync="component.type"
           :fields.sync="component.fields"
           @add-component="addComponent(component, i, index)"
-          @delete="localComponents[i].splice(index, 1)"
+          @delete="deleteWidget(i, index)"
+          @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
-  button.button.is-success.is-outlined(
-    v-if="colsCount != 2"
-    tabindex="-1"
-    @click="localComponents.push([{type: '', fields: []}])"
-  )
-    span.icon
-      i.fas.fa-plus-circle
-    span Add column
+  .buttons.is-size-2.has-text-grey
+    a(href="/" v-tooltip.right-start="'Home page'")
+      i.fas.fa-home
+    span(
+      v-if="colsCount != 2"
+      v-tooltip.right-start="'Split in two columns'"
+      tabindex="-1"
+      @click="localComponents.push([{type: '', fields: []}])"
+    )
+      i.fas.fa-columns
 </template>
 
 <script>
@@ -33,7 +40,7 @@ export default {
   },
   computed: {
     colsCount () {
-      return (this.localComponents || []).length
+      return (this.components || []).length
     }
   },
   data () {
@@ -44,6 +51,10 @@ export default {
   methods: {
     addComponent (component, col, position) {
       this.localComponents[col].splice(position + 1, 0, JSON.parse(JSON.stringify(component)))
+    },
+    deleteWidget (col, pos) {
+      this.localComponents[col].splice(pos, 1)
+      this.$emit('delete:widget', { col: col, pos: pos })
     }
   },
   watch: {
@@ -61,3 +72,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.buttons {
+  bottom: 35px;
+  left: 10px;
+  position: absolute;
+}
+.buttons span, .buttons a {
+  cursor: pointer;
+  color: inherit;
+  margin-right: 0.2em;
+}
+.slide {
+  height: 100%;
+}
+</style>

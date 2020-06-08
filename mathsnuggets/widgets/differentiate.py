@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"function": "x sin x"}
+
 
 class Differentiate(form.Form):
     """Differentiate"""

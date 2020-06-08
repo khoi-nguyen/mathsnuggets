@@ -45,8 +45,8 @@ mocha.describe('mathsnuggets', function () {
     const widget = 'Equation'
     await page.hover('.widget-col')
     await page.select('.widget-col select', widget)
-    await page.waitFor('span[name="equation"] input')
-    await page.focus('span[name="equation"] input')
+    await page.waitFor('span[name="equation"] textarea')
+    await page.focus('span[name="equation"] textarea')
     await page.keyboard.type('x^2 - 5x + 6')
     await page.keyboard.press('Enter')
     await page.waitFor('span[name="solution"] button')
