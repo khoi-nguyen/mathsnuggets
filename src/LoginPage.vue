@@ -27,10 +27,13 @@ div
           |  Remember me
       .field
         button.button.is-info.is-fullwidth(@click="login") Login
+      article.message.is-danger(v-if="error != ''")
+        div.message-body {{ error }}
 </template>
 
 <script>
 import NavBar from './NavBar'
+import { login } from './ajax.js'
 
 export default {
   components: { NavBar },
@@ -46,12 +49,25 @@ export default {
         this.errors.email = 'Email is empty'
       }
       if (!this.errors.email && !this.errors.password) {
-        this.loggedIn = true
+        const payload = {
+          email: this.$refs.fields[0].value,
+          password: this.$refs.fields[1].value
+        }
+        login(payload, function (data) {
+          if (data.error) {
+            this.loggedIn = false
+            this.error = data.message
+          } else {
+            this.loggedIn = true
+            this.error = ''
+          }
+        }.bind(this))
       }
     }
   },
   data () {
     return {
+      error: '',
       errors: {
         email: '',
         password: ''

@@ -30,3 +30,11 @@ export function getSlideshow (callback) {
 export function saveSlideshow (payload, callback) {
   callApi('/api/slideshows/save', 'POST', callback, payload)
 }
+
+export function login (payload, callback) {
+  callApi('/api/auth/login', 'POST', callback, payload)
+}
+
+export function logout (callback) {
+  callApi('/api/auth/logout', 'GET', callback)
+}
