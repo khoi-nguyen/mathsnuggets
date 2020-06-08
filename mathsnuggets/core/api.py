@@ -37,6 +37,7 @@ def get_slideshow():
 
 
 @api.route("/slideshows/save", methods=["POST"])
+@flask_login.login_required
 def save_slideshow():
     post = flask.request.get_json()
     slideshow = db.slideshows.find_one()

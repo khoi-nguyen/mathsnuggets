@@ -31,10 +31,12 @@ def get(client, url, get_data=True):
     return (response, data)
 
 
-def post(client, url, payload):
+def post(client, url, payload, get_data=True):
     response = client.post(
         url, data=flask.json.dumps(payload), content_type="application/json",
     )
+    if not get_data:
+        return response
     data = flask.json.loads(response.get_data(as_text=True))
     return (response, data)
 
@@ -95,6 +97,15 @@ def test_retrieve_slideshow(client, mock_mongo):
 
 
 def test_save_slideshow(client, mock_mongo):
+    response = post(
+        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}, False
+    )
+    assert response.status_code == 401
+
+    response, data = post(
+        client, "/api/auth/login", {"email": "test@test.com", "password": "testtest"}
+    )
+    assert response.status_code == 200
     response, data = post(
         client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
     )

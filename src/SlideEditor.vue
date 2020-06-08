@@ -26,12 +26,18 @@ div.slide
       @click="localComponents.push([{type: '', fields: []}])"
     )
       i.fas.fa-columns
+    span(
+      v-if="authState.loggedIn"
+      v-tooltip.right-start="'Automatic saving enabled'"
+    )
+      i.fas.fa-save
 </template>
 
 <script>
 import draggable from 'vuedraggable'
 import ResourceComponent from './ResourceComponent'
 import SlideTitle from './SlideTitle'
+import { auth } from './auth.js'
 
 export default {
   props: {
@@ -45,7 +51,8 @@ export default {
   },
   data () {
     return {
-      localComponents: this.components || []
+      localComponents: this.components || [],
+      authState: auth.state
     }
   },
   methods: {

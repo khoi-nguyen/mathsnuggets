@@ -15,6 +15,7 @@ div.reveal
 </template>
 
 <script>
+import { auth } from './auth.js'
 import Reveal from 'reveal.js'
 import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
@@ -95,7 +96,9 @@ export default {
         key: `slides.${slide}`,
         patch: this.data[slide]
       }
-      saveSlideshow(payload)
+      if (auth.loggedIn) {
+        saveSlideshow(payload)
+      }
     }
   },
   components: {
