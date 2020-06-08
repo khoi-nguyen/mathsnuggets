@@ -9,6 +9,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"function": "sin x"}
+
 
 class Plot(form.Form):
     """Plot functions"""

@@ -5,6 +5,8 @@ Youtube
 """
 from mathsnuggets.core import fields, form
 
+test = {"url": "https://www.youtube.com/watch?v=3d6DsjIBzJ4"}
+
 
 class Youtube(form.Form):
     """YouTube"""

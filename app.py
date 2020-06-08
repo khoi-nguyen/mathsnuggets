@@ -13,6 +13,7 @@ api.login_manager.init_app(app)
 
 
 @app.route("/about")
+@app.route("/login")
 @app.route("/plot")
 @app.route("/slideshow_builder")
 def frontend():

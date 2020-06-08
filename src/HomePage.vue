@@ -17,6 +17,18 @@ div
           h1.title.is-1 Automatic Solving
           p.content
             ResourceComponent(type="Equation" :fields.sync="equationWidget" :hide-widget-menu="true")
+        section
+          h1.title.is-1 Plotter
+          p.content
+            ResourceComponent(type="Plot" :fields.sync="plotWidget" :hide-widget-menu="true")
+        section
+          p.content
+            img(src='https://www.teachhub.com/sites/default/files/field/image/technology-in-the-classroom-benefits-of-smart-boards.jpg')
+        section
+          p.content
+            ResourceComponent(type="YouTube" :fields.sync="youtubeWidget" :hide-widget-menu="true")
+            p.content.
+              Add any YouTube link to your Slideshow.
   .container
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
@@ -53,6 +65,8 @@ export default {
       expressionField: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
       equationWidget: [],
       formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
+      plotWidget: [],
+      youtubeWidget: [],
       features: [
         [
           {

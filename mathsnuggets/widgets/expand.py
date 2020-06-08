@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"expression": "(x - 2) (x + 3)"}
+
 
 class Expand(form.Form):
     """Expand"""
