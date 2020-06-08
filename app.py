@@ -48,6 +48,7 @@ def form_route(form, generator=False):
 
 
 @app.route("/about")
+@app.route("/login")
 @app.route("/plot")
 @app.route("/slideshow_builder")
 def frontend():

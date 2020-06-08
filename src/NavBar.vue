@@ -40,8 +40,8 @@ nav.navbar.container
       div.navbar-item
         div.buttons
           a.button.is-primary
-            strong Signup
-          a.button.is-light Log in
+            router-link(to="/login").has-text-white Signup
+          router-link(to="/login").button.is-light Login
 </template>
 
 <script>
