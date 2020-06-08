@@ -1,5 +1,6 @@
 .cache
 .coverage
+.idea
 __pycache__/
 coverage.xml
 dist/
@@ -8,9 +9,3 @@ docs/source/apidoc
 env/
 htmlcov/
 node_modules/
-/.idea/mathsnuggets.iml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/vcs.xml
-/.idea/.gitignore
