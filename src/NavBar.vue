@@ -39,13 +39,20 @@ nav.navbar.container
     div.navbar-end
       div.navbar-item
         div.buttons
-          a.button.is-primary
-            strong Signup
-          a.button.is-light Log in
+          router-link(to="/login").button.is-primary Login
+          span(@click="logout").button.is-light Logout
 </template>
 
 <script>
+import { logout } from './ajax.js'
+
 export default {
+  methods: {
+    logout () {
+      logout(function (data) {
+      })
+    }
+  },
   data () {
     return {
       forceShowMenu: false
