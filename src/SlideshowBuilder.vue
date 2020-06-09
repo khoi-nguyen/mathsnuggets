@@ -32,6 +32,7 @@ export default {
   data () {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
+      authState: auth.state,
       id: {},
       slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       emptySlide: emptySlide
@@ -96,7 +97,7 @@ export default {
         key: `slides.${slide}`,
         patch: this.data[slide]
       }
-      if (auth.state.loggedIn) {
+      if (this.authState.loggedIn) {
         saveSlideshow(payload)
       }
     }
