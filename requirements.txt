@@ -11,6 +11,7 @@ flake8-use-fstring
 flask
 flask_login
 matplotlib
+mock
 pep8-naming
 pymongo
 pypandoc

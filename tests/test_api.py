@@ -115,6 +115,11 @@ def test_save_slideshow(client, mock_mongo):
         client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
     )
     assert response.status_code == 200
+    db.slideshows.delete_many({})
+    response, data = post(
+        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
+    )
+    assert response.status_code == 200
 
 
 def test_register(client, mock_mongo):
@@ -135,6 +140,10 @@ def test_register(client, mock_mongo):
 
 
 def test_login_logout(client, mock_mongo):
+    response, data = get(client, "/api/auth/login")
+    assert response.status_code == 200
+    assert not data["is_authenticated"]
+
     response, data = post(client, "/api/auth/login", {"email": "", "password": ""})
     assert response.status_code == 400
 
@@ -147,6 +156,9 @@ def test_login_logout(client, mock_mongo):
         client, "/api/auth/login", {"email": "test@test.com", "password": "testtest"}
     )
     assert response.status_code == 200
+    response, data = get(client, "/api/auth/login")
+    assert response.status_code == 200
+    assert data["is_authenticated"]
     response, data = get(client, "/api/auth/logout")
     assert response.status_code == 200
 
