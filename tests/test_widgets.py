@@ -8,4 +8,9 @@ def test_widgets():
         assert form.valid
 
         for name, field in form._fields():
-            assert field.get("value") or field.get("html") or field.get("random")
+            assert (
+                field.get("value")
+                or field.get("html")
+                or field.get("random")
+                or field.get("constraint")
+            )

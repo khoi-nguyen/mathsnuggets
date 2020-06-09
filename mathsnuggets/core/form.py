@@ -3,12 +3,10 @@
 Form
 ====
 """
+import random
 import textwrap
 
-import numpy
-
 from mathsnuggets.core import fields
-from mathsnuggets.parser import parse
 
 
 class Form:
@@ -45,12 +43,19 @@ class Form:
         - Stop the search for appropriate numbers after some time
         - Check for contradictory constraints
         """
-        constraints = self._fields(lambda f: f.get("constraint"))
-        random = list(self._fields(lambda f: f.get("random")))
+        constraints = list(
+            self._fields(
+                lambda f: f.get("constraint") and not f.get("range_constraint")
+            )
+        )
+        range_constraints = list(self._fields(lambda f: f.get("range_constraint")))
+        random_fields = list(self._fields(lambda f: f.get("random")))
+        for constraint, _ in range_constraints:
+            getattr(type(self), constraint).change_range(self)
+        self._random = {}
         while True:
-            values = numpy.random.randint(-10, 10, len(random))
-            values = [parse(str(n)) for n in values]
-            self._random = dict(zip(random, values))
+            for attr, _ in random_fields:
+                self._random[attr] = random.choice(self.__dict__.get(attr))
             if all([getattr(self, c) for c, _ in constraints]):
                 break
         if hasattr(self, "generator") and callable(self.generator):

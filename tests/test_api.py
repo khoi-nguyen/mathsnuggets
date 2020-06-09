@@ -78,9 +78,14 @@ def test_widget(client):
 
 def test_widget_validation(client):
     response, data = post(client, "/api/widgets/Equation", {"equation": "x^2"})
-
     assert response.status_code == 200
     assert data["solution"]["value"] == "FiniteSet(0)"
+
+    response, data = post(
+        client, "/api/widgets/LinearEquation/generator", {"one_step": "1"}
+    )
+    assert data["equation"]["value"]
+    assert response.status_code == 200
 
     response, data = post(client, "/api/widgets/Equation", {"equation": "sin("})
     assert response.status_code == 400

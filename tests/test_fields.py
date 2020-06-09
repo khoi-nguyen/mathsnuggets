@@ -115,6 +115,8 @@ def test_constraints():
     assert not test.constraint
     test.constraint = False
     assert test.constraint
+    export = type(test).constraint.export(test.constraint)
+    assert export == {}
 
 
 def test_email():
