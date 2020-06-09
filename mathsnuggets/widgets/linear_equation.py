@@ -20,17 +20,17 @@ class LinearEquation(equation.Equation):
     @fields.constraint("One-Step")
     def one_step(self):
         return (
-            (self.a == 1 and self.b != 0 or self.b == 0 and self.d % self.a == 0)
-            and self.a * self.d != 0
+            self.a * self.d != 0
+            and (self.a == 1 and self.b != 0 or self.b == 0 and self.d % self.a == 0)
             and self.c == 0
         )
 
     @fields.constraint("Two-Step")
     def two_step(self):
         return (
-            self.c == 0
+            self.a * self.b * self.d != 0
+            and self.c == 0
             and (self.d - self.b) % self.a == 0
-            and self.a * self.b * self.d != 0
         )
 
     @fields.constraint("Multi-Step")
