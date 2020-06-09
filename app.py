@@ -33,5 +33,9 @@ def default(path="index.html"):
     return flask.send_from_directory(f"{folder}/{path[:slash]}", path[slash:])
 
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+def init():
+    if __name__ == "__main__":
+        app.run(debug=True, host="0.0.0.0")
+
+
+init()

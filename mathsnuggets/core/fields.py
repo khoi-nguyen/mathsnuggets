@@ -146,28 +146,50 @@ class Equation(Expression):
 class RandomNumber(Field):
     """Random Number field"""
 
+    default = "-10, 10"
     hidden = True
     random = True
 
     def callback(self, instance):
         """Get the value from the form's _random attribute"""
-        if "_random" in instance.__dict__:
-            return instance.__dict__["_random"].get(self.name)
+        if "_random" in instance.__dict__ and self.name in instance.__dict__["_random"]:
+            return instance.__dict__["_random"][self.name]
+        if self.name in instance.__dict__:
+            return instance.__dict__[self.name]
         return None
+
+    def export(self, instance):
+        return {}
 
     def sanitize(self, expr):
         """Check it is an appropriate range"""
+        if isinstance(expr, (tuple, list)):
+            return list(expr)
         try:
-            numbers = [int(n) for n in expr.split(":")]
+            numbers = [int(n) for n in str(expr).split(",")]
             assert len(numbers) > 0
             if len(numbers) > 1:
                 assert numbers[1] >= numbers[0]
                 assert len(numbers) == 2
             else:
-                numbers.append(numbers[0])
+                numbers.append(numbers[0] + 1)
         except (AssertionError, ValueError):
             raise ValueError(f"{repr(expr)} is not a valid expression for {self.name}")
-        return numbers
+        return list(range(*numbers))
+
+
+class Constraint(Field):
+    """Constraint"""
+
+    constraint = True
+    default = False
+    range_constraint = False
+
+    def sanitize(self, expr):
+        return bool(expr)
+
+    def export(self, value):
+        return {}
 
 
 def constraint(*args, **kwargs):
@@ -175,20 +197,27 @@ def constraint(*args, **kwargs):
     # set_val = instance.__dict__[self.name]
     # if true, computedField
     def decorator(method):
-        class Constraint(Field):
-            """Constraint"""
-
-            constraint = True
-
+        class DecoratedConstraint(Constraint):
             def callback(self, form):
                 if self.name not in form.__dict__ or not form.__dict__[self.name]:
                     return True
                 return method(form)
 
-            def sanitize(self, expr):
-                return bool(expr)
+        return DecoratedConstraint(*args, **kwargs)
 
-        return Constraint(*args, **kwargs)
+    return decorator
+
+
+def range_constraint(*args, **kwargs):
+    def decorator(method):
+        class DecoratedConstraint(Constraint):
+            range_constraint = True
+
+            def change_range(self, form):
+                if self.name in form.__dict__ and form.__dict__[self.name]:
+                    method(form)
+
+        return DecoratedConstraint(*args, **kwargs)
 
     return decorator
 

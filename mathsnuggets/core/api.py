@@ -99,9 +99,7 @@ login_manager = flask_login.LoginManager()
 @login_manager.user_loader
 def load_user(identifier):
     user = models.User(_id=bson.objectid.ObjectId(identifier))
-    if user.email:
-        return user
-    return None
+    return user if user.email else None
 
 
 @api.route("/auth/register", methods=["POST"])
