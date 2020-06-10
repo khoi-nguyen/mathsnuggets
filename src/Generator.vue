@@ -14,13 +14,14 @@ span.dropdown.is-hoverable(
         i.fas.fa-angle-down
   .dropdown-menu
     div.dropdown-content
-     div(v-for="field in fields" v-if="field.constraint")
+     div(v-for="field in fields" v-if="field.constraint && !field.hidden")
       div.dropdown-item.control.field
         label.checkbox
           input(
             type="checkbox"
             v-model="field.value"
             @change="$emit('update:fields', fields)"
+            :disabled="field.protected"
           )
           span &nbsp; {{ field.label }}
 </template>

@@ -2,10 +2,11 @@
 span
   span(v-html="before")
   textarea.has-text-danger.is-family-monospace(
-    v-if="!computed && !valid"
+    v-if="!computed && !valid && !hidden"
     ref="field"
     :rows="rows"
     :cols="cols"
+    :disabled="protected"
     :placeholder="label"
     :value="value"
     @dblclick="$event.target.select()"
@@ -55,10 +56,12 @@ export default {
     computed: Boolean,
     default: String,
     displayMode: Boolean,
+    hidden: Boolean,
     html: String,
     label: String,
     latex: String,
     showComputed: Boolean,
+    protected: Boolean,
     type: String,
     value: String
   },
