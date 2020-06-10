@@ -1,3 +1,5 @@
+import random
+
 import sympy
 
 from mathsnuggets.core import fields
@@ -17,22 +19,34 @@ class LinearEquation(equation.Equation):
     def generator(self):
         self.equation = sympy.Eq(self.a * self.x + self.b, self.c * self.x + self.d)
 
-    @fields.constraint("One-Step")
+    @fields.constraint("Unique solution", default=True, hidden=True, protected=True)
+    def unique_solution(self):
+        return self.a != self.c
+
+    @fields.range_constraint("One-Step")
     def one_step(self):
-        return (
-            self.a * self.d != 0
-            and (self.a == 1 and self.b != 0 or self.b == 0 and self.d % self.a == 0)
-            and self.c == 0
-        )
+        self.c = 0
+        if random.randint(0, 1):
+            self.a = 1
+            self.b -= {0}
+        else:
+            self.b = 0
+            self.a -= {0}
 
-    @fields.constraint("Two-Step")
+    @fields.range_constraint("Two-Step")
     def two_step(self):
-        return (
-            self.a * self.b * self.d != 0
-            and self.c == 0
-            and (self.d - self.b) % self.a == 0
-        )
+        self.c = 0
+        self.a -= {0}
+        self.b -= {0}
+        self.d -= {0}
 
-    @fields.constraint("Multi-Step")
+    @fields.range_constraint("Multi-Step")
     def multi_step(self):
-        return not self.one_step and not self.two_step
+        self.a -= {0}
+        self.b -= {0}
+        self.c -= {0}
+        self.d -= {0}
+
+    @fields.constraint("Integer solution", default=True)
+    def integer_solution(self):
+        return self.unique_solution and (self.d - self.b) % (self.a - self.c) == 0
