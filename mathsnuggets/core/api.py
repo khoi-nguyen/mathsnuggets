@@ -78,16 +78,13 @@ def form_route(form, generator=False):
         raise InvalidUsage(f"Widget {repr(form)} does not exist", 404, payload)
     try:
         form = getattr(widgets, form)(**(payload if payload else {}))
-    except (AttributeError, ValueError, TypeError) as error:
-        raise InvalidUsage(str(error), 400, payload)
-    if generator:
-        form.generate()
-    if payload:
-        try:
+        if generator:
+            form.generate()
+        if payload:
             form._validate()
-        except (AttributeError, ValueError, TypeError) as error:
-            raise InvalidUsage(str(error), 400, payload)
-        return flask.jsonify(dict(form._fields()))
+            return flask.jsonify(dict(form._fields()))
+    except (AttributeError, ValueError, TypeError, PermissionError) as error:
+        raise InvalidUsage(str(error), 400, payload)
     data = [f for n, f in form._fields()]
     data.sort(key=lambda f: f.get("order"))
     return flask.jsonify(data)
