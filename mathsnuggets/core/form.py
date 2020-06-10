@@ -109,6 +109,8 @@ class Form:
             # Add value
             try:
                 value = getattr(self, attr)
+                if field.get("constraint"):
+                    value = self.__dict__[attr] if attr in self.__dict__ else False
                 assert value is not None
                 field.update(field_object.export(value))
             except (ValueError, AttributeError, TypeError, AssertionError):

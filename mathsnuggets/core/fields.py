@@ -195,7 +195,7 @@ class Constraint(Field):
         return bool(expr)
 
     def export(self, value):
-        return {}
+        return {"value": value, "valid": True}
 
 
 def constraint(*args, **kwargs):
