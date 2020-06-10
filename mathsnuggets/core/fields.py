@@ -68,6 +68,12 @@ class Field:
             self.construct(*args, **kwargs)
 
     def __set__(self, instance, value):
+        if (
+            hasattr(self, "protected")
+            and self.protected
+            and (not hasattr(self, "default") or value != self.default)
+        ):
+            raise PermissionError(f"Field {repr(self.name)} is protected")
         value = self.sanitize(value)
         instance.__dict__[self.name] = value
 

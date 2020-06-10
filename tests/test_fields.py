@@ -12,6 +12,7 @@ class Foo(form.Form):
     matrix = fields.Matrix("Matrix")
     email = fields.Email("Email")
     password = fields.Password("Email")
+    protected = fields.Field("Protected", default="Protected", protected=True)
 
     @fields.constraint("Contraint", default=True)
     def constraint(self):
@@ -47,6 +48,13 @@ def test_field():
 
         class FooBar(Foo):
             new_field = NewField("New Field", name="name")
+
+
+def test_protected_field():
+    assert test.protected == "Protected"
+
+    with pytest.raises(PermissionError):
+        test.protected = "This can't happen"
 
 
 def test_realnumber_field():
