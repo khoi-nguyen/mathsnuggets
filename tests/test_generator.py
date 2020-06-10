@@ -25,21 +25,21 @@ class Widget(form.Form):
 
 def test_random_number():
     test = Widget()
-    assert isinstance(test.a, list)
+    assert isinstance(test.a, set)
     assert len(test.a) > 1
 
     with pytest.raises(ValueError):
         test.a = "1, 3, 5"
 
     test.a = 5
-    assert test.a == [5]
+    assert test.a == {5}
     test.generate()
     assert test.a == 5
     test._random = {}
-    assert test.a == [5]
+    assert test.a == {5}
 
     test.a = sympy.symbols("x y z")
-    assert isinstance(test.a, list)
+    assert isinstance(test.a, set)
     test.generate()
     assert isinstance(test.a, sympy.Symbol)
 

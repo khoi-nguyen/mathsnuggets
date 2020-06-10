@@ -55,7 +55,7 @@ class Form:
         self._random = {}
         while True:
             for attr, _ in random_fields:
-                self._random[attr] = random.choice(self.__dict__.get(attr))
+                self._random[attr] = random.choice(list(self.__dict__.get(attr)))
             if all([getattr(self, c) for c, _ in constraints]):
                 break
         if hasattr(self, "generator") and callable(self.generator):
