@@ -77,10 +77,6 @@ export default {
     }
   },
   mounted () {
-    getSlideshow(function (data) {
-      this.slideshow = data
-      this.$nextTick(() => (Reveal.sync()))
-    }.bind(this))
     Reveal.initialize({
       center: false,
       embedded: this.embedded,
@@ -90,6 +86,12 @@ export default {
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
+    if (this.$route.params.id) {
+      getSlideshow(this.$route.params.id, function (data) {
+        this.slideshow = data
+        this.$nextTick(() => (Reveal.sync()))
+      }.bind(this))
+    }
   },
   methods: {
     saveSlide (slide, col, position) {
@@ -97,8 +99,8 @@ export default {
         key: `slides.${slide}`,
         patch: this.data[slide]
       }
-      if (this.authState.loggedIn) {
-        saveSlideshow(payload)
+      if (this.$route.params.id && this.authState.loggedIn) {
+        saveSlideshow(this.$route.params.id, payload)
       }
     }
   },

@@ -15,40 +15,34 @@ div
               i.fas.fa-search(aria-hidden='true')
         p.panel-tabs
           a All
-          a Khoi
-          a Tom
-        .columns.panel-block(v-for="lesson in lessons")
-          .column.is-narrow
-            i.fa-4x.fas.fa-book
-          .column
-            h1.title {{ lesson.title }}
-            dl
-              dt Creator
-              dd {{ lesson.creator }}
-              dt Key Stage
-              dd {{ lesson.keystage }}
-              dt Subject
-              dd {{ lesson.subject }}
-              dt Date
-              dd {{ lesson.date }}
+        div(v-for="lesson in lessons")
+          a(:href="`/resources/${lesson.id}`").panel-block
+            .columns.is-vcentered
+              .column.is-narrow
+                i.fa-4x.fas.fa-chalkboard-teacher
+              .column
+                h1.title {{ lesson.title }}
+                dl
+                  div(v-for="field in fields" v-if="lesson[field[0]]")
+                    dt {{ field[1] }}
+                    dd {{ Array.isArray(lesson[field[0]]) ? lesson[field[0]].join(', ') : lesson[field[0]] }}
 </template>
 
 <script>
 import NavBar from './NavBar'
+import { getSlideshowList } from './ajax'
 
 export default {
   components: { NavBar },
+  mounted () {
+    getSlideshowList(function (data) {
+      this.lessons = data
+    }.bind(this))
+  },
   data () {
     return {
-      lessons: [
-        {
-          title: 'Linear Equations',
-          creator: 'Tom',
-          keystage: '3',
-          subject: 'Algebra',
-          date: '09/06/20'
-        }
-      ]
+      fields: [['authors', 'Authors'], ['date', 'Date']],
+      lessons: []
     }
   }
 }

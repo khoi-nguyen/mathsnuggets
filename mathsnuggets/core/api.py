@@ -1,4 +1,3 @@
-import bson.json_util
 import bson.objectid
 import flask
 import flask_login
@@ -18,8 +17,28 @@ def form_list():
 
 
 @api.route("/slideshows")
-def get_slideshow():
-    slideshow = db.slideshows.find_one()
+def get_slideshows():
+    slideshows = db.slideshows.aggregate(
+        [
+            {"$match": {}},
+            {
+                "$project": {
+                    "_id": False,
+                    "id": {"$toString": "$_id"},
+                    "title": True,
+                    "date": True,
+                    "authors": True,
+                }
+            },
+        ]
+    )
+    return flask.jsonify(list(slideshows))
+
+
+@api.route("/slideshows/<identifier>", methods=["GET"])
+def edit_slideshow(identifier):
+    query = {"_id": bson.objectid.ObjectId(identifier)}
+    slideshow = db.slideshows.find_one(query)
     slides = slideshow["slides"] if slideshow else [{"title": ""}]
     for slide in slides:
         if "widgets" not in slide:
@@ -36,17 +55,18 @@ def get_slideshow():
     return flask.jsonify(slides)
 
 
-@api.route("/slideshows/save", methods=["POST"])
+@api.route("/slideshows/<identifier>", methods=["POST"])
 @flask_login.login_required
-def save_slideshow():
+def save_slideshow(identifier):
     post = flask.request.get_json()
-    slideshow = db.slideshows.find_one()
+    query = {"_id": bson.objectid.ObjectId(identifier)}
+    slideshow = db.slideshows.find_one(query)
     if slideshow:
         new_vals = {"$set": {post["key"]: post["patch"]}}
     else:
         new_vals = {"$set": {"slides": [post["patch"]]}}
-    db.slideshows.update_one({}, new_vals, upsert=True)
-    return flask.jsonify([post, new_vals])
+    db.slideshows.update_one(query, new_vals, upsert=True)
+    return flask.jsonify({"success": True})
 
 
 @api.route("/fields/<field>", methods=["POST"])

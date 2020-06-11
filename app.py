@@ -15,8 +15,10 @@ api.login_manager.init_app(app)
 @app.route("/about")
 @app.route("/login")
 @app.route("/plot")
+@app.route("/resources")
+@app.route("/resources/<identifier>")
 @app.route("/slideshow_builder")
-def frontend():
+def frontend(identifier=False):
     return flask.send_from_directory("dist/", "index.html")
 
 

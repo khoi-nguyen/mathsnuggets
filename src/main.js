@@ -7,6 +7,7 @@ import About from './About'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
 import Plot from './Plot'
+import Resources from './Resources'
 import SlideshowBuilder from './SlideshowBuilder'
 
 Vue.use(VueRouter)
@@ -17,6 +18,8 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/plot', component: Plot },
+  { path: '/resources', component: Resources },
+  { path: '/resources/:id', component: SlideshowBuilder },
   { path: '/slideshow_builder', component: SlideshowBuilder }
 ]
 

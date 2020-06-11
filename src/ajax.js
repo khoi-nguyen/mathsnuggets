@@ -23,12 +23,16 @@ export function validateField (field, payload, callback) {
   callApi(`/api/fields/${field}`, 'POST', callback, payload)
 }
 
-export function getSlideshow (callback) {
+export function getSlideshowList (callback) {
   callApi('/api/slideshows', 'GET', callback)
 }
 
-export function saveSlideshow (payload, callback) {
-  callApi('/api/slideshows/save', 'POST', callback, payload)
+export function getSlideshow (id, callback) {
+  callApi(`/api/slideshows/${id}`, 'GET', callback)
+}
+
+export function saveSlideshow (id, payload, callback) {
+  callApi(`/api/slideshows/${id}`, 'POST', callback, payload)
 }
 
 export function login (payload, callback) {

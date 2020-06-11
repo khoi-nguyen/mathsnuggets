@@ -1,4 +1,6 @@
-- slides:
+- authors:
+    - Khoi Nguyen
+  slides:
     - title: First slide
       widgets:
           - [{type: 'Equation'}]

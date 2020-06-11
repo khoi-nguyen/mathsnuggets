@@ -94,16 +94,33 @@ def test_widget_validation(client):
     assert response.status_code == 400
 
 
-def test_retrieve_slideshow(client, mock_mongo):
-    assert db.slideshows.count_documents({})
+def test_list_slideshows(client, mock_mongo):
     response, data = get(client, "/api/slideshows")
+    assert response.status_code == 200
+
+    assert isinstance(data[0]["id"], str)
+
+
+def test_retrieve_slideshow(client, mock_mongo):
+    slideshow = db.slideshows.find_one({})
+    assert slideshow["_id"]
+    response, data = get(client, f"/api/slideshows/{str(slideshow['_id'])}")
     assert response.status_code == 200
     assert isinstance(data, list)
 
 
 def test_save_slideshow(client, mock_mongo):
+    slideshow = db.slideshows.find_one({})
+    assert slideshow["_id"]
+
+    response, data = get(client, "/api/auth/login")
+    assert response.status_code == 200
+    assert not data["is_authenticated"]
     response = post(
-        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}, False
+        client,
+        f"/api/slideshows/{str(slideshow['_id'])}",
+        {"key": "1", "patch": {"title": "Hello"}},
+        False,
     )
     assert response.status_code == 401
 
@@ -112,12 +129,16 @@ def test_save_slideshow(client, mock_mongo):
     )
     assert response.status_code == 200
     response, data = post(
-        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
+        client,
+        f"/api/slideshows/{str(slideshow['_id'])}",
+        {"key": "1", "patch": {"title": "Hello"}},
     )
     assert response.status_code == 200
     db.slideshows.delete_many({})
     response, data = post(
-        client, "/api/slideshows/save", {"key": "1", "patch": {"title": "Hello"}}
+        client,
+        f"/api/slideshows/{str(slideshow['_id'])}",
+        {"key": "1", "patch": {"title": "Hello"}},
     )
     assert response.status_code == 200
 

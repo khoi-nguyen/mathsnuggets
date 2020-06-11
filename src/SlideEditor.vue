@@ -17,8 +17,8 @@ div.slide
           @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
   .buttons.is-size-2.has-text-grey
-    a(href="/" v-tooltip.right-start="'Home page'")
-      i.fas.fa-home
+    a(href="/resources" v-tooltip.right-start="'Back to resources list'")
+      i.fas.fa-sign-out-alt
     span(
       v-if="colsCount != 2"
       v-tooltip.right-start="'Split in two columns'"

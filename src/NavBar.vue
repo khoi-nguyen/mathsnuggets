@@ -19,7 +19,7 @@ nav.navbar.container
         span.icon.has-text-info
           i.fas.fa-home
         span Home
-      a(href="/slideshow_builder").navbar-item
+      router-link(to="/resources").navbar-item
         span.icon.has-text-info
           i.fas.fa-chalkboard-teacher
         span Lesson Builder
