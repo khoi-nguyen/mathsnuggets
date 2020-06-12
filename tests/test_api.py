@@ -134,6 +134,11 @@ def test_save_slideshow(client, mock_mongo):
         {"key": "1", "patch": {"title": "Hello"}},
     )
     assert response.status_code == 200
+    response, data = post(
+        client, f"/api/slideshows/{str(slideshow['_id'])}", {"title": "Hello"},
+    )
+    assert response.status_code == 200
+    assert data["title"] == "Hello"
     db.slideshows.delete_many({})
     response, data = post(
         client,
