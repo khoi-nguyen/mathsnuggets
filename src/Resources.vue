@@ -1,6 +1,5 @@
 <template lang="pug">
 div
-  NavBar
   section.hero.is-primary
     div.hero-body.has-text-centered
       div.container
@@ -48,13 +47,11 @@ div
 </template>
 
 <script>
-import NavBar from './NavBar'
 import { auth } from './auth'
 import { saveSlideshow, getSlideshowList } from './ajax'
 import _ from 'lodash'
 
 export default {
-  components: { NavBar },
   mounted () {
     getSlideshowList(function (data) {
       this.lessons = data.concat([{ title: '' }])

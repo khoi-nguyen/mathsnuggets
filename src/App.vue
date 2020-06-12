@@ -1,13 +1,28 @@
 <template lang="pug">
-router-view
+router-view(v-if="slideshowEditor")
+div(v-else-if="!slideshowEditor")
+  NavBar
+  router-view
 </template>
 
 <script>
 import { auth } from './auth.js'
+import NavBar from './NavBar'
 import 'typeface-fira-sans'
 
 export default {
   name: 'App',
+  components: {
+    NavBar
+  },
+  computed: {
+    slideshowEditor () {
+      if (this.$route.path.startsWith('/resources/') || this.$route.path === '/slideshow_builder') {
+        return true
+      }
+      return false
+    }
+  },
   mounted () {
     auth.isLoggedIn()
   }

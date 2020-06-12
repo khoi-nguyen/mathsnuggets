@@ -1,6 +1,5 @@
 <template lang="pug">
 div
-  NavBar
   section.hero.is-primary
     div.hero-body.has-text-centered
       div.container
@@ -49,10 +48,7 @@ div
 </template>
 
 <script>
-import NavBar from './NavBar'
-
 export default {
-  components: { NavBar },
   name: 'About'
 }
 </script>

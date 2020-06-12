@@ -1,6 +1,5 @@
 <template lang="pug">
 div
-  NavBar
   div.hero.is-primary
     .reveal.hero-body
       .slides
@@ -41,7 +40,6 @@ div
 <script>
 import 'typeface-fira-sans'
 import FormField from './FormField'
-import NavBar from './NavBar'
 import ResourceComponent from './ResourceComponent'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
@@ -51,7 +49,6 @@ export default {
   name: 'HomePage',
   components: {
     FormField,
-    NavBar,
     ResourceComponent
   },
   mounted () {
