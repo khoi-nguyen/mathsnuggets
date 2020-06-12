@@ -43,7 +43,7 @@ def list_slideshows(identifier=False):
 
 
 @api.route("/slideshows/<identifier>", methods=["GET"])
-def edit_slideshow(identifier):
+def load_slideshow(identifier):
     query = {"_id": bson.objectid.ObjectId(identifier)}
     slideshow = db.slideshows.find_one(query)
     slides = slideshow["slides"] if slideshow else [{"title": ""}]
@@ -62,10 +62,15 @@ def edit_slideshow(identifier):
     return flask.jsonify(slides)
 
 
+@api.route("/slideshows/", methods=["POST"])
 @api.route("/slideshows/<identifier>", methods=["POST"])
 @flask_login.login_required
-def save_slideshow(identifier):
+def save_slideshow(identifier=False):
     post = flask.request.get_json()
+    if not identifier:
+        post["slides"] = []
+        _id = db.slideshows.insert_one(post)
+        return list_slideshows(str(_id.inserted_id))
     query = {"_id": bson.objectid.ObjectId(identifier)}
     slideshow = db.slideshows.find_one(query)
     if "key" in post:

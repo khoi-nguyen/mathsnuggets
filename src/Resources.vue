@@ -15,19 +15,23 @@ div
               i.fas.fa-search(aria-hidden='true')
         p.panel-tabs
           a All
-        div(v-for="(lesson, index) in lessons")
+        div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
           a(:href="`/resources/${lesson.id}`").panel-block
             .columns.is-vcentered
-              .column.is-narrow
-                i.fa-4x.fas.fa-chalkboard-teacher
+              .column.is-narrow.is-narrow
+                div
+                  i.fa-4x.fas.fa-chalkboard-teacher
+                div.is-small
+                  i.fas.fa-edit
+                  span.link(@click.stop.prevent="openModal(index)" v-if="authState.loggedIn") Edit metadata
               .column
                 h3.title {{ lesson.title }}
                 dl
                   div(v-for="field in fields" v-if="lesson[field.name]")
                     dt {{ field.label }}
                     dd {{ Array.isArray(lesson[field.name]) ? lesson[field.name].join(', ') : lesson[field.name] }}
-              .column.is-narrow(@click.stop.prevent="openModal(index)")
-                i.fa-2x.fas.fa-edit
+      div.panel-block
+        button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(lessons.length - 1, true)") Create slideshow
   .modal(:class="{'is-active': modal}")
     .modal-background
     .modal-card
@@ -45,6 +49,7 @@ div
 
 <script>
 import NavBar from './NavBar'
+import { auth } from './auth'
 import { saveSlideshow, getSlideshowList } from './ajax'
 import _ from 'lodash'
 
@@ -52,27 +57,31 @@ export default {
   components: { NavBar },
   mounted () {
     getSlideshowList(function (data) {
-      this.lessons = data
+      this.lessons = data.concat([{ title: '' }])
     }.bind(this))
   },
   methods: {
-    openModal (index) {
+    openModal (index, create = false) {
       this.lessonIndex = index
       this.modal = true
+      this.create = create
     },
     editMetadata () {
       const payload = {}
       _.forEach(this.$refs.modalFields, function (field) {
         payload[field.name] = field.value
       })
-      saveSlideshow(this.lessons[this.lessonIndex].id, payload, function (data) {
-        this.lessons[this.lessonIndex] = data
+      saveSlideshow(this.create ? '' : this.lessons[this.lessonIndex].id, payload, function (data) {
+        this.$set(this.lessons, this.lessonIndex, data)
+        this.$set(this.lessons, this.lessonIndex + 1, { title: '' })
         this.modal = false
       }.bind(this))
     }
   },
   data () {
     return {
+      authState: auth.state,
+      create: false,
       lessonIndex: 0,
       fields: [
         {
@@ -91,7 +100,7 @@ export default {
           editable: false
         }
       ],
-      lessons: [],
+      lessons: [{ title: '' }],
       modal: false
     }
   }
