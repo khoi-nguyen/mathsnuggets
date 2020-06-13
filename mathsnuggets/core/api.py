@@ -157,6 +157,12 @@ def logout():
     return flask.jsonify({"success": True})
 
 
+@api.route("/tests")
+def tests():
+    test_data = {k: v["test"] for k, v in widgets.info.items() if v.get("test")}
+    return flask.jsonify(test_data)
+
+
 class InvalidUsage(Exception):
     status_code = 400
 

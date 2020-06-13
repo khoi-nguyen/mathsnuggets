@@ -1,4 +1,5 @@
 const assert = require('assert')
+const fetch = require('node-fetch')
 const mocha = require('mocha')
 const puppeteer = require('puppeteer')
 
@@ -17,18 +18,12 @@ async function fillInField (page, fieldName, value, key = 'Enter') {
   await page.keyboard.press(key)
 }
 
-async function checkComputedField (page, fieldName) {
-  const identifier = `span[name="${fieldName}"] button`
-  await page.waitFor(identifier)
-  await page.click(identifier)
-}
-
 mocha.describe('mathsnuggets', function () {
   let browser
   let page
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: false, slowMo: 100 })
+    browser = await puppeteer.launch({ headless: true })
     page = await browser.newPage()
     await page.goto('http://localhost:5000/slideshow_builder')
   })
@@ -63,8 +58,14 @@ mocha.describe('mathsnuggets', function () {
   })
 
   mocha.it('testing a widget', async function () {
-    await selectWidget(page, 'Equation')
-    await fillInField(page, 'equation', 'x^2 - 5x + 6')
-    await checkComputedField(page, 'solution')
+    const data = await fetch('http://localhost:5000/api/tests', { method: 'GET' }).then(r => r.json())
+    for (const widget in data) {
+      const fields = data[widget]
+      await selectWidget(page, widget)
+      for (const fieldName in fields) {
+        const value = fields[fieldName]
+        await fillInField(page, fieldName, value)
+      }
+    }
   })
 })
