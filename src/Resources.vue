@@ -20,9 +20,9 @@ div
               .column.is-narrow.is-narrow
                 div
                   i.fa-4x.fas.fa-chalkboard-teacher
-                div.is-small
+                div.is-small(v-if="authState.loggedIn")
                   i.fas.fa-edit
-                  span.link(@click.stop.prevent="openModal(index)" v-if="authState.loggedIn") Edit metadata
+                  span.link(@click.stop.prevent="openModal(index)") Edit metadata
               .column
                 h3.title {{ lesson.title }}
                 dl
