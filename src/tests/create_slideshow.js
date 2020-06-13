@@ -30,7 +30,7 @@ mocha.describe('mathsnuggets', function () {
   this.timeout(100000)
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: true })
+    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] })
     page = await browser.newPage()
     await page.goto('http://localhost:5000/slideshow_builder')
   })
