@@ -45,21 +45,8 @@ def list_slideshows(identifier=False):
 @api.route("/slideshows/<identifier>", methods=["GET"])
 def load_slideshow(identifier):
     query = {"_id": bson.objectid.ObjectId(identifier)}
-    slideshow = db.slideshows.find_one(query)
-    slides = slideshow["slides"] if slideshow else [{"title": ""}]
-    for slide in slides:
-        if "widgets" not in slide:
-            slide["widgets"] = [[{"type": "", "fields": []}]]
-            continue
-        for col in slide["widgets"]:
-            for widget in col:
-                if "fields" not in widget:
-                    continue
-                form = getattr(widgets, widget["type"])(**widget["fields"])
-                data = [f for n, f in form._fields()]
-                data.sort(key=lambda f: f.get("order"))
-                widget["fields"] = data
-    return flask.jsonify(slides)
+    slideshow = models.Slideshow(**query)
+    return flask.jsonify(dict(slideshow)["slides"])
 
 
 @api.route("/slideshows/", methods=["POST"])
