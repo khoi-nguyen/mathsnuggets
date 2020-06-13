@@ -2,12 +2,33 @@ const assert = require('assert')
 const mocha = require('mocha')
 const puppeteer = require('puppeteer')
 
+async function selectWidget (page, widget) {
+  await page.hover('.widget-col')
+  await page.select('.widget-col select', widget)
+}
+
+async function fillInField (page, fieldName, value, key = 'Enter') {
+  const identifier = `span[name="${fieldName}"] textarea`
+  await page.waitFor(identifier)
+  await page.focus(identifier)
+  await page.keyboard.type(value)
+  const typedValue = await page.$eval(identifier, el => el.value)
+  assert.equal(typedValue, value)
+  await page.keyboard.press(key)
+}
+
+async function checkComputedField (page, fieldName) {
+  const identifier = `span[name="${fieldName}"] button`
+  await page.waitFor(identifier)
+  await page.click(identifier)
+}
+
 mocha.describe('mathsnuggets', function () {
   let browser
   let page
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: true })
+    browser = await puppeteer.launch({ headless: false, slowMo: 100 })
     page = await browser.newPage()
     await page.goto('http://localhost:5000/slideshow_builder')
   })
@@ -42,14 +63,8 @@ mocha.describe('mathsnuggets', function () {
   })
 
   mocha.it('testing a widget', async function () {
-    const widget = 'Equation'
-    await page.hover('.widget-col')
-    await page.select('.widget-col select', widget)
-    await page.waitFor('span[name="equation"] textarea')
-    await page.focus('span[name="equation"] textarea')
-    await page.keyboard.type('x^2 - 5x + 6')
-    await page.keyboard.press('Enter')
-    await page.waitFor('span[name="solution"] button')
-    await page.click('span[name="solution"] button')
+    await selectWidget(page, 'Equation')
+    await fillInField(page, 'equation', 'x^2 - 5x + 6')
+    await checkComputedField(page, 'solution')
   })
 })
