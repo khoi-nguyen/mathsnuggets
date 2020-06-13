@@ -1,7 +1,7 @@
 ENV := . env/bin/activate;
 PYTHON := $(ENV) python3
 
-.PHONY: all backend build clean docker docs env frontend hooks lint precommit tests
+.PHONY: all backend build clean docker docs env e2e frontend hooks lint precommit tests
 
 all: docs lint tests
 
@@ -29,6 +29,13 @@ env/bin/activate: requirements.txt
 	@test -d env || python3 -m venv env
 	@$(PYTHON) -m pip install -Ur requirements.txt
 	@touch env/bin/activate
+
+e2e: build env
+	@$(PYTHON) -m app &
+	sleep 1
+	npx mocha --timeout 10000 src/tests
+	sleep 1
+	ps -ef | grep "env/bin/python3 -m app" | awk '{print $$2}' | head -1 | xargs kill
 
 frontend: node_modules
 	@npx parcel watch src/index.html

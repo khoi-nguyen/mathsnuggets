@@ -18,9 +18,16 @@ async function fillInField (page, fieldName, value, key = 'Enter') {
   await page.keyboard.press(key)
 }
 
+async function waitForComputedFields (page) {
+  const identifier = 'span button.computed-field'
+  await page.waitFor(identifier)
+  await page.click(identifier)
+}
+
 mocha.describe('mathsnuggets', function () {
   let browser
   let page
+  this.timeout(100000)
 
   mocha.before(async function () {
     browser = await puppeteer.launch({ headless: true })
@@ -66,6 +73,7 @@ mocha.describe('mathsnuggets', function () {
         const value = fields[fieldName]
         await fillInField(page, fieldName, value)
       }
+      await waitForComputedFields(page)
     }
   })
 })
