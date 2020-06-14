@@ -11,6 +11,9 @@ class Expand(form.Form):
     expression = fields.Expression("Expression")
     template = "Expand `expression` `expand`"
 
+    def validate(self):
+        self.expression = sympy.factor(self.expression)
+
     @fields.computed("Expanded")
     def expand(self):
         return sympy.expand(self.expression)
