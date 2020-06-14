@@ -1,6 +1,6 @@
 <template lang="pug">
 div.slide
-  SlideTitle(
+  slide-title(
     :value="title"
     @update:value="$emit('update:title', $event)"
     @validate:title="$emit('validate:title', $event)"
@@ -8,7 +8,7 @@ div.slide
   .columns
     div.column(v-for="i in [0, 1]" v-if="i < colsCount")
       draggable(v-model="localComponents[i]")
-        ResourceComponent(
+        resource-component(
           v-for="(component, index) in localComponents[i]"
           :type.sync="component.type"
           :fields.sync="component.fields"
@@ -16,21 +16,24 @@ div.slide
           @delete="deleteWidget(i, index)"
           @validate:widget="$emit('validate:widget', {col: i, pos: index})"
         )
-  .buttons.is-size-2.has-text-grey
-    a(href="/resources" v-tooltip.right-start="'Back to resources list'")
-      i.fas.fa-sign-out-alt
-    span(
+  .buttons
+    b-tooltip(label="Back to resources list" position="is-right")
+      b-button(tag="a" href="/resources")
+        b-icon(pack="fas" icon="sign-out-alt")
+    b-tooltip(
       v-if="colsCount != 2"
-      v-tooltip.right-start="'Split in two columns'"
-      tabindex="-1"
-      @click="localComponents.push([{type: '', fields: []}])"
+      label="Split in two columns"
+      position="is-right"
     )
-      i.fas.fa-columns
-    span(
+      b-button(@click="localComponents.push([{type: '', fields: []}])")
+        b-icon(pack="fas" icon="columns")
+    b-tooltip(
       v-if="authState.loggedIn"
-      v-tooltip.right-start="'Automatic saving enabled'"
+      label="Automatic saving enabled"
+      position="is-right"
     )
-      i.fas.fa-save
+      b-button
+        b-icon(pack="fas" icon="save")
 </template>
 
 <script>
