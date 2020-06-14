@@ -42,15 +42,4 @@ $weight-bold: 500;
 .title {
   font-weight: 400;
 }
-.tooltip {
-  z-index: 100000;
-
-  .tooltip-inner {
-    background: $primary;
-    border-radius: 16px;
-    color: white;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-  }
-}
 </style>
