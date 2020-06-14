@@ -7,7 +7,6 @@ import App from './App'
 import About from './About'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
-import Plot from './Plot'
 import Resources from './Resources'
 import SlideshowBuilder from './SlideshowBuilder'
 
@@ -16,13 +15,12 @@ Vue.use(VueRouter)
 Vue.use(VTooltip)
 
 const routes = [
-  { path: '/', component: HomePage, props: { navbar: true } },
-  { path: '/about', component: About, props: { navbar: true } },
-  { path: '/login', component: LoginPage, props: { navbar: true } },
-  { path: '/plot', component: Plot, props: { navbar: true } },
-  { path: '/resources', component: Resources, props: { navbar: true } },
-  { path: '/resources/:id', component: SlideshowBuilder, props: { navbar: false } },
-  { path: '/slideshow_builder', component: SlideshowBuilder, props: { navbar: false } }
+  { path: '/', component: HomePage },
+  { path: '/about', component: About },
+  { path: '/login', component: LoginPage },
+  { path: '/resources', component: Resources },
+  { path: '/resources/:id', component: SlideshowBuilder, props: { slides: true } },
+  { path: '/slideshow_builder', component: SlideshowBuilder, props: { slides: true } }
 ]
 
 const router = new VueRouter({

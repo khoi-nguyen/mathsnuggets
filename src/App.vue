@@ -1,6 +1,6 @@
 <template lang="pug">
-router-view(v-if="!navbar")
-div(v-else-if="navbar")
+router-view(v-if="slides")
+div(v-else="!slides")
   NavBar
   router-view
 </template>
@@ -13,7 +13,7 @@ import 'typeface-fira-sans'
 export default {
   name: 'App',
   props: {
-    navbar: Boolean
+    slides: Boolean
   },
   components: {
     NavBar
@@ -36,7 +36,8 @@ $weight-semibold: 400;
 $weight-bold: 500;
 
 @import "reveal.js/dist/reveal.css";
-@import "../node_modules/bulma/bulma.sass";
+@import "~bulma/bulma.sass";
+@import "~buefy/src/scss/buefy";
 
 .title {
   font-weight: 400;
