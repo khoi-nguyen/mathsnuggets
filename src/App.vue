@@ -1,6 +1,6 @@
 <template lang="pug">
-router-view(v-if="slideshowEditor")
-div(v-else-if="!slideshowEditor")
+router-view(v-if="!navbar")
+div(v-else-if="navbar")
   NavBar
   router-view
 </template>
@@ -12,16 +12,11 @@ import 'typeface-fira-sans'
 
 export default {
   name: 'App',
+  props: {
+    navbar: Boolean
+  },
   components: {
     NavBar
-  },
-  computed: {
-    slideshowEditor () {
-      if (this.$route.path.startsWith('/resources/') || this.$route.path === '/slideshow_builder') {
-        return true
-      }
-      return false
-    }
   },
   mounted () {
     auth.isLoggedIn()

@@ -14,13 +14,13 @@ Vue.use(VueRouter)
 Vue.use(VTooltip)
 
 const routes = [
-  { path: '/', component: HomePage },
-  { path: '/about', component: About },
-  { path: '/login', component: LoginPage },
-  { path: '/plot', component: Plot },
-  { path: '/resources', component: Resources },
-  { path: '/resources/:id', component: SlideshowBuilder },
-  { path: '/slideshow_builder', component: SlideshowBuilder }
+  { path: '/', component: HomePage, props: { navbar: true } },
+  { path: '/about', component: About, props: { navbar: true } },
+  { path: '/login', component: LoginPage, props: { navbar: true } },
+  { path: '/plot', component: Plot, props: { navbar: true } },
+  { path: '/resources', component: Resources, props: { navbar: true } },
+  { path: '/resources/:id', component: SlideshowBuilder, props: { navbar: false } },
+  { path: '/slideshow_builder', component: SlideshowBuilder, props: { navbar: false } }
 ]
 
 const router = new VueRouter({

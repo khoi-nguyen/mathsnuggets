@@ -11,6 +11,9 @@ class Factorise(form.Form):
     expression = fields.Expression("Expression")
     template = "Factorise `expression` `factorise`"
 
+    def validate(self):
+        self.expression = sympy.expand(self.expression)
+
     @fields.computed("Factorised")
     def factorise(self):
         return sympy.factor(self.expression)
