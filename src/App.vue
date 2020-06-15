@@ -1,6 +1,6 @@
 <template lang="pug">
 router-view(v-if="slides")
-div(v-else="!slides")
+div(v-else)
   NavBar
   router-view
 </template>
@@ -12,11 +12,13 @@ import 'typeface-fira-sans'
 
 export default {
   name: 'App',
-  props: {
-    slides: Boolean
-  },
   components: {
     NavBar
+  },
+  computed: {
+    slides () {
+      return this.$route.path.startsWith('/resources/') || this.$route.path.startsWith('/slideshow')
+    }
   },
   mounted () {
     auth.isLoggedIn()

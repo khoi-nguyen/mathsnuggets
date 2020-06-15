@@ -18,8 +18,8 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
-  { path: '/resources/:id', component: SlideshowBuilder, props: { slides: true } },
-  { path: '/slideshow_builder', component: SlideshowBuilder, props: { slides: true } }
+  { path: '/resources/:id', component: SlideshowBuilder },
+  { path: '/slideshow_builder', component: SlideshowBuilder }
 ]
 
 const router = new VueRouter({
