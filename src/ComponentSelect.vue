@@ -14,7 +14,7 @@ b-field
 </template>
 
 <script>
-import { getComponentList } from './ajax'
+import { api } from './ajax'
 export default {
   props: {
     value: String
@@ -31,8 +31,8 @@ export default {
       this.localValue = val
     }
   },
-  mounted () {
-    getComponentList((data) => { this.list = data })
+  async mounted () {
+    this.list = await api('widgets')
   },
   data () {
     return {
