@@ -159,7 +159,7 @@ def logout():
 
 @api.route("/tests")
 def tests():
-    test_data = {k: v["test"] for k, v in widgets.info.items() if v.get("test")}
+    test_data = {v["name"]: v["test"] for k, v in widgets.info.items() if v.get("test")}
     return flask.jsonify(test_data)
 
 

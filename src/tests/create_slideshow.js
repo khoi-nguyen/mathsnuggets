@@ -5,7 +5,13 @@ const puppeteer = require('puppeteer')
 
 async function selectWidget (page, widget) {
   await page.hover('.widget-col')
-  await page.select('.widget-col select', widget)
+  const identifier = '.widget-col .autocomplete input'
+  await page.waitFor(identifier)
+  await page.click(identifier, { clickCount: 3 })
+  await page.keyboard.type(widget)
+  const typedValue = await page.$eval(identifier, el => el.value)
+  assert.equal(typedValue, widget)
+  await page.keyboard.press('Enter')
 }
 
 async function fillInField (page, fieldName, value, key = 'Enter') {
