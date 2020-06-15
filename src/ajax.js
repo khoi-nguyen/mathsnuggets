@@ -29,10 +29,6 @@ export function validateForm (widget, payload, callback) {
   callApi(`/api/widgets/${widget}`, 'POST', callback, payload)
 }
 
-export function validateField (field, payload, callback) {
-  callApi(`/api/fields/${field}`, 'POST', callback, payload)
-}
-
 export function getSlideshowList (callback) {
   callApi('/api/slideshows', 'GET', callback)
 }
