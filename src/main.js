@@ -3,12 +3,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
-import App from './App'
-import About from './About'
-import HomePage from './HomePage'
-import LoginPage from './LoginPage'
-import Resources from './Resources'
-import SlideshowBuilder from './SlideshowBuilder'
+const App = () => import('./App')
+const About = () => import('./About')
+const HomePage = () => import('./HomePage')
+const LoginPage = () => import('./LoginPage')
+const Resources = () => import('./Resources')
+const SlideshowBuilder = () => import('./SlideshowBuilder')
 
 Vue.use(Buefy)
 Vue.use(VueRouter)

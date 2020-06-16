@@ -9,6 +9,7 @@ div(v-else)
 import { auth } from './auth.js'
 import NavBar from './NavBar'
 import 'typeface-fira-sans'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 export default {
   name: 'App',
