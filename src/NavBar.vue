@@ -1,11 +1,11 @@
 <template lang="pug">
 b-navbar.container
   template(slot="brand")
-    b-navbar-item(tag="router-link" :to="{ path: '/' }")
+    b-navbar-item(tag="a" href="/")
       b-icon(pack="fas" icon="square-root-alt" type="is-info")
       span mathsnuggets
   template(slot="start")
-    b-navbar-item(tag="router-link" :to="link.path" v-for="link in links")
+    b-navbar-item(v-bind="link.attrs" v-for="link in links")
       b-icon(v-bind="link.icon" type="is-info")
       span  {{ link.text }}
   template(slot="end")
@@ -29,17 +29,17 @@ export default {
       links: [
         {
           icon: { pack: 'fas', icon: 'home' },
-          path: '/',
+          attrs: { tag: 'a', href: '/' },
           text: 'Home'
         },
         {
           icon: { pack: 'fas', icon: 'chalkboard-teacher' },
-          path: '/resources',
+          attrs: { tag: 'router-link', to: '/resources' },
           text: 'Resources'
         },
         {
           icon: { pack: 'fas', icon: 'info-circle' },
-          path: '/about',
+          attrs: { tag: 'router-link', to: '/about' },
           text: 'About'
         }
       ]
