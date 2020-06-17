@@ -75,7 +75,7 @@ def test_widget(client):
 
 
 def test_widget_validation(client):
-    response, data = post(client, "/api/widgets/Equation", {"equation": "x^2"})
+    response, data = get(client, "/api/widgets/Equation?equation=x^2")
     assert response.status_code == 200
     assert data["solution"]["value"] == "FiniteSet(0)"
 
@@ -85,10 +85,10 @@ def test_widget_validation(client):
     assert data["equation"]["value"]
     assert response.status_code == 200
 
-    response, data = post(client, "/api/widgets/Equation", {"equation": "sin("})
+    response, data = get(client, "/api/widgets/Equation?equation=sin(")
     assert response.status_code == 400
 
-    response, data = post(client, "/api/widgets/Equation", {"x": "x"})
+    response, data = get(client, "/api/widgets/Equation?x=x")
     assert response.status_code == 400
 
 

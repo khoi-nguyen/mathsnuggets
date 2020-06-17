@@ -14,6 +14,13 @@ function callApi (url, method, callback, payload) {
     obj.headers = { 'Content-Type': 'application/json' }
     obj.body = JSON.stringify(payload)
   }
+  if (method === 'GET' && payload) {
+    let char = '?'
+    for (var key in payload) {
+      url += char + key + "=" + encodeURIComponent(payload[key]);
+      char = '&'
+    }
+   }
   fetch(url, obj).then(r => r.json()).then(callback)
 }
 
@@ -26,7 +33,7 @@ export function getComponentFields (path, callback) {
 }
 
 export function validateForm (widget, payload, callback) {
-  callApi(`/api/widgets/${widget}`, 'POST', callback, payload)
+  callApi(`/api/widgets/${widget}`, 'GET', callback, payload)
 }
 
 export function getSlideshowList (callback) {
