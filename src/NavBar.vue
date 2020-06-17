@@ -1,46 +1,17 @@
 <template lang="pug">
-nav.navbar.container
-  div.navbar-brand
-    a(href="/").navbar-item
-      span.icon.has-text-info
-        i.fas.fa-square-root-alt
+b-navbar.container
+  template(slot="brand")
+    b-navbar-item(tag="a" href="/")
+      b-icon(pack="fas" icon="square-root-alt" type="is-info")
       span mathsnuggets
-    a(
-      @click="forceShowMenu = !forceShowMenu"
-    ).navbar-burger.burger
-      span(aria-hidden="true")
-      span(aria-hidden="true")
-      span(aria-hidden="true")
-  div(
-    :class="{'is-active': forceShowMenu}"
-  )#navbarBasic.navbar-menu
-    div.navbar-start
-      a(href="/").navbar-item
-        span.icon.has-text-info
-          i.fas.fa-home
-        span Home
-      router-link(to="/resources").navbar-item
-        span.icon.has-text-info
-          i.fas.fa-chalkboard-teacher
-        span Lesson Builder
-      div.navbar-item.has-dropdown.is-hoverable
-        a.navbar-link
-          span.icon.has-text-info
-            i.fas.fa-tools
-          span Utilities
-        div.navbar-dropdown
-          a.navbar-item Generator
-          a.navbar-item Solver
-          router-link(to="/plot").navbar-item Plotter
-      router-link(to="/about").navbar-item
-          span.icon.has-text-info
-            i.fas.fa-info-circle
-          span About us
-    div.navbar-end
-      div.navbar-item
-        div.buttons
-          router-link(to="/login" v-if="!authState.loggedIn").button.is-primary Login
-          span(@click="logout" v-if="authState.loggedIn").button.is-light Logout
+  template(slot="start")
+    b-navbar-item(v-bind="link.attrs" v-for="link in links")
+      b-icon(v-bind="link.icon" type="is-info")
+      span  {{ link.text }}
+  template(slot="end")
+    b-navbar-item(tag="div").buttons
+      b-button(tag="router-link" to="/login" type="is-link" v-if="!authState.loggedIn") Login
+      b-button(@click="logout" v-else="authState.loggedIn") Logout
 </template>
 
 <script>
@@ -55,7 +26,23 @@ export default {
   data () {
     return {
       authState: auth.state,
-      forceShowMenu: false
+      links: [
+        {
+          icon: { pack: 'fas', icon: 'home' },
+          attrs: { tag: 'a', href: '/' },
+          text: 'Home'
+        },
+        {
+          icon: { pack: 'fas', icon: 'chalkboard-teacher' },
+          attrs: { tag: 'router-link', to: '/resources' },
+          text: 'Resources'
+        },
+        {
+          icon: { pack: 'fas', icon: 'info-circle' },
+          attrs: { tag: 'router-link', to: '/about' },
+          text: 'About'
+        }
+      ]
     }
   }
 }

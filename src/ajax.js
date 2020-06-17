@@ -1,3 +1,13 @@
+export async function api (url, payload = false) {
+  const method = payload ? 'POST' : 'GET'
+  const obj = { method: method }
+  if (method === 'POST') {
+    obj.headers = { 'Content-Type': 'application/json' }
+    obj.body = JSON.stringify(payload)
+  }
+  return await fetch(`/api/${url}`, obj).then(r => r.json())
+}
+
 function callApi (url, method, callback, payload) {
   const obj = { method: method }
   if (method === 'POST') {
@@ -17,10 +27,6 @@ export function getComponentFields (path, callback) {
 
 export function validateForm (widget, payload, callback) {
   callApi(`/api/widgets/${widget}`, 'POST', callback, payload)
-}
-
-export function validateField (field, payload, callback) {
-  callApi(`/api/fields/${field}`, 'POST', callback, payload)
 }
 
 export function getSlideshowList (callback) {

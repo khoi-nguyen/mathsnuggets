@@ -1,6 +1,6 @@
 <template lang="pug">
-router-view(v-if="!navbar")
-div(v-else-if="navbar")
+router-view(v-if="slides")
+div(v-else)
   NavBar
   router-view
 </template>
@@ -9,14 +9,17 @@ div(v-else-if="navbar")
 import { auth } from './auth.js'
 import NavBar from './NavBar'
 import 'typeface-fira-sans'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 export default {
   name: 'App',
-  props: {
-    navbar: Boolean
-  },
   components: {
     NavBar
+  },
+  computed: {
+    slides () {
+      return this.$route.path.startsWith('/resources/') || this.$route.path.startsWith('/slideshow')
+    }
   },
   mounted () {
     auth.isLoggedIn()
@@ -36,20 +39,10 @@ $weight-semibold: 400;
 $weight-bold: 500;
 
 @import "reveal.js/dist/reveal.css";
-@import "../node_modules/bulma/bulma.sass";
+@import "~bulma/bulma.sass";
+@import "~buefy/src/scss/buefy";
 
 .title {
   font-weight: 400;
-}
-.tooltip {
-  z-index: 100000;
-
-  .tooltip-inner {
-    background: $primary;
-    border-radius: 16px;
-    color: white;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-  }
 }
 </style>

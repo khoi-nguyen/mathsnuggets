@@ -73,9 +73,9 @@ def save_slideshow(identifier=False):
     return flask.jsonify({"success": True})
 
 
-@api.route("/fields/<field>", methods=["POST"])
+@api.route("/fields/<field>", methods=["GET"])
 def validate_field(field):
-    payload = flask.request.get_json()
+    payload = flask.request.args
     if not hasattr(fields, field):
         raise InvalidUsage(f"Field {repr(field)} does not exist", 404, payload=payload)
     if "value" not in payload:
@@ -159,7 +159,7 @@ def logout():
 
 @api.route("/tests")
 def tests():
-    test_data = {k: v["test"] for k, v in widgets.info.items() if v.get("test")}
+    test_data = {v["name"]: v["test"] for k, v in widgets.info.items() if v.get("test")}
     return flask.jsonify(test_data)
 
 

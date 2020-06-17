@@ -31,6 +31,8 @@ def default(path="index.html"):
         path = path[5:] if len(path) > 5 else "index.html"
     elif path.startswith("_static"):
         folder = "docs/build/html/"
+    elif path == "favicon.ico":
+        folder = "static/"
     slash = path.rfind("/") + 1
     return flask.send_from_directory(f"{folder}/{path[:slash]}", path[slash:])
 

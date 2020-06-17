@@ -1,6 +1,5 @@
 <template lang="pug">
 div
-  NavBar
   section.hero.is-primary
     div.hero-body.container.has-text-centered
       div(v-if="!authState.loggedIn")

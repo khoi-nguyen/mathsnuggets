@@ -17,7 +17,6 @@ div.reveal
 <script>
 import { auth } from './auth.js'
 import Reveal from 'reveal.js'
-import '@fortawesome/fontawesome-free/js/all.js'
 import _ from 'lodash'
 import { getSlideshow, saveSlideshow } from './ajax'
 

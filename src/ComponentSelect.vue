@@ -1,47 +1,44 @@
 <template lang="pug">
-div
-  div.select.is-small
-    select(
-      :value="value"
-      @change="selectComponent"
-      @focus="$emit('has-focus')"
-      @blur="$emit('lost-focus')"
-    )
-      option(selected value) Select component
-      option(
-        v-for="component in list"
-        :value="component.path"
-      ) {{ component.name }}
+b-field
+  b-autocomplete(
+    :data="filteredData"
+    @blur="$emit('lost-focus')"
+    @focus="$emit('has-focus')"
+    @select="$emit('update:type', $event.path)"
+    field="name"
+    keep-first
+    open-on-focus
+    placeholder="Select widget"
+    v-model="localValue"
+  )
 </template>
 
 <script>
-import { getComponentList } from './ajax'
+import { api } from './ajax'
 export default {
   props: {
     value: String
   },
-  mounted () {
-    getComponentList((data) => { this.list = data })
-  },
-  methods: {
-    selectComponent (ev) {
-      var value = ev.target.value
-      this.$emit('update:type', value)
-      ev.target.blur()
+  computed: {
+    filteredData () {
+      return this.list.filter(function (option) {
+        return option.name.toLowerCase().indexOf(this.localValue.toLowerCase()) >= 0
+      }.bind(this))
     }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val
+    }
+  },
+  async mounted () {
+    this.list = await api('widgets')
   },
   data () {
     return {
+      localValue: this.value,
       list: []
     }
   }
 }
 </script>
-
-<style scoped>
-input, input:focus {
-  border: 0;
-  max-width: 100%;
-  outline: 0;
-}
-</style>
