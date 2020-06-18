@@ -15,16 +15,23 @@ class SequencePosition(form.Form):
     @fields.computed("Find position")
     def position(self):
         # determine if sequence has attribute free_symbols and check if sequence has "n"
-        if hasattr(self.sequence, "free_symbols") and sympy.symbols("n") in self.sequence.free_symbols:
+        if (
+            hasattr(self.sequence, "free_symbols")
+            and sympy.symbols("n") in self.sequence.free_symbols
+        ):
             general_term = self.sequence
         # solve for the general term
         else:
-            general_term = sequence_term.SequenceTerm(sequence=str(self.sequence)).term.args[1]
+            general_term = sequence_term.SequenceTerm(
+                sequence=str(self.sequence)
+            ).term.args[1]
         # equate element to general term
         equation = sympy.Eq(self.element, general_term)
         # solve the equation
         solution_set = sympy.solveset(equation, sympy.symbols("n"), sympy.S.Naturals0)
         # solution set is natural numbers or one element
         if solution_set == sympy.S.EmptySet:
-            raise ValueError("The 'term' you have entered is not in the sequence you have given")
+            raise ValueError(
+                "The 'term' you have entered is not in the sequence you have given"
+            )
         return solution_set
