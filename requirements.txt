@@ -10,6 +10,7 @@ flake8-rst-docstrings
 flake8-use-fstring
 flask
 flask_login
+gunicorn
 matplotlib
 mock
 pep8-naming

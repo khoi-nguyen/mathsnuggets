@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx parcel build src/index.html"
   },
   "author": "Khoi Nguyen",
   "license": "GPL-3.0-or-later",
