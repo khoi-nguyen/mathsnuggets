@@ -13,6 +13,7 @@ class Foo(form.Form):
     email = fields.Email("Email")
     password = fields.Password("Email")
     protected = fields.Field("Protected", default="Protected", protected=True)
+    select = fields.Select("Select", options=["Hi", "Hello"])
 
     @fields.constraint("Contraint", default=True)
     def constraint(self):
@@ -99,6 +100,17 @@ def test_equation_field():
         test.equation = False
     with pytest.raises(ValueError):
         test.equation = "3 x = **"
+
+
+def test_select_field():
+    test.select = "Hi"
+    assert test.select == "Hi"
+
+    with pytest.raises(ValueError):
+        test.select = "Hey"
+
+    export = type(test).select.export(test.select)
+    assert export["options"] == ["Hi", "Hello"]
 
 
 def test_markdown_field():

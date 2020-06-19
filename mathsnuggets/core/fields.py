@@ -131,6 +131,22 @@ class Expression(Field):
         }
 
 
+class Select(Field):
+    """Select field"""
+
+    def sanitize(self, value):
+        if value in self.options:
+            return value
+        raise ValueError(f"Value entered is not in {repr(self.options)}")
+
+    def export(self, value):
+        return {
+            "value": value,
+            "valid": value in self.options,
+            "options": self.options,
+        }
+
+
 class Matrix(Expression):
     def sanitize(self, expr):
         return sympy.Matrix(sympy.parse_expr(expr))
