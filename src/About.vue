@@ -7,7 +7,7 @@ div
           i.fa-4x.fas.fa-info
         h1.title.is-2 About us
   .container
-    .card.card-content.content
+    .card-content.content
       h2.title.is-1 Hello to you, reader!
       p.is-size-4.
         We are two Teachers of Mathematics seeking to facilitate teaching and learning
@@ -15,10 +15,9 @@ div
         PGCE course together, we decided to create this website to facilitate the creation of teaching resources.
     .columns.has-text-centered
       .column
-        .card.card-content
+        .card-content
           h2.title.is-2 Khoi Nguyen
           h4.subtitle.is-4 Main Developer
-          hr
           p.content.
             Hello! My name is Khoi and I am the main developer on this project.
             My responsibility is to implement new features
@@ -39,10 +38,9 @@ div
             I represented Oxford's first team in the 77#[sup th]
             Table Tennis Varsity match against Cambridge.
       .column
-        .card.card-content
+        .card-content
           h2.title.is-2 Tom Chambaud
           h4.subtitle.is-4 Apprentice Developer
-          hr
           p.content.
             As you may have guessed, I am part French (half to be precise) and, as of September
             2020, a Teacher of Mathematics at Sandwell Academy. In 2019, I graduated from #[a(href="https://keele.ac.uk") Keele University]
