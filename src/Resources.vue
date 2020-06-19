@@ -3,6 +3,8 @@ div
   section.hero.is-primary
     div.hero-body.has-text-centered
       div.container
+        div.is-large
+          i.fa-4x.fas.fa-chalkboard
         h1.title.is-2 Resources
   div.container
     div.panel
