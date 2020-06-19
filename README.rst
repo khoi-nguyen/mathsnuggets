@@ -9,8 +9,8 @@ MathsNuggets
   :target: https://github.com/khoi-nguyen/mathsnuggets
 .. image:: https://codecov.io/gh/khoi-nguyen/mathsnuggets/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/khoi-nguyen/mathsnuggets
-.. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
-  :target: https://www.gnu.org/licenses/gpl-3.0.en.html
+.. image:: https://img.shields.io/badge/License-AGPLv3-blue.svg
+  :target: https://www.gnu.org/licenses/agpl-3.0.en.html
 
 Slideshow builder for mathematics teachers with automatic solving
 and an exercise generator.
