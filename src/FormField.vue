@@ -1,8 +1,8 @@
 <template lang="pug">
 span
   span(v-html="before")
-  component.has-text-danger.is-family-monospace(
-    :class="{'select': options}"
+  component(
+    :class="{'select': options, 'has-text-danger': !options, 'is-family-monospace': !options}"
     v-if="!computed && !valid && !hidden"
     ref="field"
     :rows="rows"
@@ -17,7 +17,7 @@ span
     @keydown.enter.exact.prevent="blur"
     @input="$emit('update:value', $event.target.value)"
     @blur="blur"
-  )
+  ) {{ (options || []).length? '' : value }}
     option(v-for="option in options" :value="option") {{ option }}
   span(
     tabindex="0"
