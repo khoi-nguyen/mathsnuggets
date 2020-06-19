@@ -131,6 +131,22 @@ class Expression(Field):
         }
 
 
+class Select(Field):
+    """Select field"""
+
+    def sanitize(self, value):
+        if value in self.options:
+            return value
+        raise ValueError(f"Value entered is not in {repr(self.options)}")
+
+    def export(self, value):
+        return {
+            "value": value,
+            "valid": value in self.options,
+            "options": self.options,
+        }
+
+
 class Matrix(Expression):
     def sanitize(self, expr):
         return sympy.Matrix(sympy.parse_expr(expr))
@@ -254,7 +270,7 @@ class Email(Field):
     """Email Field"""
 
     def sanitize(self, value):
-        if not re.search(r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", value):
+        if not re.search(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?", value):
             raise ValueError("Invalid email address")
         return value
 
