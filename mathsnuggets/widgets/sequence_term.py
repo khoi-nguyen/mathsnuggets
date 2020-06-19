@@ -36,3 +36,30 @@ class SequenceTerm(form.Form):
         return sympy.Eq(
             sympy.Symbol(f"u_{self.n}"), sympy.simplify(formula.subs(replacements))
         )
+
+    a = fields.RandomNumber("a")
+    b = fields.RandomNumber("b")
+    c = fields.RandomNumber("c")
+
+    def generator(self):
+        formula = self.a * self.n ** 2 + self.b * self.n + self.c
+        self.sequence = tuple([formula.subs(self.n, i) for i in range(1, 5)])
+
+    @fields.range_constraint("Linear")
+    def linear(self):
+        self.a = {0}
+        self.b -= {0}
+
+    @fields.range_constraint("Quadratic")
+    def quadratic(self):
+        self.a -= {0}
+
+    @fields.range_constraint("Increasing")
+    def increasing(self):
+        self.a = {n for n in self.a if n > 0}
+        self.b = {n for n in self.b if n > 0}
+
+    @fields.range_constraint("Decreasing")
+    def decreasing(self):
+        self.a = {n for n in self.a if n < 0}
+        self.b = {n for n in self.b if n < 0}
