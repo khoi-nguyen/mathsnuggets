@@ -23,11 +23,8 @@ span
     @focus="enterEditMode"
     @click="enterEditMode"
   )
-  .message.is-danger(v-if="error")
-    .message-body
-      span.icon
-        i.fas.fa-exclamation-triangle
-      |  {{ error }}
+  div(v-if="error")
+    error-message {{ error }}
   div.has-text-centered(
     v-if="computed && renderedHtml"
     @click="$emit('update:show-computed', !showComputed)"
@@ -49,6 +46,8 @@ import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import _ from 'lodash'
 
+import ErrorMessage from './ErrorMessage'
+
 export default {
   props: {
     after: String,
@@ -64,6 +63,9 @@ export default {
     protected: Boolean,
     type: String,
     value: String
+  },
+  components: {
+    ErrorMessage
   },
   watch: {
     renderedHtml (value) {

@@ -43,11 +43,8 @@ div.widget-container
           :show-computed.sync="field.showComputed"
           @form-validate="formValidate"
         )
-      .message.is-danger(v-if="error")
-        .message-body
-          span.icon
-            i.fas.fa-exclamation-triangle
-          |  {{ error }}
+      div(v-if="error")
+        error-message {{ error }}
 </template>
 
 <script>
@@ -55,6 +52,7 @@ import { getComponentFields, validateForm } from './ajax'
 import ComponentSelect from './ComponentSelect'
 import FormField from './FormField'
 import Generator from './Generator'
+import ErrorMessage from './ErrorMessage'
 
 export default {
   props: {
@@ -120,6 +118,7 @@ export default {
   },
   components: {
     ComponentSelect,
+    ErrorMessage,
     FormField,
     Generator
   }
