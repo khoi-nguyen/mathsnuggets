@@ -23,7 +23,7 @@ div
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
         div.is-large
-          i.fa-3x(:class="feature.icon")
+          i.fa-4x(:class="feature.icon")
         h3.title(:class="row.length === 1 ? 'is-1' : 'is-3'") {{ feature.title }}
         .content(:class="row.length === 1 ? 'is-size-3' : 'is-size-5'") {{ feature.text }}
 </template>
@@ -76,35 +76,35 @@ export default {
         [
           {
             icon: 'fas fa-calculator',
-            title: 'Solver',
-            text: 'Solve any equation you type in.'
+            title: 'Automatic solving',
+            text: 'Solutions are always correct and computed for you.'
           },
           {
-            icon: 'fas fa-solar-panel',
-            title: 'Generator',
-            text: 'Generate exercises to the level of your choice.'
+            icon: 'fas fa-cogs',
+            title: 'Exercises generator',
+            text: 'Exercises can be generated for you, with fine-grained control over the difficulty.'
           },
           {
-            icon: 'far fa-chart-bar',
-            title: 'Plotter',
-            text: 'Plot the graph of any equation.'
+            icon: 'fas fa-users',
+            title: 'User-friendly',
+            text: 'The interface is intuitive and works out of the box on every device.'
           }
         ],
         [
           {
-            icon: 'fas fa-grin-alt',
-            title: 'User-Friendly Interface',
-            text: 'No programming knowledge is necessary, your inputted formulae are automatically converted.'
+            icon: 'fas fa-photo-video',
+            title: 'Dynamic',
+            text: 'Draw on the slides or embed videos. The possibilities are endless.'
           },
           {
-            icon: 'fas fa-school',
-            title: 'Inclusivity',
-            text: 'All tools on this website are available to pupils and teachers.'
+            icon: 'fas fa-puzzle-piece',
+            title: 'Easily extensible',
+            text: 'If you can program, make sure it fits your needs'
           },
           {
-            icon: 'fas fa-archway',
-            title: 'Structure',
-            text: 'Web components are fully embedded'
+            icon: 'fas fa-handshake',
+            title: 'Free',
+            text: 'As in \'free beer\' and \'free software\'.'
           }
         ]
       ],
