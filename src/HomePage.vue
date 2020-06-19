@@ -4,30 +4,21 @@ div
     .reveal.hero-body
       .slides
         section
-          div.is-size-2.content.katex(v-html="formula")
           h1.title.is-1 Welcome to MathsNuggets
+          div.is-size-2.content.katex(v-html="formula")
         section
           h1.title.is-1 Easily edit formulas
           p.content.is-size-2
-            FormField(v-bind.sync="expressionField")
+            form-field(v-bind.sync="field")
           p.content.
             Try it out by clicking the formula above.
         section
           h1.title.is-1 Automatic Solving
-          p.content
-            ResourceComponent(type="Equation" :fields.sync="equationWidget" :hide-widget-menu="true")
-        section
-          h1.title.is-1 Plotter
-          p.content
-            ResourceComponent(type="Plot" :fields.sync="plotWidget" :hide-widget-menu="true")
-        section
-          p.content
-            img(src='https://www.teachhub.com/sites/default/files/field/image/technology-in-the-classroom-benefits-of-smart-boards.jpg')
-        section
-          p.content
-            ResourceComponent(type="YouTube" :fields.sync="youtubeWidget" :hide-widget-menu="true")
-            p.content.
-              Add any YouTube link to your Slideshow.
+          div.content.is-gapless
+            resource-component(type="Equation" :fields.sync="widget" :hide-widget-menu="true")
+          ul.content
+            li Click the equation to change it
+            li Click the 'Solution' button to see the solution
   .container
     .columns(v-for="row in features")
       .column(v-for="feature in row").feature.has-text-centered
@@ -38,7 +29,6 @@ div
 </template>
 
 <script>
-import 'typeface-fira-sans'
 import FormField from './FormField'
 import ResourceComponent from './ResourceComponent'
 import katex from 'katex'
@@ -58,13 +48,23 @@ export default {
       height: '100%'
     })
   },
+  watch: {
+    widget (newVal, oldVal) {
+      if (!oldVal.length) {
+        const field = newVal[0]
+        field.value = 'x^2 - 5x + 6'
+        this.$set(this.widget, 0, field)
+        const solution = newVal[2]
+        solution.latex = '\\{2, 3\\}'
+        this.$set(this.widget, 2, solution)
+      }
+    }
+  },
   data () {
     return {
-      expressionField: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
-      equationWidget: [],
+      field: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
+      widget: [],
       formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
-      plotWidget: [],
-      youtubeWidget: [],
       features: [
         [
           {
