@@ -97,7 +97,7 @@ def validate_field(field):
 @api.route("/widgets/<path:form>", methods=["GET", "POST"])
 @api.route("/widgets/<path:form>/<generator>", methods=["GET", "POST"])
 def form_route(form, generator=False):
-    payload = flask.request.get_json()
+    payload = flask.request.args or flask.request.get_json()
     if form not in widget_names:
         raise InvalidUsage(f"Widget {repr(form)} does not exist", 404, payload)
     try:
