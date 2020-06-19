@@ -16,7 +16,7 @@ div.widget-container
             @has-focus="edit = true"
             @lost-focus="edit = false"
           )
-        div.column
+        div.column.is-narrow
           .buttons
             button.delete(
               tabindex="-1"

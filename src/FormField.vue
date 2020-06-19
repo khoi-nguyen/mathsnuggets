@@ -44,7 +44,7 @@ span
 </template>
 
 <script>
-import { validateField } from './ajax'
+import { api } from './ajax'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import _ from 'lodash'
@@ -109,24 +109,23 @@ export default {
       this.valid = false
       this.$nextTick(() => { this.$refs.field.select() })
     },
-    validate (value, validateForm) {
-      validateField(this.type, { value: value }, function (data) {
-        if (data.error) {
-          this.error = data.message
-          this.valid = false
-          return false
+    async validate (value, validateForm) {
+      const data = await api(`fields/${this.type}?value=${encodeURIComponent(value)}`)
+      if (data.error) {
+        this.error = data.message
+        this.valid = false
+        return false
+      }
+      this.error = ''
+      for (const prop in data) {
+        if (prop !== 'valid') {
+          this.$emit('update:' + prop, data[prop])
         }
-        this.error = ''
-        for (const prop in data) {
-          if (prop !== 'valid') {
-            this.$emit('update:' + prop, data[prop])
-          }
-        }
-        this.valid = data.valid
-        if (validateForm) {
-          this.$nextTick(() => { this.$emit('form-validate') })
-        }
-      }.bind(this))
+      }
+      this.valid = data.valid
+      if (validateForm) {
+        this.$nextTick(() => { this.$emit('form-validate') })
+      }
     }
   }
 }

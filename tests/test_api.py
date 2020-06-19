@@ -51,19 +51,17 @@ def test_widgets(client):
 
 
 def test_field_validation(client):
-    response, data = post(
-        client, "/api/fields/Equation", {"name": "eq", "value": "x^2"}
-    )
+    response, data = get(client, "/api/fields/Equation?value=x^2")
     assert response.status_code == 200
     assert data["valid"]
 
-    response, data = post(client, "/api/fields/Equation", {"name": "eq", "value": "/"})
+    response, data = get(client, "/api/fields/Equation?value=/")
     assert response.status_code == 400
 
-    response, data = post(client, "/api/fields/Eequation", {"name": "eq", "value": "/"})
+    response, data = get(client, "/api/fields/Eequation?value=/")
     assert response.status_code == 404
 
-    response, data = post(client, "/api/fields/Equation", {"name": "eq"})
+    response, data = get(client, "/api/fields/Equation")
     assert response.status_code == 400
 
 

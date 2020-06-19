@@ -270,7 +270,7 @@ class Email(Field):
     """Email Field"""
 
     def sanitize(self, value):
-        if not re.search(r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", value):
+        if not re.search(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?", value):
             raise ValueError("Invalid email address")
         return value
 
