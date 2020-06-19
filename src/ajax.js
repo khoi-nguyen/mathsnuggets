@@ -1,9 +1,15 @@
-export async function api (url, payload = false) {
-  const method = payload ? 'POST' : 'GET'
+export async function api (url, method = 'GET', payload = false) {
   const obj = { method: method }
   if (method === 'POST') {
     obj.headers = { 'Content-Type': 'application/json' }
     obj.body = JSON.stringify(payload)
+  }
+  if (method === 'GET' && payload) {
+    let char = '?'
+    for (var key in payload) {
+      url += char + key + '=' + encodeURIComponent(payload[key])
+      char = '&'
+    }
   }
   return await fetch(`/api/${url}`, obj).then(r => r.json())
 }
@@ -17,10 +23,10 @@ function callApi (url, method, callback, payload) {
   if (method === 'GET' && payload) {
     let char = '?'
     for (var key in payload) {
-      url += char + key + "=" + encodeURIComponent(payload[key]);
+      url += char + key + '=' + encodeURIComponent(payload[key])
       char = '&'
     }
-   }
+  }
   fetch(url, obj).then(r => r.json()).then(callback)
 }
 

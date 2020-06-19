@@ -1,13 +1,15 @@
 <template lang="pug">
 span
   span(v-html="before")
-  textarea.has-text-danger.is-family-monospace(
+  component.has-text-danger.is-family-monospace(
+    :class="{'select': options}"
     v-if="!computed && !valid && !hidden"
     ref="field"
     :rows="rows"
     :cols="cols"
     :disabled="protected"
     :placeholder="label"
+    :is="tag"
     :value="value"
     @dblclick="$event.target.select()"
     @focus="valid = false"
@@ -16,6 +18,7 @@ span
     @input="$emit('update:value', $event.target.value)"
     @blur="blur"
   )
+    option(v-for="option in options" :value="option") {{ option }}
   span(
     tabindex="0"
     v-html="renderedHtml"
@@ -59,6 +62,7 @@ export default {
     html: String,
     label: String,
     latex: String,
+    options: Array,
     showComputed: Boolean,
     protected: Boolean,
     type: String,
@@ -87,6 +91,9 @@ export default {
     },
     rows () {
       return this.value ? this.value.split('\n').length : 1
+    },
+    tag () {
+      return (this.options || []).length ? 'select' : 'textarea'
     }
   },
   data () {
@@ -112,7 +119,11 @@ export default {
       this.$nextTick(() => { this.$refs.field.select() })
     },
     async validate (value, validateForm) {
-      const data = await api(`fields/${this.type}?value=${encodeURIComponent(value)}`)
+      const payload = { value: value }
+      if ((this.options || []).length) {
+        payload.options = this.options
+      }
+      const data = await api(`fields/${this.type}`, 'GET', payload)
       if (data.error) {
         this.error = data.message
         this.valid = false

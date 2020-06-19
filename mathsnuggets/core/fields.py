@@ -141,6 +141,7 @@ class Select(Field):
 
     def export(self, value):
         return {
+            "html": value,
             "value": value,
             "valid": value in self.options,
             "options": self.options,
