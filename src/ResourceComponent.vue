@@ -107,7 +107,7 @@ export default {
       }.bind(this))
     },
     loadFields (type) {
-      if (type === this.type) {
+      if (type === this.type && this.realFields.length) {
         return false
       }
       this.$emit('update:type', type)
