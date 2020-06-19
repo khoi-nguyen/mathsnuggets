@@ -23,6 +23,7 @@ import { getSlideshow, saveSlideshow } from './ajax'
 import SlideEditor from './SlideEditor'
 
 export default {
+  title: 'Slideshow builder',
   props: {
     embedded: Boolean,
     height: String,

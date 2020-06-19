@@ -52,6 +52,7 @@ import { saveSlideshow, getSlideshowList } from './ajax'
 import _ from 'lodash'
 
 export default {
+  title: 'Teaching Resources',
   mounted () {
     getSlideshowList(function (data) {
       this.lessons = data.concat([{ title: '' }])

@@ -36,6 +36,7 @@ import { auth } from './auth.js'
 
 export default {
   components: { NavBar },
+  title: 'Login',
   name: 'Login',
   methods: {
     login () {

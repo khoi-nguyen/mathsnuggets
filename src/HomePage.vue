@@ -47,6 +47,7 @@ import Reveal from 'reveal.js'
 
 export default {
   name: 'HomePage',
+  title: 'Home',
   components: {
     FormField,
     ResourceComponent

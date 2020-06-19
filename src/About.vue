@@ -49,6 +49,7 @@ div
 
 <script>
 export default {
+  title: 'About us',
   name: 'About'
 }
 </script>

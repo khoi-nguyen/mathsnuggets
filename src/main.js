@@ -3,6 +3,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
+import titleMixin from './titleMixin'
+
 const App = () => import('./App')
 const About = () => import('./About')
 const HomePage = () => import('./HomePage')
@@ -12,6 +14,7 @@ const SlideshowBuilder = () => import('./SlideshowBuilder')
 
 Vue.use(Buefy)
 Vue.use(VueRouter)
+Vue.mixin(titleMixin)
 
 const routes = [
   { path: '/', component: HomePage },
