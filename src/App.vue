@@ -3,18 +3,21 @@ router-view(v-if="slides")
 div(v-else)
   NavBar
   router-view
+  website-footer
 </template>
 
 <script>
 import { auth } from './auth.js'
 import NavBar from './NavBar'
+import WebsiteFooter from './WebsiteFooter'
 import 'typeface-fira-sans'
 import '@fortawesome/fontawesome-free/js/all.js'
 
 export default {
   name: 'App',
   components: {
-    NavBar
+    NavBar,
+    WebsiteFooter
   },
   computed: {
     slides () {
