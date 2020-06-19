@@ -6,6 +6,7 @@ div
         section
           h1.title.is-1 Welcome to MathsNuggets
           div.is-size-2.content.katex(v-html="formula")
+          p.content Press the right arrow key to see our main features.
         section
           h1.title.is-1 Easily edit formulas
           p.content.is-size-2
@@ -81,7 +82,7 @@ export default {
           },
           {
             icon: 'fas fa-cogs',
-            title: 'Exercises generator',
+            title: 'Exercise generator',
             text: 'Exercises can be generated for you, with fine-grained control over the difficulty.'
           },
           {
@@ -104,7 +105,7 @@ export default {
           {
             icon: 'fas fa-handshake',
             title: 'Free',
-            text: 'As in \'free beer\' and \'free software\'.'
+            text: 'As in \'free coffee\' and \'free speech\'.'
           }
         ]
       ],
