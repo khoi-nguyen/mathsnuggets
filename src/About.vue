@@ -13,7 +13,7 @@ div
   .container
     .columns
       .column.has-text-centered
-        h3.title.is-3 Khôi Nguyen
+        h3.title.is-3 Khoi Nguyen
         h4.subtitle.is-5 Full Stack Developer
         p.content.
           Hello! My name is Khoi and I am the main developer on this project.
