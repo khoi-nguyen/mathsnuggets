@@ -29,7 +29,7 @@ div
                   div(v-for="field in fields" v-if="lesson[field.name]")
                     dt {{ field.label }}
                     dd {{ Array.isArray(lesson[field.name]) ? lesson[field.name].join(', ') : lesson[field.name] }}
-      div.panel-block
+      div.panel-block(v-if="authState.loggedIn")
         button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(lessons.length - 1, true)") Create slideshow
   .modal(:class="{'is-active': modal}")
     .modal-background
