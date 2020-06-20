@@ -46,31 +46,22 @@ def list_slideshows(identifier=False):
 def load_slideshow(identifier):
     query = {"_id": bson.objectid.ObjectId(identifier)}
     slideshow = models.Slideshow(**query)
-    return flask.jsonify(dict(slideshow)["slides"])
+    return flask.jsonify(slideshow._slides)
 
 
 @api.route("/slideshows/", methods=["POST"])
 @api.route("/slideshows/<identifier>", methods=["POST"])
 @flask_login.login_required
 def save_slideshow(identifier=False):
-    post = flask.request.get_json()
-    if not identifier:
-        post["slides"] = []
-        _id = db.slideshows.insert_one(post)
-        return list_slideshows(str(_id.inserted_id))
-    query = {"_id": bson.objectid.ObjectId(identifier)}
-    slideshow = db.slideshows.find_one(query)
-    if "key" in post:
-        if slideshow:
-            new_vals = {"$set": {post["key"]: post["patch"]}}
-        else:
-            new_vals = {"$set": {"slides": [post["patch"]]}}
+    payload = flask.request.get_json()
+    query = {"_id": bson.objectid.ObjectId(identifier)} if identifier else {}
+    slideshow = models.Slideshow(**query)
+    if payload.get("edit_slide"):
+        slideshow.slides[payload["slide"]] = payload["data"]
     else:
-        new_vals = {"$set": post}
-    db.slideshows.update_one(query, new_vals, upsert=True)
-    if "key" not in post:
-        return list_slideshows(identifier)
-    return flask.jsonify({"success": True})
+        for attr, val in payload.items():
+            setattr(slideshow, attr, val)
+    return list_slideshows(slideshow.save())
 
 
 @api.route("/fields/<field>", methods=["GET"])

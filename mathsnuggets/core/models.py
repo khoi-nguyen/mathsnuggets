@@ -1,3 +1,5 @@
+import copy
+
 import flask_login
 
 from mathsnuggets import widgets
@@ -33,24 +35,24 @@ class Model:
             db.collections[self._collection].update_one(
                 {"_id": self._id}, {"$set": dict(iter(self))}
             )
+            return self.get_id()
         else:
-            db.collections[self._collection].insert_one(dict(iter(self)))
+            _id = db.collections[self._collection].insert_one(dict(iter(self)))
+            return str(_id.inserted_id)
 
 
 class Slideshow(Model):
     _use_setter = ["slides"]
     _collection = "slideshows"
-    _slides = [{"title": ""}]
+
+    slides = [{"title": ""}]
 
     title = fields.Field("Title")
     authors = fields.Field("Authors")
 
     @property
-    def slides(self):
-        return self._slides
-
-    @slides.setter
-    def slides(self, slides):
+    def _slides(self):
+        slides = copy.deepcopy(self.slides)
         for slide in slides:
             if "widgets" not in slide:
                 slide["widgets"] = [[{"type": "", "fields": []}]]
@@ -63,7 +65,7 @@ class Slideshow(Model):
                     data = [f for n, f in form._fields()]
                     data.sort(key=lambda f: f.get("order"))
                     widget["fields"] = data
-        self._slides = slides
+        return slides
 
 
 class User(Model, flask_login.UserMixin):
