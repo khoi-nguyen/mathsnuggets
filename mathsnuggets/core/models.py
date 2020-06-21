@@ -34,18 +34,19 @@ class Model:
     ----------
     _id : ObjectId
         MongoDB Id of the record (``None`` if it's a new element)
-    _collection :
-        Relevant MongoDB collection
+    _collection : str
+        Relevant MongoDB collection.
+        Is a string for testing purposes (we monkeypatch ``db.collections``)
     """
 
     _id = fields.ObjectId("MongoDB ID")
-    _collection = None
+    _collection = ""
 
     def __init__(self, **query):
         if "_id" in query and query["_id"]:
             self._id = query["_id"]
             query["_id"] = self._id
-        data = self._collection.find_one(query)
+        data = db.collections[self._collection].find_one(query)
         if not data or not query:
             return None
         for attr, val in data.items():
@@ -157,9 +158,11 @@ class Model:
         - Otherwise, we create a new one.
         """
         if self._id:
-            self._collection.update_one({"_id": self._id}, {"$set": dict(iter(self))})
+            db.collections[self._collection].update_one(
+                {"_id": self._id}, {"$set": dict(iter(self))}
+            )
         else:
-            doc = self._collection.insert_one(dict(iter(self)))
+            doc = db.collections[self._collection].insert_one(dict(iter(self)))
             self._id = doc.inserted_id
 
 
@@ -182,7 +185,7 @@ class Slideshow(Model):
         (with the computed fields and the fields' data).
     """
 
-    _collection = db.collections.slideshows
+    _collection = "slideshows"
 
     title = fields.Field("Title")
     authors = fields.Field("Authors")
@@ -235,7 +238,7 @@ class User(Model):
         Whether the user is anonymous (necessary for Flask-Login)
     """
 
-    _collection = db.collections.users
+    _collection = "users"
 
     email = fields.Email("email")
     password = fields.Password("password")
