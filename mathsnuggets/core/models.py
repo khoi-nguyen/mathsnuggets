@@ -151,13 +151,29 @@ class Model:
 
 
 class Slideshow(Model):
-    _use_setter = ["slides"]
-    _collection = db.collections.slideshows
+    """Slideshow model
 
-    slides = [{"title": ""}]
+    This model aims to represent a slideshow.
+
+    Attributes
+    ----------
+    title : str
+        Title of the whole slideshow
+    authors :
+        Authors (format to be determined)
+    slides : list
+        Slides exactly as they are stored in the database
+        (i.e. without the solutions or the fields' data).
+    _slides : list
+        Slides exactly as they should be sent to the frontend
+        (with the computed fields and the fields' data).
+    """
+
+    _collection = db.collections.slideshows
 
     title = fields.Field("Title")
     authors = fields.Field("Authors")
+    slides = [{"title": ""}]
 
     @property
     def _slides(self):
