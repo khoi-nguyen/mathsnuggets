@@ -6,12 +6,13 @@ import os
 
 import flask
 
-from mathsnuggets.core import api
+from mathsnuggets.core import api, cache
 
 app = flask.Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "hello").encode("UTF-8")
 app.register_blueprint(api.api, url_prefix="/api")
 api.login_manager.init_app(app)
+cache.cache.init_app(app)
 
 
 @app.route("/about")

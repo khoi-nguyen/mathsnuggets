@@ -2,7 +2,7 @@ import flask
 import flask_login
 
 from mathsnuggets import widgets
-from mathsnuggets.core import fields, form, models
+from mathsnuggets.core import cache, fields, form, models
 
 api = flask.Blueprint("api", __name__)
 
@@ -10,17 +10,24 @@ widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
 
 
+def is_post():
+    return flask.request.method == "POST"
+
+
 @api.route("/widgets")
+@cache.cached()
 def form_list():
     return flask.jsonify(widget_data)
 
 
 @api.route("/slideshows")
+@cache.memoize()
 def list_slideshows():
     return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
-@api.route("/slideshows/<identifier>", methods=["GET"])
+@api.route("/slideshows/<identifier>")
+@cache.memoize()
 def load_slideshow(identifier):
     return flask.jsonify(models.Slideshow(_id=identifier)._slides)
 
@@ -31,10 +38,13 @@ def load_slideshow(identifier):
 def save_slideshow(identifier=False):
     slideshow = models.Slideshow(_id=identifier)
     slideshow.update(flask.request.get_json())
+    cache.delete_memoized(list_slideshows)
+    cache.delete_memoized(load_slideshow, str(slideshow._id))
     return flask.jsonify(dict(slideshow))
 
 
 @api.route("/fields/<field>", methods=["GET"])
+@cache.cached(query_string=True)
 def validate_field(field):
     payload = flask.request.args
     if not hasattr(fields, field):
@@ -57,6 +67,7 @@ def validate_field(field):
 
 @api.route("/widgets/<path:form>", methods=["GET", "POST"])
 @api.route("/widgets/<path:form>/<generator>", methods=["GET", "POST"])
+@cache.cached(unless=is_post, query_string=True)
 def form_route(form, generator=False):
     payload = flask.request.args or flask.request.get_json()
     if form not in widget_names:
@@ -119,6 +130,7 @@ def logout():
 
 
 @api.route("/tests")
+@cache.cached()
 def tests():
     test_data = {v["name"]: v["test"] for k, v in widgets.info.items() if v.get("test")}
     return flask.jsonify(test_data)
