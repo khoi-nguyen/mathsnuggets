@@ -119,6 +119,10 @@ export default {
       this.$nextTick(() => { this.$refs.field.select() })
     },
     async validate (value, validateForm) {
+      if (validateForm) {
+        this.$emit('form-validate')
+        return false
+      }
       const payload = { value: value }
       if ((this.options || []).length) {
         payload.options = this.options
@@ -136,9 +140,6 @@ export default {
         }
       }
       this.valid = data.valid
-      if (validateForm) {
-        this.$nextTick(() => { this.$emit('form-validate') })
-      }
     }
   }
 }
