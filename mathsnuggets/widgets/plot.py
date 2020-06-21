@@ -37,6 +37,7 @@ class Plot(form.Form):
         backend.fig.tight_layout()
         tmp = io.BytesIO()
         backend.fig.savefig(tmp, format="svg")
+        backend.close()
         tmp.seek(0)
         svg = tmp.getvalue().decode("utf-8")
         return svg
