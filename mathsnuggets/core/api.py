@@ -1,9 +1,8 @@
-import bson.objectid
 import flask
 import flask_login
 
 from mathsnuggets import widgets
-from mathsnuggets.core import db, fields, form, models
+from mathsnuggets.core import fields, form, models
 
 api = flask.Blueprint("api", __name__)
 
@@ -17,36 +16,13 @@ def form_list():
 
 
 @api.route("/slideshows")
-def list_slideshows(identifier=False):
-    slideshows = db.slideshows.aggregate(
-        [
-            {
-                "$match": {"_id": bson.objectid.ObjectId(identifier)}
-                if identifier
-                else {}
-            },
-            {
-                "$project": {
-                    "_id": False,
-                    "id": {"$toString": "$_id"},
-                    "title": True,
-                    "date": True,
-                    "authors": True,
-                }
-            },
-        ]
-    )
-    slideshows = list(slideshows)
-    if identifier:
-        return flask.jsonify(slideshows[0])
-    return flask.jsonify(slideshows)
+def list_slideshows():
+    return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
 @api.route("/slideshows/<identifier>", methods=["GET"])
 def load_slideshow(identifier):
-    query = {"_id": bson.objectid.ObjectId(identifier)}
-    slideshow = models.Slideshow(**query)
-    return flask.jsonify(slideshow._slides)
+    return flask.jsonify(models.Slideshow(_id=identifier)._slides)
 
 
 @api.route("/slideshows/", methods=["POST"])
@@ -54,14 +30,14 @@ def load_slideshow(identifier):
 @flask_login.login_required
 def save_slideshow(identifier=False):
     payload = flask.request.get_json()
-    query = {"_id": bson.objectid.ObjectId(identifier)} if identifier else {}
-    slideshow = models.Slideshow(**query)
+    slideshow = models.Slideshow(_id=identifier)
     if payload.get("edit_slide"):
         slideshow.slides[payload["slide"]] = payload["data"]
     else:
         for attr, val in payload.items():
             setattr(slideshow, attr, val)
-    return list_slideshows(slideshow.save())
+    slideshow.save()
+    return flask.jsonify(dict(slideshow))
 
 
 @api.route("/fields/<field>", methods=["GET"])
@@ -110,7 +86,7 @@ login_manager = flask_login.LoginManager()
 
 @login_manager.user_loader
 def load_user(identifier):
-    user = models.User(_id=bson.objectid.ObjectId(identifier))
+    user = models.User(_id=identifier)
     return user if user.email else None
 
 

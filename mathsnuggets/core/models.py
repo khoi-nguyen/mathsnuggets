@@ -1,7 +1,5 @@
 import copy
 
-import flask_login
-
 from mathsnuggets import widgets
 from mathsnuggets.core import db, fields
 
@@ -9,36 +7,42 @@ from mathsnuggets.core import db, fields
 class Model:
     _use_setter = []
 
+    _id = fields.ObjectId("MongoDB ID")
+
     def __init__(self, **query):
-        if query:
-            data = db.collections[self._collection].find_one(query)
-            if data:
-                for attr, val in data.items():
-                    if attr in self._use_setter:
-                        setattr(self, attr, val)
-                    else:
-                        self.__dict__[attr] = val
+        if "_id" in query and query["_id"]:
+            self._id = query["_id"]
+            query["_id"] = self._id
+        data = db.collections[self._collection].find_one(query)
+        if not data or not query:
+            return None
+        for attr, val in data.items():
+            if attr in self._use_setter:
+                setattr(self, attr, val)
+            else:
+                self.__dict__[attr] = val
 
     def __iter__(self):
+        if self._id:
+            yield ("id", str(self._id))
         for attr in dir(self):
             value = getattr(self, attr)
             if not attr.startswith("_") and not callable(value):
                 yield (attr, value)
 
-    def get_id(self):
-        if hasattr(self, "_id"):
-            return str(self._id)
-        return None
+    @classmethod
+    def find(cls, *args, **kwargs):
+        for document in db.collections[cls._collection].find(*args, **kwargs):
+            yield cls(_id=document["_id"])
 
     def save(self):
-        if hasattr(self, "_id"):
+        if self._id:
             db.collections[self._collection].update_one(
                 {"_id": self._id}, {"$set": dict(iter(self))}
             )
-            return self.get_id()
         else:
-            _id = db.collections[self._collection].insert_one(dict(iter(self)))
-            return str(_id.inserted_id)
+            doc = db.collections[self._collection].insert_one(dict(iter(self)))
+            self._id = doc.inserted_id
 
 
 class Slideshow(Model):
@@ -68,12 +72,19 @@ class Slideshow(Model):
         return slides
 
 
-class User(Model, flask_login.UserMixin):
+class User(Model):
 
     _collection = "users"
 
     email = fields.Email("email")
     password = fields.Password("password")
+
+    is_active = True
+    is_authenticated = True
+    is_anonymous = False
+
+    def get_id(self):
+        return str(self._id) if self._id else None
 
     def check_password(self, password):
         return type(self).password.check(password, self.password)

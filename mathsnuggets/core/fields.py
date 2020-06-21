@@ -6,6 +6,7 @@ Fields
 import re
 
 import bcrypt
+import bson.objectid
 import pypandoc
 import sympy
 
@@ -265,6 +266,13 @@ class Markdown(Field):
             "value": pypandoc.convert_text(value, "md", format="html"),
             "valid": value != "",
         }
+
+
+class ObjectId(Field):
+    """MongoDB object id"""
+
+    def sanitize(self, value):
+        return bson.objectid.ObjectId(value)
 
 
 class Email(Field):
