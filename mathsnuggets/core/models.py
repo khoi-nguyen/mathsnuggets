@@ -5,22 +5,51 @@ from mathsnuggets.core import db, fields
 
 
 class Model:
-    _use_setter = []
+    """Basic Model
+
+    Instances of this class are meant to represent a MongoDB document.
+    This class provides useful methods to find, update, and insert new entries.
+
+    When creating an instance, keyword arguments may be supplied
+    to load a specific document from the database.
+
+    Example
+    -------
+
+    If there is a user with `test@test.com` as an email address,
+    then the following will load it from the database.
+    Otherwise, it will simply be a new MongoDB document
+    that may be saved later.
+
+    >>> user = User(email="test@test.com")
+    >>> user.email
+    >>> # Either 'test@test.com' if such a user exists or None
+
+    Parameters
+    ----------
+    **query : dict
+        MongoDB Query (as keyword arguments)
+
+    Attributes
+    ----------
+    _id : ObjectId
+        MongoDB Id of the record (``None`` if it's a new element)
+    _collection :
+        Relevant MongoDB collection
+    """
 
     _id = fields.ObjectId("MongoDB ID")
+    _collection = None
 
     def __init__(self, **query):
         if "_id" in query and query["_id"]:
             self._id = query["_id"]
             query["_id"] = self._id
-        data = db.collections[self._collection].find_one(query)
+        data = self._collection.find_one(query)
         if not data or not query:
             return None
         for attr, val in data.items():
-            if attr in self._use_setter:
-                setattr(self, attr, val)
-            else:
-                self.__dict__[attr] = val
+            self.__dict__[attr] = val
 
     def __iter__(self):
         if self._id:
@@ -32,10 +61,63 @@ class Model:
 
     @classmethod
     def find(cls, *args, **kwargs):
+        """Iterate through all relevant documents in the collection
+
+        This is a **class** method.
+
+        Parameters
+        ----------
+        *args:
+            Supplied to PyMongo's ``find``
+        **kwargs:
+            Supplied to PyMongo's ``find``
+
+        Yields
+        ------
+        Model
+            An object form of a document satsifying the query
+
+        Example
+        -------
+        The following example will change the password of all users to ``hellohello`.
+
+        >>> for user in User.find({}):
+        ...     user.password = 'hellohello'
+
+        """
         for document in db.collections[cls._collection].find(*args, **kwargs):
             yield cls(_id=document["_id"])
 
     def update(self, patch, save=True):
+        """Update the current document
+
+        This will typically be used with a payload.
+
+        Example
+        -------
+
+        Suppose we are working with a slideshow.
+
+        >>> slideshow = Slideshow(title="Hello")
+
+        Using ``update`` like the following
+
+        >>> slideshow.update({"title": "New title", "slides.0.title": "Slide title"})
+
+        is simply a shorthand for:
+
+        >>> slideshow.title = "New title"
+        >>> slideshow.slides[0]["title"] = "Slide title"
+        >>> slideshow.save()
+
+        Parameters
+        ----------
+        patch: dict
+            Modifications to apply to the document
+            (MongoDB's dot syntax is supported)
+        save: bool
+            Whether to save the document in the database afterwards
+        """
         for attr, val in patch.items():
             obj = self
             for key in attr.split(".")[:-1]:
@@ -56,18 +138,21 @@ class Model:
             self.save()
 
     def save(self):
+        """Save the document in the collection
+
+        - If the record exists, we update it.
+        - Otherwise, we create a new one.
+        """
         if self._id:
-            db.collections[self._collection].update_one(
-                {"_id": self._id}, {"$set": dict(iter(self))}
-            )
+            self._collection.update_one({"_id": self._id}, {"$set": dict(iter(self))})
         else:
-            doc = db.collections[self._collection].insert_one(dict(iter(self)))
+            doc = self._collection.insert_one(dict(iter(self)))
             self._id = doc.inserted_id
 
 
 class Slideshow(Model):
     _use_setter = ["slides"]
-    _collection = "slideshows"
+    _collection = db.collections.slideshows
 
     slides = [{"title": ""}]
 
@@ -94,7 +179,7 @@ class Slideshow(Model):
 
 class User(Model):
 
-    _collection = "users"
+    _collection = db.collections.users
 
     email = fields.Email("email")
     password = fields.Password("password")
