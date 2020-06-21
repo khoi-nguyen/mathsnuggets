@@ -42,14 +42,6 @@ function callApi (url, method, callback, payload) {
   fetch(url, obj).then(r => r.json()).then(callback)
 }
 
-export function getComponentList (callback) {
-  callApi('/api/widgets', 'GET', callback)
-}
-
-export function getComponentFields (path, callback) {
-  callApi(`/api/widgets/${path}`, 'GET', callback)
-}
-
 export function getSlideshowList (callback) {
   callApi('/api/slideshows', 'GET', callback)
 }

@@ -48,7 +48,7 @@ div.widget-container
 </template>
 
 <script>
-import { getComponentFields, api } from './ajax'
+import { api } from './ajax'
 import ComponentSelect from './ComponentSelect'
 import FormField from './FormField'
 import Generator from './Generator'
@@ -105,14 +105,13 @@ export default {
       }
       this.$emit('validate:widget')
     },
-    loadFields (type) {
+    async loadFields (type) {
       if (type === this.type && this.realFields.length) {
         return false
       }
       this.$emit('update:type', type)
-      getComponentFields(type, function (data) {
-        this.$emit('update:fields', data)
-      }.bind(this))
+      const data = await api(`widgets/${type}`)
+      this.$emit('update:fields', data)
     }
   },
   components: {
