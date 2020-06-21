@@ -48,7 +48,7 @@ div.widget-container
 </template>
 
 <script>
-import { getComponentFields, validateForm } from './ajax'
+import { getComponentFields, api } from './ajax'
 import ComponentSelect from './ComponentSelect'
 import FormField from './FormField'
 import Generator from './Generator'
@@ -80,7 +80,7 @@ export default {
     }
   },
   methods: {
-    formValidate (useGenerator = false) {
+    async formValidate (useGenerator = false) {
       var formData = {}
       var fields = useGenerator ? this.constraints : this.realFields
       for (var i = 0; i < fields.length; i++) {
@@ -91,20 +91,19 @@ export default {
         }
       }
       var path = useGenerator ? '/generator' : ''
-      validateForm(this.type + path, formData, function (data) {
-        if (data.error) {
-          this.error = data.message
-          return false
-        }
-        this.error = ''
-        for (var name in data) {
-          var field = this.fields.filter((f) => (f.name === name))[0]
-          var position = this.fields.indexOf(field)
-          field = Object.assign(field, data[name])
-          this.$set(this.fields, position, field)
-        }
-        this.$emit('validate:widget')
-      }.bind(this))
+      const data = await api(`widgets/${this.type}${path}`, 'GET', formData)
+      if (data.error) {
+        this.error = data.message
+        return false
+      }
+      this.error = ''
+      for (var name in data) {
+        var field = this.fields.filter((f) => (f.name === name))[0]
+        var position = this.fields.indexOf(field)
+        field = Object.assign(field, data[name])
+        this.$set(this.fields, position, field)
+      }
+      this.$emit('validate:widget')
     },
     loadFields (type) {
       if (type === this.type && this.realFields.length) {

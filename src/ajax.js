@@ -1,17 +1,29 @@
-export async function api (url, method = 'GET', payload = false) {
+export async function api (url, method = 'GET', payload = false, cache = true) {
   const obj = { method: method }
   if (method === 'POST') {
     obj.headers = { 'Content-Type': 'application/json' }
     obj.body = JSON.stringify(payload)
   }
-  if (method === 'GET' && payload) {
-    let char = '?'
-    for (var key in payload) {
-      url += char + key + '=' + encodeURIComponent(payload[key])
-      char = '&'
+  let sessionKey = url
+  if (method === 'GET') {
+    if (payload) {
+      let char = '?'
+      for (var key in payload) {
+        url += char + key + '=' + encodeURIComponent(payload[key])
+        sessionKey += char + key + '=' + payload[key]
+        char = '&'
+      }
+    }
+    const cached = sessionStorage.getItem(sessionKey)
+    if (cached !== null) {
+      return JSON.parse(cached)
     }
   }
-  return await fetch(`/api/${url}`, obj).then(r => r.json())
+  const data = await fetch(`/api/${url}`, obj).then(r => r.json())
+  if (method === 'GET' && cache) {
+    sessionStorage.setItem(sessionKey, JSON.stringify(data))
+  }
+  return data
 }
 
 function callApi (url, method, callback, payload) {
@@ -36,10 +48,6 @@ export function getComponentList (callback) {
 
 export function getComponentFields (path, callback) {
   callApi(`/api/widgets/${path}`, 'GET', callback)
-}
-
-export function validateForm (widget, payload, callback) {
-  callApi(`/api/widgets/${widget}`, 'GET', callback, payload)
 }
 
 export function getSlideshowList (callback) {
