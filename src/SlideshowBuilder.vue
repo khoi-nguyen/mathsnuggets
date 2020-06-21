@@ -95,10 +95,8 @@ export default {
   },
   methods: {
     saveSlide (slide, col, position) {
-      const payload = {
-        key: `slides.${slide}`,
-        patch: this.data[slide]
-      }
+      const payload = {}
+      payload[`slides.${slide}`] = this.data[slide]
       if (this.$route.params.id && this.authState.loggedIn) {
         saveSlideshow(this.$route.params.id, payload)
       }

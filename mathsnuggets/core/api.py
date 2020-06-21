@@ -1,9 +1,8 @@
-import bson.objectid
 import flask
 import flask_login
 
 from mathsnuggets import widgets
-from mathsnuggets.core import db, fields, form, models
+from mathsnuggets.core import fields, form, models
 
 api = flask.Blueprint("api", __name__)
 
@@ -17,60 +16,22 @@ def form_list():
 
 
 @api.route("/slideshows")
-def list_slideshows(identifier=False):
-    slideshows = db.slideshows.aggregate(
-        [
-            {
-                "$match": {"_id": bson.objectid.ObjectId(identifier)}
-                if identifier
-                else {}
-            },
-            {
-                "$project": {
-                    "_id": False,
-                    "id": {"$toString": "$_id"},
-                    "title": True,
-                    "date": True,
-                    "authors": True,
-                }
-            },
-        ]
-    )
-    slideshows = list(slideshows)
-    if identifier:
-        return flask.jsonify(slideshows[0])
-    return flask.jsonify(slideshows)
+def list_slideshows():
+    return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
 @api.route("/slideshows/<identifier>", methods=["GET"])
 def load_slideshow(identifier):
-    query = {"_id": bson.objectid.ObjectId(identifier)}
-    slideshow = models.Slideshow(**query)
-    return flask.jsonify(dict(slideshow)["slides"])
+    return flask.jsonify(models.Slideshow(_id=identifier)._slides)
 
 
 @api.route("/slideshows/", methods=["POST"])
 @api.route("/slideshows/<identifier>", methods=["POST"])
 @flask_login.login_required
 def save_slideshow(identifier=False):
-    post = flask.request.get_json()
-    if not identifier:
-        post["slides"] = []
-        _id = db.slideshows.insert_one(post)
-        return list_slideshows(str(_id.inserted_id))
-    query = {"_id": bson.objectid.ObjectId(identifier)}
-    slideshow = db.slideshows.find_one(query)
-    if "key" in post:
-        if slideshow:
-            new_vals = {"$set": {post["key"]: post["patch"]}}
-        else:
-            new_vals = {"$set": {"slides": [post["patch"]]}}
-    else:
-        new_vals = {"$set": post}
-    db.slideshows.update_one(query, new_vals, upsert=True)
-    if "key" not in post:
-        return list_slideshows(identifier)
-    return flask.jsonify({"success": True})
+    slideshow = models.Slideshow(_id=identifier)
+    slideshow.update(flask.request.get_json())
+    return flask.jsonify(dict(slideshow))
 
 
 @api.route("/fields/<field>", methods=["GET"])
@@ -119,7 +80,7 @@ login_manager = flask_login.LoginManager()
 
 @login_manager.user_loader
 def load_user(identifier):
-    user = models.User(_id=bson.objectid.ObjectId(identifier))
+    user = models.User(_id=identifier)
     return user if user.email else None
 
 
@@ -130,11 +91,9 @@ def register():
     if user.email:
         raise InvalidUsage(f"User {user.email} already exists", 400, payload)
     try:
-        user.email = payload["email"]
-        user.password = payload["password"]
+        user.update(payload)
     except (AttributeError, ValueError) as error:
         raise InvalidUsage(str(error), 400, payload)
-    user.save()
     return flask.jsonify({"success": True})
 
 
@@ -142,7 +101,9 @@ def register():
 def login():
     payload = flask.request.get_json()
     if not payload:
-        return {"is_authenticated": flask_login.current_user.is_authenticated}
+        return flask.jsonify(
+            {"is_authenticated": flask_login.current_user.is_authenticated}
+        )
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):
         raise InvalidUsage("Incorrect email or password")

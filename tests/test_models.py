@@ -2,8 +2,6 @@ import pytest
 
 from mathsnuggets.core import db, models
 
-user = models.User()
-
 
 @pytest.fixture
 def mock_mongo(mongodb, monkeypatch):
@@ -12,6 +10,7 @@ def mock_mongo(mongodb, monkeypatch):
 
 def test_user(mock_mongo):
     assert db.collections.users.count_documents({}) == 1
+    user = models.User()
     user.email = "test@test.com"
     user.password = "hellohello"
     assert user.password != "hellohello"
