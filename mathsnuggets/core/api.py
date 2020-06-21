@@ -29,14 +29,8 @@ def load_slideshow(identifier):
 @api.route("/slideshows/<identifier>", methods=["POST"])
 @flask_login.login_required
 def save_slideshow(identifier=False):
-    payload = flask.request.get_json()
     slideshow = models.Slideshow(_id=identifier)
-    if payload.get("edit_slide"):
-        slideshow.slides[payload["slide"]] = payload["data"]
-    else:
-        for attr, val in payload.items():
-            setattr(slideshow, attr, val)
-    slideshow.save()
+    slideshow.update(flask.request.get_json())
     return flask.jsonify(dict(slideshow))
 
 
@@ -97,11 +91,9 @@ def register():
     if user.email:
         raise InvalidUsage(f"User {user.email} already exists", 400, payload)
     try:
-        user.email = payload["email"]
-        user.password = payload["password"]
+        user.update(payload)
     except (AttributeError, ValueError) as error:
         raise InvalidUsage(str(error), 400, payload)
-    user.save()
     return flask.jsonify({"success": True})
 
 
@@ -109,7 +101,9 @@ def register():
 def login():
     payload = flask.request.get_json()
     if not payload:
-        return {"is_authenticated": flask_login.current_user.is_authenticated}
+        return flask.jsonify(
+            {"is_authenticated": flask_login.current_user.is_authenticated}
+        )
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):
         raise InvalidUsage("Incorrect email or password")

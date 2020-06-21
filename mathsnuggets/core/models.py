@@ -35,6 +35,26 @@ class Model:
         for document in db.collections[cls._collection].find(*args, **kwargs):
             yield cls(_id=document["_id"])
 
+    def update(self, patch, save=True):
+        for attr, val in patch.items():
+            obj = self
+            for key in attr.split(".")[:-1]:
+                if isinstance(obj, list):
+                    obj = obj[int(key)]
+                elif isinstance(obj, dict):
+                    obj = obj[key]
+                else:
+                    obj = getattr(obj, key)
+            key = attr.split(".")[-1]
+            if isinstance(obj, list):
+                obj[int(key)] = val
+            elif isinstance(obj, dict):
+                obj[key] = val
+            else:
+                setattr(obj, key, val)
+        if save:
+            self.save()
+
     def save(self):
         if self._id:
             db.collections[self._collection].update_one(
