@@ -207,6 +207,33 @@ class Slideshow(Model):
 
 
 class User(Model):
+    """User model
+
+    This class aims to model how a user should be stored in MongoDB.
+
+    Additional features:
+
+    - Basic email/password validation;
+    - Passwords are automatically encrypted.
+
+    >>> user = User()
+    >>> user.password = 'hellohello'
+    >>> user.password
+    b'$2b$12$zSlvL44kPhhID67nz0CBoumrFSZlKR2MZ8BpDVDCQg2hpBLJwbLYC'
+
+    Attributes
+    ----------
+    email: str
+        User's email address
+    password
+        User's password (encrypted)
+    is_active : bool
+        Whether the user is active (necessary for Flask-Login)
+    is_authenticated : bool
+        Whether the user is authenticated (necessary for Flask-Login)
+    is_anonymous : bool
+        Whether the user is anonymous (necessary for Flask-Login)
+    """
 
     _collection = db.collections.users
 
