@@ -52,6 +52,19 @@ class Model:
             self.__dict__[attr] = val
 
     def __iter__(self):
+        """Iterates through the public, non-callable properties
+
+        This iterator is defined mainly to ensure that the ``dict()``
+        conversion of an instance
+        matches exactly how a document should be stored in MongoDB.
+
+        Yields
+        ------
+        tuple
+            First element corresponds to the attribute name,
+            the second to its value.
+            In other words, ``(attr, val)``.
+        """
         if self._id:
             yield ("id", str(self._id))
         for attr in dir(self):
