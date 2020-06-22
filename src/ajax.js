@@ -4,24 +4,24 @@ export async function api (url, method = 'GET', payload = false, cache = true) {
     obj.headers = { 'Content-Type': 'application/json' }
     obj.body = JSON.stringify(payload)
   }
-  let sessionKey = url
+  let storageKey = url
   if (method === 'GET') {
     if (payload) {
       let char = '?'
       for (var key in payload) {
         url += char + key + '=' + encodeURIComponent(payload[key])
-        sessionKey += char + key + '=' + payload[key]
+        storageKey += char + key + '=' + payload[key]
         char = '&'
       }
     }
-    const cached = sessionStorage.getItem(sessionKey)
+    const cached = localStorage.getItem(storageKey)
     if (cached !== null) {
       return JSON.parse(cached)
     }
   }
   const data = await fetch(`/api/${url}`, obj).then(r => r.json())
   if (method === 'GET' && cache) {
-    sessionStorage.setItem(sessionKey, JSON.stringify(data))
+    localStorage.setItem(storageKey, JSON.stringify(data))
   }
   return data
 }
