@@ -166,6 +166,11 @@ class Model:
             doc = db.collections[self._collection].insert_one(dict(iter(self)))
             self._id = doc.inserted_id
 
+    def delete(self):
+        """Delete document in the collection that matches the id"""
+        if self._id:
+            db.collections[self._collection].delete_one({"_id": self._id})
+
 
 class Slideshow(Model):
     """Slideshow model
