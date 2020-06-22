@@ -91,7 +91,8 @@ export default {
         }
       }
       var path = useGenerator ? '/generator' : ''
-      const data = await api(`widgets/${this.type}${path}`, 'GET', formData)
+      const method = useGenerator ? 'POST' : 'GET'
+      const data = await api(`widgets/${this.type}${path}`, method, formData)
       if (data.error) {
         this.error = data.message
         return false
