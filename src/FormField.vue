@@ -14,7 +14,7 @@ span
     @dblclick="$event.target.select()"
     @focus="valid = false"
     @keydown.191.stop=""
-    @keydown.enter.exact.prevent="blur"
+    @keydown.enter.exact.stop.prevent="blur"
     @input="$emit('update:value', $event.target.value)"
     @blur="blur"
   ) {{ (options || []).length? '' : value }}
@@ -119,10 +119,6 @@ export default {
       this.$nextTick(() => { this.$refs.field.select() })
     },
     async validate (value, validateForm) {
-      if (validateForm) {
-        this.$emit('form-validate')
-        return false
-      }
       const payload = { value: value }
       if ((this.options || []).length) {
         payload.options = this.options
@@ -140,6 +136,9 @@ export default {
         }
       }
       this.valid = data.valid
+      if (validateForm) {
+        this.$emit('form-validate')
+      }
     }
   }
 }
