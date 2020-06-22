@@ -73,6 +73,8 @@ class Form:
         for attr, _ in self._fields(lambda f: f.get("required")):
             if getattr(self, attr) is None:
                 raise AttributeError(f"Field {repr(attr)} is required")
+        for attr, _ in self._fields(lambda f: f.get("computed")):
+            getattr(self, attr)
         if hasattr(self, "validate"):
             self.validate()
 
