@@ -1,5 +1,7 @@
 - authors:
     - Khoi Nguyen
+  title: Title
+  slug: slug
   slides:
     - title: First slide
       widgets:

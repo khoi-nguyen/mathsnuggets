@@ -20,5 +20,6 @@ pypandoc
 pytest-cov
 pytest-mongodb
 pytest-xdist
+python-slugify
 sphinx-rtd-theme
 sympy

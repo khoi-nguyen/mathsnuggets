@@ -17,7 +17,7 @@ div
         p.panel-tabs
           a All
         div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
-          a(:href="`/resources/${lesson.id}`").panel-block
+          a(:href="`/resources/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow
                 div

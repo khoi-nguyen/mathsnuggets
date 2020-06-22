@@ -26,10 +26,10 @@ def list_slideshows():
     return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
-@api.route("/slideshows/<identifier>")
+@api.route("/slideshows/<slug>")
 @cache.memoize()
-def load_slideshow(identifier):
-    return flask.jsonify(models.Slideshow(_id=identifier)._slides)
+def load_slideshow(slug):
+    return flask.jsonify(models.Slideshow(slug=slug)._slides)
 
 
 @api.route("/slideshows/", methods=["POST"])

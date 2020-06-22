@@ -96,13 +96,13 @@ def test_list_slideshows(client, mock_mongo):
     response, data = get(client, "/api/slideshows")
     assert response.status_code == 200
 
-    assert isinstance(data[0]["id"], str)
+    assert isinstance(data[0]["slug"], str)
 
 
 def test_retrieve_slideshow(client, mock_mongo):
     slideshow = db.slideshows.find_one({})
     assert slideshow["_id"]
-    response, data = get(client, f"/api/slideshows/{str(slideshow['_id'])}")
+    response, data = get(client, f"/api/slideshows/{slideshow['slug']}")
     assert response.status_code == 200
     assert isinstance(data, list)
 
