@@ -41,6 +41,10 @@ def post(client, url, payload, get_data=True):
     return (response, data)
 
 
+def delete(client, url):
+    return client.delete(url)
+
+
 def test_widgets(client):
     response, data = get(client, "/api/widgets")
 
@@ -149,6 +153,26 @@ def test_save_slideshow(client, mock_mongo):
     response, data = post(client, "/api/slideshows/", {"title": "Hello"},)
     assert response.status_code == 200
     assert db.slideshows.count_documents({}) == count + 1
+
+
+def test_delete_slideshow(client, mock_mongo):
+
+    response, data = get(client, "/api/auth/login")
+    assert response.status_code == 200
+    assert not data["is_authenticated"]
+
+    response = delete(client, "/api/slideshows/delete")
+    assert response.status_code == 401
+
+    response, data = post(
+        client, "/api/auth/login", {"email": "test@test.com", "password": "testtest"}
+    )
+    assert response.status_code == 200
+
+    count = db.slideshows.count_documents({})
+    response = delete(client, "/api/slideshows/delete")
+    assert response.status_code == 204
+    assert db.slideshows.count_documents({}) == count - 1
 
 
 def test_register(client, mock_mongo):

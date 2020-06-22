@@ -43,6 +43,16 @@ def save_slideshow(slug=False):
     return flask.jsonify(dict(slideshow))
 
 
+@api.route("/slideshows/<slug>", methods=["DELETE"])
+@flask_login.login_required
+def delete_slideshow(slug=False):
+    slideshow = models.Slideshow(slug=slug)
+    slideshow.delete()
+    cache.delete_memoized(list_slideshows)
+    cache.delete_memoized(load_slideshow, slug)
+    return "", 204
+
+
 @api.route("/fields/<field>", methods=["GET"])
 @cache.cached(query_string=True)
 def validate_field(field):
