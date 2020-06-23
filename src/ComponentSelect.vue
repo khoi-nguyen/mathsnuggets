@@ -2,10 +2,10 @@
 b-field
   b-autocomplete(
     :data="filteredData"
-    @blur="$emit('lost-focus')"
-    @focus="$emit('has-focus')"
     @select="$emit('update:type', $event.path)"
     field="name"
+    icon-pack="fas"
+    icon="search"
     keep-first
     open-on-focus
     placeholder="Select widget"

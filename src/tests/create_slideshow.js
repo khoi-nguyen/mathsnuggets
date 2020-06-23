@@ -4,8 +4,8 @@ const mocha = require('mocha')
 const puppeteer = require('puppeteer')
 
 async function selectWidget (page, widget) {
-  await page.hover('.widget-col')
-  const identifier = '.widget-col .autocomplete input'
+  await page.click('.widget-search')
+  const identifier = '.autocomplete input'
   await page.waitFor(identifier)
   await page.click(identifier, { clickCount: 3 })
   await page.keyboard.type(widget)

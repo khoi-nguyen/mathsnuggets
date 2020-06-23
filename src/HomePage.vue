@@ -16,7 +16,7 @@ div
         section
           h1.title.is-1 Automatic Solving
           div.content.is-gapless
-            resource-component(type="Equation" :fields.sync="widget" :hide-widget-menu="true")
+            resource-component(type="Equation" :fields.sync="widget" :toolbar="false")
           ul.content
             li Click the equation to change it
             li Click the 'Solution' button to see the solution
