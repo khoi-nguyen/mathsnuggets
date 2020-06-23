@@ -217,9 +217,6 @@ class Constraint(Field):
 
 
 def constraint(*args, **kwargs):
-    # if set to False, get -> lambda x : True
-    # set_val = instance.__dict__[self.name]
-    # if true, computedField
     def decorator(method):
         class DecoratedConstraint(Constraint):
             def callback(self, form):

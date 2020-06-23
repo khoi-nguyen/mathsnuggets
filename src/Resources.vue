@@ -17,7 +17,7 @@ div
         p.panel-tabs
           a All
         div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
-          a(:href="`/resources/${lesson.id}`").panel-block
+          a(:href="`/resources/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow
                 div
@@ -33,16 +33,14 @@ div
                     dd {{ Array.isArray(lesson[field.name]) ? lesson[field.name].join(', ') : lesson[field.name] }}
       div.panel-block(v-if="authState.loggedIn")
         button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(lessons.length - 1, true)") Create slideshow
-  .modal(:class="{'is-active': modal}")
-    .modal-background
+  b-modal(:active.sync="modal" has-modal-card)
     .modal-card
       header.modal-card-head
         h3.modal-card-title Edit
         button.delete(@click="modal = false")
       section.modal-card-body
-        .field(v-for="field in fields" v-if="field.editable")
-          label.label {{ field.label }}
-          input.input(:value="lessons[lessonIndex][field.name]" ref="modalFields" :name="field.name")
+        b-field(:label="field.label" v-for="field in fields" v-if="field.editable")
+          b-input(:value="lessons[lessonIndex][field.name]" ref="modalFields" :name="field.name")
       footer.modal-card-foot
         button.button.is-success(@click="editMetadata") Save
         button.button(@click="modal = false") Cancel

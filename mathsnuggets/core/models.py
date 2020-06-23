@@ -1,4 +1,7 @@
 import copy
+import datetime
+
+import slugify
 
 from mathsnuggets import widgets
 from mathsnuggets.core import db, fields
@@ -66,8 +69,6 @@ class Model:
             the second to its value.
             In other words, ``(attr, val)``.
         """
-        if self._id:
-            yield ("id", str(self._id))
         for attr in dir(self):
             value = getattr(self, attr)
             if not attr.startswith("_") and not callable(value):
@@ -165,6 +166,11 @@ class Model:
             doc = db.collections[self._collection].insert_one(dict(iter(self)))
             self._id = doc.inserted_id
 
+    def delete(self):
+        """Delete document in the collection that matches the id"""
+        if self._id:
+            db.collections[self._collection].delete_one({"_id": self._id})
+
 
 class Slideshow(Model):
     """Slideshow model
@@ -190,6 +196,14 @@ class Slideshow(Model):
     title = fields.Field("Title")
     authors = fields.Field("Authors")
     slides = [{"title": ""}]
+
+    @property
+    def last_modified(self):
+        return datetime.datetime.utcnow()
+
+    @fields.computed("Slug", field=fields.Field)
+    def slug(self):
+        return slugify.slugify(self.title) if self.title else None
 
     @property
     def _slides(self):

@@ -26,21 +26,31 @@ def list_slideshows():
     return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
-@api.route("/slideshows/<identifier>")
+@api.route("/slideshows/<slug>")
 @cache.memoize()
-def load_slideshow(identifier):
-    return flask.jsonify(models.Slideshow(_id=identifier)._slides)
+def load_slideshow(slug):
+    return flask.jsonify(models.Slideshow(slug=slug)._slides)
 
 
 @api.route("/slideshows/", methods=["POST"])
-@api.route("/slideshows/<identifier>", methods=["POST"])
+@api.route("/slideshows/<slug>", methods=["POST"])
 @flask_login.login_required
-def save_slideshow(identifier=False):
-    slideshow = models.Slideshow(_id=identifier)
+def save_slideshow(slug=False):
+    slideshow = models.Slideshow(slug=slug)
     slideshow.update(flask.request.get_json())
     cache.delete_memoized(list_slideshows)
-    cache.delete_memoized(load_slideshow, str(slideshow._id))
+    cache.delete_memoized(load_slideshow, slug)
     return flask.jsonify(dict(slideshow))
+
+
+@api.route("/slideshows/<slug>", methods=["DELETE"])
+@flask_login.login_required
+def delete_slideshow(slug=False):
+    slideshow = models.Slideshow(slug=slug)
+    slideshow.delete()
+    cache.delete_memoized(list_slideshows)
+    cache.delete_memoized(load_slideshow, slug)
+    return "", 204
 
 
 @api.route("/fields/<field>", methods=["GET"])
