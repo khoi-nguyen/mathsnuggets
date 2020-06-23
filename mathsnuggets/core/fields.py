@@ -188,7 +188,7 @@ class RandomNumber(Field):
     def sanitize(self, expr):
         """Check it is an appropriate range"""
         if isinstance(expr, (tuple, list, set)):
-            return set(expr)
+            return {parse(i) for i in expr}
         try:
             numbers = [int(n) for n in str(expr).split(",")]
             assert len(numbers) > 0
@@ -199,7 +199,7 @@ class RandomNumber(Field):
                 numbers.append(numbers[0] + 1)
         except (AssertionError, ValueError):
             raise ValueError(f"{repr(expr)} is not a valid expression for {self.name}")
-        return set(range(*numbers))
+        return self.sanitize(list(range(*numbers)))
 
 
 class Constraint(Field):
