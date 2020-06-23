@@ -3,9 +3,12 @@ div.columns
   ul.column.is-narrow.content.has-text-grey-lighter(v-if="toolbar")
     li(v-for="item in menu" v-if="!item.hide")
       span(@click="item.click" v-if="item.click" :class="`widget-${item.icon}`")
-        b-icon(pack="fas" :icon="item.icon")
+        b-tooltip(:label="item.tooltip" position="is-right")
+          b-icon(pack="fas" :icon="item.icon")
       b-dropdown(v-if="item.dropdown" :mobile-modal="false")
-        b-icon(pack="fas" :icon="item.icon" slot="trigger" slot-scope="{ active }" :class="`widget-${item.icon}`")
+        span(slot="trigger" :class="`widget-${item.icon}`")
+          b-tooltip(:label="item.tooltip" position="is-right")
+            b-icon(pack="fas" :icon="item.icon")
         b-dropdown-item(custom v-for="constraint in item.dropdown.fields" v-if="item.dropdown.fields")
           input(type="checkbox" v-model="constraint.value" :disabled="constraint.protected")
           label  {{ constraint.label }}
@@ -43,6 +46,7 @@ export default {
       menu: [
         {
           icon: 'search',
+          tooltip: 'Select another widget',
           dropdown: {
             items: [
               {
@@ -55,6 +59,7 @@ export default {
         },
         {
           icon: 'cogs',
+          tooltip: 'Generate an exercise',
           hide: !(this.fields.filter(f => f.constraint).length > 0),
           dropdown: {
             fields: this.fields.filter(f => f.constraint),
@@ -70,10 +75,12 @@ export default {
         },
         {
           click: () => this.$emit('add-component'),
+          tooltip: 'Add a widget after this one',
           icon: 'plus-circle'
         },
         {
           click: () => this.$emit('delete'),
+          tooltip: 'Delete this widget',
           icon: 'trash-alt'
         }
       ]
