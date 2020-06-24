@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"expression": "x^2 - 5x + 6"}
+
 
 class CompleteSquare(form.Form):
     """Complete the square"""
