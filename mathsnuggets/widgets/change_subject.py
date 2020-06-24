@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"equation": "y=mx+c"}
+
 
 class ChangeSubject(form.Form):
     """Change the subject"""
