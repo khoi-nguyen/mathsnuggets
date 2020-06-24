@@ -42,8 +42,15 @@ export default {
   data () {
     return {
       error: '',
-      dropdown: '',
-      menu: [
+      dropdown: ''
+    }
+  },
+  computed: {
+    constraints () {
+      return this.fields.filter(f => f.constraint)
+    },
+    menu () {
+      return [
         {
           icon: 'search',
           tooltip: 'Select another widget',
@@ -60,9 +67,9 @@ export default {
         {
           icon: 'cogs',
           tooltip: 'Generate an exercise',
-          hide: !(this.fields.filter(f => f.constraint).length > 0),
+          hide: !(this.constraints.length > 0),
           dropdown: {
-            fields: this.fields.filter(f => f.constraint),
+            fields: this.constraints,
             items: [
               {
                 tag: 'b-button',
@@ -84,11 +91,6 @@ export default {
           icon: 'trash-alt'
         }
       ]
-    }
-  },
-  computed: {
-    constraints () {
-      return this.fields.filter(f => f.constraint)
     },
     realFields () {
       return this.fields.filter(f => !f.constraint)
