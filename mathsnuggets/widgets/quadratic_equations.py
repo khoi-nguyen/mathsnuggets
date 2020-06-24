@@ -3,6 +3,8 @@ import sympy
 from mathsnuggets.core import fields
 from mathsnuggets.widgets import equation
 
+test = {"equation": "x^2 - 3x + 2"}
+
 
 class QuadraticEquations(equation.Equation):
     """Quadratic Equations"""
