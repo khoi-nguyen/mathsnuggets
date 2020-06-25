@@ -44,6 +44,7 @@ class Model:
 
     _id = fields.ObjectId("MongoDB ID")
     _collection = ""
+    last_modified = False
 
     def __init__(self, **query):
         if "_id" in query and query["_id"]:
@@ -158,6 +159,7 @@ class Model:
         - If the record exists, we update it.
         - Otherwise, we create a new one.
         """
+        self.last_modified = datetime.datetime.utcnow()
         if self._id:
             db.collections[self._collection].update_one(
                 {"_id": self._id}, {"$set": dict(iter(self))}
@@ -196,10 +198,6 @@ class Slideshow(Model):
     title = fields.Field("Title")
     authors = fields.Field("Authors")
     slides = [{"title": ""}]
-
-    @property
-    def last_modified(self):
-        return datetime.datetime.utcnow()
 
     @fields.computed("Slug", field=fields.Field)
     def slug(self):
