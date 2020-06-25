@@ -4,13 +4,33 @@ div.reveal
     section(
       v-for="(slide, index) in slideshow"
     )
-      SlideEditor(
-        :title.sync="slide.title"
-        :components.sync="slide.widgets"
+      slide-title(
+        :value.sync="slide.title"
         @validate:title="saveSlide(index)"
+      )
+      slide-editor(
+        :components.sync="slide.widgets"
         @validate:widget="saveSlide(index)"
         @delete:widget="saveSlide(index)"
       )
+      .buttons
+        b-tooltip(label="Back to resources list" position="is-right")
+          b-button(tag="a" href="/resources")
+            b-icon(pack="fas" icon="sign-out-alt")
+        b-tooltip(
+          v-if="slide.widgets.length == 1"
+          label="Split in two columns"
+          position="is-right"
+        )
+          b-button(@click="slide.widgets.push([{type: '', fields: []}])")
+            b-icon(pack="fas" icon="columns")
+        b-tooltip(
+          v-if="authState.loggedIn"
+          label="Automatic saving enabled"
+          position="is-right"
+        )
+          b-button
+            b-icon(pack="fas" icon="save")
 </template>
 
 <script>
@@ -20,6 +40,7 @@ import _ from 'lodash'
 import { api } from './ajax'
 
 import SlideEditor from './SlideEditor'
+import SlideTitle from './SlideTitle'
 
 export default {
   title: 'Slideshow builder',
@@ -98,15 +119,29 @@ export default {
     }
   },
   components: {
-    SlideEditor
+    SlideEditor,
+    SlideTitle
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .reveal .slides section {
   height: 100%;
   padding: 0;
   text-align: left;
+}
+.buttons {
+  bottom: 35px;
+  left: 10px;
+  position: absolute;
+}
+.buttons span, .buttons a {
+  cursor: pointer;
+  color: inherit;
+  margin-right: 0.2em;
+}
+.slide {
+  height: 100%;
 }
 </style>
