@@ -17,4 +17,6 @@ class Equation(form.Form):
         answer = sympy.solveset(self.equation, self.x)
         if answer.func == sympy.FiniteSet and len(answer.args) <= 3:
             answer = [sympy.Eq(self.x, answer.args[i]) for i in range(len(answer.args))]
+        elif answer.func != sympy.FiniteSet:
+            answer = sympy.Eq(self.x, answer.args)
         return answer
