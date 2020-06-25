@@ -14,7 +14,7 @@ async function selectWidget (page, widget) {
   await page.keyboard.press('Enter')
 }
 
-async function fillInField (page, fieldName, value, key = 'Enter') {
+async function fillInField (page, fieldName, value, key = 'Tab') {
   const identifier = `span[name="${fieldName}"] textarea`
   await page.waitFor(identifier)
   await page.focus(identifier)
@@ -22,9 +22,16 @@ async function fillInField (page, fieldName, value, key = 'Enter') {
   const typedValue = await page.$eval(identifier, el => el.value)
   assert.equal(typedValue, value)
   await page.keyboard.press(key)
+  await page.waitForFunction((selector) => !document.querySelector(selector), identifier)
 }
 
 async function waitForComputedFields (page) {
+  try {
+    await page.waitForSelector('.is-danger', { timeout: 500 })
+    assert.equal(true, false)
+  } catch (error) {
+    assert.equal(true, true)
+  }
   const identifier = 'span button.computed-field'
   await page.waitFor(identifier)
   await page.click(identifier)
@@ -75,9 +82,11 @@ mocha.describe('mathsnuggets', function () {
     for (const widget in data) {
       const fields = data[widget]
       await selectWidget(page, widget)
+      let count = 1
       for (const fieldName in fields) {
         const value = fields[fieldName]
-        await fillInField(page, fieldName, value)
+        await fillInField(page, fieldName, value, fields.length > count ? 'Tab' : 'Enter')
+        count++
       }
       await waitForComputedFields(page)
     }
