@@ -5,7 +5,6 @@ div.reveal
       v-for="(slide, index) in slideshow"
     )
       SlideEditor(
-        :id="id"
         :title.sync="slide.title"
         :components.sync="slide.widgets"
         @validate:title="saveSlide(index)"
@@ -33,7 +32,6 @@ export default {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
       authState: auth.state,
-      id: {},
       slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       emptySlide: emptySlide
     }
@@ -86,8 +84,8 @@ export default {
       transition: 'none',
       width: this.width ? this.width : '100%'
     })
-    if (this.$route.params.id) {
-      getSlideshow(this.$route.params.id, function (data) {
+    if (this.$route.params.slug) {
+      getSlideshow(this.$route.params.slug, function (data) {
         this.slideshow = data
         this.$nextTick(() => (Reveal.sync()))
       }.bind(this))
@@ -97,8 +95,8 @@ export default {
     saveSlide (slide, col, position) {
       const payload = {}
       payload[`slides.${slide}`] = this.data[slide]
-      if (this.$route.params.id && this.authState.loggedIn) {
-        saveSlideshow(this.$route.params.id, payload)
+      if (this.$route.params.slug && this.authState.loggedIn) {
+        saveSlideshow(this.$route.params.slug, payload)
       }
     }
   },
