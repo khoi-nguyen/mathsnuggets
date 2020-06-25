@@ -2,6 +2,8 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+test = {"info": "radius", "equation": "x^2 + y^2 = 9"}
+
 
 class CircleEquation(form.Form):
     """Circle radius and center"""
