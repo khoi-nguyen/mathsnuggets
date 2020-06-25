@@ -20,13 +20,13 @@ def form_list():
     return flask.jsonify(widget_data)
 
 
-@api.route("/slideshows")
+@api.route("/slideshows", methods=["GET"])
 @cache.memoize()
 def list_slideshows():
     return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
-@api.route("/slideshows/<slug>")
+@api.route("/slideshows/<slug>", methods=["GET"])
 @cache.memoize()
 def load_slideshow(slug):
     return flask.jsonify(models.Slideshow(slug=slug)._slides)

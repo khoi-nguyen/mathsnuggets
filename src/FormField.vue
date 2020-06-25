@@ -123,7 +123,7 @@ export default {
       if ((this.options || []).length) {
         payload.options = this.options
       }
-      const data = await api(`fields/${this.type}`, 'GET', payload)
+      const data = await api(`fields/${this.type}`, 'GET', payload, true)
       if (data.error) {
         this.error = data.message
         this.valid = false

@@ -17,7 +17,7 @@ div.reveal
 import { auth } from './auth.js'
 import Reveal from 'reveal.js'
 import _ from 'lodash'
-import { getSlideshow, saveSlideshow } from './ajax'
+import { api } from './ajax'
 
 import SlideEditor from './SlideEditor'
 
@@ -32,6 +32,10 @@ export default {
     }
   },
   computed: {
+    apiUrl () {
+      const slug = this.$route.params.slug
+      return slug ? `slideshows/${slug}` : false
+    },
     data () {
       const transform = function (obj) {
         return _.transform(obj, function (result, val, key) {
@@ -69,7 +73,7 @@ export default {
       deep: true
     }
   },
-  mounted () {
+  async mounted () {
     Reveal.initialize({
       center: false,
       height: '100%',
@@ -78,19 +82,18 @@ export default {
       transition: 'none',
       width: '100%'
     })
-    if (this.$route.params.slug) {
-      getSlideshow(this.$route.params.slug, function (data) {
-        this.slideshow = data
-        this.$nextTick(() => (Reveal.sync()))
-      }.bind(this))
+    if (this.apiUrl) {
+      const data = await api(this.apiUrl)
+      this.slideshow = data
+      this.$nextTick(() => (Reveal.sync()))
     }
   },
   methods: {
-    saveSlide (slide, col, position) {
+    saveSlide (slide) {
       const payload = {}
       payload[`slides.${slide}`] = this.data[slide]
-      if (this.$route.params.slug && this.authState.loggedIn) {
-        saveSlideshow(this.$route.params.slug, payload)
+      if (this.apiUrl && this.authState.loggedIn) {
+        api(this.apiUrl, 'POST', payload)
       }
     }
   },
