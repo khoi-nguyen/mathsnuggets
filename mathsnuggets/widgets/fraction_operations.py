@@ -1,5 +1,7 @@
 from mathsnuggets.core import fields, form
 
+test = {"fraction_1": "1/3", "fraction_2": "1/2", "operation": "+"}
+
 
 class FractionOperations(form.Form):
     """Fractions"""
