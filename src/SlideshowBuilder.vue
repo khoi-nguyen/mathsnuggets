@@ -23,11 +23,6 @@ import SlideEditor from './SlideEditor'
 
 export default {
   title: 'Slideshow builder',
-  props: {
-    embedded: Boolean,
-    height: String,
-    width: String
-  },
   data () {
     const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
     return {
@@ -77,12 +72,11 @@ export default {
   mounted () {
     Reveal.initialize({
       center: false,
-      embedded: this.embedded,
-      height: this.height ? this.height : '100%',
+      height: '100%',
       margin: 0,
       slideNumber: 'c/t',
       transition: 'none',
-      width: this.width ? this.width : '100%'
+      width: '100%'
     })
     if (this.$route.params.slug) {
       getSlideshow(this.$route.params.slug, function (data) {
