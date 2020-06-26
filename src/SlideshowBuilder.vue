@@ -1,5 +1,7 @@
 <template lang="pug">
 div.reveal
+  div.trash
+    draggable(group="widgets" v-model="trash")
   div.slides
     section(
       v-for="(slide, index) in slideshow"
@@ -11,8 +13,8 @@ div.reveal
       slide-editor(
         :position="`slides.${index}`"
         :components.sync="slide.widgets"
+        @dragndrop="saveSlide($event.split('.')[1])"
         @validate:widget="save($event.key, $event.value)"
-        @delete:widget="saveSlide(index)"
       )
       .buttons
         b-tooltip(label="Back to resources list" position="is-right")
@@ -39,6 +41,7 @@ import { auth } from './auth.js'
 import Reveal from 'reveal.js'
 import _ from 'lodash'
 import { api } from './ajax'
+import draggable from 'vuedraggable'
 
 import SlideEditor from './SlideEditor'
 import SlideTitle from './SlideTitle'
@@ -50,7 +53,8 @@ export default {
     return {
       authState: auth.state,
       slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
-      emptySlide: emptySlide
+      emptySlide: emptySlide,
+      trash: []
     }
   },
   computed: {
@@ -127,6 +131,7 @@ export default {
     }
   },
   components: {
+    draggable,
     SlideEditor,
     SlideTitle
   }
@@ -149,7 +154,11 @@ export default {
   color: inherit;
   margin-right: 0.2em;
 }
-.slide {
-  height: 100%;
+.trash {
+  bottom: 0;
+  height: 150px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
 }
 </style>

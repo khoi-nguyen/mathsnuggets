@@ -1,13 +1,12 @@
 <template lang="pug">
 .columns
   div.column(v-for="col in [0, 1]" v-if="col < components.length")
-    draggable(v-model="localComponents[col]" group="widgets")
+    draggable(v-model="localComponents[col]" group="widgets" @change="$emit('dragndrop', position)")
       resource-component(
         v-for="(component, index) in localComponents[col]"
         :type.sync="component.type"
         :fields.sync="component.fields"
         @add-component="addComponent(component, col, index)"
-        @delete="deleteWidget(col, index)"
         @validate:widget="$emit('validate:widget', {key: `${position}.widgets.${col}.${index}`, value: $event})"
       )
 </template>
@@ -41,10 +40,6 @@ export default {
   methods: {
     addComponent (component, col, position) {
       this.localComponents[col].splice(position + 1, 0, JSON.parse(JSON.stringify(component)))
-    },
-    deleteWidget (col, pos) {
-      this.localComponents[col].splice(pos, 1)
-      this.$emit('delete:widget', { col: col, pos: pos })
     }
   }
 }

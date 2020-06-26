@@ -84,11 +84,6 @@ export default {
           click: () => this.$emit('add-component'),
           tooltip: 'Add a widget after this one',
           icon: 'plus-circle'
-        },
-        {
-          click: () => this.$emit('delete'),
-          tooltip: 'Delete this widget',
-          icon: 'trash-alt'
         }
       ]
     },
