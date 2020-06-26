@@ -145,7 +145,11 @@ class Model:
                     obj = getattr(obj, key)
             key = attr.split(".")[-1]
             if isinstance(obj, list):
-                obj[int(key)] = val
+                key = int(key)
+                if key < len(obj):
+                    obj[int(key)] = val
+                else:
+                    obj.append(val)
             elif isinstance(obj, dict):
                 obj[key] = val
             else:
