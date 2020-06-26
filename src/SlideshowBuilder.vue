@@ -6,7 +6,7 @@ div.reveal
     )
       slide-title(
         :value.sync="slide.title"
-        @validate:title="saveSlide(index)"
+        @validate:title="save(`slides.${index}.title`, $event)"
       )
       slide-editor(
         :components.sync="slide.widgets"
@@ -110,6 +110,13 @@ export default {
     }
   },
   methods: {
+    save (key, value) {
+      const payload = {}
+      payload[key] = value
+      if (this.apiUrl && this.authState.loggedIn) {
+        api(this.apiUrl, 'POST', payload)
+      }
+    },
     saveSlide (slide) {
       const payload = {}
       payload[`slides.${slide}`] = this.data[slide]
