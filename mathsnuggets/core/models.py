@@ -136,10 +136,16 @@ class Model:
         """
         for attr, val in patch.items():
             obj = self
-            for key in attr.split(".")[:-1]:
+            split = attr.split(".")
+            for key, next_key in zip(split[:-1], split[1:]):
                 if isinstance(obj, list):
-                    obj = obj[int(key)]
+                    key = int(key)
+                    if key == len(obj):
+                        obj.append([] if next_key.isdigit() else {})
+                    obj = obj[key]
                 elif isinstance(obj, dict):
+                    if key not in obj:
+                        obj[key] = [] if next_key.isdigit() else {}
                     obj = obj[key]
                 else:
                     obj = getattr(obj, key)
