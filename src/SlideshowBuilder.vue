@@ -34,6 +34,7 @@ div.reveal
         )
           b-button
             b-icon(pack="fas" icon="save")
+        component-select(@add:widget="slide.widgets[0].push({type: $event, fields: []})")
 </template>
 
 <script>
@@ -43,13 +44,14 @@ import _ from 'lodash'
 import { api } from './ajax'
 import draggable from 'vuedraggable'
 
+import ComponentSelect from './ComponentSelect'
 import SlideEditor from './SlideEditor'
 import SlideTitle from './SlideTitle'
 
 export default {
   title: 'Slideshow builder',
   data () {
-    const emptySlide = { title: '', widgets: [[{ type: '', fields: [] }]] }
+    const emptySlide = { title: '', widgets: [[]] }
     return {
       authState: auth.state,
       slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
@@ -131,6 +133,7 @@ export default {
     }
   },
   components: {
+    ComponentSelect,
     draggable,
     SlideEditor,
     SlideTitle
