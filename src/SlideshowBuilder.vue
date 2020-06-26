@@ -9,8 +9,9 @@ div.reveal
         @validate:title="save(`slides.${index}.title`, $event)"
       )
       slide-editor(
+        :position="`slides.${index}`"
         :components.sync="slide.widgets"
-        @validate:widget="saveSlide(index)"
+        @validate:widget="save($event.key, $event.value)"
         @delete:widget="saveSlide(index)"
       )
       .buttons

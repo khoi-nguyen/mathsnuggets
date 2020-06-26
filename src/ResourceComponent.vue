@@ -126,7 +126,7 @@ export default {
         field = Object.assign(field, data[name])
         this.$set(this.fields, position, field)
       }
-      this.$emit('validate:widget')
+      this.$emit('validate:widget', { fields: payload, type: this.type })
     },
     async loadFields (type) {
       if (type === this.type && this.realFields.length) {
