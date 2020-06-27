@@ -48,15 +48,14 @@ div
 
 <script>
 import { auth } from './auth'
-import { saveSlideshow, getSlideshowList } from './ajax'
+import { api } from './ajax'
 import _ from 'lodash'
 
 export default {
   title: 'Teaching Resources',
-  mounted () {
-    getSlideshowList(function (data) {
-      this.lessons = data.concat([{ title: '' }])
-    }.bind(this))
+  async mounted () {
+    const data = await api('slideshows')
+    this.lessons = data.concat([{ title: '' }])
   },
   methods: {
     openModal (index, create = false) {
@@ -64,16 +63,15 @@ export default {
       this.modal = true
       this.create = create
     },
-    editMetadata () {
+    async editMetadata () {
       const payload = {}
       _.forEach(this.$refs.modalFields, function (field) {
-        payload[field.name] = field.value
+        payload[field.$attrs.name] = field.$el.children[0].value
       })
-      saveSlideshow(this.create ? '' : this.lessons[this.lessonIndex].id, payload, function (data) {
-        this.$set(this.lessons, this.lessonIndex, data)
-        this.$set(this.lessons, this.lessonIndex + 1, { title: '' })
-        this.modal = false
-      }.bind(this))
+      const data = await api(`slideshows/${this.create ? '' : this.lessons[this.lessonIndex].slug}`, 'POST', payload)
+      this.$set(this.lessons, this.lessonIndex, data)
+      this.$set(this.lessons, this.lessonIndex + 1, { title: '' })
+      this.modal = false
     }
   },
   data () {

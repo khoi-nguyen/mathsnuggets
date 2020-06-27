@@ -2,9 +2,6 @@
 div.columns
   ul.column.is-narrow.content.has-text-grey-lighter(v-if="toolbar")
     li(v-for="item in menu" v-if="!item.hide")
-      span(@click="item.click" v-if="item.click" :class="`widget-${item.icon}`")
-        b-tooltip(:label="item.tooltip" position="is-right")
-          b-icon(pack="fas" :icon="item.icon")
       b-dropdown(v-if="item.dropdown" :mobile-modal="false")
         span(slot="trigger" :class="`widget-${item.icon}`")
           b-tooltip(:label="item.tooltip" position="is-right")
@@ -29,7 +26,6 @@ div.columns
 
 <script>
 import { api } from './ajax'
-import ComponentSelect from './ComponentSelect'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 
@@ -52,19 +48,6 @@ export default {
     menu () {
       return [
         {
-          icon: 'search',
-          tooltip: 'Select another widget',
-          dropdown: {
-            items: [
-              {
-                tag: 'component-select',
-                attrs: { value: this.type },
-                listeners: { 'update:type': this.loadFields }
-              }
-            ]
-          }
-        },
-        {
           icon: 'cogs',
           tooltip: 'Generate an exercise',
           hide: !(this.constraints.length > 0),
@@ -79,16 +62,6 @@ export default {
               }
             ]
           }
-        },
-        {
-          click: () => this.$emit('add-component'),
-          tooltip: 'Add a widget after this one',
-          icon: 'plus-circle'
-        },
-        {
-          click: () => this.$emit('delete'),
-          tooltip: 'Delete this widget',
-          icon: 'trash-alt'
         }
       ]
     },
@@ -126,7 +99,7 @@ export default {
         field = Object.assign(field, data[name])
         this.$set(this.fields, position, field)
       }
-      this.$emit('validate:widget')
+      this.$emit('validate:widget', { fields: payload, type: this.type })
     },
     async loadFields (type) {
       if (type === this.type && this.realFields.length) {
@@ -138,7 +111,6 @@ export default {
     }
   },
   components: {
-    ComponentSelect,
     ErrorMessage,
     FormField
   }

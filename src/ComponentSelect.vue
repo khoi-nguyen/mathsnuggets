@@ -2,13 +2,13 @@
 b-field
   b-autocomplete(
     :data="filteredData"
-    @select="$emit('update:type', $event.path)"
+    @select="$emit('add:widget', $event.path)"
     field="name"
     icon-pack="fas"
     icon="search"
     keep-first
     open-on-focus
-    placeholder="Select widget"
+    placeholder="Add a widget"
     v-model="localValue"
   )
 </template>
@@ -17,7 +17,7 @@ b-field
 import { api } from './ajax'
 export default {
   props: {
-    value: String
+    value: { type: String, default: '' }
   },
   computed: {
     filteredData () {

@@ -1,30 +1,29 @@
-import { isLoggedIn, login, logout } from './ajax.js'
+import { api } from './ajax.js'
 
 export const auth = {
   state: {
     error: '',
     loggedIn: false
   },
-  isLoggedIn () {
-    isLoggedIn(function (data) {
-      this.state.loggedIn = data.is_authenticated
-    }.bind(this))
+  async isLoggedIn () {
+    const data = await api('auth/login')
+    this.state.loggedIn = data.is_authenticated
   },
-  login (email, password) {
+  async login (email, password) {
     const payload = {
       email: email,
       password: password
     }
-    login(payload, function (data) {
-      if (data.error) {
-        this.state.error = data.message
-      } else {
-        this.state.loggedIn = true
-        this.state.error = ''
-      }
-    }.bind(this))
+    const data = await api('auth/login', 'POST', payload)
+    if (data.error) {
+      this.state.error = data.message
+    } else {
+      this.state.loggedIn = true
+      this.state.error = ''
+    }
   },
-  logout () {
-    logout(() => (this.state.loggedIn = false))
+  async logout () {
+    await api('auth/logout')
+    this.state.loggedIn = false
   }
 }

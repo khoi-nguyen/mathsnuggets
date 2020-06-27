@@ -21,7 +21,7 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
-  { path: '/resources/:id', component: SlideshowBuilder },
+  { path: '/resources/:slug', component: SlideshowBuilder },
   { path: '/slideshow_builder', component: SlideshowBuilder }
 ]
 
