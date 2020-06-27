@@ -134,6 +134,13 @@ class Model:
         save: bool
             Whether to save the document in the database afterwards
         """
+        if isinstance(patch, list):
+            for element in patch:
+                self.update(element, save=False)
+            if save:
+                self.save()
+            return None
+        action = patch.pop("action", "update")
         for attr, val in patch.items():
             obj = self
             split = attr.split(".")
@@ -152,10 +159,17 @@ class Model:
             key = attr.split(".")[-1]
             if isinstance(obj, list):
                 key = int(key)
-                if key < len(obj):
-                    obj[int(key)] = val
+                if action == "delete" and key < len(obj):
+                    del obj[key]
+                elif action == "swap" and key < len(obj) and val < len(obj):
+                    obj[key], obj[val] = obj[val], obj[key]
+                elif action == "insert" and key < len(obj):
+                    obj.insert(key, val)
                 else:
-                    obj.append(val)
+                    if key < len(obj):
+                        obj[int(key)] = val
+                    elif key == len(obj):
+                        obj.append(val)
             elif isinstance(obj, dict):
                 obj[key] = val
             else:
