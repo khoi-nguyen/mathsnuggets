@@ -8,13 +8,15 @@ div.reveal
     )
       slide-title(
         :value.sync="slide.title"
-        @validate:title="save(`slides.${index}.title`, $event)"
+        @validate:title="save('update', `slides.${index}.title`, $event)"
       )
       slide-editor(
         :position="`slides.${index}`"
         :components.sync="slide.widgets"
-        @dragndrop="saveSlide($event.split('.')[1])"
-        @validate:widget="save($event.key, $event.value)"
+        @delete:widget="save('delete', $event)"
+        @insert:widget="save('insert', $event.key, $event.value)"
+        @swap:widget="save('swap', $event.key, $event.value)"
+        @validate:widget="save('update', $event.key, $event.value)"
       )
       .buttons
         b-tooltip(label="Back to resources list" position="is-right")
@@ -25,7 +27,7 @@ div.reveal
           label="Split in two columns"
           position="is-right"
         )
-          b-button(@click="slide.widgets.push([{type: '', fields: []}])")
+          b-button(@click="slide.widgets.push([])")
             b-icon(pack="fas" icon="columns")
         b-tooltip(
           v-if="authState.loggedIn"
@@ -34,7 +36,7 @@ div.reveal
         )
           b-button
             b-icon(pack="fas" icon="save")
-        component-select(@add:widget="slide.widgets[0].push({type: $event, fields: []})")
+        component-select(@add:widget="slide.widgets[0].push({type: $event})")
 </template>
 
 <script>
@@ -56,6 +58,7 @@ export default {
       authState: auth.state,
       slideshow: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       emptySlide: emptySlide,
+      saveStack: [],
       trash: []
     }
   },
@@ -63,31 +66,6 @@ export default {
     apiUrl () {
       const slug = this.$route.params.slug
       return slug ? `slideshows/${slug}` : false
-    },
-    data () {
-      const transform = function (obj) {
-        return _.transform(obj, function (result, val, key) {
-          if ('type' in obj && obj.type === '') {
-            return
-          }
-          if (key === 'fields') {
-            const result = {}
-            _.forEach(val, function (field) {
-              if (field.value !== field.default && !field.computed) {
-                result[field.name] = field.value
-              }
-            })
-            val = result
-          }
-          if (_.isObject(val) || _.isArray(val)) {
-            val = transform(val)
-          }
-          if (!_.isEmpty(val)) {
-            result[key] = val
-          }
-        })
-      }
-      return transform(this.slideshow)
     }
   },
   watch: {
@@ -117,18 +95,16 @@ export default {
     }
   },
   methods: {
-    save (key, value) {
-      const payload = {}
+    save (action, key, value = '') {
+      const payload = { action: action }
       payload[key] = value
-      if (this.apiUrl && this.authState.loggedIn) {
-        api(this.apiUrl, 'POST', payload)
-      }
+      this.saveStack.push(payload)
+      setTimeout(this.sendSaveStack, 200)
     },
-    saveSlide (slide) {
-      const payload = {}
-      payload[`slides.${slide}`] = this.data[slide]
-      if (this.apiUrl && this.authState.loggedIn) {
-        api(this.apiUrl, 'POST', payload)
+    sendSaveStack () {
+      if (this.saveStack.length && this.apiUrl && this.authState.loggedIn) {
+        api(this.apiUrl, 'POST', this.saveStack)
+        this.saveStack = []
       }
     }
   },
