@@ -134,6 +134,12 @@ class Model:
         save: bool
             Whether to save the document in the database afterwards
         """
+        if isinstance(patch, list):
+            for element in patch:
+                self.update(element, save=False)
+            if save:
+                self.save()
+            return None
         action = patch.pop("action", "update")
         for attr, val in patch.items():
             obj = self
