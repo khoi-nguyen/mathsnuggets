@@ -4,8 +4,7 @@ const mocha = require('mocha')
 const puppeteer = require('puppeteer')
 
 async function selectWidget (page, widget) {
-  await page.click('.widget-search')
-  const identifier = '.autocomplete input'
+  const identifier = 'section.present .autocomplete input'
   await page.waitFor(identifier)
   await page.click(identifier, { clickCount: 3 })
   await page.keyboard.type(widget)
@@ -35,6 +34,7 @@ async function waitForComputedFields (page) {
   const identifier = 'span button.computed-field'
   await page.waitFor(identifier)
   await page.click(identifier)
+  await page.keyboard.press('ArrowRight')
 }
 
 mocha.describe('mathsnuggets', function () {
