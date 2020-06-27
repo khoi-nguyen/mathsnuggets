@@ -20,6 +20,9 @@ div
           a(:href="`/resources/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow
+                div.container
+                  .column.is-narrow
+                    button.button(@click="deleteSlideshow(index, lesson.slug)") Delete
                 div
                   i.fa-4x.fas.fa-chalkboard-teacher
                 div.is-small(v-if="authState.loggedIn")
@@ -62,6 +65,10 @@ export default {
       this.lessonIndex = index
       this.modal = true
       this.create = create
+    },
+    deleteSlideshow (index, slug) {
+      api.delete_slideshow(slug, 'DELETE')
+      this.lessons.splice(index, 1)
     },
     async editMetadata () {
       const payload = {}
