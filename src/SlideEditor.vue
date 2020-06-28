@@ -1,7 +1,13 @@
 <template lang="pug">
 .columns
   div.column(v-for="col in [0, 1]" v-if="col < components.length")
-    draggable(v-model="localComponents[col]" group="widgets" @change="dragAndDrop(col, $event)")
+    draggable(
+      @change="dragAndDrop(col, $event)"
+      ghost-class="has-background-white-ter"
+      group="widgets"
+      paddingless
+      v-model="localComponents[col]"
+    )
       resource-component(
         v-for="(component, index) in localComponents[col]"
         :type.sync="component.type"
