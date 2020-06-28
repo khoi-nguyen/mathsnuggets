@@ -21,8 +21,7 @@ div
             .columns.is-vcentered
               .column.is-narrow.is-narrow
                 div.container
-                  .column.is-narrow
-                    button.button(@click="deleteSlideshow(index, lesson.slug)") Delete
+                  button.button(@click.prevent="openDeleteModal(index, lesson.slug)") Delete
                 div
                   i.fa-4x.fas.fa-chalkboard-teacher
                 div.is-small(v-if="authState.loggedIn")
@@ -47,6 +46,15 @@ div
       footer.modal-card-foot
         button.button.is-success(@click="editMetadata") Save
         button.button(@click="modal = false") Cancel
+  b-modal(:active.sync="deleteModal" has-modal-card)
+    .modal-card
+      header.modal-card-head
+        h3.modal-card-title Delete
+        button.delete(@click="deleteModal = false")
+      section.modal-card-body Are you sure you want to delete the slideshow {{ lessons[lessonIndex].title }}?
+      footer.modal-card-foot
+        button.button.is-success(@click="deleteSlideshow(lessonIndex, slug)") Delete
+        button.button(@click="deleteModal = false") Cancel
 </template>
 
 <script>
@@ -66,9 +74,15 @@ export default {
       this.modal = true
       this.create = create
     },
+    openDeleteModal (index, slug) {
+      this.deleteModal = true
+      this.lessonIndex = index
+      this.slug = slug
+    },
     deleteSlideshow (index, slug) {
-      api.delete_slideshow(slug, 'DELETE')
+      api(`/api/slideshow/${slug}`, 'DELETE')
       this.lessons.splice(index, 1)
+      this.deleteModal = false
     },
     async editMetadata () {
       const payload = {}
@@ -85,6 +99,8 @@ export default {
     return {
       authState: auth.state,
       create: false,
+      deleteModal: false,
+      slug: '',
       lessonIndex: 0,
       fields: [
         {
