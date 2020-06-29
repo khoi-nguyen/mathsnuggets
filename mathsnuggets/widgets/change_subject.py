@@ -17,7 +17,7 @@ class ChangeSubject(form.Form):
     def solution(self):
         solution = sympy.solve(self.equation, self.variable)
         if not solution:
-            raise ValueError("The 'variable' you have entered is not in the equation")
+            raise ValueError("The equation you have entered cannot be solved")
         return sympy.Eq(
             self.variable, sympy.solveset(self.equation, self.variable).args[0]
         )
