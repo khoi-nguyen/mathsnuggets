@@ -1,3 +1,5 @@
+import sympy
+
 from mathsnuggets.core import fields, form
 
 test = {"fraction_1": "1/3", "fraction_2": "1/2", "operation": "+"}
@@ -14,28 +16,25 @@ class FractionOperations(form.Form):
 
     @fields.computed("Solution")
     def solution(self):
-        if self.operation == "+":
-            answer = self.fraction_1 + self.fraction_2
-        elif self.operation == "-":
-            answer = self.fraction_1 - self.fraction_2
-        elif self.operation == "×":
-            answer = self.fraction_1 * self.fraction_2
-        else:
-            answer = self.fraction_1 / self.fraction_2
-        return answer
+        operations = {
+            "+": sympy.Add,
+            "-": lambda a, b: a - b,
+            "×": sympy.Mul,
+            "÷": lambda a, b: a / b,
+        }
+        if self.operation:
+            return sympy.nsimplify(operations[self.operation](self.fraction_1, self.fraction_2))
 
     a = fields.RandomNumber("a")
     b = fields.RandomNumber("b")
     c = fields.RandomNumber("c")
     d = fields.RandomNumber("d")
+    op = fields.RandomNumber("op", default=["+", "-", "×", "÷"])
 
     def generator(self):
         self.fraction_1 = self.a / self.b
         self.fraction_2 = self.c / self.d
-
-    @fields.constraint("t")
-    def true(self):
-        return True
+        self.operation = self.op
 
     @fields.range_constraint(
         "non-zero numbers", default=True, hidden=True, protected=True
