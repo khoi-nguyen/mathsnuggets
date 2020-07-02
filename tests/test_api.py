@@ -83,9 +83,7 @@ def test_widget_validation(client):
     assert response.status_code == 200
     assert data["solution"]["value"] == "FiniteSet(0)"
 
-    response, data = post(
-        client, "/api/widgets/LinearEquation/generator", {"one_step": "1"}
-    )
+    response, data = post(client, "/api/widgets/LinearEquation", {"one_step": "1"})
     assert data["equation"]["value"]
     assert response.status_code == 200
 

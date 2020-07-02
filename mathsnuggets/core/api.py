@@ -29,7 +29,7 @@ def list_slideshows():
 @api.route("/slideshows/<slug>", methods=["GET"])
 @cache.memoize()
 def load_slideshow(slug):
-    return flask.jsonify(models.Slideshow(slug=slug)._slides)
+    return flask.jsonify(models.Slideshow(slug=slug).children)
 
 
 @api.route("/slideshows/", methods=["POST"])
@@ -76,15 +76,14 @@ def validate_field(field):
 
 
 @api.route("/widgets/<path:form>", methods=["GET", "POST"])
-@api.route("/widgets/<path:form>/<generator>", methods=["GET", "POST"])
 @cache.cached(unless=is_post, query_string=True)
-def form_route(form, generator=False):
+def form_route(form):
     payload = flask.request.args or flask.request.get_json()
     if form not in widget_names:
         raise InvalidUsage(f"Widget {repr(form)} does not exist", 404, payload)
     try:
         form = getattr(widgets, form)(**(payload if payload else {}))
-        if generator:
+        if is_post():
             form.generate()
         if payload:
             form._validate()

@@ -1,9 +1,7 @@
-import copy
 import datetime
 
 import slugify
 
-from mathsnuggets import widgets
 from mathsnuggets.core import db, fields
 
 
@@ -161,7 +159,8 @@ class Model:
                 key = int(key)
                 if action == "delete" and key < len(obj):
                     del obj[key]
-                elif action == "swap" and key < len(obj) and val < len(obj):
+                elif action == "swap":
+                    val = int(val.split(".")[-1])
                     obj[key], obj[val] = obj[val], obj[key]
                 elif action == "insert" and key < len(obj):
                     obj.insert(key, val)
@@ -209,40 +208,20 @@ class Slideshow(Model):
         Title of the whole slideshow
     authors :
         Authors (format to be determined)
-    slides : list
+    children : list
         Slides exactly as they are stored in the database
         (i.e. without the solutions or the fields' data).
-    _slides : list
-        Slides exactly as they should be sent to the frontend
-        (with the computed fields and the fields' data).
     """
 
     _collection = "slideshows"
 
     title = fields.Field("Title")
     authors = fields.Field("Authors")
-    slides = [{"title": ""}]
+    children = []
 
     @fields.computed("Slug", field=fields.Field)
     def slug(self):
         return slugify.slugify(self.title) if self.title else None
-
-    @property
-    def _slides(self):
-        slides = copy.deepcopy(self.slides)
-        for slide in slides:
-            if "widgets" not in slide:
-                slide["widgets"] = [[{"type": "", "fields": []}]]
-                continue
-            for col in slide["widgets"]:
-                for widget in col:
-                    if "fields" not in widget:
-                        continue
-                    form = getattr(widgets, widget["type"])(**widget["fields"])
-                    data = [f for n, f in form._fields()]
-                    data.sort(key=lambda f: f.get("order"))
-                    widget["fields"] = data
-        return slides
 
 
 class User(Model):
