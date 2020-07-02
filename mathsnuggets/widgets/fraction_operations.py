@@ -23,7 +23,9 @@ class FractionOperations(form.Form):
             "÷": lambda a, b: a / b,
         }
         if self.operation:
-            return sympy.nsimplify(operations[self.operation](self.fraction_1, self.fraction_2))
+            return sympy.nsimplify(
+                operations[self.operation](self.fraction_1, self.fraction_2)
+            )
 
     a = fields.RandomNumber("a")
     b = fields.RandomNumber("b")
