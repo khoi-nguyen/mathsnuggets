@@ -188,7 +188,7 @@ class RandomNumber(Field):
     def sanitize(self, expr):
         """Check it is an appropriate range"""
         if isinstance(expr, (tuple, list, set)):
-            return {parse(i) for i in expr}
+            return {parse(i) if isinstance(i, int) else i for i in expr}
         try:
             numbers = [int(n) for n in str(expr).split(",")]
             assert len(numbers) > 0
