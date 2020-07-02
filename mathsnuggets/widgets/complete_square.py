@@ -20,7 +20,7 @@ class CompleteSquare(form.Form):
         system = [equation.coeff(*t) for t in [(x, 2), (x, 1), (x, 0)]]
         replacements = sympy.solve(system)
         if not replacements:
-            raise ValueError("The 'expression' you have entered is not quadratic")
+            raise ValueError(f"{self.expression} is not a quadratic expression")
         return formula.subs(replacements[0])
 
     a = fields.RandomNumber("a")
