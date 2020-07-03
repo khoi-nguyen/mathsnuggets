@@ -10,7 +10,7 @@
     b-dropdown-item(custom paddingless)
       b-button(type="is-info is-outlined" @click="formValidate(true)") Generate
   form-field(
-    v-for="(field, id) in (fields || []).filter(f => !f.constraint)"
+    v-for="(field, id) in (fields || []).filter(f => !f.constraint && !f.random)"
     v-bind="field"
     :value="field.name in payload ? payload[field.name] : ''"
     @update:value="updatePayload(field.name, $event)"

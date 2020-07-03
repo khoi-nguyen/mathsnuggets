@@ -14,4 +14,7 @@ class Equation(form.Form):
 
     @fields.computed("Solution")
     def solution(self):
-        return sympy.solveset(self.equation, self.x)
+        answer = sympy.solveset(self.equation, self.x)
+        if answer.func == sympy.FiniteSet and len(answer.args) <= 3:
+            answer = [sympy.Eq(self.x, answer.args[i]) for i in range(len(answer.args))]
+        return answer
