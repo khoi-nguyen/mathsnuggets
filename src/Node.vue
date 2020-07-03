@@ -51,7 +51,7 @@ export default {
   props: {
     children: { type: Array, default: () => [] },
     cols: { type: Number, default: 1 },
-    component: { type: String, default: '' },
+    component: { type: String, default: 'slide' },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     title: { type: String, default: '' },
