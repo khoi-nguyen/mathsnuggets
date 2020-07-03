@@ -47,7 +47,7 @@ export default {
         this.children.push(cloneDeep(this.emptySlide))
         this.$nextTick(() => (Reveal.sync()))
       }
-      if (this.saveStack.length && this.apiUrl && this.authState.loggedIn) {
+      if (this.apiUrl && this.authState.loggedIn) {
         this.saveStack.push(payload)
         setTimeout(this.sendSaveStack, 200)
       }
