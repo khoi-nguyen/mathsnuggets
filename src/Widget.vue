@@ -5,7 +5,13 @@
       b-icon(pack="fas" icon="cogs")
       span &nbsp;
     b-dropdown-item(custom v-for="constraint in (fields || []).filter(f => f.constraint)")
-      input(type="checkbox" :checked="constraint.value" @input="updatePayload(constraint.name, $event.target.checked)" :disabled="constraint.protected")
+      input(
+        :checked="constraint.name in payload ? payload[constraint.name] : constraint.value"
+        :disabled="constraint.protected"
+        @input="updatePayload(constraint.name, $event.target.checked)"
+        type="checkbox"
+        v-if="!constraint.hidden"
+      )
       label {{ constraint.label }}
     b-dropdown-item(custom paddingless)
       b-button(type="is-info is-outlined" @click="formValidate(true)") Generate
