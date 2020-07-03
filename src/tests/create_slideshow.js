@@ -56,7 +56,7 @@ mocha.describe('mathsnuggets', function () {
     const identifier = 'section.present .slide-title'
 
     const checkTitle = async function (assertMethod, string) {
-      const title = await page.$eval(identifier, el => el.value)
+      const title = await page.$eval(identifier, el => el.innerText)
       assert[assertMethod](title, string)
     }
 
@@ -66,7 +66,7 @@ mocha.describe('mathsnuggets', function () {
     await page.keyboard.press('Enter')
     await checkTitle('equal', 'Test')
 
-    await page.click(identifier)
+    await page.click(identifier, { clickCount: 3 })
     await page.keyboard.type('Hello')
     await page.keyboard.press('Enter')
     await checkTitle('equal', 'Hello')

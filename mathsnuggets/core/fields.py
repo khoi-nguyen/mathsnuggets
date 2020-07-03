@@ -112,6 +112,9 @@ def computed(*args, **kwargs):
             computed = True
             callback = staticmethod(function)
 
+            def construct(self, *args, **kwargs):
+                self.type = self.__class__.__bases__[0].__name__
+
         return ComputedField(*args, **kwargs)
 
     return decorator

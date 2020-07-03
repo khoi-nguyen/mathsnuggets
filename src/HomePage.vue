@@ -16,7 +16,7 @@ div
         section
           h1.title.is-1 Automatic Solving
           div.content.is-gapless
-            resource-component(type="Equation" :fields.sync="widget" :toolbar="false")
+            widget(type="Equation" :fields.sync="widget" :toolbar="false")
           ul.content
             li Click the equation to change it
             li Click the 'Solution' button to see the solution
@@ -31,7 +31,7 @@ div
 
 <script>
 import FormField from './FormField'
-import ResourceComponent from './ResourceComponent'
+import Widget from './Widget'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import Reveal from 'reveal.js'
@@ -41,7 +41,7 @@ export default {
   title: 'Home',
   components: {
     FormField,
-    ResourceComponent
+    Widget
   },
   mounted () {
     Reveal.initialize({

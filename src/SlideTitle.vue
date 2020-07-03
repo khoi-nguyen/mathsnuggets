@@ -2,15 +2,12 @@
 div.box
   h2.title
     .columns.is-vcentered
-      .column
-        input.slide-title(
-          placeholder="Slide Title"
-          :value="value"
-          @blur="$emit('validate:title', $event.target.value)"
-          @click="$event.target.select()"
-          @keydown.enter="$event.target.blur()"
-          @input="$emit('update:value', $event.target.value)"
-        )
+      .column.slide-title(
+        @blur="$emit('update:title', $event.target.innerText)"
+        @keydown.enter.prevent="$event.target.blur()"
+        contenteditable
+        v-text="title"
+      )
       .column.is-narrow.date
         div {{ today }}
         div {{ time }}
@@ -22,7 +19,7 @@ var moment = require('moment')
 
 export default {
   props: {
-    value: String
+    title: String
   },
   data () {
     return {
@@ -44,26 +41,12 @@ export default {
 </script>
 
 <style scoped>
-h2 input, h2 input:focus {
-  background-color: transparent;
-  border: 0 !important;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-  padding-left: 0.4em;
-  text-align: left;
-  width: 100%;
-  outline: none;
-}
-h2 input::placeholder {
-  color: #eeeeee;
-}
 div h2 {
   background-color: #172838;
   color: #ebf0ef;
   font-size: 3em;
   margin-bottom: 0.5em;
-  padding: 0.1em;
+  padding: 0.2em;
 }
 .date {
   font-size: 0.5em;
