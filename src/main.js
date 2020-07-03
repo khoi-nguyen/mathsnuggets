@@ -1,4 +1,5 @@
 import 'regenerator-runtime/runtime'
+import AsyncComputed from 'vue-async-computed'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
@@ -10,8 +11,9 @@ const About = () => import('./About')
 const HomePage = () => import('./HomePage')
 const LoginPage = () => import('./LoginPage')
 const Resources = () => import('./Resources')
-const SlideshowBuilder = () => import('./SlideshowBuilder')
+const Slideshow = () => import('./Slideshow')
 
+Vue.use(AsyncComputed)
 Vue.use(Buefy)
 Vue.use(VueRouter)
 Vue.mixin(titleMixin)
@@ -21,8 +23,8 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
-  { path: '/resources/:slug', component: SlideshowBuilder },
-  { path: '/slideshow_builder', component: SlideshowBuilder }
+  { path: '/resources/:slug', component: Slideshow },
+  { path: '/slideshow_builder', component: Slideshow }
 ]
 
 const router = new VueRouter({
