@@ -14,12 +14,17 @@ async function selectWidget (page, widget) {
 }
 
 async function fillInField (page, fieldName, value, key = 'Tab') {
-  const identifier = `span[name="${fieldName}"] textarea`
+  const identifier = `.present span[name="${fieldName}"] .field`
   await page.waitFor(identifier)
-  await page.focus(identifier)
-  await page.keyboard.type(value)
-  const typedValue = await page.$eval(identifier, el => el.value)
-  assert.equal(typedValue, value)
+  const tagName = await page.$eval(identifier, el => el.tagName)
+  if (tagName === 'select') {
+    await page.select(identifier, value)
+  } else {
+    await page.focus(identifier)
+    await page.keyboard.type(value)
+    const typedValue = await page.$eval(identifier, el => el.value)
+    assert.equal(typedValue, value)
+  }
   await page.keyboard.press(key)
   await page.waitForFunction((selector) => !document.querySelector(selector), identifier)
 }
