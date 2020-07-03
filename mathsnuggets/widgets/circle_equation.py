@@ -24,6 +24,6 @@ class CircleEquation(form.Form):
         system = [equation.coeff(*t) for t in [(x, 2), (y, 2), (x, 1), (y, 1), (x, 0)]]
         values = sympy.solve(system, (a, r, h, k), dict=True)
         if not values:
-            raise ValueError(f"{self.equation} is not an equation for a circle")
+            raise ValueError(repr(self.equation) + ' is not an equation for a circle')
         values = values[0]
         return values[r] if self.info == "radius" else (values[h], values[k])
