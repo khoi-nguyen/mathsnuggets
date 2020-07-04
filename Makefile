@@ -45,7 +45,7 @@ hooks:
 	@chmod +x .git/hooks/pre-commit
 
 lint: env node_modules
-	@$(ENV) isort --apply --skip env
+	@$(ENV) isort . --skip env
 	@$(PYTHON) -m black .
 	@$(PYTHON) -m flake8
 	@npx eslint --fix --ignore-path .gitignore src/*
@@ -54,7 +54,7 @@ node_modules: package.json
 	@npm install
 
 precommit:
-	@$(ENV) isort -c --skip env
+	@$(ENV) isort . --check --skip env
 	@$(PYTHON) -m black .
 	@$(PYTHON) -m flake8
 	@npx eslint --ignore-path .gitignore src/*

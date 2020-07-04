@@ -3,6 +3,8 @@ import sympy
 from mathsnuggets.core import fields, form
 from mathsnuggets.widgets import sequence_term
 
+test = {"element": "9", "sequence": "2n + 1"}
+
 
 class SequencePosition(form.Form):
     """Position in Sequence"""

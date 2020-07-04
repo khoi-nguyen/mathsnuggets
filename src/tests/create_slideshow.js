@@ -15,10 +15,15 @@ async function selectWidget (page, widget) {
 
 async function fillInField (page, identifier, value, key = 'Tab') {
   await page.waitFor(identifier)
-  await page.focus(identifier)
-  await page.keyboard.type(value)
-  const typedValue = await page.$eval(identifier, el => el.value)
-  assert.equal(typedValue, value)
+  const tagName = await page.$eval(identifier, el => el.tagName)
+  if (tagName === 'select') {
+    await page.select(identifier, value)
+  } else {
+    await page.focus(identifier)
+    await page.keyboard.type(value)
+    const typedValue = await page.$eval(identifier, el => el.value)
+    assert.equal(typedValue, value)
+  }
   await page.keyboard.press(key)
   await page.waitForFunction((selector) => !document.querySelector(selector), identifier)
 }
@@ -67,7 +72,7 @@ mocha.describe('mathsnuggets', function () {
     const identifier = 'section.present .slide-title'
 
     const checkTitle = async function (assertMethod, string) {
-      const title = await page.$eval(identifier, el => el.value)
+      const title = await page.$eval(identifier, el => el.innerText)
       assert[assertMethod](title, string)
     }
 
@@ -77,7 +82,7 @@ mocha.describe('mathsnuggets', function () {
     await page.keyboard.press('Enter')
     await checkTitle('equal', 'Test')
 
-    await page.click(identifier)
+    await page.click(identifier, { clickCount: 3 })
     await page.keyboard.type('Hello')
     await page.keyboard.press('Enter')
     await checkTitle('equal', 'Hello')

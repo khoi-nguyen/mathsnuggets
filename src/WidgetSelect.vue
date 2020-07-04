@@ -2,10 +2,10 @@
 b-field
   b-autocomplete(
     :data="filteredData"
-    @select="$emit('add:widget', $event.path)"
+    @select="$emit('select:widget', $event.path)"
     field="name"
     icon-pack="fas"
-    icon="search"
+    icon="plus"
     keep-first
     open-on-focus
     placeholder="Add a widget"

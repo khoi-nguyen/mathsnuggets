@@ -1,9 +1,9 @@
 <template lang="pug">
-span
+span(:name="name")
   span(v-html="before")
-  component(
-    :class="{'select': options, 'has-text-danger': !options, 'is-family-monospace': !options}"
-    v-if="!computed && !valid && !hidden"
+  component.field(
+    :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
+    v-if="!computed && editing && !hidden"
     ref="field"
     :rows="rows"
     :cols="cols"
@@ -12,35 +12,24 @@ span
     :is="tag"
     :value="value"
     @dblclick="$event.target.select()"
-    @focus="valid = false"
-    @keydown.191.stop=""
+    @focus="editing = true"
     @keydown.enter.exact.stop.prevent="blur"
-    @input="$emit('update:value', $event.target.value)"
+    @input="inputValue = $event.target.value"
     @blur="blur"
-  ) {{ (options || []).length? '' : value }}
+  ) {{ options.length ? '' : value }}
     option(v-for="option in options" :value="option") {{ option }}
-  span(
+  span.field.content(
     tabindex="0"
-    v-html="renderedHtml"
-    v-if="valid && !computed && renderedHtml"
+    v-html="html"
+    v-if="!editing && !computed && html"
     @focus="enterEditMode"
     @click="enterEditMode"
   )
-  div(v-if="error")
-    error-message {{ error }}
-  div.has-text-centered(
-    v-if="computed && renderedHtml"
-    @click="$emit('update:show-computed', !showComputed)"
-  )
-    button.button.is-success.is-outlined.computed-field(v-if="!showComputed")
-      span.icon
-        i.fas.fa-square-root-alt
-      span {{ label }}
-    div(
-      v-html="renderedHtml"
-      v-if="showComputed"
-    )
   span(v-html="after")
+  error-message(v-if="error") {{ error }}
+  .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
+    b-button.computed-field(type="is-success is-outlined" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
+    div(v-html="html" v-if="showComputed")
 </template>
 
 <script>
@@ -59,11 +48,9 @@ export default {
     default: String,
     displayMode: Boolean,
     hidden: Boolean,
-    html: String,
     label: String,
-    latex: String,
-    options: Array,
-    showComputed: Boolean,
+    name: String,
+    options: { type: Array, default: () => [] },
     protected: Boolean,
     type: String,
     value: String
@@ -71,74 +58,65 @@ export default {
   components: {
     ErrorMessage
   },
-  watch: {
-    renderedHtml (value) {
-      this.valid = !!value
+  asyncComputed: {
+    async html () {
+      const value = !this.value && this.default ? this.default : this.value
+      if (!value || this.type === 'Html') {
+        return value
+      }
+      const payload = { value: value, options: this.options }
+      const data = await api(`fields/${this.type}`, 'GET', payload, true)
+      if (data.error) {
+        this.error = data.message
+        this.editing = true
+        return ''
+      }
+      this.error = ''
+      this.editing = false
+      if ('value' in data) {
+        this.$emit('update:value', data.value)
+      }
+      if ('latex' in data) {
+        return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed })
+      }
+      return data.html || data.value
     }
   },
   computed: {
-    renderedHtml () {
-      if (this.latex) {
-        return katex.renderToString(this.latex, { displayMode: this.displayMode || this.computed })
-      }
-      return this.html
-    },
     cols () {
-      if (!this.value) {
+      if (!this.inputValue) {
         return this.label.length
       }
-      return _.maxBy(this.value.split('\n'), (line) => (line.length)).length + 0
+      return _.maxBy(this.inputValue.split('\n'), (line) => (line.length)).length + 0
     },
     rows () {
-      return this.value ? this.value.split('\n').length : 1
+      return this.inputValue ? this.inputValue.split('\n').length : 1
     },
     tag () {
-      return (this.options || []).length ? 'select' : 'textarea'
+      return this.options.length ? 'select' : 'textarea'
     }
   },
   data () {
     return {
       error: '',
-      valid: false
-    }
-  },
-  mounted () {
-    const value = this.value ? this.value : this.default
-    if (value && !this.computed) {
-      this.validate(value)
+      editing: !this.value && !this.default,
+      inputValue: this.value,
+      showComputed: false
     }
   },
   methods: {
     blur (ev) {
       if (ev.target.value) {
-        this.validate(ev.target.value, ev.key === 'Enter')
+        this.$emit('update:value', ev.target.value)
+        this.editing = false
+        if (ev.key === 'Enter') {
+          this.$emit('form-validate')
+        }
       }
     },
     enterEditMode () {
-      this.valid = false
+      this.editing = true
       this.$nextTick(() => { this.$refs.field.select() })
-    },
-    async validate (value, validateForm) {
-      const payload = { value: value }
-      if ((this.options || []).length) {
-        payload.options = this.options
-      }
-      const data = await api(`fields/${this.type}`, 'GET', payload, true)
-      if (data.error) {
-        this.error = data.message
-        this.valid = false
-        return false
-      }
-      this.error = ''
-      for (const prop in data) {
-        if (prop !== 'valid') {
-          this.$emit('update:' + prop, data[prop])
-        }
-      }
-      this.valid = data.valid
-      if (validateForm) {
-        this.$emit('form-validate')
-      }
     }
   }
 }
