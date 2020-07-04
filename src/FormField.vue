@@ -1,7 +1,7 @@
 <template lang="pug">
-span
+span(:name="name")
   span(v-html="before")
-  component(
+  component.field(
     :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
     v-if="!computed && editing && !hidden"
     ref="field"
@@ -18,7 +18,7 @@ span
     @blur="blur"
   ) {{ options.length ? '' : value }}
     option(v-for="option in options" :value="option") {{ option }}
-  span.content(
+  span.field.content(
     tabindex="0"
     v-html="html"
     v-if="!editing && !computed && html"
@@ -49,6 +49,7 @@ export default {
     displayMode: Boolean,
     hidden: Boolean,
     label: String,
+    name: String,
     options: { type: Array, default: () => [] },
     protected: Boolean,
     type: String,

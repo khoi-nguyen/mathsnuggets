@@ -16,7 +16,7 @@ div
         section
           h1.title.is-1 Automatic Solving
           div.content.is-gapless
-            widget(type="Equation" :fields.sync="widget" :toolbar="false")
+            widget(type="Equation" :payload="widget" :toolbar="false")
           ul.content
             li Click the equation to change it
             li Click the 'Solution' button to see the solution
@@ -49,22 +49,10 @@ export default {
       height: '100%'
     })
   },
-  watch: {
-    widget (newVal, oldVal) {
-      if (!oldVal.length) {
-        const field = newVal[0]
-        field.value = 'x^2 - 5x + 6'
-        this.$set(this.widget, 0, field)
-        const solution = newVal[2]
-        solution.latex = '\\{2, 3\\}'
-        this.$set(this.widget, 2, solution)
-      }
-    }
-  },
   data () {
     return {
       field: { label: 'Equation', displayMode: true, type: 'Expression', value: '(sin x)/(sqrt(x) + 1)', latex: '\\frac {\\sin x} {\\sqrt x + 1}' },
-      widget: [],
+      widget: { equation: 'x^2 - 5x + 6', solution: '[Eq(x, 2), Eq(x, 3)]' },
       formula: katex.renderToString('\\int_{-\\infty}^{+\\infty} e^{-x^2} \\,\\mathrm{d}x = \\sqrt \\pi', { displayMode: true }),
       features: [
         [
