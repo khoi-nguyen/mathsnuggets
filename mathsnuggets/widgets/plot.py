@@ -34,4 +34,3 @@ class Plot(form.Form):
         backend.matplotlib.use("agg")
         backend.process_series()
         backend.fig.tight_layout()
-        return backend.fig

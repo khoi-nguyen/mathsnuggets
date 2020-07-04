@@ -8,9 +8,9 @@ import re
 
 import bcrypt
 import bson.objectid
-import matplotlib.pyplot
 import pypandoc
 import sympy
+from matplotlib import pyplot
 
 from mathsnuggets.parser import parse
 
@@ -124,10 +124,10 @@ def computed(*args, **kwargs):
 
 def figure(function):
     def decorated_function(*args, **kwargs):
-        figure = function(*args, **kwargs)
+        function(*args, **kwargs)
         tmp = io.BytesIO()
-        figure.savefig(tmp, format="svg")
-        matplotlib.pyplot.close()
+        pyplot.savefig(tmp, format="svg")
+        pyplot.close()
         tmp.seek(0)
         svg = tmp.getvalue().decode("utf-8")
         return svg
