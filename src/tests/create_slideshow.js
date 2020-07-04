@@ -13,8 +13,7 @@ async function selectWidget (page, widget) {
   await page.keyboard.press('Enter')
 }
 
-async function fillInField (page, fieldName, value, key = 'Tab') {
-  const identifier = `span[name="${fieldName}"] textarea`
+async function fillInField (page, identifier, value, key = 'Tab') {
   await page.waitFor(identifier)
   await page.focus(identifier)
   await page.keyboard.type(value)
@@ -43,9 +42,8 @@ mocha.describe('mathsnuggets', function () {
   this.timeout(100000)
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] })
+    browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] })
     page = await browser.newPage()
-    await page.goto('http://localhost:5000/slideshow_builder')
   })
 
   mocha.after(async function () {
@@ -53,6 +51,7 @@ mocha.describe('mathsnuggets', function () {
   })
 
   mocha.it('changing the title', async function () {
+    await page.goto('http://localhost:5000/slideshow_builder')
     const identifier = 'section.present .slide-title'
 
     const checkTitle = async function (assertMethod, string) {
@@ -78,6 +77,7 @@ mocha.describe('mathsnuggets', function () {
   })
 
   mocha.it('testing a widget', async function () {
+    await page.goto('http://localhost:5000/slideshow_builder')
     const data = await fetch('http://localhost:5000/api/tests', { method: 'GET' }).then(r => r.json())
     for (const widget in data) {
       const fields = data[widget]
@@ -85,10 +85,34 @@ mocha.describe('mathsnuggets', function () {
       let count = 1
       for (const fieldName in fields) {
         const value = fields[fieldName]
-        await fillInField(page, fieldName, value, fields.length > count ? 'Tab' : 'Enter')
+        await fillInField(page, `span[name="${fieldName}"] textarea`, value, fields.length > count ? 'Tab' : 'Enter')
         count++
       }
       await waitForComputedFields(page)
     }
+  })
+
+  mocha.it('test the login', async function () {
+    await page.goto('http://localhost:5000')
+    const identifier = 'a[href="/login"]'
+    await page.waitForSelector(identifier)
+    await page.$eval(identifier, elem => elem.click())
+    await page.waitForSelector('input[name="email"]')
+    await fillInField(page, 'input[name="email"]', 'test@test.com')
+    await fillInField(page, 'input[name="password"]', '12345678')
+    await page.$eval('button.button.is-fullwidth', elem => elem.click())
+    await page.waitForSelector('button.logout')
+  })
+
+  mocha.it('create a slideshow', async function () {
+    await page.goto('http://localhost:5000')
+    const identifier = 'a[href="/login"]'
+    await page.waitForSelector(identifier)
+    await page.$eval(identifier, elem => elem.click())
+    await page.waitForSelector('input[name="email"]')
+    await fillInField(page, 'input[name="email"]', 'test@test.com')
+    await fillInField(page, 'input[name="password"]', '12345678')
+    await page.$eval('button.button.is-fullwidth', elem => elem.click())
+
   })
 })
