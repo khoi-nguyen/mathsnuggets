@@ -3,8 +3,6 @@
 Plots
 ======
 """
-import io
-
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -27,6 +25,7 @@ class Plot(form.Form):
     """
 
     @fields.computed("Plot", field=fields.Html)
+    @fields.figure
     def plot(self):
         """Use SymPy/matplotlib to generate an SVG graph"""
         data = (self.x, self.x_min, self.x_max)
@@ -35,9 +34,4 @@ class Plot(form.Form):
         backend.matplotlib.use("agg")
         backend.process_series()
         backend.fig.tight_layout()
-        tmp = io.BytesIO()
-        backend.fig.savefig(tmp, format="svg")
-        backend.close()
-        tmp.seek(0)
-        svg = tmp.getvalue().decode("utf-8")
-        return svg
+        return backend.fig

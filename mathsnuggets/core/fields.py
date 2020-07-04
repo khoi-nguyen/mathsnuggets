@@ -3,10 +3,12 @@
 Fields
 ======
 """
+import io
 import re
 
 import bcrypt
 import bson.objectid
+import matplotlib.pyplot
 import pypandoc
 import sympy
 
@@ -118,6 +120,19 @@ def computed(*args, **kwargs):
         return ComputedField(*args, **kwargs)
 
     return decorator
+
+
+def figure(function):
+    def decorated_function(*args, **kwargs):
+        figure = function(*args, **kwargs)
+        tmp = io.BytesIO()
+        figure.savefig(tmp, format="svg")
+        matplotlib.pyplot.close()
+        tmp.seek(0)
+        svg = tmp.getvalue().decode("utf-8")
+        return svg
+
+    return decorated_function
 
 
 class Expression(Field):
