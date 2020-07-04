@@ -1,3 +1,4 @@
+import numpy
 import sympy
 from matplotlib import pyplot
 
@@ -28,11 +29,17 @@ class Triangle(form.Form):
     @fields.computed("Triangle", field=fields.Html)
     @fields.figure
     def triangle(self):
-        x, y = zip(*self.vertices)
-        pyplot.plot(x, y)
-        pyplot.gca().set_aspect("equal")
+        # Prepare figure
         pyplot.axis("off")
         pyplot.grid(b=None)
+        pyplot.gca().set_aspect("equal")
+        # Draw triangle
+        x, y = zip(*self.vertices)
+        pyplot.plot(x, y)
+        # Label vertices
+        m = numpy.sum(self.vertices) / 3
+        for label, position in zip([self.A, self.B, self.C], self.vertices):
+            pyplot.text(*(position + (position - m) * 0.05), label)
 
     @property
     def vertices(self):
@@ -74,11 +81,13 @@ class Triangle(form.Form):
             missing_quantities -= 1
 
         return [
-            (0, 0),
-            (lengths[0].evalf(), 0),
-            (
-                (lengths[2] * sympy.cos(angles[1])).evalf(),
-                (lengths[2] * sympy.sin(angles[1])).evalf(),
+            numpy.array([0, 0]),
+            numpy.array([lengths[0].evalf(), 0]),
+            numpy.array(
+                [
+                    (lengths[2] * sympy.cos(angles[1])).evalf(),
+                    (lengths[2] * sympy.sin(angles[1])).evalf(),
+                ]
             ),
             (0, 0),
         ]
