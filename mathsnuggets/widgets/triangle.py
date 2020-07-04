@@ -1,4 +1,5 @@
 import sympy
+from matplotlib import pyplot
 
 from mathsnuggets.core import fields, form
 
@@ -24,7 +25,16 @@ class Triangle(form.Form):
     beta = fields.Expression("beta")
     gamma = fields.Expression("gamma")
 
-    @fields.computed("Vertices")
+    @fields.computed("Triangle", field=fields.Html)
+    @fields.figure
+    def triangle(self):
+        x, y = zip(*self.vertices)
+        pyplot.plot(x, y)
+        pyplot.gca().set_aspect("equal")
+        pyplot.axis("off")
+        pyplot.grid(b=None)
+
+    @property
     def vertices(self):
         lengths = [self.a, self.b, self.c]
         angles = [self.alpha, self.beta, self.gamma]
@@ -65,6 +75,10 @@ class Triangle(form.Form):
 
         return [
             (0, 0),
-            (lengths[0], 0),
-            (lengths[2] * sympy.cos(angles[1]), lengths[2] * sympy.sin(angles[1])),
+            (lengths[0].evalf(), 0),
+            (
+                (lengths[2] * sympy.cos(angles[1])).evalf(),
+                (lengths[2] * sympy.sin(angles[1])).evalf(),
+            ),
+            (0, 0),
         ]
