@@ -41,7 +41,7 @@ class QuadraticEquations(equation.Equation):
     def easy_factorisation(self):
         return (self.x1 + self.x2) * self.x1 * self.x2 == 0
 
-    @fields.constraint("One (double) solution")
+    @fields.constraint("Repeated roots")
     def one_solution(self):
         return self.x1 == self.x2
 
