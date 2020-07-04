@@ -27,6 +27,29 @@ class QuadraticEquations(equation.Equation):
             self.d * self.x ** 2 + self.e * self.x + self.f,
         )
 
+    @property
+    def b(self):
+        return -self.a * (self.x1 + self.x2)
+
+    @property
+    def c(self):
+        return self.a * self.x1 * self.x2
+
+    @property
+    def delta(self):
+        """Discriminant"""
+        return self.b ** 2 - 4 * self.a * self.c
+
+    @property
+    def alpha(self):
+        """x-coordinate of the turning point"""
+        return -self.b / (2 * self.a)
+
+    @property
+    def beta(self):
+        """y-coordinate of the turning point"""
+        return -self.delta / (4 * self.a)
+
     @fields.range_constraint(
         "Quadratic Equation", default=True, hidden=True, protected=True
     )
@@ -35,19 +58,19 @@ class QuadraticEquations(equation.Equation):
 
     @fields.constraint("No linear terms after simplification")
     def no_linear_terms(self):
-        return self.x1 + self.x2 == 0
+        return self.b == 0
 
     @fields.constraint("Easy factorisation after simplification")
     def easy_factorisation(self):
-        return (self.x1 + self.x2) * self.x1 * self.x2 == 0
+        return self.b * self.c == 0
 
     @fields.constraint("Turning point has integer coordinates")
     def integer_turning_point(self):
-        return (self.x1 + self.x2) % (2 * self.a) == 0
+        return self.alpha.is_integer and self.beta.is_integer
 
     @fields.constraint("Repeated roots")
     def one_solution(self):
-        return self.x1 == self.x2
+        return self.delta == 0
 
     @fields.range_constraint("Monic after simplification")
     def monic(self):
