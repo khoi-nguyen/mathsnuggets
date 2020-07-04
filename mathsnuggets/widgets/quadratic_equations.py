@@ -41,6 +41,10 @@ class QuadraticEquations(equation.Equation):
     def easy_factorisation(self):
         return (self.x1 + self.x2) * self.x1 * self.x2 == 0
 
+    @fields.constraint("Turning point has integer coordinates")
+    def integer_turning_point(self):
+        return (self.x1 + self.x2) % (2 * self.a) == 0
+
     @fields.constraint("Repeated roots")
     def one_solution(self):
         return self.x1 == self.x2
