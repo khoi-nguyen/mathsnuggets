@@ -19,6 +19,10 @@ class LinearEquation(equation.Equation):
     def generator(self):
         self.equation = sympy.Eq(self.a * self.x + self.b, self.c * self.x + self.d)
 
+    @property
+    def solution(self):
+        return (self.d - self.b) / (self.a - self.c)
+
     @fields.constraint("Unique solution", default=True, hidden=True, protected=True)
     def unique_solution(self):
         return self.a != self.c
@@ -49,4 +53,4 @@ class LinearEquation(equation.Equation):
 
     @fields.constraint("Integer solution", default=True)
     def integer_solution(self):
-        return self.unique_solution and (self.d - self.b) % (self.a - self.c) == 0
+        return self.solution.is_integer
