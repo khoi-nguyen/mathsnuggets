@@ -161,6 +161,7 @@ def test_password():
     with pytest.raises(ValueError):
         test.password = "short"
 
+
 def test_standard_form():
     test.std = 300
     with sympy.evaluate(False):

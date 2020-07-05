@@ -308,4 +308,8 @@ class StandardForm(Expression):
         x = sympy.Mul(number, sympy.Pow(10, -power)).evalf()
         if float(x).is_integer():
             x = int(x)
-        return sympy.Mul(x, sympy.Pow(sympy.UnevaluatedExpr(10), power, evaluate=False), evaluate=False)
+        return sympy.Mul(
+            x,
+            sympy.Pow(sympy.UnevaluatedExpr(10), power, evaluate=False),
+            evaluate=False,
+        )
