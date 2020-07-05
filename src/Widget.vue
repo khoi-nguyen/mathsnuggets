@@ -22,7 +22,10 @@
     @update:value="updatePayload(field.name, $event)"
     @form-validate="formValidate"
   )
-  error-message(v-if="error") {{ error }}
+  error-message(v-if="error")
+    p {{ error }}
+    b-button(type="is-danger" v-if="!showTraceback" @click="showTraceback = true") Show more details
+    pre(@click="showTraceback = false" v-if="showTraceback") {{ traceback }}
 </template>
 
 <script>
@@ -38,7 +41,7 @@ export default {
     type: String
   },
   data () {
-    return { error: '' }
+    return { error: '', showTraceback: false, traceback: '' }
   },
   computed: {
     generator () {
@@ -54,6 +57,7 @@ export default {
     async formValidate (generator = false) {
       const data = await api(`widgets/${this.type}`, generator ? 'POST' : 'GET', this.payload)
       this.error = data.error ? data.message : ''
+      this.traceback = data.error ? data.traceback : ''
       forEach(data, (value, key) => this.updatePayload(key, value.html || value.value))
       this.$emit('validate:widget')
     },
