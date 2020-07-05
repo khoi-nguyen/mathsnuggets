@@ -39,12 +39,18 @@ class Triangle(form.Form):
         # Labelling
         m = numpy.sum(self.vertices, axis=0) / 3
         edges = zip(self.vertices, self.vertices[1:] + self.vertices[:1])
-        positions = self.vertices + [numpy.sum(e, axis=0) / 2 for e in edges]
-        labels = [getattr(self, attr) for attr in ["A", "B", "C", "a", "b", "c"]]
-        for label, position in zip(labels, positions):
+        positions = (
+            self.vertices + [numpy.sum(e, axis=0) / 2 for e in edges] + self.vertices
+        )
+        labels = [
+            getattr(self, attr)
+            for attr in ["A", "B", "C", "a", "b", "c", "beta", "gamma", "alpha"]
+        ]
+        signs = [1 if i < 6 else -1 for i in range(9)]
+        for label, position, sign in zip(labels, positions, signs):
             if label:
                 direction = (position - m) / numpy.linalg.norm(position - m)
-                pyplot.text(*(position + 0.3 * direction), label, fontsize=13)
+                pyplot.text(*(position + 0.3 * sign * direction), label, fontsize=13)
 
     @property
     def vertices(self):
