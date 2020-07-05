@@ -56,7 +56,7 @@ class Field:
         value = instance.__dict__[self.name] if self.name in instance.__dict__ else None
         if hasattr(self, "callback"):
             value = self.callback(instance)
-        return self.getter(value) if hasattr(self, "getter") and callable(self.getter) else value
+        return self.getter(value) if value is not None else None
 
     def __init__(self, label, *args, **kwargs):
         self.label = label
@@ -88,6 +88,9 @@ class Field:
             value = getattr(self, attr)
             if not attr.startswith("_") and not callable(value):
                 yield (attr, value)
+
+    def getter(self, value):
+        return value
 
     def sanitize(self, value):
         return value
