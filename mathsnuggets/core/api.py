@@ -71,6 +71,7 @@ def validate_field(field):
         field = field_cls("Dummy Field", **kwargs)
 
     try:
+        value = DummyForm(field=value).field
         response = DummyForm.field.validate(value)
         return flask.jsonify(response)
     except (ValueError, TypeError, AttributeError) as error:
