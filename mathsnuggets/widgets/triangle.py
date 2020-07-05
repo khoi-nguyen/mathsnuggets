@@ -34,12 +34,17 @@ class Triangle(form.Form):
         pyplot.grid(b=None)
         pyplot.gca().set_aspect("equal")
         # Draw triangle
-        x, y = zip(*self.vertices)
+        x, y = zip(*(self.vertices + [numpy.array([0, 0])]))
         pyplot.plot(x, y)
-        # Label vertices
-        m = numpy.sum(self.vertices) / 3
-        for label, position in zip([self.A, self.B, self.C], self.vertices):
-            pyplot.text(*(position + (position - m) * 0.05), label)
+        # Labelling
+        m = numpy.sum(self.vertices, axis=0) / 3
+        edges = zip(self.vertices, self.vertices[1:] + self.vertices[:1])
+        positions = self.vertices + [numpy.sum(e, axis=0) / 2 for e in edges]
+        labels = [getattr(self, attr) for attr in ["A", "B", "C", "a", "b", "c"]]
+        for label, position in zip(labels, positions):
+            if label:
+                direction = (position - m) / numpy.linalg.norm(position - m)
+                pyplot.text(*(position + 0.3 * direction), label, fontsize=13)
 
     @property
     def vertices(self):
@@ -82,12 +87,12 @@ class Triangle(form.Form):
 
         return [
             numpy.array([0, 0]),
-            numpy.array([lengths[0].evalf(), 0]),
+            numpy.array([lengths[0].evalf(), 0], dtype=numpy.float64),
             numpy.array(
                 [
                     (lengths[2] * sympy.cos(angles[1])).evalf(),
                     (lengths[2] * sympy.sin(angles[1])).evalf(),
-                ]
+                ],
+                dtype=numpy.float64,
             ),
-            (0, 0),
         ]
