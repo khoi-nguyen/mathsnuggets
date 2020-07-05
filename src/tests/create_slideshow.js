@@ -47,6 +47,7 @@ async function clickElement (page, identifier) {
 }
 
 async function login (page) {
+  await page.goto('http://localhost:5000')
   await clickElement(page, 'a[href="/login"]')
   await fillInField(page, 'input[name="email"]', 'test@test.com')
   await fillInField(page, 'input[name="password"]', '12345678')
@@ -110,16 +111,11 @@ mocha.describe('mathsnuggets', function () {
   })
 
   mocha.it('test the login', async function () {
-    await page.goto('http://localhost:5000')
-    await clickElement(page, 'a[href="/login"]')
-    await fillInField(page, 'input[name="email"]', 'test@test.com')
-    await fillInField(page, 'input[name="password"]', '12345678')
-    await clickElement(page, 'button.button.is-fullwidth')
+    await login(page)
     await clickElement(page, 'button.logout')
   })
 
   mocha.it('create a slideshow', async function () {
-    await page.goto('http://localhost:5000')
     await login(page)
     await clickElement(page, 'a[href="/resources"]')
     await clickElement(page, '.panel-block button.is-primary')
