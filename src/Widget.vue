@@ -56,7 +56,7 @@ export default {
   methods: {
     fieldValue (field) {
       const payload = field.computed ? this.computed : this.payload
-      return field.name in payload ? payload[field.name] : ''
+      return field.name in payload && payload[field.name] ? payload[field.name] : ''
     },
     async formValidate (generator = false) {
       const data = await api(`widgets/${this.type}`, generator ? 'POST' : 'GET', this.payload)
@@ -66,9 +66,13 @@ export default {
     },
     updatePayload (fieldName, value) {
       const field = (this.fields || []).filter(f => f.name === fieldName)[0]
-      if (!field.computed && value !== undefined) {
+      if (!field.computed) {
         const payload = this.payload
-        payload[fieldName] = value
+        if (value === undefined || value === '') {
+          delete payload[fieldName]
+        } else {
+          payload[fieldName] = value
+        }
         this.$emit('update:payload', payload)
       } else {
         this.computed[fieldName] = value
