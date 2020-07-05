@@ -14,4 +14,4 @@ class Pythagoras(form.Form):
 
     @fields.computed("Length")
     def length(self):
-        return sympy.solve(sympy.Eq(self.a ** 2 + self.b ** 2, self.c ** 2))
+        return sympy.solve(sympy.Eq(self.a ** 2 + self.b ** 2, self.c ** 2))[1]
