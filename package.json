@@ -34,6 +34,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "buefy": "^0.8.20",
     "bulma": "^0.8.2",
+    "fabric": "^3.6.3",
     "katex": "^0.11.1",
     "moment": "^2.26.0",
     "reveal.js": "^4.0.2",
