@@ -5,26 +5,22 @@ from mathsnuggets.core import fields, form
 test = {
     "equation_1": "x + 2 = y",
     "equation_2": " 2x = y",
-    "variable_1": "x",
-    "variable_2": "y",
+    "x": "x",
+    "y": "y",
 }
 
 
 class SimultaneousEquations(form.Form):
     """Simultaneous equations"""
 
-    template = "Solve `equation1` and `equation2` for `x` and `y` `solution`"
+    template = "Solve `equation_1` and `equation_2` for `x` and `y` `solution`"
 
-    equation1 = fields.Equation("equation 1", required=True)
-    equation2 = fields.Equation("equation 2", required=True)
+    equation_1 = fields.Equation("equation 1", required=True)
+    equation_2 = fields.Equation("equation 2", required=True)
     x = fields.Expression("variable 1", default="x", required=True)
     y = fields.Expression("variable 2", default="y", required=True)
 
     @fields.computed("Solution")
     def solution(self):
-        eq1 = self.equation1.args[0] - self.equation1.args[1]
-        eq2 = self.equation2.args[0] - self.equation2.args[1]
-        eq = eq1 - eq2
-        value = sympy.solve(eq, self.x)
-        values = sympy.solve(eq, self.y)
-        return value, values
+        answer = sympy.solve([self.equation_1, self.equation_2], self.x, self.y)
+        return [sympy.Eq(key, value) for key, value in answer.items()]

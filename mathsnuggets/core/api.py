@@ -1,3 +1,5 @@
+import traceback
+
 import flask
 import flask_login
 
@@ -157,6 +159,7 @@ class InvalidUsage(Exception):
 
     def __iter__(self):
         yield ("error", True)
+        yield ("traceback", traceback.format_exc())
         yield ("status_code", self.status_code)
         yield ("payload", dict(self.payload or ()))
         yield ("message", self.message)
