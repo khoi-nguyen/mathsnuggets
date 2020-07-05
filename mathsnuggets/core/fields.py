@@ -53,9 +53,10 @@ class Field:
     def __get__(self, instance, owner):
         if instance is None:
             return self
+        value = instance.__dict__[self.name] if self.name in instance.__dict__ else None
         if hasattr(self, "callback"):
-            return self.callback(instance)
-        return instance.__dict__[self.name] if self.name in instance.__dict__ else None
+            value = self.callback(instance)
+        return self.getter(value) if hasattr(self, "getter") and callable(self.getter) else value
 
     def __init__(self, label, *args, **kwargs):
         self.label = label
@@ -297,3 +298,14 @@ class Password(Field):
     @staticmethod
     def check(value, hashed):
         return bcrypt.checkpw(value.encode("utf8"), hashed)
+
+
+class StandardForm(Expression):
+    """Display a number in standard form"""
+
+    def getter(self, number):
+        power = sympy.floor((sympy.log(sympy.Abs(number)) / sympy.log(10)).evalf())
+        x = sympy.Mul(number, sympy.Pow(10, -power)).evalf()
+        if float(x).is_integer():
+            x = int(x)
+        return sympy.Mul(x, sympy.Pow(sympy.UnevaluatedExpr(10), power, evaluate=False), evaluate=False)
