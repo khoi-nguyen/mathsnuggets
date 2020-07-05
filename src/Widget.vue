@@ -65,7 +65,7 @@ export default {
       this.$emit('validate:widget')
     },
     updatePayload (fieldName, value) {
-      const field = this.fields.filter(f => f.name === fieldName)[0]
+      const field = (this.fields || []).filter(f => f.name === fieldName)[0]
       if (!field.computed && value !== undefined) {
         const payload = this.payload
         payload[fieldName] = value
