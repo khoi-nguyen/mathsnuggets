@@ -18,7 +18,7 @@
   form-field(
     v-for="(field, id) in (fields || []).filter(f => !f.constraint && !f.random)"
     v-bind="field"
-    :value="field.name in payload ? payload[field.name] : ''"
+    :value="fieldValue(field)"
     @update:value="updatePayload(field.name, $event)"
     @form-validate="formValidate"
   )
@@ -41,7 +41,12 @@ export default {
     type: String
   },
   data () {
-    return { error: '', showTraceback: false, traceback: '' }
+    return {
+      error: '',
+      showTraceback: false,
+      traceback: '',
+      computed: {}
+    }
   },
   computed: {
     generator () {
@@ -54,6 +59,10 @@ export default {
     }
   },
   methods: {
+    fieldValue (field) {
+      const payload = field.computed ? this.computed : this.payload
+      return field.name in payload ? payload[field.name] : ''
+    },
     async formValidate (generator = false) {
       const data = await api(`widgets/${this.type}`, generator ? 'POST' : 'GET', this.payload)
       this.error = data.error ? data.message : ''
@@ -62,9 +71,19 @@ export default {
       this.$emit('validate:widget')
     },
     updatePayload (fieldName, value) {
-      const payload = this.payload
-      payload[fieldName] = value
-      this.$emit('update:payload', payload)
+      const field = this.fields.filter(f => f.name === fieldName)[0]
+      if (!field.computed && value !== undefined) {
+        const payload = this.payload
+        payload[fieldName] = value
+        this.$emit('update:payload', payload)
+      } else {
+        this.computed[fieldName] = value
+      }
+    }
+  },
+  async mounted () {
+    if (this.payload) {
+      this.formValidate()
     }
   },
   components: {
