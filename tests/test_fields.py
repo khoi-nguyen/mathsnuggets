@@ -14,6 +14,7 @@ class Foo(form.Form):
     password = fields.Password("Email")
     protected = fields.Field("Protected", default="Protected", protected=True)
     select = fields.Select("Select", options=["Hi", "Hello"])
+    std = fields.StandardForm("Standard Form")
 
     @fields.constraint("Contraint", default=True)
     def constraint(self):
@@ -159,3 +160,9 @@ def test_password():
         test.password = ""
     with pytest.raises(ValueError):
         test.password = "short"
+
+
+def test_standard_form():
+    test.std = 300
+    with sympy.evaluate(False):
+        assert test.std != sympy.Mul(3, sympy.Pow(10, 2))

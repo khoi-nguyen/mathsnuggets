@@ -8,11 +8,11 @@ class Indices(form.Form):
 
     template = "Calculate `index_1` `operation` `index_2` `solution`"
 
-    index_1 = fields.Expression("index 1")
-    index_2 = fields.Expression("index 2")
+    index_1 = fields.StandardForm("index 1")
+    index_2 = fields.StandardForm("index 2")
     operation = fields.Select("operation", options=["×", "÷"])
 
-    @fields.computed("Solution")
+    @fields.computed("Solution", field=fields.StandardForm)
     def solution(self):
         operations = {
             "×": sympy.Mul,
