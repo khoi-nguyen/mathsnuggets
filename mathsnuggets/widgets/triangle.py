@@ -14,9 +14,9 @@ class Triangle(form.Form):
         Angles: `alpha`, `beta`, `gamma`<br>
     """
 
-    A = fields.Field("A", default="A")
-    B = fields.Field("B", default="B")
-    C = fields.Field("C", default="C")
+    A = fields.Expression("A", default="A")
+    B = fields.Expression("B", default="B")
+    C = fields.Expression("C", default="C")
 
     a = fields.Expression("a")
     b = fields.Expression("b")
@@ -49,6 +49,7 @@ class Triangle(form.Form):
         signs = [1 if i < 6 else -1 for i in range(9)]
         for label, position, sign in zip(labels, positions, signs):
             if label:
+                label = fr"${sympy.latex(label)}$"
                 direction = (position - m) / numpy.linalg.norm(position - m)
                 pyplot.text(*(position + 0.3 * sign * direction), label, fontsize=13)
 
