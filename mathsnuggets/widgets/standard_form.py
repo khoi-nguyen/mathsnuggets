@@ -3,8 +3,8 @@ import sympy
 from mathsnuggets.core import fields, form
 
 
-class Indices(form.Form):
-    """Indices"""
+class StandardForm(form.Form):
+    """Standard Form"""
 
     template = "Calculate `index_1` `operation` `index_2` `solution`"
 
