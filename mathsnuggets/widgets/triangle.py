@@ -25,6 +25,7 @@ class Triangle(form.Form):
     alpha = fields.Expression("alpha")
     beta = fields.Expression("beta")
     gamma = fields.Expression("gamma")
+    obtuse = fields.Expression("Obtuse")
 
     @fields.computed("Triangle", field=fields.Html)
     @fields.figure
@@ -73,23 +74,39 @@ class Triangle(form.Form):
             gamma, c = gamma or x, c or x
             equation = sympy.Eq(c ** 2, a ** 2 + b ** 2 - 2 * a * b * sympy.cos(gamma))
             domain = sympy.Interval.open(0, sympy.pi if find_angle else sympy.oo)
-            sol = [x for x in sympy.solve(equation) if x in domain][0]
-            locals()["angles" if find_angle else "lengths"][index] = sol
+            sol = [x for x in sympy.solve(equation) if x in domain]
+            if not sol:
+                raise ValueError(
+                    "The lengths and angles must satisfy the law of cosines"
+                )
+            locals()["angles" if find_angle else "lengths"][index] = sol[0]
 
         def sine_law(lengths, angles, i, j):
             a, b, alpha, beta = lengths[i], lengths[j], angles[i], angles[j]
             x, find_angle = sympy.Dummy("x"), not bool(beta)
             b, beta = b or x, beta or x
             equation = sympy.Eq(sympy.sin(alpha) / a, sympy.sin(beta) / b)
-            # TODO: ambiguity with sine law
             domain = sympy.Interval.open(0, sympy.pi / 2 if find_angle else sympy.oo)
-            sol = [x for x in sympy.solve(equation) if x in domain][0]
+            sol = [x for x in sympy.solve(equation) if x in domain]
+            if not sol:
+                raise ValueError("The lengths and angles must satisfy the law of sines")
+            sol = [
+                x
+                for x in sol
+                if x + sum([a for a in angles if a and not a.free_symbols]) < sympy.pi
+            ]
+            if not sol:
+                raise ValueError("There are no triangles satisfying the conditions")
+            sol = sol[1] if self.obtuse and len(sol) == 2 else sol[0]
             locals()["angles" if find_angle else "lengths"][j] = sol
 
         while missing_quantities:
             missing_info = [len(missing(el)) for el in zip(lengths, angles)]
             if len(missing(angles)) == 1:
-                angles[missing(angles)[0]] = sympy.pi - sum([a for a in angles if a])
+                angle = sympy.pi - sum([a for a in angles if a and not a.free_symbols])
+                if angle not in sympy.Interval.open(0, sympy.pi):
+                    raise ValueError("The angles sum cannot exceed 180 degrees")
+                angles[missing(angles)[0]] = angle
             elif not missing(lengths) and missing(angles):
                 cosine_law(lengths, angles, missing(angles)[0])
             elif len(missing(lengths)) == 1 and missing(lengths)[0] not in missing(
@@ -101,6 +118,20 @@ class Triangle(form.Form):
             else:
                 raise ValueError("Not enough information to find the vertices")
             missing_quantities -= 1
+
+        equations = [
+            sympy.Eq(
+                (lengths[2] * sympy.cos(angles[1])).evalf(5),
+                (lengths[0] - lengths[1] * sympy.cos(angles[2])).evalf(5),
+            ),
+            sympy.Eq(
+                (lengths[2] * sympy.sin(angles[1])).evalf(5),
+                (lengths[1] * sympy.sin(angles[2])).evalf(5),
+            ),
+            sympy.Eq(sum(angles).evalf(5), sympy.pi.evalf(5)),
+        ]
+        if not all(equations):
+            raise ValueError("There are no triangles satisfying the conditions")
 
         return [
             numpy.array([0, 0]),
