@@ -57,7 +57,15 @@ class Triangle(form.Form):
     def vertices(self):
         lengths = [self.a, self.b, self.c]
         angles = [self.alpha, self.beta, self.gamma]
-        missing_quantities = (lengths + angles).count(None)
+
+        def missing(expressions):
+            return [
+                i
+                for i, e in enumerate(expressions)
+                if not e or getattr(e, "func", "") == sympy.Symbol
+            ]
+
+        missing_quantities = len(missing(lengths + angles))
 
         def cosine_law(lengths, angles, index):
             (c, a, b), gamma = lengths[index:] + lengths[:index], angles[index]
@@ -79,13 +87,15 @@ class Triangle(form.Form):
             locals()["angles" if find_angle else "lengths"][j] = sol
 
         while missing_quantities:
-            missing_info = [[lengths[i], angles[i]].count(None) for i in range(3)]
-            if angles.count(None) == 1:
-                angles[angles.index(None)] = sympy.pi - sum([a for a in angles if a])
-            elif lengths.count(None) == 0 and angles.count(None):
-                cosine_law(lengths, angles, angles.index(None))
-            elif lengths.count(None) == 1 and angles[lengths.index(None)]:
-                cosine_law(lengths, angles, lengths.index(None))
+            missing_info = [len(missing(el)) for el in zip(lengths, angles)]
+            if len(missing(angles)) == 1:
+                angles[missing(angles)[0]] = sympy.pi - sum([a for a in angles if a])
+            elif not missing(lengths) and missing(angles):
+                cosine_law(lengths, angles, missing(angles)[0])
+            elif len(missing(lengths)) == 1 and missing(lengths)[0] not in missing(
+                angles
+            ):
+                cosine_law(lengths, angles, missing(lengths)[0])
             elif {0, 1} <= set(missing_info):
                 sine_law(lengths, angles, missing_info.index(0), missing_info.index(1))
             else:
