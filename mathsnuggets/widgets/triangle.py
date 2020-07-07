@@ -1,4 +1,5 @@
 import numpy
+import pytest
 import sympy
 from matplotlib import pyplot
 
@@ -25,7 +26,7 @@ class Triangle(form.Form):
     alpha = fields.Expression("alpha")
     beta = fields.Expression("beta")
     gamma = fields.Expression("gamma")
-    obtuse = fields.Expression("Obtuse")
+    obtuse = fields.Field("Obtuse (sine law ambiguity)", default=False)
 
     @fields.computed("Triangle", field=fields.Html)
     @fields.figure
@@ -86,7 +87,7 @@ class Triangle(form.Form):
             x, find_angle = sympy.Dummy("x"), not bool(beta)
             b, beta = b or x, beta or x
             equation = sympy.Eq(sympy.sin(alpha) / a, sympy.sin(beta) / b)
-            domain = sympy.Interval.open(0, sympy.pi / 2 if find_angle else sympy.oo)
+            domain = sympy.Interval.open(0, sympy.pi if find_angle else sympy.oo)
             sol = [x for x in sympy.solve(equation) if x in domain]
             if not sol:
                 raise ValueError("The lengths and angles must satisfy the law of sines")
@@ -95,8 +96,6 @@ class Triangle(form.Form):
                 for x in sol
                 if x + sum([a for a in angles if a and not a.free_symbols]) < sympy.pi
             ]
-            if not sol:
-                raise ValueError("There are no triangles satisfying the conditions")
             sol = sol[1] if self.obtuse and len(sol) == 2 else sol[0]
             locals()["angles" if find_angle else "lengths"][j] = sol
 
@@ -132,6 +131,8 @@ class Triangle(form.Form):
         ]
         if not all(equations):
             raise ValueError("There are no triangles satisfying the conditions")
+        if self.obtuse and not [a for a in angles if a > sympy.pi / 2]:
+            raise ValueError("Could not find an appropriate obtuse triangle")
 
         return [
             numpy.array([0, 0]),
@@ -144,3 +145,37 @@ class Triangle(form.Form):
                 dtype=numpy.float64,
             ),
         ]
+
+
+def test_triangle():
+    triangle = Triangle(a=3, b=4, c=5)
+    assert triangle.triangle
+
+    triangle = Triangle(a=3, b=4, c="c", gamma="pi/2")
+    assert triangle.triangle
+
+    with pytest.raises(ValueError):
+        triangle = Triangle(a=3, b=4, c=5, gamma="pi")
+        assert triangle.vertices
+
+    with pytest.raises(ValueError):
+        triangle = Triangle(a=3, b=4, c=5, gamma="pi/4")
+        assert triangle.vertices
+
+    with pytest.raises(ValueError):
+        triangle = Triangle(a=3, b=4, c=15)
+        assert triangle.vertices
+
+    with pytest.raises(ValueError):
+        triangle = Triangle(a=4, b=4, c=4, obtuse=True)
+        assert triangle.vertices
+
+    # Sine law: no triangle
+    with pytest.raises(ValueError):
+        triangle = Triangle(b=7, c=16, beta="pi/6")
+        assert triangle.vertices
+
+    # Ambiguous case
+    triangle = Triangle(b=10, c=16, beta="pi/6")
+    triangle2 = Triangle(b=10, c=16, beta="pi/6", obtuse=True)
+    assert triangle.vertices[1][0] != triangle2.vertices[1][0]
