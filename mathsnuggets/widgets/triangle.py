@@ -5,6 +5,8 @@ from matplotlib import pyplot
 
 from mathsnuggets.core import fields, form
 
+test = {"a": "3", "b": "4", "c": "5"}
+
 
 class Triangle(form.Form):
     """Draw a triangle"""
