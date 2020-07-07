@@ -14,9 +14,9 @@ class Triangle(form.Form):
         Angles: `alpha`, `beta`, `gamma`<br>
     """
 
-    A = fields.Expression("A", default="A")
-    B = fields.Expression("B", default="B")
-    C = fields.Expression("C", default="C")
+    A = fields.Expression("A")
+    B = fields.Expression("B")
+    C = fields.Expression("C")
 
     a = fields.Expression("a")
     b = fields.Expression("b")
