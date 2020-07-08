@@ -150,32 +150,25 @@ class Triangle(form.Form):
 
 
 def test_triangle():
-    triangle = Triangle(a=3, b=4, c=5)
-    assert triangle.triangle
+    assert Triangle(a=3, b=4, c=5).triangle
 
-    triangle = Triangle(a=3, b=4, c="c", gamma="pi/2")
-    assert triangle.triangle
+    assert Triangle(a=3, b=4, c="c", gamma="pi/2").triangle
 
     with pytest.raises(ValueError):
-        triangle = Triangle(a=3, b=4, c=5, gamma="pi")
-        assert triangle.vertices
+        assert Triangle(a=3, b=4, c=5, gamma="pi").vertices
 
     with pytest.raises(ValueError):
-        triangle = Triangle(a=3, b=4, c=5, gamma="pi/4")
-        assert triangle.vertices
+        assert Triangle(a=3, b=4, c=5, gamma="pi/4").vertices
 
     with pytest.raises(ValueError):
-        triangle = Triangle(a=3, b=4, c=15)
-        assert triangle.vertices
+        assert Triangle(a=3, b=4, c=15).vertices
 
     with pytest.raises(ValueError):
-        triangle = Triangle(a=4, b=4, c=4, obtuse=True)
-        assert triangle.vertices
+        assert Triangle(a=4, b=4, c=4, obtuse=True).vertices
 
     # Sine law: no triangle
     with pytest.raises(ValueError):
-        triangle = Triangle(b=7, c=16, beta="pi/6")
-        assert triangle.vertices
+        assert Triangle(b=7, c=16, beta="pi/6").vertices
 
     # Ambiguous case
     triangle = Triangle(b=10, c=16, beta="pi/6")
