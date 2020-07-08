@@ -7,10 +7,6 @@ def test_widgets():
         form = info["class"](**info["test"])
         assert form.valid
 
-        for name, field in form._fields():
-            assert (
-                field.get("value")
-                or field.get("html")
-                or field.get("random")
-                or field.get("constraint")
-            )
+        for _name, field in form._fields():
+            if field.get("computed") or field.get("required"):
+                assert field.get("value") or field.get("html")
