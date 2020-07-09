@@ -3,12 +3,14 @@
 Fields
 ======
 """
+import io
 import re
 
 import bcrypt
 import bson.objectid
 import pypandoc
 import sympy
+from matplotlib import pyplot
 
 from mathsnuggets.parser import parse
 
@@ -122,6 +124,19 @@ def computed(*args, **kwargs):
         return ComputedField(*args, **kwargs)
 
     return decorator
+
+
+def figure(function):
+    def decorated_function(*args, **kwargs):
+        function(*args, **kwargs)
+        tmp = io.BytesIO()
+        pyplot.savefig(tmp, format="svg")
+        pyplot.close()
+        tmp.seek(0)
+        svg = tmp.getvalue().decode("utf-8")
+        return svg
+
+    return decorated_function
 
 
 class Expression(Field):
