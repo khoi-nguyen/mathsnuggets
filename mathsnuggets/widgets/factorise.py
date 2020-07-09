@@ -42,3 +42,7 @@ class Factorise(form.Form):
     @fields.range_constraint("Linear")
     def linear(self):
         self.a = {0}
+
+    @fields.range_constraint("one set of brackets")
+    def one_bracket(self):
+        self.b = {0}
