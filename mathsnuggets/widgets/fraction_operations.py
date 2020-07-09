@@ -64,6 +64,14 @@ class FractionOperations(form.Form):
     def fraction_2_proper(self):
         return self.c < self.d
 
+    @fields.constraint("first fraction improper")
+    def fraction_1_improper(self):
+        return self.a > self.b
+
+    @fields.constraint("second fraction improper")
+    def fraction_2_improper(self):
+        return self.c > self.d
+
     @fields.constraint("same denominators")
     def same_denominators(self):
         return self.b == self.d
