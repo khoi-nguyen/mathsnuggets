@@ -1,3 +1,5 @@
+import random
+
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -42,6 +44,15 @@ class AlgebraicFractions(form.Form):
         self.fraction_1 = (self.a * x + self.b) / (self.c * x + self.d)
         self.fraction_2 = (self.e * x + self.f) / (self.g * x + self.h)
         self.operation = self.op
+
+    @fields.range_constraint("One fraction normal")
+    def normal(self):
+        if random.randint(0, 1):
+            self.a = 0
+            self.c = 0
+        else:
+            self.e = 0
+            self.g = 0
 
     @fields.constraint("Add")
     def add(self):
