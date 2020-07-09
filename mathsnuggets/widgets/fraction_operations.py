@@ -50,3 +50,19 @@ class FractionOperations(form.Form):
     @fields.constraint("same denominators")
     def same_denominators(self):
         return self.b == self.d
+
+    @fields.constraint("Add")
+    def add(self):
+        return self.op == "+"
+
+    @fields.constraint("Subtract")
+    def subtract(self):
+        return self.op == "-"
+
+    @fields.constraint("Multiply")
+    def multiply(self):
+        return self.op == "×"
+
+    @fields.constraint("Divide")
+    def divide(self):
+        return self.op == "÷"
