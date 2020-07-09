@@ -46,3 +46,7 @@ class FractionOperations(form.Form):
         self.b -= {0}
         self.c -= {0}
         self.d -= {0}
+
+    @fields.constraint("same denominators")
+    def same_denominators(self):
+        return self.b == self.d
