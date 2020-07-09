@@ -39,3 +39,19 @@ class StandardForm(form.Form):
     @fields.constraint("Positive powers")
     def positive(self):
         return self.m > 0 and self.n > 0
+
+    @fields.constraint("Add")
+    def add(self):
+        return self.op == "+"
+
+    @fields.constraint("Subtract")
+    def subtract(self):
+        return self.op == "-"
+
+    @fields.constraint("Multiply")
+    def multiply(self):
+        return self.op == "×"
+
+    @fields.constraint("Divide")
+    def divide(self):
+        return self.op == "÷"
