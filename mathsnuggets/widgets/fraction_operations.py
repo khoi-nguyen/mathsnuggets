@@ -1,3 +1,5 @@
+import random
+
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -46,6 +48,13 @@ class FractionOperations(form.Form):
         self.b -= {0}
         self.c -= {0}
         self.d -= {0}
+
+    @fields.range_constraint("a numerator is 1")
+    def numerator_1(self):
+        if random.randint(0, 1):
+            self.a = 1
+        else:
+            self.c = 1
 
     @fields.constraint("same denominators")
     def same_denominators(self):
