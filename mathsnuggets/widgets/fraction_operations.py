@@ -56,6 +56,10 @@ class FractionOperations(form.Form):
         else:
             self.c = 1
 
+    @fields.constraint("second fraction < 1")
+    def fraction_small(self):
+        return self.c < self.d
+
     @fields.constraint("same denominators")
     def same_denominators(self):
         return self.b == self.d
