@@ -65,11 +65,11 @@ export default {
       this.$emit('validate:widget')
     },
     updatePayload (fieldName, value) {
-      const field = (this.fields || []).filter(f => f.name === fieldName)[0]
-      if (field.protected) {
+      const field = (this.fields || []).filter(f => f.name === fieldName)
+      if (!field.length || field[0].protected) {
         return false
       }
-      if (!field.computed) {
+      if (!field[0].computed) {
         const payload = this.payload
         if (value === undefined || value === '') {
           delete payload[fieldName]
