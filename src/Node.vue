@@ -16,25 +16,26 @@ component(
     @change="dragAndDrop"
     ghost-class="has-background-white-ter"
     group="widgets"
-    paddingless
+    handle=".handle"
   )
-    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children")
-      node(
-        :children="child.children || []"
-        :cols="child.cols"
-        :component="child.component"
-        :payload="child.payload || {}"
-        :position="`${position}.children.${index}`"
-        :title="child.title"
-        :type="child.type"
-        @save="$emit('save', $event)"
-        @update:children="updateChildren(index, 'children', $event)"
-        @update:payload="updateChildren(index, 'payload', $event)"
-        @update:title="updateChildren(index, 'title', $event)"
-        @update:cols="updateChildren(index, 'cols', $event)"
-      )
-    component(:is="component === 'list' ? 'li' : 'div'" v-if="!children.length" slot="footer").message.is-success
-        .message-body Add an element here
+    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children").columns
+      .column.is-narrow.has-text-grey-lighter
+        b-icon(pack="fas" icon="ellipsis-v").handle
+      .column
+        node(
+          :children="child.children || []"
+          :cols="child.cols"
+          :component="child.component"
+          :payload="child.payload || {}"
+          :position="`${position}.children.${index}`"
+          :title="child.title"
+          :type="child.type"
+          @save="$emit('save', $event)"
+          @update:children="updateChildren(index, 'children', $event)"
+          @update:payload="updateChildren(index, 'payload', $event)"
+          @update:title="updateChildren(index, 'title', $event)"
+          @update:cols="updateChildren(index, 'cols', $event)"
+        )
 </template>
 
 <script>
