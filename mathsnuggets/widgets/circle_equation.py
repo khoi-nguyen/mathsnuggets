@@ -1,3 +1,4 @@
+import pytest
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -27,3 +28,8 @@ class CircleEquation(form.Form):
             raise ValueError(f"{repr(self.equation)} is not an equation for a circle")
         values = values[0]
         return values[r] if self.info == "radius" else (values[h], values[k])
+
+
+def test_circle_equation():
+    with pytest.raises(ValueError):
+        CircleEquation(equation="x^2 + 1").solution

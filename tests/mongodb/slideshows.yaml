@@ -2,19 +2,21 @@
     - Khoi Nguyen
   title: Title
   slug: slug
-  slides:
+  children:
     - title: First slide
-      widgets:
-          - [{type: 'Equation'}]
-          - [{type: 'Equation', fields: {'equation': 'x^2'}}]
+      children:
+        - type: Equation
+          component: widget
+          payload:
+            equation: x^2
     - title: Second slide
 - authors:
     - Khoi Nguyen
   title: Title test
   slug: delete
-  slides:
+  children:
     - title: First slide
-      widgets:
-          - [{type: 'Equation'}]
-          - [{type: 'Equation', fields: {'equation': 'x^2'}}]
+      children:
+        - type: Equation
+          component: widget
     - title: Second slide

@@ -1,3 +1,4 @@
+import pytest
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -57,3 +58,8 @@ class SequencePosition(form.Form):
     @fields.range_constraint("Quadratic")
     def quadratic(self):
         self.a -= {0}
+
+
+def test_sequence_position():
+    with pytest.raises(ValueError):
+        SequencePosition(sequence="1, 2, 3, 4", element="1/2").position
