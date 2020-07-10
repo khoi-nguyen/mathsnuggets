@@ -25,4 +25,3 @@ class ChangeSubject(form.Form):
 def test_change_subject():
     with pytest.raises(ValueError):
         ChangeSubject(equation="2 = 0").solution
-    pass
