@@ -49,9 +49,13 @@ def test_slideshow(mock_mongo):
         [
             {"action": "swap", "children.0": "children.1"},
             {"action": "insert", "children.1": {"title": "Inserted slide"}},
+            {"children.0": {"title": "Hello slide"}},
+            {"children.3": {"title": "Fourth slide"}},
+            {"children.0.children.0": "test"},
         ]
     )
-    assert slideshow.children[0]["title"] == "Second slide"
+    assert slideshow.children[0]["title"] == "Hello slide"
     assert slideshow.children[1]["title"] == "Inserted slide"
     assert slideshow.children[2]["title"] == "First slide"
-    assert len(slideshow.children) == 3
+    assert slideshow.children[3]["title"] == "Fourth slide"
+    assert len(slideshow.children) == 4
