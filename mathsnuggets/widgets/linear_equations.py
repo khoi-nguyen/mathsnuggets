@@ -8,7 +8,7 @@ from mathsnuggets.widgets import equation
 test = {"equation": "x + 4 = 3"}
 
 
-class LinearEquation(equation.Equation):
+class LinearEquations(equation.Equation):
     """Linear equations"""
 
     a = fields.RandomNumber("a")

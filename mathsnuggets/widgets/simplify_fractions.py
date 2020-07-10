@@ -5,8 +5,8 @@ from mathsnuggets.core import fields, form
 test = {"fraction": "2/6"}
 
 
-class SimplifyFraction(form.Form):
-    """Simplify fraction"""
+class SimplifyFractions(form.Form):
+    """Simplify fractions"""
 
     template = "Simplify `fraction` `simplification`"
 

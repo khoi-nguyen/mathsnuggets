@@ -6,7 +6,7 @@ from mathsnuggets.core import fields, form
 test = {"info": "radius", "equation": "x^2 + y^2 = 9"}
 
 
-class CircleEquation(form.Form):
+class CircleEquations(form.Form):
     """Circle radius and center"""
 
     template = "Find the `info` of the circle `equation` `solution`"
@@ -32,4 +32,4 @@ class CircleEquation(form.Form):
 
 def test_circle_equation():
     with pytest.raises(ValueError):
-        CircleEquation(equation="x^2 + 1").solution
+        CircleEquations(equation="x^2 + 1").solution

@@ -7,7 +7,7 @@ from mathsnuggets.core import fields, form
 test = {"fraction_1": "1/3", "fraction_2": "1/2", "operation": "+"}
 
 
-class FractionOperations(form.Form):
+class Fractions(form.Form):
     """Fractions"""
 
     template = "Calculate `fraction_1` `operation` `fraction_2` `solution`"

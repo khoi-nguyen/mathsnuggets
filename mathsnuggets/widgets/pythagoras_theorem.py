@@ -3,8 +3,8 @@ import sympy
 from mathsnuggets.core import fields, form
 
 
-class Pythagoras(form.Form):
-    """Pythagoras"""
+class PythagorasTheorem(form.Form):
+    """Pythagoras' theorem"""
 
     template = "Find the missing length of triangle `a` `b` `c` `length`"
 
