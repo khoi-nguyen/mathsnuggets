@@ -4,7 +4,7 @@ from mathsnuggets.core import fields, form
 
 
 class StandardForm(form.Form):
-    """Standard Form"""
+    """Standard form"""
 
     template = "Calculate `index_1` `operation` `index_2` `solution`"
 
@@ -40,18 +40,18 @@ class StandardForm(form.Form):
     def positive(self):
         return self.m > 0 and self.n > 0
 
-    @fields.constraint("Add")
-    def add(self):
+    @fields.constraint("Addition")
+    def addition(self):
         return self.op == "+"
 
-    @fields.constraint("Subtract")
-    def subtract(self):
+    @fields.constraint("Subtraction")
+    def subtraction(self):
         return self.op == "-"
 
-    @fields.constraint("Multiply")
-    def multiply(self):
+    @fields.constraint("Multiplication")
+    def multiplication(self):
         return self.op == "×"
 
-    @fields.constraint("Divide")
-    def divide(self):
+    @fields.constraint("Division")
+    def division(self):
         return self.op == "÷"

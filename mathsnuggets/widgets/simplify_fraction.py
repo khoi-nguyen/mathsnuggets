@@ -8,12 +8,12 @@ test = {"fraction": "2/6"}
 class SimplifyFraction(form.Form):
     """Simplify fraction"""
 
-    template = "Simplify `fraction` `simplified`"
+    template = "Simplify `fraction` `simplification`"
 
     fraction = fields.Expression("fraction")
 
-    @fields.computed("Simplified")
-    def simplified(self):
+    @fields.computed("Simplification")
+    def simplification(self):
         return sympy.simplify(self.fraction)
 
     a = fields.RandomNumber("a")

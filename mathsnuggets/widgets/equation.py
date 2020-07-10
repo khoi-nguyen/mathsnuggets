@@ -8,9 +8,10 @@ test = {"equation": "x^2 - 5x + 6"}
 class Equation(form.Form):
     """Equation"""
 
-    equation = fields.Equation("Equation", required=True)
-    x = fields.Expression("Solve for", default="x", required=True)
     template = "Solve `equation` for `x` `solution`"
+
+    equation = fields.Equation("equation", required=True)
+    x = fields.Expression("variable", default="x", required=True)
 
     @fields.computed("Solution")
     def solution(self):

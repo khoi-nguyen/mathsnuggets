@@ -10,9 +10,9 @@ class CompleteSquare(form.Form):
 
     template = "Complete the square for `expression` `completed_square`"
 
-    expression = fields.Expression("Expression", required=True)
+    expression = fields.Expression("expression", required=True)
 
-    @fields.computed("Completed Square")
+    @fields.computed("Completed square")
     def completed_square(self):
         a, h, k, x = sympy.symbols("a h k x")
         formula = a * (x + h) ** 2 + k
@@ -29,7 +29,7 @@ class CompleteSquare(form.Form):
         x = sympy.symbols("x")
         self.expression = sympy.expand(self.a * (x + self.h) ** 2 + self.k)
 
-    @fields.range_constraint("a non-zero", default=True, hidden=True, protected=True)
+    @fields.range_constraint("Non-zero a", default=True, hidden=True, protected=True)
     def a_non_zero(self):
         self.a -= {0}
 

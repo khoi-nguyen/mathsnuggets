@@ -8,14 +8,14 @@ test = {"element": "9", "sequence": "2n + 1"}
 
 
 class SequencePosition(form.Form):
-    """Position in Sequence"""
+    """Position in sequence"""
 
     template = "Find the position of `element` in `sequence` `position`"
 
-    sequence = fields.Expression("Sequence", required=True)
+    sequence = fields.Expression("sequence", required=True)
     element = fields.Expression("term", required=True)
 
-    @fields.computed("Find position")
+    @fields.computed("Position")
     def position(self):
         # determine if sequence has attribute free_symbols and check if sequence has "n"
         if (

@@ -41,7 +41,7 @@ class FractionOperations(form.Form):
         self.operation = self.op
 
     @fields.range_constraint(
-        "non-zero numbers", default=True, hidden=True, protected=True
+        "Non-zero numbers", default=True, hidden=True, protected=True
     )
     def non_zero_numbers(self):
         self.a -= {0}
@@ -49,7 +49,7 @@ class FractionOperations(form.Form):
         self.c -= {0}
         self.d -= {0}
 
-    @fields.range_constraint("A numerator is 1")
+    @fields.range_constraint("One numerator is 1")
     def numerator_1(self):
         if random.randint(0, 1):
             self.a = 1
@@ -76,18 +76,18 @@ class FractionOperations(form.Form):
     def same_denominators(self):
         return self.b == self.d
 
-    @fields.constraint("Add")
-    def add(self):
+    @fields.constraint("Addition")
+    def addition(self):
         return self.op == "+"
 
-    @fields.constraint("Subtract")
-    def subtract(self):
+    @fields.constraint("Subtraction")
+    def subtraction(self):
         return self.op == "-"
 
-    @fields.constraint("Multiply")
-    def multiply(self):
+    @fields.constraint("Multiplication")
+    def multiplication(self):
         return self.op == "×"
 
-    @fields.constraint("Divide")
-    def divide(self):
+    @fields.constraint("Division")
+    def division(self):
         return self.op == "÷"

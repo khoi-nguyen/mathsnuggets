@@ -12,7 +12,7 @@ class Differentiate(form.Form):
         Differentiate `function` with respect to `x` `derivative`
     """
 
-    function = fields.Expression("Function")
+    function = fields.Expression("function")
     x = fields.Expression("x", default="x")
 
     @fields.computed("Derivative")

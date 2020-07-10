@@ -12,7 +12,7 @@ class Tangent(form.Form):
         Find the tangent of `function` at `x` = `a` `tangent`
     """
 
-    function = fields.Expression("Function")
+    function = fields.Expression("function")
     x = fields.Expression("x", default="x")
     a = fields.Expression("a")
 

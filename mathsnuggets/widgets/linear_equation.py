@@ -9,7 +9,7 @@ test = {"equation": "x + 4 = 3"}
 
 
 class LinearEquation(equation.Equation):
-    """Linear Equations"""
+    """Linear equations"""
 
     a = fields.RandomNumber("a")
     b = fields.RandomNumber("b")
@@ -27,7 +27,7 @@ class LinearEquation(equation.Equation):
     def unique_solution(self):
         return self.a != self.c
 
-    @fields.range_constraint("One-Step")
+    @fields.range_constraint("One-step")
     def one_step(self):
         self.c = 0
         if random.randint(0, 1):
@@ -37,14 +37,14 @@ class LinearEquation(equation.Equation):
             self.b = 0
             self.a -= {0}
 
-    @fields.range_constraint("Two-Step")
+    @fields.range_constraint("Two-step")
     def two_step(self):
         self.c = 0
         self.a -= {0}
         self.b -= {0}
         self.d -= {0}
 
-    @fields.range_constraint("Multi-Step")
+    @fields.range_constraint("Multi-step")
     def multi_step(self):
         self.a -= {0}
         self.b -= {0}

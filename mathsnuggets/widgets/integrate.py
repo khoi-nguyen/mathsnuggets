@@ -12,7 +12,7 @@ class Integrate(form.Form):
         Integrate `function` with respect to `x` `integral`
     """
 
-    function = fields.Expression("Function")
+    function = fields.Expression("function")
     x = fields.Expression("x", default="x")
 
     @fields.computed("Integral")

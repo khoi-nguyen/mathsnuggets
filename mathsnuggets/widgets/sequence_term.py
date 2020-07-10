@@ -7,11 +7,11 @@ test = {"sequence": "1, 3, 5, 7"}
 
 
 class SequenceTerm(form.Form):
-    """Sequences/Find Term"""
+    """Sequences/find term"""
 
     template = "Find the `n`th term in `sequence` `term`"
 
-    sequence = fields.Expression("Sequence", required=True)
+    sequence = fields.Expression("sequence", required=True)
     n = fields.Expression("n", required=True, default="n")
 
     @fields.computed("Term")

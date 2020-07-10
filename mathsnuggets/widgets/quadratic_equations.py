@@ -7,11 +7,11 @@ test = {"equation": "x^2 - 3x + 2"}
 
 
 class QuadraticEquations(equation.Equation):
-    """Quadratic Equations"""
+    """Quadratic equations"""
 
     a = fields.RandomNumber("a", default="-3,3")
-    x1 = fields.RandomNumber("x1")
-    x2 = fields.RandomNumber("x2")
+    x_1 = fields.RandomNumber("x1")
+    x_2 = fields.RandomNumber("x2")
     d = fields.RandomNumber("d")
     e = fields.RandomNumber("e")
     f = fields.RandomNumber("f")
@@ -19,7 +19,7 @@ class QuadraticEquations(equation.Equation):
     def generator(self):
         self.equation = sympy.Eq(
             sympy.expand(
-                self.a * (self.x - self.x1) * (self.x - self.x2)
+                self.a * (self.x - self.x_1) * (self.x - self.x_2)
                 + self.d * self.x ** 2
                 + self.e * self.x
                 + self.f
@@ -29,11 +29,11 @@ class QuadraticEquations(equation.Equation):
 
     @property
     def b(self):
-        return -self.a * (self.x1 + self.x2)
+        return -self.a * (self.x_1 + self.x_2)
 
     @property
     def c(self):
-        return self.a * self.x1 * self.x2
+        return self.a * self.x_1 * self.x_2
 
     @property
     def delta(self):
@@ -51,7 +51,7 @@ class QuadraticEquations(equation.Equation):
         return -self.delta / (4 * self.a)
 
     @fields.range_constraint(
-        "Quadratic Equation", default=True, hidden=True, protected=True
+        "Quadratic equation", default=True, hidden=True, protected=True
     )
     def quadratic_equation(self):
         self.a -= {0}

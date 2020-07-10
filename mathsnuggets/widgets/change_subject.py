@@ -11,8 +11,8 @@ class ChangeSubject(form.Form):
 
     template = "Make `variable` the subject for `equation` `solution`"
 
-    equation = fields.Equation("Equation", required=True)
-    variable = fields.Expression("Solve for", default="x", required=True)
+    equation = fields.Equation("equation", required=True)
+    variable = fields.Expression("variable", default="x", required=True)
 
     @fields.computed("Solution")
     def solution(self):

@@ -45,7 +45,7 @@ class AlgebraicFractions(form.Form):
         self.fraction_2 = (self.e * x + self.f) / (self.g * x + self.h)
         self.operation = self.op
 
-    @fields.range_constraint("One fraction normal")
+    @fields.range_constraint("One numeric fraction")
     def normal(self):
         if random.randint(0, 1):
             self.a = 0
@@ -54,18 +54,18 @@ class AlgebraicFractions(form.Form):
             self.e = 0
             self.g = 0
 
-    @fields.constraint("Add")
-    def add(self):
+    @fields.constraint("Addition")
+    def addition(self):
         return self.op == "+"
 
-    @fields.constraint("Subtract")
-    def subtract(self):
+    @fields.constraint("Subtraction")
+    def subtraction(self):
         return self.op == "-"
 
-    @fields.constraint("Multiply")
-    def multiply(self):
+    @fields.constraint("Multiplication")
+    def multiplication(self):
         return self.op == "×"
 
-    @fields.constraint("Divide")
-    def divide(self):
+    @fields.constraint("Division")
+    def division(self):
         return self.op == "÷"

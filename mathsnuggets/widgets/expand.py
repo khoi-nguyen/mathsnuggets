@@ -8,14 +8,15 @@ test = {"expression": "(x - 2) (x + 3)"}
 class Expand(form.Form):
     """Expand"""
 
-    expression = fields.Expression("Expression")
-    template = "Expand `expression` `expand`"
+    template = "Expand `expression` `expansion`"
+
+    expression = fields.Expression("expression")
 
     def validate(self):
         self.expression = sympy.factor(self.expression)
 
-    @fields.computed("Expanded")
-    def expand(self):
+    @fields.computed("Expansion")
+    def expansion(self):
         return sympy.expand(self.expression)
 
     a = fields.RandomNumber("a")
@@ -44,6 +45,6 @@ class Expand(form.Form):
     def linear(self):
         self.a = {0}
 
-    @fields.range_constraint("One set of brackets")
+    @fields.range_constraint("ax(bx+c)")
     def one_bracket(self):
         self.b = {0}

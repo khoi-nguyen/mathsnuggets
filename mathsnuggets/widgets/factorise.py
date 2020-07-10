@@ -8,14 +8,15 @@ test = {"expression": "x^2 - 5x + 6"}
 class Factorise(form.Form):
     """Factorise"""
 
-    expression = fields.Expression("Expression")
-    template = "Factorise `expression` `factorise`"
+    template = "Factorise `expression` `factorisation`"
+
+    expression = fields.Expression("expression")
 
     def validate(self):
         self.expression = sympy.expand(self.expression)
 
-    @fields.computed("Factorised")
-    def factorise(self):
+    @fields.computed("Factorisation")
+    def factorisation(self):
         return sympy.factor(self.expression)
 
     a = fields.RandomNumber("a")
@@ -43,6 +44,6 @@ class Factorise(form.Form):
     def linear(self):
         self.a = {0}
 
-    @fields.range_constraint("One set of brackets")
+    @fields.range_constraint("ax^2+bx")
     def one_bracket(self):
         self.b = {0}

@@ -7,7 +7,8 @@ from mathsnuggets.core import fields, form
 
 
 class Pandoc(form.Form):
-    """Rich Text"""
+    """Rich text"""
+
+    template = "`markdown`"
 
     markdown = fields.Markdown("Markdown")
-    template = "`markdown`"

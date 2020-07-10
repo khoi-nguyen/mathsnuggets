@@ -13,16 +13,16 @@ test = {"function": "sin x"}
 class Plot(form.Form):
     """Plot functions"""
 
-    function = fields.Expression("Function")
-    x = fields.Expression("Variable", default="x")
+    template = """
+            Plot `function` for `x` between `x_min` and `x_max`
+
+            `plot`
+        """
+
+    function = fields.Expression("function")
+    x = fields.Expression("variable", default="x")
     x_min = fields.Expression("x min", default="-10")
     x_max = fields.Expression("x max", default="10")
-
-    template = """
-        Plot `function` for `x` between `x_min` and `x_max`
-
-        `plot`
-    """
 
     @fields.computed("Plot", field=fields.Html)
     @fields.figure

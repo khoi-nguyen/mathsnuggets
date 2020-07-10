@@ -11,10 +11,10 @@ class CircleEquation(form.Form):
 
     template = "Find the `info` of the circle `equation` `solution`"
 
-    equation = fields.Equation("Equation", required=True)
-    info = fields.Select("Info", options=["radius", "center"])
+    equation = fields.Equation("equation", required=True)
+    info = fields.Select("info", options=["radius", "center"])
 
-    @fields.computed("Radius/Center")
+    @fields.computed("Solution")
     def solution(self):
         (a, h, k, x, y), r = (
             sympy.symbols("a h k x y"),
