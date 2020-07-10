@@ -30,7 +30,7 @@ class Expand(form.Form):
         )
 
     @fields.range_constraint(
-        "non-zero expression", default=True, hidden=True, protected=True
+        "Non-zero expression", default=True, hidden=True, protected=True
     )
     def nonzero(self):
         self.b -= {0}
@@ -44,6 +44,6 @@ class Expand(form.Form):
     def linear(self):
         self.a = {0}
 
-    @fields.range_constraint("one set of brackets")
+    @fields.range_constraint("One set of brackets")
     def one_bracket(self):
         self.b = {0}

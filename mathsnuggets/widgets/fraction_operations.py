@@ -49,30 +49,30 @@ class FractionOperations(form.Form):
         self.c -= {0}
         self.d -= {0}
 
-    @fields.range_constraint("a numerator is 1")
+    @fields.range_constraint("A numerator is 1")
     def numerator_1(self):
         if random.randint(0, 1):
             self.a = 1
         else:
             self.c = 1
 
-    @fields.constraint("first fraction proper")
+    @fields.constraint("First fraction is proper")
     def fraction_1_proper(self):
         return self.a < self.b
 
-    @fields.constraint("second fraction proper")
+    @fields.constraint("Second fraction is proper")
     def fraction_2_proper(self):
         return self.c < self.d
 
-    @fields.constraint("first fraction improper")
+    @fields.constraint("First fraction is improper")
     def fraction_1_improper(self):
         return self.a > self.b
 
-    @fields.constraint("second fraction improper")
+    @fields.constraint("Second fraction is improper")
     def fraction_2_improper(self):
         return self.c > self.d
 
-    @fields.constraint("same denominators")
+    @fields.constraint("Same denominators")
     def same_denominators(self):
         return self.b == self.d
 
