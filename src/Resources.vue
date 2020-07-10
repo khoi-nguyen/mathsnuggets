@@ -80,7 +80,7 @@ export default {
       this.slug = slug
     },
     deleteSlideshow (index, slug) {
-      api(`/api/slideshow/${slug}`, 'DELETE')
+      api(`slideshows/${slug}`, 'DELETE')
       this.lessons.splice(index, 1)
       this.deleteModal = false
     },
