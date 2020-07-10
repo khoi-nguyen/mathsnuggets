@@ -7,10 +7,10 @@ import io
 import re
 
 import bcrypt
-import bson.objectid
 import pypandoc
 import sympy
-from matplotlib import pyplot
+from bson import objectid as objectid
+from matplotlib import pyplot as pyplot
 
 from mathsnuggets.parser import parse
 
@@ -287,7 +287,7 @@ class ObjectId(Field):
     """MongoDB object id"""
 
     def sanitize(self, value):
-        return bson.objectid.ObjectId(value)
+        return objectid.ObjectId(value)
 
 
 class Email(Field):
