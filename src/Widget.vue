@@ -66,6 +66,9 @@ export default {
     },
     updatePayload (fieldName, value) {
       const field = (this.fields || []).filter(f => f.name === fieldName)[0]
+      if (field.protected) {
+        return false
+      }
       if (!field.computed) {
         const payload = this.payload
         if (value === undefined || value === '') {
