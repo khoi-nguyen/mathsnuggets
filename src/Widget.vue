@@ -87,11 +87,13 @@ export default {
     async generate () {
       const data = await api(`widgets/${this.type}`, 'POST', this.payload)
       this.error = data.error ? data.message : ''
+      const payload = clone(this.payload)
       forEach(data, (field, fieldName) => {
-        if (!field.constraint) {
-          this.updatePayload(fieldName, field.html || field.value)
+        if (!field.constraint && !field.computed && !field.random) {
+          payload[fieldName] = field.value
         }
       })
+      this.$emit('update:payload', payload)
     },
     updatePayload (fieldName, value) {
       const field = this.fields.filter(f => f.name === fieldName)
