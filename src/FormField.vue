@@ -76,6 +76,7 @@ export default {
       this.editing = false
       if ('value' in data) {
         this.$emit('update:value', data.value)
+        this.inputValue = data.value
       }
       if ('latex' in data) {
         return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed })
