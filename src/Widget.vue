@@ -73,7 +73,6 @@ export default {
       const data = await api(`widgets/${this.type}`, 'POST', this.payload)
       this.error = data.error ? data.message : ''
       forEach(data, (value, key) => this.updatePayload(key, value.html || value.value))
-      this.$emit('validate:widget')
     },
     updatePayload (fieldName, value) {
       const field = (this.fields || []).filter(f => f.name === fieldName)
