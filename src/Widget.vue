@@ -4,7 +4,7 @@
     span(slot="trigger")
       b-icon(pack="fas" icon="cogs")
       span &nbsp;
-    b-dropdown-item(custom v-for="constraint in (fields || []).filter(f => f.constraint)")
+    b-dropdown-item(custom v-for="constraint in fields.filter(f => f.constraint)")
       input(
         :checked="constraint.name in payload ? payload[constraint.name] : constraint.value"
         :disabled="constraint.protected"
@@ -16,7 +16,7 @@
     b-dropdown-item(custom paddingless)
       b-button(type="is-info is-outlined" @click="generate()") Generate
   form-field(
-    v-for="(field, id) in (fields || []).filter(f => !f.constraint && !f.random)"
+    v-for="(field, id) in fields.filter(f => !f.constraint && !f.random)"
     v-bind="field"
     :value="fieldValue(field)"
     @update:value="updatePayload(field.name, $event)"
@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     generator () {
-      return (this.fields || []).filter(f => f.constraint).length
+      return this.fields.filter(f => f.constraint).length
     }
   },
   asyncComputed: {
@@ -60,8 +60,11 @@ export default {
       })
       return computed
     },
-    async fields () {
-      return await api(`widgets/${this.type}`)
+    fields: {
+      async get () {
+        return await api(`widgets/${this.type}`)
+      },
+      default: []
     }
   },
   methods: {
@@ -79,7 +82,7 @@ export default {
       })
     },
     updatePayload (fieldName, value) {
-      const field = (this.fields || []).filter(f => f.name === fieldName)
+      const field = this.fields.filter(f => f.name === fieldName)
       if (!field.length || field[0].protected || field[0].computed) {
         return false
       }
