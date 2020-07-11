@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { forEach } from 'lodash'
+import { clone, forEach } from 'lodash'
 
 import { api } from './ajax'
 import FormField from './FormField'
@@ -47,18 +47,30 @@ export default {
     }
   },
   asyncComputed: {
-    async computed () {
-      const computed = {}
-      const data = await api(`widgets/${this.type}`, 'GET', this.payload)
-      this.error = data.error ? data.message : ''
-      forEach(data, (field, fieldName) => {
-        if (field.computed) {
-          computed[fieldName] = field.html || field.value
-        } else if (!field.constraint && fieldName in (this.payload || {}) && this.payload[fieldName] !== (field.html || field.value)) {
-          this.updatePayload(fieldName, field.html || field.value)
-        }
-      })
-      return computed
+    computed: {
+      async get () {
+        const computed = {}
+        const data = await api(`widgets/${this.type}`, 'GET', this.payload)
+        this.error = data.error ? data.message : ''
+        forEach(data, (field, fieldName) => {
+          if (field.computed) {
+            computed[fieldName] = field.html || field.value
+          } else if (!field.constraint && fieldName in (this.payload || {}) && this.payload[fieldName] !== (field.html || field.value)) {
+            this.updatePayload(fieldName, field.html || field.value)
+          }
+        })
+        return computed
+      },
+      default: {},
+      shouldUpdate () {
+        let valid = true
+        forEach(this.fields.filter(f => f.required), (field) => {
+          if (!(field.name in this.payload)) {
+            valid = false
+          }
+        })
+        return valid
+      }
     },
     fields: {
       async get () {
@@ -86,7 +98,7 @@ export default {
       if (!field.length || field[0].protected || field[0].computed) {
         return false
       }
-      const payload = this.payload
+      const payload = clone(this.payload)
       if (value === undefined || value === '') {
         delete payload[fieldName]
       } else {
