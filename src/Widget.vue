@@ -54,7 +54,7 @@ export default {
       forEach(data, (field, fieldName) => {
         if (field.computed) {
           computed[fieldName] = field.html || field.value
-        } else if (!field.constraint && fieldName in this.payload && this.payload[fieldName] !== (field.html || field.value)) {
+        } else if (!field.constraint && fieldName in (this.payload || {}) && this.payload[fieldName] !== (field.html || field.value)) {
           this.updatePayload(fieldName, field.html || field.value)
         }
       })
@@ -67,7 +67,7 @@ export default {
   methods: {
     fieldValue (field) {
       const payload = field.computed ? this.computed : this.payload
-      return field.name in payload && payload[field.name] ? payload[field.name] : ''
+      return field.name in (payload || {}) && payload[field.name] ? payload[field.name] : ''
     },
     async generate () {
       const data = await api(`widgets/${this.type}`, 'POST', this.payload)
