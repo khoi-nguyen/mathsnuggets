@@ -20,7 +20,10 @@ component(
   )
     component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children").columns
       .column.is-narrow.has-text-grey-lighter
-        b-icon(pack="fas" icon="ellipsis-v").handle
+        b-dropdown
+          span(slot="trigger")
+            b-icon.handle(pack="fas" icon="ellipsis-v")
+          b-dropdown-item(@click="deleteChild(index)") Delete
       .column
         node(
           :children="child.children || []"
@@ -62,6 +65,10 @@ export default {
     addChild (event) {
       this.$emit('update:children', this.children.concat([event]))
       this.$emit('save', { action: 'update', [`${this.position}.children.${this.children.length}`]: event })
+    },
+    deleteChild (index) {
+      this.children.splice(index, 1)
+      this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
     },
     dragAndDrop (event) {
       const indices = event[Object.keys(event)[0]]
