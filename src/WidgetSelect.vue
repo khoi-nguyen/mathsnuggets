@@ -2,7 +2,7 @@
 b-field
   b-autocomplete(
     :data="filteredData"
-    @select="$emit('select:widget', $event.path)"
+    @select="onSelect"
     field="name"
     icon-pack="fas"
     icon="plus"
@@ -24,6 +24,13 @@ export default {
       return this.list.filter(function (option) {
         return option.name.toLowerCase().indexOf(this.localValue.toLowerCase()) >= 0
       }.bind(this))
+    }
+  },
+  methods: {
+    onSelect (event) {
+      if (event && 'path' in event) {
+        this.$emit('select:widget', event.path)
+      }
     }
   },
   watch: {
