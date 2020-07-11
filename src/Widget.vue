@@ -14,13 +14,12 @@
       )
       label {{ constraint.label }}
     b-dropdown-item(custom paddingless)
-      b-button(type="is-info is-outlined" @click="formValidate(true)") Generate
+      b-button(type="is-info is-outlined" @click="generate()") Generate
   form-field(
     v-for="(field, id) in (fields || []).filter(f => !f.constraint && !f.random)"
     v-bind="field"
     :value="fieldValue(field)"
     @update:value="updatePayload(field.name, $event)"
-    @form-validate="formValidate"
   )
   error-message(v-if="error") {{ error }}
 </template>
@@ -39,8 +38,7 @@ export default {
   },
   data () {
     return {
-      error: '',
-      computed: { }
+      error: ''
     }
   },
   computed: {
@@ -49,6 +47,19 @@ export default {
     }
   },
   asyncComputed: {
+    async computed () {
+      const computed = {}
+      const data = await api(`widgets/${this.type}`, 'GET', this.payload)
+      this.error = data.error ? data.message : ''
+      forEach(data, (field, fieldName) => {
+        if (field.computed) {
+          computed[fieldName] = field.html || field.value
+        } else if (fieldName in this.payload && this.payload[fieldName] !== (field.html || field.value)) {
+          this.updatePayload(fieldName, field.html || field.value)
+        }
+      })
+      return computed
+    },
     async fields () {
       return await api(`widgets/${this.type}`)
     }
@@ -58,33 +69,24 @@ export default {
       const payload = field.computed ? this.computed : this.payload
       return field.name in payload && payload[field.name] ? payload[field.name] : ''
     },
-    async formValidate (generator = false) {
-      const data = await api(`widgets/${this.type}`, generator ? 'POST' : 'GET', this.payload)
+    async generate () {
+      const data = await api(`widgets/${this.type}`, 'POST', this.payload)
       this.error = data.error ? data.message : ''
       forEach(data, (value, key) => this.updatePayload(key, value.html || value.value))
       this.$emit('validate:widget')
     },
     updatePayload (fieldName, value) {
       const field = (this.fields || []).filter(f => f.name === fieldName)
-      if (!field.length || field[0].protected) {
+      if (!field.length || field[0].protected || field[0].computed) {
         return false
       }
-      if (!field[0].computed) {
-        const payload = this.payload
-        if (value === undefined || value === '') {
-          delete payload[fieldName]
-        } else {
-          payload[fieldName] = value
-        }
-        this.$emit('update:payload', payload)
+      const payload = this.payload
+      if (value === undefined || value === '') {
+        delete payload[fieldName]
       } else {
-        this.computed[fieldName] = value
+        payload[fieldName] = value
       }
-    }
-  },
-  async mounted () {
-    if (this.payload) {
-      this.formValidate()
+      this.$emit('update:payload', payload)
     }
   },
   components: {
