@@ -19,14 +19,15 @@ div
         div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
           a(:href="`/resources/${lesson.slug}`").panel-block
             .columns.is-vcentered
-              .column.is-narrow.is-narrow
-                div.container
-                  button.button(@click.prevent="openDeleteModal(index, lesson.slug)") Delete
-                div
-                  i.fa-4x.fas.fa-chalkboard-teacher
-                div.is-small(v-if="authState.loggedIn")
-                  i.fas.fa-edit
-                  span.link(@click.stop.prevent="openModal(index)") Edit metadata
+              .column.is-narrow.is-narrow.has-text-centered
+                i.fa-4x.fas.fa-chalkboard-teacher
+                ul.is-small(v-if="authState.loggedIn")
+                  li
+                    b-icon(pack="fas" icon="edit")
+                    span.link(@click.stop.prevent="openModal(index)") Edit metadata
+                  li
+                    b-icon(pack="fas" icon="trash")
+                    span.link(@click.prevent="openDeleteModal(index, lesson.slug)") Delete slideshow
               .column
                 h3.title {{ lesson.title }}
                 dl
