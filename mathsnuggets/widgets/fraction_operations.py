@@ -2,7 +2,7 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
-test = {"fraction_1": "1/3", "fraction_2": "1/2", "operation": "+"}
+test = {"fraction_1": "1/3", "operation": "+", "fraction_2": "1/2"}
 
 
 class FractionOperations(form.Form):
