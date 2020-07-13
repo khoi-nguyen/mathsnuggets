@@ -74,10 +74,6 @@ export default {
       }
       this.error = ''
       this.editing = false
-      if ('value' in data) {
-        this.$emit('update:value', data.value)
-        this.inputValue = data.value
-      }
       if ('latex' in data) {
         return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed })
       }
@@ -98,6 +94,11 @@ export default {
       return this.options.length ? 'select' : 'textarea'
     }
   },
+  watch: {
+    value () {
+      this.inputValue = this.value
+    }
+  },
   data () {
     return {
       error: '',
@@ -110,9 +111,6 @@ export default {
     blur (ev) {
       this.$emit('update:value', ev.target.value)
       this.editing = false
-      if (ev.key === 'Enter') {
-        this.$emit('form-validate')
-      }
     },
     enterEditMode () {
       this.editing = true

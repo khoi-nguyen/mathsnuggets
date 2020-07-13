@@ -65,7 +65,7 @@ export default {
       shouldUpdate () {
         let valid = true
         forEach(this.fields.filter(f => f.required), (field) => {
-          if (!(field.name in this.payload)) {
+          if (!(field.name in this.payload) && !field.default) {
             valid = false
           }
         })
