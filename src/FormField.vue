@@ -16,6 +16,7 @@ span(:name="name")
       @focus="editing = true"
       @keydown.enter.exact.stop.prevent="blur"
       @input="inputValue = $event.target.value"
+      @onchange="blur"
       @blur="blur"
     ) {{ options.length ? '' : value }}
       option(v-for="option in options" :value="option") {{ option }}
