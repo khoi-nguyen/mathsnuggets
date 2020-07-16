@@ -12,6 +12,7 @@ component(
   @update:cols="updateProp('cols', $event)"
 )
   draggable.drop(
+    :emptyInsertThreshold="100"
     :list="children || []"
     @change="dragAndDrop"
     ghost-class="has-background-white-ter"
