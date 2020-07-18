@@ -128,7 +128,7 @@ mocha.describe('mathsnuggets', function () {
     await fillInField(page, '.modal input[name="title"]', 'New Slideshow')
     await clickElement(page, '.modal .is-success')
     await clickElement(page, 'a[href="/resources/new-slideshow"]')
-    await clickElement(page, 'a[href="/resources"]')
+    await page.goto('http://localhost:5000/resources')
     await clickElement(page, 'button.logout')
   })
 })
