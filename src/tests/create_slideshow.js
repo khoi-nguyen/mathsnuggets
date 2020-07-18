@@ -62,9 +62,15 @@ mocha.describe('mathsnuggets', function () {
   mocha.before(async function () {
     browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] })
     page = await browser.newPage()
+    fetch('http://localhost:5000/api/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',  },
+      body: JSON.stringify({'email': 'test@test.com', 'password':'12345678'}),
+      })
   })
 
   mocha.after(async function () {
+    fetch('http://localhost:5000/api/tests/user', { method: 'DELETE' })
     browser.close()
   })
 
