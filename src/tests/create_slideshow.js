@@ -60,7 +60,7 @@ mocha.describe('mathsnuggets', function () {
   this.timeout(100000)
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] })
+    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] })
     page = await browser.newPage()
     fetch('http://localhost:5000/api/auth/register', {
       method: 'POST',
