@@ -1,32 +1,34 @@
 <template lang="pug">
 span(:name="name")
   span(v-html="before")
-  component.field(
-    :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
-    v-if="!computed && editing && !hidden"
-    ref="field"
-    :rows="rows"
-    :cols="cols"
-    :disabled="protected"
-    :placeholder="label"
-    :is="tag"
-    :value="value"
-    @dblclick="$event.target.select()"
-    @focus="editing = true"
-    @keydown.enter.exact.stop.prevent="blur"
-    @input="inputValue = $event.target.value"
-    @blur="blur"
-  ) {{ options.length ? '' : value }}
-    option(v-for="option in options" :value="option") {{ option }}
-  span.field.content(
-    tabindex="0"
-    v-html="html"
-    v-if="!editing && !computed && html"
-    @focus="enterEditMode"
-    @click="enterEditMode"
-  )
+  span(v-if="!computed")
+    component.field(
+      :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
+      v-if="editing || !html"
+      ref="field"
+      :rows="rows"
+      :cols="cols"
+      :disabled="protected"
+      :placeholder="label"
+      :is="tag"
+      :value="value"
+      @dblclick="$event.target.select()"
+      @focus="editing = true"
+      @keydown.enter.exact.stop.prevent="blur"
+      @input="inputValue = $event.target.value"
+      @onchange="blur"
+      @blur="blur"
+    ) {{ options.length ? '' : value }}
+      option(v-for="option in options" :value="option") {{ option }}
+    span.field.content(
+      tabindex="0"
+      v-html="html"
+      v-if="!editing && html"
+      @focus="enterEditMode"
+      @click="enterEditMode"
+    )
+    error-message(v-if="error") {{ error }}
   span(v-html="after")
-  error-message(v-if="error") {{ error }}
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success is-outlined" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
     div(v-html="html" v-if="showComputed")
@@ -73,9 +75,6 @@ export default {
       }
       this.error = ''
       this.editing = false
-      if ('value' in data) {
-        this.$emit('update:value', data.value)
-      }
       if ('latex' in data) {
         return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed })
       }
@@ -96,6 +95,11 @@ export default {
       return this.options.length ? 'select' : 'textarea'
     }
   },
+  watch: {
+    value () {
+      this.inputValue = this.value
+    }
+  },
   data () {
     return {
       error: '',
@@ -106,13 +110,8 @@ export default {
   },
   methods: {
     blur (ev) {
-      if (ev.target.value) {
-        this.$emit('update:value', ev.target.value)
-        this.editing = false
-        if (ev.key === 'Enter') {
-          this.$emit('form-validate')
-        }
-      }
+      this.$emit('update:value', ev.target.value)
+      this.editing = false
     },
     enterEditMode () {
       this.editing = true

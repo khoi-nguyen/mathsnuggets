@@ -3,12 +3,14 @@
 Fields
 ======
 """
+import io
 import re
 
 import bcrypt
-import bson.objectid
 import pypandoc
 import sympy
+from bson import objectid as objectid
+from matplotlib import pyplot as pyplot
 
 from mathsnuggets.parser import parse
 
@@ -118,6 +120,19 @@ def computed(*args, **kwargs):
         return ComputedField(*args, **kwargs)
 
     return decorator
+
+
+def figure(function):
+    def decorated_function(*args, **kwargs):
+        function(*args, **kwargs)
+        tmp = io.BytesIO()
+        pyplot.savefig(tmp, format="svg")
+        pyplot.close()
+        tmp.seek(0)
+        svg = tmp.getvalue().decode("utf-8")
+        return svg
+
+    return decorated_function
 
 
 class Expression(Field):
@@ -272,7 +287,7 @@ class ObjectId(Field):
     """MongoDB object id"""
 
     def sanitize(self, value):
-        return bson.objectid.ObjectId(value)
+        return objectid.ObjectId(value)
 
 
 class Email(Field):

@@ -1,3 +1,4 @@
+import pytest
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -19,3 +20,8 @@ class ChangeSubject(form.Form):
         if not solution:
             raise ValueError(f"{repr(self.equation)} cannot be solved")
         return sympy.Eq(self.variable, solution[0])
+
+
+def test_change_subject():
+    with pytest.raises(ValueError):
+        ChangeSubject(equation="2 = 0").solution

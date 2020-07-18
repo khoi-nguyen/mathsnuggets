@@ -2,7 +2,7 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
-test = {"fraction_1": "1/3", "fraction_2": "1/2", "operation": "+"}
+test = {"fraction_1": "1/3", "operation": "+", "fraction_2": "1/2"}
 
 
 class FractionOperations(form.Form):
@@ -10,9 +10,9 @@ class FractionOperations(form.Form):
 
     template = "Calculate `fraction_1` `operation` `fraction_2` `solution`"
 
-    fraction_1 = fields.Expression("fraction 1")
-    fraction_2 = fields.Expression("fraction 2")
-    operation = fields.Select("operation", options=["+", "-", "×", "÷"])
+    fraction_1 = fields.Expression("fraction 1", required=True)
+    fraction_2 = fields.Expression("fraction 2", required=True)
+    operation = fields.Select("operation", options=["+", "-", "×", "÷"], default="+")
 
     @fields.computed("Solution")
     def solution(self):

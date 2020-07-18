@@ -12,29 +12,34 @@ component(
   @update:cols="updateProp('cols', $event)"
 )
   draggable.drop(
+    :emptyInsertThreshold="100"
     :list="children || []"
     @change="dragAndDrop"
     ghost-class="has-background-white-ter"
     group="widgets"
-    paddingless
+    handle=".handle"
   )
-    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children")
-      node(
-        :children="child.children || []"
-        :cols="child.cols"
-        :component="child.component"
-        :payload="child.payload || {}"
-        :position="`${position}.children.${index}`"
-        :title="child.title"
-        :type="child.type"
-        @save="$emit('save', $event)"
-        @update:children="updateChildren(index, 'children', $event)"
-        @update:payload="updateChildren(index, 'payload', $event)"
-        @update:title="updateChildren(index, 'title', $event)"
-        @update:cols="updateChildren(index, 'cols', $event)"
-      )
-    component(:is="component === 'list' ? 'li' : 'div'" v-if="!children.length" slot="footer").message.is-success
-        .message-body Add an element here
+    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children").columns
+      .column.is-narrow.has-text-grey-lighter
+        b-dropdown
+          span(slot="trigger")
+            b-icon.handle(pack="fas" icon="ellipsis-v")
+          b-dropdown-item(@click="deleteChild(index)") Delete
+      .column
+        node(
+          :children="child.children || []"
+          :cols="child.cols"
+          :component="child.component"
+          :payload="child.payload || {}"
+          :position="`${position}.children.${index}`"
+          :title="child.title"
+          :type="child.type"
+          @save="$emit('save', $event)"
+          @update:children="updateChildren(index, 'children', $event)"
+          @update:payload="updateChildren(index, 'payload', $event)"
+          @update:title="updateChildren(index, 'title', $event)"
+          @update:cols="updateChildren(index, 'cols', $event)"
+        )
 </template>
 
 <script>
@@ -61,6 +66,10 @@ export default {
     addChild (event) {
       this.$emit('update:children', this.children.concat([event]))
       this.$emit('save', { action: 'update', [`${this.position}.children.${this.children.length}`]: event })
+    },
+    deleteChild (index) {
+      this.children.splice(index, 1)
+      this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
     },
     dragAndDrop (event) {
       const indices = event[Object.keys(event)[0]]

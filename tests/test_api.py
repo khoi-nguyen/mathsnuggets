@@ -219,7 +219,13 @@ def test_logout(client):
     assert response.status_code == 401
 
 
+def test_tests(client):
+    response, data = get(client, "/api/tests")
+    assert response.status_code == 200
+    assert isinstance(data, dict)
+
+
 def test_static_routes(client):
-    for route in ["/docs/", "/_static/jquery.js", "/slideshow_builder"]:
+    for route in ["/docs/", "/_static/jquery.js", "/slideshow_builder", "/favicon.ico"]:
         response = get(client, route, False)
         assert response.status_code == 200

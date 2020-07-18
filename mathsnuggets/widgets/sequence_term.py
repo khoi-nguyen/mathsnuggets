@@ -1,3 +1,4 @@
+import pytest
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -63,3 +64,9 @@ class SequenceTerm(form.Form):
     def decreasing(self):
         self.a = {n for n in self.a if n < 0}
         self.b = {n for n in self.b if n < 0}
+
+
+def test_sequence_term():
+    with pytest.raises(ValueError):
+        SequenceTerm(sequence="1, 1, 1, 3").term
+    pass

@@ -12,8 +12,10 @@ flask
 flask_login
 gunicorn
 isort
+jedi
 matplotlib
 mock
+neovim
 pep8-naming
 pymongo
 pypandoc

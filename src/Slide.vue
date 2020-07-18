@@ -1,9 +1,6 @@
 <template lang="pug">
 div
-  slide-title(
-    :title="title"
-    @update:title="$emit('update:title', $event)"
-  )
+  slide-title(:title="title" @update:title="$emit('update:title', $event)")
   div(:style="`column-count: ${cols}`")
     slot
   .buttons.toolbar
