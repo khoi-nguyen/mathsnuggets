@@ -14,7 +14,7 @@ component(
     group="widgets"
     handle=".handle"
   )
-    component(:is="childComponent" v-for="(child, index) in children")
+    component.child(:is="childComponent" v-for="(child, index) in children")
       b-dropdown.is-narrow.float.has-text-grey-lighter
         span(slot="trigger")
           b-icon.handle(pack="fas" icon="ellipsis-v")
@@ -105,7 +105,11 @@ export default {
 </script>
 
 <style scoped>
-.float {
+.child .float {
+  display: none;
+}
+.child:hover .float {
+  display: block;
   float: left;
 }
 .message {
