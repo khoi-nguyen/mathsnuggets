@@ -38,7 +38,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import { clone, cloneDeep, forEach, isEmpty } from 'lodash'
+import { clone, cloneDeep } from 'lodash'
 
 import Environment from './Environment'
 import List from './List'
@@ -74,19 +74,10 @@ export default {
         this.$emit('save', { action: 'delete', [`${this.position}.children.${indices.oldIndex}`]: '' })
       } else if ('added' in event) {
         const pos = `${this.position}.children.${indices.newIndex}`
-        this.$emit('save', { action: 'insert', [pos]: this.clean(this.children[indices.newIndex]) })
+        this.$emit('save', { action: 'insert', [pos]: this.children[indices.newIndex] })
       } else if ('moved' in event) {
         this.$emit('save', { action: 'swap', [`${this.position}.children.${indices.oldIndex}`]: `${this.position}.children.${indices.newIndex}` })
       }
-    },
-    clean (node) {
-      const obj = {}
-      forEach(['children', 'component', 'payload', 'type'], function (key) {
-        if (!isEmpty(node[key])) {
-          obj[key] = node[key]
-        }
-      })
-      return obj
     },
     updateChildren (index, key, value) {
       let children = cloneDeep(this.children)
