@@ -9,16 +9,22 @@
         p.control
           b-button(type="is-small")
             b-icon(pack="fas" icon="columns")
-        b-numberinput(:value="cols" @input="$emit('update:cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
-  component(:is="numbered ? 'ol' : 'ul'" :style="`column-count: ${cols}`")
+        b-numberinput(:value="payload.cols || 1" @input="updatePayload('cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
+  component(:is="payload.numbered ? 'ol' : 'ul'" :style="`column-count: ${payload.cols || 1}`")
     slot
 </template>
 
 <script>
+import { clone } from 'lodash'
+
 export default {
-  props: {
-    cols: { type: Number, default: 1 },
-    numbered: { type: Boolean, default: true }
+  props: { payload: { type: Object, default: {} } },
+  methods: {
+    updatePayload (fieldName, value) {
+      const payload = clone(this.payload)
+      payload[fieldName] = value
+      this.$emit('update:payload', payload)
+    }
   }
 }
 </script>

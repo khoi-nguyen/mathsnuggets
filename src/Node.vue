@@ -1,15 +1,11 @@
 <template lang="pug">
 component(
-  :cols="cols"
   :is="component"
   :payload="payload || {}"
-  :title="title"
   :type="type"
   @add:child="addChild"
   @save="$emit('save', $event)"
   @update:payload="updateProp('payload', $event)"
-  @update:title="updateProp('title', $event)"
-  @update:cols="updateProp('cols', $event)"
 )
   draggable.drop(
     :emptyInsertThreshold="100"
@@ -28,17 +24,13 @@ component(
       .column
         node(
           :children="child.children || []"
-          :cols="child.cols"
           :component="child.component"
           :payload="child.payload || {}"
           :position="`${position}.children.${index}`"
-          :title="child.title"
           :type="child.type"
           @save="$emit('save', $event)"
           @update:children="updateChildren(index, 'children', $event)"
           @update:payload="updateChildren(index, 'payload', $event)"
-          @update:title="updateChildren(index, 'title', $event)"
-          @update:cols="updateChildren(index, 'cols', $event)"
         )
 </template>
 
@@ -55,11 +47,9 @@ export default {
   name: 'node',
   props: {
     children: { type: Array, default: () => [] },
-    cols: { type: Number, default: 1 },
     component: { type: String, default: 'slide' },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
-    title: { type: String, default: '' },
     type: { type: String, default: '' }
   },
   methods: {
@@ -84,7 +74,7 @@ export default {
     },
     clean (node) {
       const obj = {}
-      forEach(['children', 'cols', 'component', 'payload', 'title', 'type'], function (key) {
+      forEach(['children', 'component', 'payload', 'type'], function (key) {
         if (!isEmpty(node[key])) {
           obj[key] = node[key]
         }
