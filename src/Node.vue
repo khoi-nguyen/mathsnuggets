@@ -6,7 +6,7 @@ component(
   @update:payload="updateProp('payload', $event)"
   v-bind="$props"
 )
-  draggable.drop(
+  draggable(
     :emptyInsertThreshold="100"
     :list="children"
     @change="dragAndDrop"
@@ -14,20 +14,18 @@ component(
     group="widgets"
     handle=".handle"
   )
-    component(:is="childComponent" v-for="(child, index) in children").columns
-      .column.is-narrow.has-text-grey-lighter
-        b-dropdown
-          span(slot="trigger")
-            b-icon.handle(pack="fas" icon="ellipsis-v")
-          b-dropdown-item(@click="deleteChild(index)") Delete
-      .column
-        node(
-          :position="`${position}.children.${index}`"
-          @save="$emit('save', $event)"
-          @update:children="updateChildren(index, 'children', $event)"
-          @update:payload="updateChildren(index, 'payload', $event)"
-          v-bind="child"
-        )
+    component(:is="childComponent" v-for="(child, index) in children")
+      b-dropdown.is-narrow.float.has-text-grey-lighter
+        span(slot="trigger")
+          b-icon.handle(pack="fas" icon="ellipsis-v")
+        b-dropdown-item(@click="deleteChild(index)") Delete
+      node(
+        :position="`${position}.children.${index}`"
+        @save="$emit('save', $event)"
+        @update:children="updateChildren(index, 'children', $event)"
+        @update:payload="updateChildren(index, 'payload', $event)"
+        v-bind="child"
+      )
 </template>
 
 <script>
@@ -106,9 +104,9 @@ export default {
 }
 </script>
 
-<style>
-.drop {
-  min-height: 20px;
+<style scoped>
+.float {
+  float: left;
 }
 .message {
   break-inside: avoid-column;
