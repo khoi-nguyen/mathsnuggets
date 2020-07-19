@@ -105,10 +105,10 @@ export default {
 </script>
 
 <style scoped>
-.child .float {
+.child > .float {
   display: none;
 }
-.child:hover .float {
+.child:hover > .float {
   display: block;
   float: left;
 }
