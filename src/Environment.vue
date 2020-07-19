@@ -2,7 +2,7 @@
 .container
   article.message.is-primary.is-medium
     h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
-    .message-body
+    .message-body(:style="`column-count: ${payload.cols || 1}`")
       slot
 </template>
 

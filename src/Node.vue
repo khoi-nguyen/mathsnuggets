@@ -1,9 +1,15 @@
 <template lang="pug">
-div.node
-  b-dropdown.is-narrow.float.has-text-grey-lighter(v-if="component !== 'slide'")
+.node
+  b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'")
     span(slot="trigger")
       b-icon.handle(pack="fas" icon="ellipsis-v")
     b-dropdown-item(@click="$emit('delete')") Delete
+    b-dropdown-item(v-if="component !== 'widget'")
+      b-field
+        p.control
+          b-button(type="is-small")
+            b-icon(pack="fas" icon="columns")
+        b-numberinput(:value="payload.cols || 1" @input="updatePayload('cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
   component(
     :is="component"
     @add:child="addChild"
@@ -32,7 +38,7 @@ div.node
 
 <script>
 import draggable from 'vuedraggable'
-import { cloneDeep, forEach, isEmpty } from 'lodash'
+import { clone, cloneDeep, forEach, isEmpty } from 'lodash'
 
 import Environment from './Environment'
 import List from './List'
@@ -90,6 +96,11 @@ export default {
         children = children.concat({ [key]: value })
       }
       this.$emit('update:children', children)
+    },
+    updatePayload (fieldName, value) {
+      const payload = clone(this.payload)
+      payload[fieldName] = value
+      this.updateProp('payload', payload)
     },
     updateProp (prop, value) {
       this.$emit(`update:${prop}`, value)
