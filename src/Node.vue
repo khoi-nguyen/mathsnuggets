@@ -15,7 +15,7 @@
     @add:child="addChild"
     @save="$emit('save', $event)"
     @update:payload="updateProp('payload', $event)"
-    v-bind="$props"
+    v-bind="attrs"
   )
     draggable(
       :emptyInsertThreshold="100"
@@ -55,6 +55,16 @@ export default {
     type: { type: String, default: '' }
   },
   computed: {
+    attrs () {
+      const attrs = clone(this.$props)
+      if (!attrs.children) {
+        attrs.children = []
+      }
+      if (!attrs.payload) {
+        attrs.payload = {}
+      }
+      return attrs
+    },
     childComponent () {
       return this.component === 'list' ? 'li' : 'div'
     }
