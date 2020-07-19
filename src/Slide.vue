@@ -28,7 +28,7 @@ export default {
     WidgetSelect
   },
   props: {
-    payload: { type: Object, default: {} },
+    payload: { type: Object, default: () => {} }
   },
   methods: {
     updatePayload (fieldName, value) {

@@ -18,7 +18,7 @@
 import { clone } from 'lodash'
 
 export default {
-  props: { payload: { type: Object, default: {} } },
+  props: { payload: { type: Object, default: () => {} } },
   methods: {
     updatePayload (fieldName, value) {
       const payload = clone(this.payload)

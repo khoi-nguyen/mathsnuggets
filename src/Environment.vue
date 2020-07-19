@@ -10,7 +10,7 @@
 import { clone } from 'lodash'
 
 export default {
-  props: { payload: { type: Object, default: '' } },
+  props: { payload: { type: Object, default: () => {} } },
   methods: {
     blur (event) {
       this.updatePayload('title', event.target.innerText)
