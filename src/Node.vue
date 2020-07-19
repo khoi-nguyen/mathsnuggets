@@ -1,21 +1,20 @@
 <template lang="pug">
 component(
   :is="component"
-  :payload="payload || {}"
-  :type="type"
   @add:child="addChild"
   @save="$emit('save', $event)"
   @update:payload="updateProp('payload', $event)"
+  v-bind="$props"
 )
   draggable.drop(
     :emptyInsertThreshold="100"
-    :list="children || []"
+    :list="children"
     @change="dragAndDrop"
     ghost-class="has-background-white-ter"
     group="widgets"
     handle=".handle"
   )
-    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children").columns
+    component(:is="childComponent" v-for="(child, index) in children").columns
       .column.is-narrow.has-text-grey-lighter
         b-dropdown
           span(slot="trigger")
@@ -23,14 +22,11 @@ component(
           b-dropdown-item(@click="deleteChild(index)") Delete
       .column
         node(
-          :children="child.children || []"
-          :component="child.component"
-          :payload="child.payload || {}"
           :position="`${position}.children.${index}`"
-          :type="child.type"
           @save="$emit('save', $event)"
           @update:children="updateChildren(index, 'children', $event)"
           @update:payload="updateChildren(index, 'payload', $event)"
+          v-bind="child"
         )
 </template>
 
@@ -51,6 +47,11 @@ export default {
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     type: { type: String, default: '' }
+  },
+  computed: {
+    childComponent () {
+      return this.component === 'list' ? 'li' : 'div'
+    }
   },
   methods: {
     addChild (event) {

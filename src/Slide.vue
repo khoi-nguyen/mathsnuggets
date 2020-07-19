@@ -9,11 +9,11 @@ div
         b-button
           b-icon(pack="fas" icon="columns")
       b-numberinput.number-input(:value="payload.cols || 1" @input="updatePayload('cols', $event)" controls-position="compact" icon-pack="fas" max="3")
-    b-button(@click="$emit('add:child', {component: 'list', children: []})")
+    b-button(@click="addChild('list')")
       b-icon(pack="fas" icon="list")
-    b-button(@click="$emit('add:child', {component: 'environment', title: 'Hello', children: []})")
+    b-button(@click="addChild('environment')")
       b-icon(pack="fas" icon="cube")
-    widget-select(@select:widget="$emit('add:child', {component: 'widget', type: $event})")
+    widget-select(@select:widget="addChild('widget', $event)")
 </template>
 
 <script>
@@ -31,6 +31,14 @@ export default {
     payload: { type: Object, default: () => {} }
   },
   methods: {
+    addChild (component, type = '') {
+      this.$emit('add:child', {
+        children: component !== 'widget' ? [] : undefined,
+        component: component,
+        payload: {},
+        type: component === 'widget' ? type : undefined
+      })
+    },
     updatePayload (fieldName, value) {
       const payload = clone(this.payload)
       payload[fieldName] = value

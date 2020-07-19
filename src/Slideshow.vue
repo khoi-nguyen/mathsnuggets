@@ -25,7 +25,7 @@ import Node from './Node'
 export default {
   title: 'Slideshow builder',
   data () {
-    const emptySlide = { component: 'slide', children: [] }
+    const emptySlide = { component: 'slide', payload: {}, children: [] }
     return {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
