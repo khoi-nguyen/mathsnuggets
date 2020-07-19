@@ -79,14 +79,14 @@ export default {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
     },
     dragAndDrop (event) {
-      const indices = event[Object.keys(event)[0]]
+      const data = event[Object.keys(event)[0]]
       if ('removed' in event) {
-        this.$emit('save', { action: 'delete', [`${this.position}.children.${indices.oldIndex}`]: '' })
+        this.$emit('save', { action: 'delete', [`${this.position}.children.${data.oldIndex}`]: '' })
       } else if ('added' in event) {
-        const pos = `${this.position}.children.${indices.newIndex}`
-        this.$emit('save', { action: 'insert', [pos]: this.children[indices.newIndex] })
+        const pos = `${this.position}.children.${data.newIndex}`
+        this.$emit('save', { action: 'insert', [pos]: data.element })
       } else if ('moved' in event) {
-        this.$emit('save', { action: 'swap', [`${this.position}.children.${indices.oldIndex}`]: `${this.position}.children.${indices.newIndex}` })
+        this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
       }
     },
     updateChildren (index, key, value) {
