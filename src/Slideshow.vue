@@ -9,8 +9,6 @@
         :position="`children.${index}`"
         @save="save"
       )
-  .trash
-    draggable(group="widgets" v-model="trash")
 </template>
 
 <script>
@@ -30,8 +28,7 @@ export default {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       emptySlide: emptySlide,
-      saveStack: [],
-      trash: []
+      saveStack: []
     }
   },
   computed: {
@@ -87,15 +84,5 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
-}
-.trash {
-  bottom: 0;
-  height: 150px;
-  position: absolute;
-  text-align: center;
-  width: 100%;
-}
-.trash div {
-  height: 100%;
 }
 </style>
