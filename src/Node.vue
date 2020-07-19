@@ -1,31 +1,33 @@
 <template lang="pug">
-component(
-  :is="component"
-  @add:child="addChild"
-  @save="$emit('save', $event)"
-  @update:payload="updateProp('payload', $event)"
-  v-bind="$props"
-)
-  draggable(
-    :emptyInsertThreshold="100"
-    :list="children"
-    @change="dragAndDrop"
-    ghost-class="has-background-white-ter"
-    group="widgets"
-    handle=".handle"
+div.node
+  b-dropdown.is-narrow.float.has-text-grey-lighter(v-if="component !== 'slide'")
+    span(slot="trigger")
+      b-icon.handle(pack="fas" icon="ellipsis-v")
+    b-dropdown-item(@click="$emit('delete')") Delete
+  component(
+    :is="component"
+    @add:child="addChild"
+    @save="$emit('save', $event)"
+    @update:payload="updateProp('payload', $event)"
+    v-bind="$props"
   )
-    component.child(:is="childComponent" v-for="(child, index) in children")
-      b-dropdown.is-narrow.float.has-text-grey-lighter
-        span(slot="trigger")
-          b-icon.handle(pack="fas" icon="ellipsis-v")
-        b-dropdown-item(@click="deleteChild(index)") Delete
-      node(
-        :position="`${position}.children.${index}`"
-        @save="$emit('save', $event)"
-        @update:children="updateChildren(index, 'children', $event)"
-        @update:payload="updateChildren(index, 'payload', $event)"
-        v-bind="child"
-      )
+    draggable(
+      :emptyInsertThreshold="100"
+      :list="children"
+      @change="dragAndDrop"
+      ghost-class="has-background-white-ter"
+      group="widgets"
+      handle=".handle"
+    )
+      component(:is="childComponent" v-for="(child, index) in children")
+        node(
+          :position="`${position}.children.${index}`"
+          @delete="deleteChild(index)"
+          @save="$emit('save', $event)"
+          @update:children="updateChildren(index, 'children', $event)"
+          @update:payload="updateChildren(index, 'payload', $event)"
+          v-bind="child"
+        )
 </template>
 
 <script>
@@ -105,10 +107,10 @@ export default {
 </script>
 
 <style scoped>
-.child > .float {
+.node > .float {
   display: none;
 }
-.child:hover > .float {
+.node:hover > .float {
   display: block;
   float: left;
 }
