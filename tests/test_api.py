@@ -225,6 +225,19 @@ def test_tests(client):
     assert isinstance(data, dict)
 
 
+def test_delete_test_user(client):
+
+    response, data = post(
+        client,
+        "/api/auth/register",
+        {"email": "test@test.com", "password": "12345678"},
+    )
+    assert response.status_code == 200
+
+    response = delete(client, "/api/tests/user")
+    assert response.status_code == 204
+
+
 def test_static_routes(client):
     for route in ["/docs/", "/_static/jquery.js", "/slideshow_builder", "/favicon.ico"]:
         response = get(client, route, False)
