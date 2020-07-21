@@ -8,7 +8,9 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "npx parcel build src/index.html"
+    "backend": "pip install -Ur requirements.txt && python -m app",
+    "build": "npx parcel build src/index.html",
+    "frontend": "npx parcel watch src/index.html"
   },
   "author": "Khoi Nguyen",
   "license": "GPL-3.0-or-later",
