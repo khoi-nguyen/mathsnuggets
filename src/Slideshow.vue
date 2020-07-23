@@ -4,8 +4,8 @@
     section(v-for="(slide, index) in children")
       node(
         :component="slide.component"
-        :children.sync="slide.children"
-        :payload.sync="slide.payload"
+        :children="slide.children"
+        :payload="slide.payload"
         :position="`children.${index}`"
         @save="save"
       )

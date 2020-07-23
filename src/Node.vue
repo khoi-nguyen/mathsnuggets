@@ -9,12 +9,12 @@
         p.control
           b-button(type="is-small")
             b-icon(pack="fas" icon="columns")
-        b-numberinput(:value="payload.cols || 1" @input="updatePayload('cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
+        b-numberinput(:value="payload.cols || 1" @input="$set(payload, 'cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
   component(
     :is="component"
     @add:child="addChild"
     @save="$emit('save', $event)"
-    @update:payload="updateProp('payload', $event)"
+    @update:payload="updatePayload($event)"
     v-bind="attrs"
   )
     draggable(
@@ -30,15 +30,14 @@
           :position="`${position}.children.${index}`"
           @delete="deleteChild(index)"
           @save="$emit('save', $event)"
-          @update:children="updateChildren(index, 'children', $event)"
-          @update:payload="updateChildren(index, 'payload', $event)"
+          @update:payload="$set(child, 'payload', $event)"
           v-bind="child"
         )
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-import { clone, cloneDeep } from 'lodash'
+import { clone } from 'lodash'
 
 import Environment from './Environment'
 import List from './List'
@@ -71,12 +70,15 @@ export default {
   },
   methods: {
     addChild (event) {
-      this.$emit('update:children', this.children.concat([event]))
-      this.$emit('save', { action: 'update', [`${this.position}.children.${this.children.length}`]: event })
+      this.$emit('save', {
+        action: 'update',
+        [`${this.position}.children.${this.children.length}`]: event
+      })
+      this.children.push(event)
     },
     deleteChild (index) {
-      this.children.splice(index, 1)
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
+      this.children.splice(index, 1)
     },
     dragAndDrop (event) {
       const data = event[Object.keys(event)[0]]
@@ -89,23 +91,9 @@ export default {
         this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
       }
     },
-    updateChildren (index, key, value) {
-      let children = cloneDeep(this.children)
-      if (index < children.length) {
-        children[index][key] = value
-      } else {
-        children = children.concat({ [key]: value })
-      }
-      this.$emit('update:children', children)
-    },
-    updatePayload (fieldName, value) {
-      const payload = clone(this.payload)
-      payload[fieldName] = value
-      this.updateProp('payload', payload)
-    },
-    updateProp (prop, value) {
-      this.$emit(`update:${prop}`, value)
-      this.$emit('save', { action: 'update', [`${this.position}.${prop}`]: value })
+    updatePayload (value) {
+      this.$emit('update:payload', value)
+      this.$emit('save', { action: 'update', [`${this.position}.payload`]: value })
     }
   },
   components: {
