@@ -18,7 +18,8 @@
     v-bind="attrs"
   )
     draggable(
-      :emptyInsertThreshold="100"
+      :fallback-on-body="true"
+      :invert-swap="true"
       :list="children"
       @change="dragAndDrop"
       ghost-class="has-background-white-ter"
