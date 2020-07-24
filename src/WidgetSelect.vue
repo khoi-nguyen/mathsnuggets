@@ -10,6 +10,7 @@ b-field
     open-on-focus
     placeholder="Add a widget"
     v-model="localValue"
+    :size="size"
   )
 </template>
 
@@ -17,7 +18,8 @@ b-field
 import { api } from './ajax'
 export default {
   props: {
-    value: { type: String, default: '' }
+    value: { type: String, default: '' },
+    size: String
   },
   computed: {
     filteredData () {

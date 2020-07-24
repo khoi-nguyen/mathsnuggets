@@ -28,7 +28,7 @@
             @update:payload="$set(child, 'payload', $event)"
             v-bind="child"
           )
-      .buttons(slot="footer")
+      .buttons.are-small(slot="footer")
         b-field
           p.control
             b-button
@@ -37,12 +37,14 @@
             :value="payload.cols || 1"
             @input="updatePayload($event, 'cols')"
             controls-position="compact"
-            icon-pack="fas")
+            icon-pack="fas"
+            size="is-small"
+          )
         b-button(@click="addChild('list')")
           b-icon(pack="fas" icon="list")
         b-button(@click="addChild('environment')")
           b-icon(pack="fas" icon="cube")
-        widget-select(@select:widget="addChild('widget', $event)")
+        widget-select(@select:widget="addChild('widget', $event)" size="is-small")
 </template>
 
 <script>
