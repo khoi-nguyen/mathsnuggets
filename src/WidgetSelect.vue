@@ -1,17 +1,17 @@
 <template lang="pug">
-b-field
-  b-autocomplete(
-    :data="filteredData"
-    @select="onSelect"
-    field="name"
-    icon-pack="fas"
-    icon="plus"
-    keep-first
-    open-on-focus
-    placeholder="Add a widget"
-    v-model="localValue"
-    :size="size"
-  )
+b-autocomplete(
+  :append-to-body="true"
+  :data="filteredData"
+  @select="onSelect"
+  field="name"
+  icon-pack="fas"
+  icon="plus"
+  keep-first
+  open-on-focus
+  placeholder="Add a widget"
+  v-model="localValue"
+  :size="size"
+)
 </template>
 
 <script>
