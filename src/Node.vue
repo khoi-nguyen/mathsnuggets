@@ -3,6 +3,16 @@
   b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'" hoverable)
     span(slot="trigger")
       b-icon.handle(pack="fas" icon="ellipsis-v")
+    b-dropdown-item(v-if="component === 'list'")
+      b-checkbox(:value="payload.numbered" @input="updatePayload($event, 'numbered')") Numbered list
+    b-dropdown-item(v-if="component === 'environment'" custom)
+      b-select(placeholder="Style" :value="payload.style" @input="updatePayload($event, 'style')")
+        option(value="primary") Dark blue
+        option(value="link") Blue
+        option(value="info") Light blue
+        option(value="success") Green
+        option(value="warning") Yellow
+        option(value="danger") Red
     b-dropdown-item(@click="$emit('delete')") Delete
   component(
     :is="component"

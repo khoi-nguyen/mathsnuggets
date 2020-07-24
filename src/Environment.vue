@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  article.message.is-primary.is-medium
+  article.message.is-medium(:class="`is-${payload.style || 'primary'}`")
     h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
     .message-body
       slot
