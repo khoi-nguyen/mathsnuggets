@@ -29,17 +29,17 @@
             v-bind="child"
           )
       .buttons.are-small(slot="footer")
-        b-field
-          p.control
-            b-button
-              b-icon(pack="fas" icon="columns")
-          b-numberinput(
-            :value="payload.cols || 1"
-            @input="updatePayload($event, 'cols')"
-            controls-position="compact"
-            icon-pack="fas"
-            size="is-small"
-          )
+        p.control
+          b-button
+            b-icon(pack="fas" icon="columns")
+        b-numberinput.numberinput(
+          :editable="false"
+          :value="payload.cols || 1"
+          @input="updatePayload($event, 'cols')"
+          controls-position="compact"
+          icon-pack="fas"
+          size="is-small"
+        )
         b-button(@click="addChild('list')")
           b-icon(pack="fas" icon="list")
         b-button(@click="addChild('environment')")
@@ -141,5 +141,8 @@ export default {
 }
 .message {
   break-inside: avoid-column;
+}
+.numberinput {
+  width: 90px;
 }
 </style>
