@@ -5,7 +5,7 @@
       node(
         :component="slide.component"
         :children="slide.children"
-        :payload="slide.payload"
+        :payload.sync="slide.payload"
         :position="`children.${index}`"
         @save="save"
       )

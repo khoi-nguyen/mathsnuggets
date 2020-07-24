@@ -4,15 +4,8 @@
     span(slot="trigger")
       b-icon.handle(pack="fas" icon="ellipsis-v")
     b-dropdown-item(@click="$emit('delete')") Delete
-    b-dropdown-item(v-if="component !== 'widget'")
-      b-field
-        p.control
-          b-button(type="is-small")
-            b-icon(pack="fas" icon="columns")
-        b-numberinput(:value="payload.cols || 1" @input="$set(payload, 'cols', $event)" icon-pack="fas" max="3" controls-position="compact" size="is-small")
   component(
     :is="component"
-    @add:child="addChild"
     @save="$emit('save', $event)"
     @update:payload="updatePayload($event)"
     v-bind="attrs"
@@ -26,14 +19,30 @@
       group="widgets"
       handle=".handle"
     )
-      component(:is="childComponent" v-for="(child, index) in children")
-        node(
-          :position="`${position}.children.${index}`"
-          @delete="deleteChild(index)"
-          @save="$emit('save', $event)"
-          @update:payload="$set(child, 'payload', $event)"
-          v-bind="child"
-        )
+      div(:style="`column-count: ${payload.cols || 1}`")
+        component(:is="childComponent" v-for="(child, index) in children")
+          node(
+            :position="`${position}.children.${index}`"
+            @delete="deleteChild(index)"
+            @save="$emit('save', $event)"
+            @update:payload="$set(child, 'payload', $event)"
+            v-bind="child"
+          )
+      .buttons(slot="footer")
+        b-field
+          p.control
+            b-button
+              b-icon(pack="fas" icon="columns")
+          b-numberinput(
+            :value="payload.cols || 1"
+            @input="updatePayload($event, 'cols')"
+            controls-position="compact"
+            icon-pack="fas")
+        b-button(@click="addChild('list')")
+          b-icon(pack="fas" icon="list")
+        b-button(@click="addChild('environment')")
+          b-icon(pack="fas" icon="cube")
+        widget-select(@select:widget="addChild('widget', $event)")
 </template>
 
 <script>
@@ -44,6 +53,7 @@ import Environment from './Environment'
 import List from './List'
 import Slide from './Slide'
 import Widget from './Widget'
+import WidgetSelect from './WidgetSelect'
 
 export default {
   name: 'node',
@@ -70,12 +80,18 @@ export default {
     }
   },
   methods: {
-    addChild (event) {
+    addChild (component, type) {
+      const child = {
+        children: component !== 'widget' ? [] : undefined,
+        component: component,
+        payload: {},
+        type: component === 'widget' ? type : undefined
+      }
       this.$emit('save', {
         action: 'update',
-        [`${this.position}.children.${this.children.length}`]: event
+        [`${this.position}.children.${this.children.length}`]: child
       })
-      this.children.push(event)
+      this.children.push(child)
     },
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
@@ -92,9 +108,14 @@ export default {
         this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
       }
     },
-    updatePayload (value) {
-      this.$emit('update:payload', value)
-      this.$emit('save', { action: 'update', [`${this.position}.payload`]: value })
+    updatePayload (value, key = false) {
+      let payload = value
+      if (key !== false) {
+        payload = clone(this.payload)
+        payload[key] = value
+      }
+      this.$emit('update:payload', payload)
+      this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
     }
   },
   components: {
@@ -102,6 +123,7 @@ export default {
     List,
     Slide,
     Widget,
+    WidgetSelect,
     draggable
   }
 }
