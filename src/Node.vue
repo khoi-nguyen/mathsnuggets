@@ -10,16 +10,16 @@
     @update:payload="updatePayload($event)"
     v-bind="attrs"
   )
-    draggable(
-      :fallback-on-body="true"
-      :invert-swap="true"
-      :list="children"
-      @change="dragAndDrop"
-      ghost-class="has-background-white-ter"
-      group="widgets"
-      handle=".handle"
-    )
-      div(:style="`column-count: ${payload.cols || 1}`")
+    div(:style="`column-count: ${payload.cols || 1}`")
+      draggable(
+        :fallback-on-body="true"
+        :invert-swap="true"
+        :list="children"
+        @change="dragAndDrop"
+        ghost-class="has-background-white-ter"
+        group="widgets"
+        handle=".handle"
+      )
         component(:is="childComponent" v-for="(child, index) in children")
           node(
             :position="`${position}.children.${index}`"
