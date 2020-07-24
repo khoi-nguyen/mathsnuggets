@@ -41,7 +41,6 @@ export default {
     save (payload) {
       if (!isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(cloneDeep(this.emptySlide))
-        this.$nextTick(() => (Reveal.sync()))
       }
       if (this.apiUrl && this.authState.loggedIn) {
         this.saveStack.push(payload)
@@ -68,7 +67,6 @@ export default {
       const data = await api(this.apiUrl)
       if (data.length) {
         this.children = data
-        this.$nextTick(() => (Reveal.sync()))
       }
     }
   },
