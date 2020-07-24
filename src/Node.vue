@@ -1,6 +1,6 @@
 <template lang="pug">
 .node
-  b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'")
+  b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'" hoverable)
     span(slot="trigger")
       b-icon.handle(pack="fas" icon="ellipsis-v")
     b-dropdown-item(@click="$emit('delete')") Delete
@@ -28,23 +28,26 @@
             @update:payload="$set(child, 'payload', $event)"
             v-bind="child"
           )
-      .buttons.are-small(slot="footer")
-        p.control
-          b-button
-            b-icon(pack="fas" icon="columns")
-        b-numberinput.numberinput(
-          :editable="false"
-          :value="payload.cols || 1"
-          @input="updatePayload($event, 'cols')"
-          controls-position="compact"
-          icon-pack="fas"
-          size="is-small"
-        )
-        b-button(@click="addChild('list')")
-          b-icon(pack="fas" icon="list")
-        b-button(@click="addChild('environment')")
-          b-icon(pack="fas" icon="cube")
-        widget-select(@select:widget="addChild('widget', $event)" size="is-small")
+        .buttons.are-small(slot="footer" @mouseleave="showToolbar = false")
+          b-button(@mouseover="showToolbar = true" type="is-text")
+            b-icon.toolbar-trigger(pack="fas" icon="angle-double-right")
+          .buttons(v-if="showToolbar")
+            p.control
+              b-button
+                b-icon(pack="fas" icon="columns")
+            b-numberinput.numberinput(
+              :editable="false"
+              :value="payload.cols || 1"
+              @input="updatePayload($event, 'cols')"
+              controls-position="compact"
+              icon-pack="fas"
+              size="is-small"
+            )
+            b-button(@click="addChild('list')")
+              b-icon(pack="fas" icon="list")
+            b-button(@click="addChild('environment')")
+              b-icon(pack="fas" icon="cube")
+            widget-select(@select:widget="addChild('widget', $event)" size="is-small")
 </template>
 
 <script>
@@ -65,6 +68,11 @@ export default {
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     type: { type: String, default: '' }
+  },
+  data () {
+    return {
+      showToolbar: false
+    }
   },
   computed: {
     attrs () {
@@ -144,5 +152,11 @@ export default {
 }
 .numberinput {
   width: 90px;
+}
+.hidden {
+  visibility: hidden;
+}
+.toolbar-trigger {
+  color: #cccccc;
 }
 </style>
