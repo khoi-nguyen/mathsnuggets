@@ -38,9 +38,10 @@
             @update:payload="$set(child, 'payload', $event)"
             v-bind="child"
           )
-        .buttons.are-small(slot="footer" @mouseleave="showToolbar = false")
-          b-button(@mouseover="showToolbar = true" type="is-text")
-            b-icon.toolbar-trigger(pack="fas" icon="angle-double-right")
+        .buttons.are-small(slot="footer")
+          b-button(@click="showToolbar = !showToolbar" type="is-text")
+            .toolbar-trigger
+              b-icon(pack="fas" icon="angle-double-right")
           .buttons(v-if="showToolbar")
             p.control
               b-button
