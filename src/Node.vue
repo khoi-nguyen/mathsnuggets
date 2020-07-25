@@ -82,7 +82,7 @@ export default {
   },
   data () {
     return {
-      showToolbar: false
+      showToolbar: this.component === 'slide'
     }
   },
   computed: {
