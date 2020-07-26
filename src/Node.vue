@@ -58,7 +58,11 @@
               b-icon(pack="fas" icon="list")
             b-button(@click="addChild('environment')")
               b-icon(pack="fas" icon="cube")
-            widget-select(@select:widget="addChild('widget', $event)" size="is-small")
+            b-dropdown
+              b-button(slot="trigger")
+                b-icon(pack="fas" icon="plus")
+              b-dropdown-item(custom)
+                widget-select(@select:widget="addChild('widget', $event)" size="is-small")
 </template>
 
 <script>
