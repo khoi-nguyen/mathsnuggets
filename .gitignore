@@ -3,6 +3,7 @@
 .idea
 __pycache__/
 coverage.xml
+coverage/
 dist/
 docs/build/
 docs/source/apidoc

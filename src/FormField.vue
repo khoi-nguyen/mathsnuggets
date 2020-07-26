@@ -84,7 +84,7 @@ export default {
   computed: {
     cols () {
       if (!this.inputValue) {
-        return this.label.length
+        return (this.label || '').length
       }
       return _.maxBy(this.inputValue.split('\n'), (line) => (line.length)).length + 0
     },
