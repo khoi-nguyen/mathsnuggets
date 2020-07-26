@@ -5,7 +5,7 @@ b-autocomplete(
   @select="onSelect"
   field="name"
   icon-pack="fas"
-  icon="plus"
+  icon="search"
   keep-first
   open-on-focus
   placeholder="Add a widget"
