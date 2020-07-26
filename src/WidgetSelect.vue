@@ -15,7 +15,7 @@ b-autocomplete(
 </template>
 
 <script>
-import { api } from './ajax'
+import api from './ajax'
 export default {
   props: {
     value: { type: String, default: '' },

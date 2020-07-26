@@ -17,7 +17,7 @@ import { cloneDeep, isEqual } from 'lodash'
 import draggable from 'vuedraggable'
 
 import { auth } from './auth.js'
-import { api } from './ajax'
+import api from './ajax'
 import Node from './Node'
 
 export default {

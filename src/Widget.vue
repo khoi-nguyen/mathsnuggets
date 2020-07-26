@@ -27,7 +27,7 @@
 <script>
 import { clone, forEach } from 'lodash'
 
-import { api } from './ajax'
+import api from './ajax'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 
