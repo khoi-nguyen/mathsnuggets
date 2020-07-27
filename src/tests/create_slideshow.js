@@ -64,9 +64,9 @@ mocha.describe('mathsnuggets', function () {
     page = await browser.newPage()
     fetch('http://localhost:5000/api/auth/register', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json',  },
-      body: JSON.stringify({'email': 'test@test.com', 'password':'12345678'}),
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'test@test.com', password: '12345678' })
+    })
   })
 
   mocha.after(async function () {
