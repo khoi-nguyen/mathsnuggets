@@ -1,14 +1,16 @@
 import 'regenerator-runtime/runtime'
+import AsyncComputed from 'vue-async-computed'
+import Buefy from 'buefy'
 import FormField from './FormField.vue'
 import flushPromises from 'flush-promises'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { enableFetchMocks } from 'jest-fetch-mock'
-import AsyncComputed from 'vue-async-computed'
 
 enableFetchMocks()
 
 const localVue = createLocalVue()
 localVue.use(AsyncComputed)
+localVue.use(Buefy)
 
 let wrapper = shallowMount(FormField)
 
@@ -51,6 +53,31 @@ describe('FormField', () => {
     expect(wrapper.find('textarea').exists()).toBe(true)
   })
 
+  it('select field', async () => {
+    fetch.mockResponses(JSON.stringify({
+      valid: true,
+      value: 'foo'
+    }))
+    wrapper = shallowMount(FormField, {
+      localVue,
+      propsData: {
+        label: 'Field',
+        type: 'Select',
+        options: ['foo', 'bar']
+      }
+    })
+    expect(wrapper.find('select').exists()).toBe(true)
+    expect(wrapper.find('option').exists()).toBe(true)
+    wrapper.find('select').setValue('foo')
+    wrapper.find('select').trigger('blur')
+    expect(wrapper.emitted()['update:value'][0]).toEqual(['foo'])
+    wrapper.setProps({ value: 'foo' })
+    await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(wrapper.find('select').exists()).toBe(false)
+    expect(wrapper.text()).toBe('foo')
+  })
+
   it('computed field', async () => {
     fetch.mockResponses(JSON.stringify({
       latex: '\\frac {1}{x}',
@@ -65,13 +92,13 @@ describe('FormField', () => {
         type: 'Expression'
       }
     })
-    expect(wrapper.find('b-button').exists()).toBe(false)
+    expect(wrapper.find('b-button-stub').exists()).toBe(false)
     wrapper.setProps({ value: 'x' })
     await flushPromises()
     expect(fetch).toHaveBeenCalledTimes(1)
-    expect(wrapper.find('b-button').exists()).toBe(true)
-    await wrapper.find('b-button').trigger('click')
-    expect(wrapper.find('b-button').exists()).toBe(false)
+    expect(wrapper.find('b-button-stub').exists()).toBe(true)
+    await wrapper.find('b-button-stub').trigger('click')
+    expect(wrapper.find('b-button-stub').exists()).toBe(false)
     expect(wrapper.find('.katex').exists()).toBe(true)
   })
 
