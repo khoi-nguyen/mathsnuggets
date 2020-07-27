@@ -43,6 +43,7 @@ describe('FormField', () => {
     expect(wrapper.emitted()['update:value']).toEqual([['1/x']])
     wrapper.setProps({ value: '1/x' })
     await flushPromises()
+    expect(wrapper.find('error-message-stub').exists()).toBe(false)
     expect(fetch).toHaveBeenCalledTimes(1)
     expect(wrapper.find('textarea').exists()).toBe(false)
     expect(wrapper.html()).toContain('katex')
@@ -71,6 +72,31 @@ describe('FormField', () => {
     expect(wrapper.find('b-button').exists()).toBe(true)
     await wrapper.find('b-button').trigger('click')
     expect(wrapper.find('b-button').exists()).toBe(false)
-    expect(wrapper.contains('.katex')).toBeTruthy()
+    expect(wrapper.find('.katex').exists()).toBe(true)
+  })
+
+  it('validation error', async () => {
+    fetch.once(JSON.stringify({
+      error: true,
+      message: 'foobar'
+    }))
+    fetch.once(JSON.stringify({
+      latex: '\\frac {1}{x}',
+      valid: true,
+      value: '1/x'
+    }))
+    wrapper = shallowMount(FormField, {
+      localVue,
+      propsData: {
+        label: 'Field',
+        type: 'Expression',
+        value: '1/'
+      }
+    })
+    await flushPromises()
+    expect(wrapper.find('error-message-stub').exists()).toBe(true)
+    wrapper.setProps({ value: 'x' })
+    await flushPromises()
+    expect(wrapper.find('error-message-stub').exists()).toBe(false)
   })
 })
