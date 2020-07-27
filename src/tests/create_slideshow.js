@@ -13,7 +13,7 @@ async function selectWidget (page, widget) {
   await page.keyboard.press('Enter')
 }
 
-async function fillInField (page, identifier, value, key = 'Tab') {
+async function fillInField (page, identifier, value) {
   await page.waitFor(identifier)
   const tagName = await page.$eval(identifier, el => el.tagName)
   if (tagName === 'select') {
@@ -24,7 +24,7 @@ async function fillInField (page, identifier, value, key = 'Tab') {
     const typedValue = await page.$eval(identifier, el => el.value)
     assert.equal(typedValue, value)
   }
-  await page.keyboard.press(key)
+  await page.keyboard.press('Tab')
   await page.waitForFunction((selector) => !document.querySelector(selector), identifier)
 }
 
@@ -100,17 +100,15 @@ mocha.describe('mathsnuggets', function () {
     await checkTitle('equal', 'Hello')
   })
 
-  mocha.it('testing a widget', async function () {
+  mocha.it('testing widgets', async function () {
     await page.goto('http://localhost:5000/slideshow_builder')
     const data = await fetch('http://localhost:5000/api/tests', { method: 'GET' }).then(r => r.json())
     for (const widget in data) {
       const fields = data[widget]
       await selectWidget(page, widget)
-      let count = 1
       for (const fieldName in fields) {
         const value = fields[fieldName]
-        await fillInField(page, `span[name="${fieldName}"] textarea`, value, fields.length > count ? 'Tab' : 'Enter')
-        count++
+        await fillInField(page, `span[name="${fieldName}"] textarea, span[name="${fieldName}"] select`, value)
       }
       await waitForComputedFields(page)
     }
@@ -129,6 +127,5 @@ mocha.describe('mathsnuggets', function () {
     await clickElement(page, '.modal .is-success')
     await clickElement(page, 'a[href="/resources/new-slideshow"]')
     await page.goto('http://localhost:5000/resources')
-    await clickElement(page, 'button.logout')
   })
 })
