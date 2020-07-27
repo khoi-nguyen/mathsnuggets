@@ -1,4 +1,4 @@
-import { api } from './ajax.js'
+import api from './ajax.js'
 
 export const auth = {
   state: {

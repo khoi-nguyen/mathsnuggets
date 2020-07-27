@@ -1,19 +1,24 @@
 <template lang="pug">
 .container
-  article.message.is-primary.is-medium
-    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ title }}
+  article.message.is-medium(:class="`is-${payload.style || 'primary'}`")
+    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
     .message-body
       slot
 </template>
 
 <script>
+import { clone } from 'lodash'
+
 export default {
-  props: {
-    title: String
-  },
+  props: { payload: { type: Object, default: () => {} } },
   methods: {
     blur (event) {
-      this.$emit('update:title', event.target.innerText)
+      this.updatePayload('title', event.target.innerText)
+    },
+    updatePayload (fieldName, value) {
+      const payload = clone(this.payload)
+      payload[fieldName] = value
+      this.$emit('update:payload', payload)
     }
   }
 }

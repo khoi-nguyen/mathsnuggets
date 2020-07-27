@@ -16,7 +16,7 @@ span(:name="name")
       @focus="editing = true"
       @keydown.enter.exact.stop.prevent="blur"
       @input="inputValue = $event.target.value"
-      @onchange="blur"
+      @change="blur"
       @blur="blur"
     ) {{ options.length ? '' : value }}
       option(v-for="option in options" :value="option") {{ option }}
@@ -30,12 +30,12 @@ span(:name="name")
     error-message(v-if="error") {{ error }}
   span(v-html="after")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
-    b-button.computed-field(type="is-success is-outlined" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
+    b-button.computed-field(type="is-success" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
     div(v-html="html" v-if="showComputed")
 </template>
 
 <script>
-import { api } from './ajax'
+import api from './ajax'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import _ from 'lodash'
@@ -84,7 +84,7 @@ export default {
   computed: {
     cols () {
       if (!this.inputValue) {
-        return this.label.length
+        return (this.label || '').length
       }
       return _.maxBy(this.inputValue.split('\n'), (line) => (line.length)).length + 0
     },

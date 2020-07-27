@@ -60,7 +60,7 @@ div
 
 <script>
 import { auth } from './auth'
-import { api } from './ajax'
+import api from './ajax'
 import _ from 'lodash'
 
 export default {

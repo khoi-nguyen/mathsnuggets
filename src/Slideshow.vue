@@ -3,15 +3,12 @@
   .slides
     section(v-for="(slide, index) in children")
       node(
-        :cols.sync="slide.cols"
         :component="slide.component"
-        :children.sync="slide.children"
+        :children="slide.children"
+        :payload.sync="slide.payload"
         :position="`children.${index}`"
-        :title.sync="slide.title"
         @save="save"
       )
-  .trash
-    draggable(group="widgets" v-model="trash")
 </template>
 
 <script>
@@ -20,19 +17,18 @@ import { cloneDeep, isEqual } from 'lodash'
 import draggable from 'vuedraggable'
 
 import { auth } from './auth.js'
-import { api } from './ajax'
+import api from './ajax'
 import Node from './Node'
 
 export default {
   title: 'Slideshow builder',
   data () {
-    const emptySlide = { title: '', cols: 1, component: 'slide', children: [] }
+    const emptySlide = { component: 'slide', payload: {}, children: [] }
     return {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       emptySlide: emptySlide,
-      saveStack: [],
-      trash: []
+      saveStack: []
     }
   },
   computed: {
@@ -45,7 +41,6 @@ export default {
     save (payload) {
       if (!isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(cloneDeep(this.emptySlide))
-        this.$nextTick(() => (Reveal.sync()))
       }
       if (this.apiUrl && this.authState.loggedIn) {
         this.saveStack.push(payload)
@@ -72,7 +67,6 @@ export default {
       const data = await api(this.apiUrl)
       if (data.length) {
         this.children = data
-        this.$nextTick(() => (Reveal.sync()))
       }
     }
   },
@@ -88,15 +82,5 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
-}
-.trash {
-  bottom: 0;
-  height: 150px;
-  position: absolute;
-  text-align: center;
-  width: 100%;
-}
-.trash div {
-  height: 100%;
 }
 </style>

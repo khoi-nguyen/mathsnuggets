@@ -1,4 +1,4 @@
-export async function api (url, method = 'GET', payload = false, cache = false) {
+export default async function api (url, method = 'GET', payload = false, cache = false) {
   const obj = { method: method }
   if (method === 'POST') {
     obj.headers = { 'Content-Type': 'application/json' }

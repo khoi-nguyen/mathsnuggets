@@ -1,108 +1,142 @@
 <template lang="pug">
-component(
-  :cols="cols"
-  :is="component"
-  :payload="payload || {}"
-  :title="title"
-  :type="type"
-  @add:child="addChild"
-  @save="$emit('save', $event)"
-  @update:payload="updateProp('payload', $event)"
-  @update:title="updateProp('title', $event)"
-  @update:cols="updateProp('cols', $event)"
-)
-  draggable.drop(
-    :emptyInsertThreshold="100"
-    :list="children || []"
-    @change="dragAndDrop"
-    ghost-class="has-background-white-ter"
-    group="widgets"
-    handle=".handle"
+.node
+  b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'" hoverable)
+    span(slot="trigger")
+      b-icon.handle(pack="fas" icon="ellipsis-v")
+    b-dropdown-item(v-if="component === 'list'")
+      b-checkbox(:value="payload.numbered" @input="updatePayload($event, 'numbered')") Numbered list
+    b-dropdown-item(v-if="component === 'environment'" custom)
+      b-select(placeholder="Style" :value="payload.style" @input="updatePayload($event, 'style')")
+        option(value="primary") Dark blue
+        option(value="link") Blue
+        option(value="info") Light blue
+        option(value="success") Green
+        option(value="warning") Yellow
+        option(value="danger") Red
+    b-dropdown-item(@click="$emit('delete')") Delete
+  component(
+    :is="component"
+    @save="$emit('save', $event)"
+    @update:payload="updatePayload($event)"
+    v-bind="attrs"
   )
-    component(:is="component === 'list' ? 'li' : 'div'" v-for="(child, index) in children").columns
-      .column.is-narrow.has-text-grey-lighter
-        b-dropdown
-          span(slot="trigger")
-            b-icon.handle(pack="fas" icon="ellipsis-v")
-          b-dropdown-item(@click="deleteChild(index)") Delete
-      .column
-        node(
-          :children="child.children || []"
-          :cols="child.cols"
-          :component="child.component"
-          :payload="child.payload || {}"
-          :position="`${position}.children.${index}`"
-          :title="child.title"
-          :type="child.type"
-          @save="$emit('save', $event)"
-          @update:children="updateChildren(index, 'children', $event)"
-          @update:payload="updateChildren(index, 'payload', $event)"
-          @update:title="updateChildren(index, 'title', $event)"
-          @update:cols="updateChildren(index, 'cols', $event)"
-        )
+    div(:style="`column-count: ${payload.cols || 1}`")
+      draggable(
+        :fallback-on-body="true"
+        :invert-swap="true"
+        :list="children"
+        @change="dragAndDrop"
+        ghost-class="has-background-white-ter"
+        group="widgets"
+        handle=".handle"
+      )
+        component(:is="childComponent" v-for="(child, index) in children")
+          node(
+            :position="`${position}.children.${index}`"
+            @delete="deleteChild(index)"
+            @save="$emit('save', $event)"
+            @update:payload="$set(child, 'payload', $event)"
+            v-bind="child"
+          )
+        .buttons.are-small(slot="footer")
+          b-button(@click="showToolbar = !showToolbar" type="is-text")
+            .toolbar-trigger
+              b-icon(pack="fas" icon="angle-double-right")
+          .buttons(v-if="showToolbar")
+            p.control
+              b-button
+                b-icon(pack="fas" icon="columns")
+            b-numberinput.numberinput(
+              :editable="false"
+              :value="payload.cols || 1"
+              @input="updatePayload($event, 'cols')"
+              controls-position="compact"
+              icon-pack="fas"
+              size="is-small"
+            )
+            b-button(@click="addChild('list')")
+              b-icon(pack="fas" icon="list")
+            b-button(@click="addChild('environment')")
+              b-icon(pack="fas" icon="cube")
+            widget-select(@select:widget="addChild('widget', $event)" size="is-small")
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-import { cloneDeep, forEach, isEmpty } from 'lodash'
+import { clone } from 'lodash'
 
 import Environment from './Environment'
 import List from './List'
 import Slide from './Slide'
 import Widget from './Widget'
+import WidgetSelect from './WidgetSelect'
 
 export default {
   name: 'node',
   props: {
     children: { type: Array, default: () => [] },
-    cols: { type: Number, default: 1 },
     component: { type: String, default: 'slide' },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
-    title: { type: String, default: '' },
     type: { type: String, default: '' }
   },
+  data () {
+    return {
+      showToolbar: this.component === 'slide'
+    }
+  },
+  computed: {
+    attrs () {
+      const attrs = clone(this.$props)
+      if (!attrs.children) {
+        attrs.children = []
+      }
+      if (!attrs.payload) {
+        attrs.payload = {}
+      }
+      return attrs
+    },
+    childComponent () {
+      return this.component === 'list' ? 'li' : 'div'
+    }
+  },
   methods: {
-    addChild (event) {
-      this.$emit('update:children', this.children.concat([event]))
-      this.$emit('save', { action: 'update', [`${this.position}.children.${this.children.length}`]: event })
+    addChild (component, type) {
+      const child = {
+        children: component !== 'widget' ? [] : undefined,
+        component: component,
+        payload: {},
+        type: component === 'widget' ? type : undefined
+      }
+      this.$emit('save', {
+        action: 'update',
+        [`${this.position}.children.${this.children.length}`]: child
+      })
+      this.children.push(child)
     },
     deleteChild (index) {
-      this.children.splice(index, 1)
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
+      this.children.splice(index, 1)
     },
     dragAndDrop (event) {
-      const indices = event[Object.keys(event)[0]]
+      const data = event[Object.keys(event)[0]]
       if ('removed' in event) {
-        this.$emit('save', { action: 'delete', [`${this.position}.children.${indices.oldIndex}`]: '' })
+        this.$emit('save', { action: 'delete', [`${this.position}.children.${data.oldIndex}`]: '' })
       } else if ('added' in event) {
-        const pos = `${this.position}.children.${indices.newIndex}`
-        this.$emit('save', { action: 'insert', [pos]: this.clean(this.children[indices.newIndex]) })
+        const pos = `${this.position}.children.${data.newIndex}`
+        this.$emit('save', { action: 'insert', [pos]: data.element })
       } else if ('moved' in event) {
-        this.$emit('save', { action: 'swap', [`${this.position}.children.${indices.oldIndex}`]: `${this.position}.children.${indices.newIndex}` })
+        this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
       }
     },
-    clean (node) {
-      const obj = {}
-      forEach(['children', 'cols', 'component', 'payload', 'title', 'type'], function (key) {
-        if (!isEmpty(node[key])) {
-          obj[key] = node[key]
-        }
-      })
-      return obj
-    },
-    updateChildren (index, key, value) {
-      let children = cloneDeep(this.children)
-      if (index < children.length) {
-        children[index][key] = value
-      } else {
-        children = children.concat({ [key]: value })
+    updatePayload (value, key = false) {
+      let payload = value
+      if (key !== false) {
+        payload = clone(this.payload)
+        payload[key] = value
       }
-      this.$emit('update:children', children)
-    },
-    updateProp (prop, value) {
-      this.$emit(`update:${prop}`, value)
-      this.$emit('save', { action: 'update', [`${this.position}.${prop}`]: value })
+      this.$emit('update:payload', payload)
+      this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
     }
   },
   components: {
@@ -110,16 +144,30 @@ export default {
     List,
     Slide,
     Widget,
+    WidgetSelect,
     draggable
   }
 }
 </script>
 
-<style>
-.drop {
-  min-height: 20px;
+<style scoped>
+.node > .float {
+  display: none;
+}
+.node:hover > .float {
+  display: block;
+  float: left;
 }
 .message {
   break-inside: avoid-column;
+}
+.numberinput {
+  width: 90px;
+}
+.hidden {
+  visibility: hidden;
+}
+.toolbar-trigger {
+  color: #cccccc;
 }
 </style>

@@ -4,6 +4,7 @@ module.exports = {
     es6: true
   },
   extends: [
+    'plugin:jest/recommended',
     'plugin:vue/essential',
     'standard'
   ],
@@ -16,6 +17,7 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
+    'jest',
     'vue'
   ],
   rules: {
