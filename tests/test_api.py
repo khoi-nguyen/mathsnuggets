@@ -225,7 +225,7 @@ def test_tests(client):
     assert isinstance(data, dict)
 
 
-def test_delete_test_user(client):
+def test_delete_test_user(client, mock_mongo):
     count = db.collections.users.count_documents({})
     response = post(
         client,
