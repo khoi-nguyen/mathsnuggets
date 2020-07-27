@@ -226,16 +226,19 @@ def test_tests(client):
 
 
 def test_delete_test_user(client):
-
-    response, data = post(
+    count = db.collections.users.count_documents({})
+    response = post(
         client,
         "/api/auth/register",
         {"email": "test@test.com", "password": "12345678"},
+        get_data=False
     )
     assert response.status_code == 200
+    assert db.collections.users.count_documents({}) == count + 1
 
     response = delete(client, "/api/tests/user")
     assert response.status_code == 204
+    assert db.collections.users.count_documents({}) == count
 
 
 def test_static_routes(client):
