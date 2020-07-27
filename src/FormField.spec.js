@@ -38,11 +38,15 @@ describe('FormField', () => {
 
     expect(wrapper.find('textarea')).toBeTruthy()
     expect(wrapper.html()).toContain('Field')
-
+    wrapper.find('textarea').setValue('1/x')
+    wrapper.find('textarea').trigger('blur')
+    expect(wrapper.emitted()['update:value']).toEqual([['1/x']])
     wrapper.vm.value = '1/x'
     await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(1)
     expect(wrapper.contains('textarea')).toBeFalsy()
     expect(wrapper.html()).toContain('katex')
-    expect(fetch).toHaveBeenCalledTimes(1)
+    await wrapper.find('.field').trigger('click')
+    expect(wrapper.contains('textarea')).toBeTruthy()
   })
 })
