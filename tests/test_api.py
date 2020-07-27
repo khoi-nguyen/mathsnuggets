@@ -226,18 +226,25 @@ def test_tests(client):
 
 
 def test_delete_test_user(client, mock_mongo):
+    response = post(
+        client,
+        "/api/auth/login",
+        {"email": "test@test.com", "password": "testtest"},
+        get_data=False,
+    )
+    assert response.status_code == 200
     count = db.collections.users.count_documents({})
+    response = delete(client, "/api/tests/user")
+    assert response.status_code == 204
+    assert db.collections.users.count_documents({}) == count - 1
+
     response = post(
         client,
         "/api/auth/register",
-        {"email": "test@test.com", "password": "12345678"},
-        get_data=False
+        {"email": "test@test.com", "password": "testtest"},
+        get_data=False,
     )
     assert response.status_code == 200
-    assert db.collections.users.count_documents({}) == count + 1
-
-    response = delete(client, "/api/tests/user")
-    assert response.status_code == 204
     assert db.collections.users.count_documents({}) == count
 
 
