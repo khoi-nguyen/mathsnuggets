@@ -53,6 +53,32 @@ describe('FormField', () => {
     expect(wrapper.find('textarea').exists()).toBe(true)
   })
 
+  it('markdown fields', async () => {
+    fetch.mockResponses(JSON.stringify({
+      html: '<strong>hello</strong>',
+      valid: true,
+      value: '**hello**'
+    }))
+    wrapper = shallowMount(FormField, {
+      localVue,
+      propsData: {
+        label: 'Field',
+        type: 'Markdown'
+      }
+    })
+    expect(wrapper.vm.cols).toBe(5)
+    expect(wrapper.find('textarea').exists()).toBe(true)
+    wrapper.find('textarea').setValue('Bonjour\nHello')
+    expect(wrapper.vm.cols).toBe(7)
+    expect(wrapper.vm.rows).toBe(2)
+    wrapper.find('textarea').trigger('blur')
+    expect(wrapper.emitted()['update:value']).toEqual([['Bonjour\nHello']])
+    wrapper.setProps({ value: '**hello**' })
+    await flushPromises()
+    expect(wrapper.find('textarea').exists()).toBe(false)
+    expect(wrapper.text()).toEqual('hello')
+  })
+
   it('select field', async () => {
     fetch.mockResponses(JSON.stringify({
       valid: true,
