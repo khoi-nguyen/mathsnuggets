@@ -36,17 +36,41 @@ describe('FormField', () => {
       }
     })
 
-    expect(wrapper.find('textarea')).toBeTruthy()
+    expect(wrapper.find('textarea').exists()).toBe(true)
     expect(wrapper.html()).toContain('Field')
     wrapper.find('textarea').setValue('1/x')
     wrapper.find('textarea').trigger('blur')
     expect(wrapper.emitted()['update:value']).toEqual([['1/x']])
-    wrapper.vm.value = '1/x'
+    wrapper.setProps({ value: '1/x' })
     await flushPromises()
     expect(fetch).toHaveBeenCalledTimes(1)
-    expect(wrapper.contains('textarea')).toBeFalsy()
+    expect(wrapper.find('textarea').exists()).toBe(false)
     expect(wrapper.html()).toContain('katex')
     await wrapper.find('.field').trigger('click')
-    expect(wrapper.contains('textarea')).toBeTruthy()
+    expect(wrapper.find('textarea').exists()).toBe(true)
+  })
+
+  it('computed field', async () => {
+    fetch.mockResponses(JSON.stringify({
+      latex: '\\frac {1}{x}',
+      valid: true,
+      value: '1/x'
+    }))
+    wrapper = shallowMount(FormField, {
+      localVue,
+      propsData: {
+        computed: true,
+        label: 'Field',
+        type: 'Expression'
+      }
+    })
+    expect(wrapper.find('b-button').exists()).toBe(false)
+    wrapper.setProps({ value: 'x' })
+    await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(wrapper.find('b-button').exists()).toBe(true)
+    await wrapper.find('b-button').trigger('click')
+    expect(wrapper.find('b-button').exists()).toBe(false)
+    expect(wrapper.contains('.katex')).toBeTruthy()
   })
 })
