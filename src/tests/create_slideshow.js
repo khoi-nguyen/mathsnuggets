@@ -114,7 +114,7 @@ mocha.describe('mathsnuggets', function () {
     }
   })
 
-  mocha.it('test the login', async function () {
+  mocha.xit('test the login', async function () {
     await login(page)
     await clickElement(page, 'button.logout')
   })
