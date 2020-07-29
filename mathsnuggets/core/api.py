@@ -1,3 +1,5 @@
+import os
+
 import flask
 import flask_login
 
@@ -143,6 +145,14 @@ def logout():
 def tests():
     test_data = {v["name"]: v["test"] for k, v in widgets.info.items() if v.get("test")}
     return flask.jsonify(test_data)
+
+
+@api.route("/tests/user", methods=["DELETE"])
+def delete_test_user():
+    if "MONGO_URL" not in os.environ:
+        user = models.User(email="test@test.com")
+        user.delete()
+        return "", 204
 
 
 class InvalidUsage(Exception):

@@ -11,7 +11,7 @@ b-navbar.container
   template(slot="end")
     b-navbar-item(tag="div").buttons
       b-button(tag="router-link" to="/login" type="is-link" v-if="!authState.loggedIn") Login
-      b-button(@click="logout" v-else="authState.loggedIn") Logout
+      b-button(@click="logout" v-else="authState.loggedIn" type="logout") Logout
 </template>
 
 <script>

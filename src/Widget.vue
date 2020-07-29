@@ -1,5 +1,5 @@
 <template lang="pug">
-.is-size-3.widget
+.is-size-3.widget.avoid-column
   b-dropdown.has-text-grey-lighter(v-if="generator" hoverable)
     span(slot="trigger")
       b-icon(pack="fas" icon="cogs")

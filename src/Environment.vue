@@ -1,5 +1,5 @@
 <template lang="pug">
-.container
+.container.avoid-column
   article.message.is-medium(:class="`is-${payload.style || 'primary'}`")
     h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
     .message-body

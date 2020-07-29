@@ -31,7 +31,7 @@
         handle=".handle"
       )
         component(:is="childComponent" v-for="(child, index) in children")
-          node(
+          node.mb-2(
             :position="`${position}.children.${index}`"
             @delete="deleteChild(index)"
             @save="$emit('save', $event)"
@@ -158,8 +158,9 @@ export default {
   display: block;
   float: left;
 }
-.message {
-  break-inside: avoid-column;
+.avoid-column {
+  break-inside: avoid-column !important;
+  page-break-inside: avoid;
 }
 .numberinput {
   width: 90px;
