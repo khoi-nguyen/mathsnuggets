@@ -21,7 +21,7 @@
     :value="fieldValue(field)"
     @update:value="updatePayload(field.name, $event)"
   )
-  error-message(v-if="error") {{ error }}
+  error-message(:error="error" :traceback="traceback")
 </template>
 
 <script>
@@ -38,7 +38,8 @@ export default {
   },
   data () {
     return {
-      error: ''
+      error: '',
+      traceback: ''
     }
   },
   computed: {
@@ -52,6 +53,7 @@ export default {
         const computed = {}
         const data = await api(`widgets/${this.type}`, 'GET', this.payload)
         this.error = data.error ? data.message : ''
+        this.traceback = data.error ? data.traceback : ''
         forEach(data, (field, fieldName) => {
           if (field.computed) {
             computed[fieldName] = field.html || field.value
@@ -87,6 +89,7 @@ export default {
     async generate () {
       const data = await api(`widgets/${this.type}`, 'POST', this.payload)
       this.error = data.error ? data.message : ''
+      this.traceback = data.error ? data.traceback : ''
       const payload = clone(this.payload)
       forEach(data, (field, fieldName) => {
         if (!field.constraint && !field.computed && !field.random) {

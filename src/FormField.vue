@@ -27,7 +27,7 @@ span(:name="name")
       @focus="enterEditMode"
       @click="enterEditMode"
     )
-    error-message(v-if="error") {{ error }}
+    error-message(:error="error" :traceback="traceback")
   span(v-html="after")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
@@ -70,6 +70,7 @@ export default {
       const data = await api(`fields/${this.type}`, 'GET', payload, true)
       if (data.error) {
         this.error = data.message
+        this.traceback = data.traceback
         this.editing = true
         return ''
       }
@@ -105,7 +106,8 @@ export default {
       error: '',
       editing: !this.value && !this.default,
       inputValue: this.value,
-      showComputed: false
+      showComputed: false,
+      traceback: ''
     }
   },
   methods: {
