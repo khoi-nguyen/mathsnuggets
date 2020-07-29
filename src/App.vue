@@ -36,8 +36,6 @@ $body-font-size: 1.2em;
 $body-weight: 300;
 $family-sans-serif: "Fira Sans", sans-serif;
 $primary: #172838;
-$link: #2c2a48;
-$info: #48466b;
 $success: #3d6658;
 $warning: #baa380;
 $danger: #aa7582;
