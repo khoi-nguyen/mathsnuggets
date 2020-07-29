@@ -10,6 +10,10 @@ module.exports = {
     '.*\\.(js)$': 'babel-jest',
     '.*\\.(vue)$': 'vue-jest'
   },
+  setupFiles: [
+    'mock-local-storage',
+    'regenerator-runtime/runtime'
+  ],
   coverageDirectory: './coverage/',
   collectCoverage: true
 }

@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime'
 import AsyncComputed from 'vue-async-computed'
 import Buefy from 'buefy'
 import FormField from './FormField.vue'
