@@ -23,7 +23,7 @@ class FractionOperations(form.Form):
             "÷": lambda a, b: a / b,
         }
         if self.operation:
-            return sympy.nsimplify(
+            return sympy.simplify(
                 operations[self.operation](self.fraction_1, self.fraction_2)
             )
 
@@ -46,3 +46,7 @@ class FractionOperations(form.Form):
         self.b -= {0}
         self.c -= {0}
         self.d -= {0}
+
+def test_fractions():
+    ex = FractionOperations(fraction_1="1/x", operation="+", fraction_2="1/(x + 1)")
+    assert not isinstance(ex.solution, sympy.Add)
