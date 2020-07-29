@@ -27,7 +27,7 @@ span(:name="name")
       @focus="enterEditMode"
       @click="enterEditMode"
     )
-    error-message(:error="error" :traceback="traceback")
+    error-message(:error="error" :traceback="traceback" v-if="error")
   span(v-html="after")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}

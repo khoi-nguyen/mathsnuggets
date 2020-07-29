@@ -21,7 +21,7 @@
     :value="fieldValue(field)"
     @update:value="updatePayload(field.name, $event)"
   )
-  error-message(:error="error" :traceback="traceback")
+  error-message(:error="error" :traceback="traceback" v-if="error")
 </template>
 
 <script>
