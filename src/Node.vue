@@ -2,7 +2,7 @@
 .node
   b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'" hoverable)
     span(slot="trigger")
-      b-icon.handle(pack="fas" icon="ellipsis-v")
+      b-icon(pack="fas" icon="ellipsis-v")
     b-dropdown-item(v-if="component === 'list'")
       b-checkbox(:value="payload.numbered" @input="updatePayload('numbered', $event)") Numbered list
     b-dropdown-item(v-if="component === 'environment'" custom)
@@ -22,13 +22,13 @@
   )
     div(:style="`column-count: ${payload.cols || 1}`")
       draggable(
+        :delay="200"
         :fallback-on-body="true"
         :invert-swap="true"
         :list="children"
         @change="dragAndDrop"
         ghost-class="has-background-white-ter"
         group="widgets"
-        handle=".handle"
       )
         component(:is="childComponent" v-for="(child, index) in children")
           node.mb-2(
