@@ -119,7 +119,7 @@ mocha.describe('mathsnuggets', function () {
     await clickElement(page, 'button.logout')
   })
 
-  mocha.it('create a slideshow', async function () {
+  mocha.xit('create a slideshow', async function () {
     await login(page)
     await clickElement(page, 'a[href="/resources"]')
     await clickElement(page, '.panel-block button.is-primary')
