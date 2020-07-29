@@ -7,18 +7,15 @@
 </template>
 
 <script>
-import { clone } from 'lodash'
-
 export default {
   props: { payload: { type: Object, default: () => {} } },
   methods: {
     blur (event) {
-      this.updatePayload('title', event.target.innerText)
+      this.updateTitle(event.target.innerText)
     },
-    updatePayload (fieldName, value) {
-      const payload = clone(this.payload)
-      payload[fieldName] = value
-      this.$emit('update:payload', payload)
+    updateTitle (value) {
+      this.$set(this.payload, 'title', value)
+      this.$emit('update:payload')
     }
   }
 }

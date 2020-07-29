@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     blur (ev) {
-      this.$emit('update:value', ev.target.value)
+      this.$emit('input', ev.target.value)
       this.editing = false
     },
     enterEditMode () {

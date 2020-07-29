@@ -1,12 +1,10 @@
 <template lang="pug">
 div
-  slide-title(:title="payload.title" @update:title="updatePayload('title', $event)")
+  slide-title(:title="payload.title" @input="updateTitle")
   slot
 </template>
 
 <script>
-import { clone } from 'lodash'
-
 import SlideTitle from './SlideTitle'
 
 export default {
@@ -17,10 +15,9 @@ export default {
     payload: { type: Object, default: () => {} }
   },
   methods: {
-    updatePayload (fieldName, value) {
-      const payload = clone(this.payload)
-      payload[fieldName] = value
-      this.$emit('update:payload', payload)
+    updateTitle (value) {
+      this.$set(this.payload, 'title', value)
+      this.$emit('update:payload')
     }
   }
 }

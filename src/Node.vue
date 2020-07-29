@@ -4,9 +4,9 @@
     span(slot="trigger")
       b-icon.handle(pack="fas" icon="ellipsis-v")
     b-dropdown-item(v-if="component === 'list'")
-      b-checkbox(:value="payload.numbered" @input="updatePayload($event, 'numbered')") Numbered list
+      b-checkbox(:value="payload.numbered" @input="updatePayload('numbered', $event)") Numbered list
     b-dropdown-item(v-if="component === 'environment'" custom)
-      b-select(placeholder="Style" :value="payload.style" @input="updatePayload($event, 'style')")
+      b-select(placeholder="Style" :value="payload.style" @input="updatePayload('style', $event)")
         option(value="primary") Dark blue
         option(value="link") Blue
         option(value="info") Light blue
@@ -17,7 +17,7 @@
   component(
     :is="component"
     @save="$emit('save', $event)"
-    @update:payload="updatePayload($event)"
+    @update:payload="updatePayload"
     v-bind="attrs"
   )
     div(:style="`column-count: ${payload.cols || 1}`")
@@ -35,7 +35,6 @@
             :position="`${position}.children.${index}`"
             @delete="deleteChild(index)"
             @save="$emit('save', $event)"
-            @update:payload="$set(child, 'payload', $event)"
             v-bind="child"
           )
         .buttons.are-small(slot="footer")
@@ -49,7 +48,7 @@
             b-numberinput.numberinput(
               :editable="false"
               :value="payload.cols || 1"
-              @input="updatePayload($event, 'cols')"
+              @input="updatePayload('cols', $event)"
               controls-position="compact"
               icon-pack="fas"
               size="is-small"
@@ -129,14 +128,11 @@ export default {
         this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
       }
     },
-    updatePayload (value, key = false) {
-      let payload = value
+    updatePayload (key = false, value = false) {
       if (key !== false) {
-        payload = clone(this.payload)
-        payload[key] = value
+        this.$set(this.payload, key, value)
       }
-      this.$emit('update:payload', payload)
-      this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
+      this.$emit('save', { action: 'update', [`${this.position}.payload`]: this.payload })
     }
   },
   components: {

@@ -19,7 +19,7 @@
     v-for="(field, id) in fields.filter(f => !f.constraint && !f.random)"
     v-bind="field"
     :value="fieldValue(field)"
-    @update:value="updatePayload(field.name, $event)"
+    @input="updatePayload(field.name, $event)"
   )
   error-message(:error="error" :traceback="traceback" v-if="error")
 </template>
@@ -96,20 +96,19 @@ export default {
           payload[fieldName] = field.value
         }
       })
-      this.$emit('update:payload', payload)
+      this.$emit('update:payload')
     },
     updatePayload (fieldName, value) {
       const field = this.fields.filter(f => f.name === fieldName)
       if (!field.length || field[0].protected || field[0].computed) {
         return false
       }
-      const payload = clone(this.payload)
       if (value === undefined || value === '') {
-        delete payload[fieldName]
+        delete this.payload[fieldName]
       } else {
-        payload[fieldName] = value
+        this.$set(this.payload, fieldName, value)
+        this.$emit('update:payload')
       }
-      this.$emit('update:payload', payload)
     }
   },
   components: {

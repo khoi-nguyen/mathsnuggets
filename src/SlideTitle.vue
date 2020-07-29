@@ -3,7 +3,7 @@ div.box
   h2.title
     .columns.is-vcentered
       .column.slide-title(
-        @blur="$emit('update:title', $event.target.innerText)"
+        @blur="$emit('input', $event.target.innerText)"
         @keydown.enter.prevent="$event.target.blur()"
         contenteditable
         v-text="title"

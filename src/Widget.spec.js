@@ -49,11 +49,11 @@ describe('FormField', () => {
       }
     }))
     const field = wrapper.find('form-field-stub[name="equation"]')
-    await field.vm.$emit('update:value', 'x^2')
-    expect(wrapper.emitted()['update:payload'][0]).toEqual([{ equation: 'x^2' }])
-    wrapper.vm.payload = { equation: 'x^2' }
+    await field.vm.$emit('input', 'x^2')
+    expect(wrapper.vm.payload).toEqual({ equation: 'x^2' })
+    wrapper.setProps({ payload: { equation: 'x^2' } })
     await flushPromises()
-    expect(wrapper.emitted()['update:payload'][1]).toEqual([{ equation: 'x^3' }])
+    expect(wrapper.vm.payload).toEqual({ equation: 'x^3' })
     expect(wrapper.emitted()['update:payload'].length).toBe(2)
   })
 })
