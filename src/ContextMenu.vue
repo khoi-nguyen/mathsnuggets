@@ -15,7 +15,7 @@ div.dropdown-content
     span Delete
   li.dropdown-item(v-if="component !== 'widget'")
     b-field(label="Columns")
-      b-slider(:min="1" :max="4" value="1" @change="$set(payload, 'cols', $event)")
+      b-slider(:min="1" :max="4" :value="payload.cols || 1" @change="$set(payload, 'cols', $event)")
   li.dropdown-item(@click="addChild('list')")
     b-icon(pack="fas" icon="list")
     span Add a list
