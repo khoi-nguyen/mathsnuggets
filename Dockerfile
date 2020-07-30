@@ -49,7 +49,8 @@ RUN apt-get update \
  && wget -O - https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz| \
     tar -xz -C /usr/local/ --strip-components=1 \
  && rm -rf /usr/local/share/man/* \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && npm i npm@latest -g
 
 WORKDIR /mathsnuggets
 
