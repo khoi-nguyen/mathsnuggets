@@ -98,6 +98,7 @@ export default {
       } else {
         this.$emit('add-child', child)
       }
+      this.refs.$menu.close()
     },
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
