@@ -1,11 +1,7 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }")
   div(@contextmenu.prevent.stop="$refs.menu.open" :class="{ slide: component === 'slide' }")
-    component(
-      :is="component"
-      @save="$emit('save', $event)"
-      v-bind="attrs"
-    )
+    component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
       div(:style="`column-count: ${payload.cols || 1}`")
         draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions")
           component(:is="childComponent" v-for="(child, index) in children")
