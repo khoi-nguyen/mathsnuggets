@@ -1,7 +1,7 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
   component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
-    draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions")
+    draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
           :position="`${position}.children.${index}`"
@@ -88,21 +88,12 @@ export default {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
       this.children.splice(index, 1)
     },
-    dragAndDrop (event) {
-      const data = event[Object.keys(event)[0]]
-      if ('removed' in event) {
-        this.$emit('save', { action: 'delete', [`${this.position}.children.${data.oldIndex}`]: '' })
-      } else if ('added' in event) {
-        const pos = `${this.position}.children.${data.newIndex}`
-        this.$emit('save', { action: 'insert', [pos]: data.element })
-      } else if ('moved' in event) {
-        this.$emit('save', { action: 'swap', [`${this.position}.children.${data.oldIndex}`]: `${this.position}.children.${data.newIndex}` })
-      }
-    },
-    updatePayload (key = false, value = false) {
-      if (key !== false) {
-        this.$set(this.payload, key, value)
-      }
+    updateChildren (event) {
+      this.$emit('save', {
+        action: 'update',
+        [`${this.position}.children`]: event
+      })
+      this.$set(this, 'children', event)
     }
   },
   components: {
