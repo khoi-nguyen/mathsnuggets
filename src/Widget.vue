@@ -1,5 +1,5 @@
 <template lang="pug">
-.is-size-3.widget.avoid-column
+.is-size-3.avoid-column
   b-dropdown.has-text-grey-lighter(v-if="generator" hoverable)
     span(slot="trigger")
       b-icon(pack="fas" icon="cogs")
@@ -117,9 +117,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.widget {
-  break-inside: avoid-column;
-}
-</style>
