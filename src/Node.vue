@@ -7,15 +7,7 @@ div(:class="{ slide: component === 'slide' }")
       v-bind="attrs"
     )
       div(:style="`column-count: ${payload.cols || 1}`")
-        draggable(
-          :delay="200"
-          :fallback-on-body="true"
-          :invert-swap="true"
-          :list="children"
-          @change="dragAndDrop"
-          ghost-class="has-background-white-ter"
-          group="widgets"
-        )
+        draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions")
           component(:is="childComponent" v-for="(child, index) in children")
             node.mb-2(
               :position="`${position}.children.${index}`"
@@ -55,6 +47,13 @@ export default {
   },
   data () {
     return {
+      draggableOptions: {
+        delay: 200,
+        fallBackOnBody: true,
+        ghostClass: 'has-background-white-ter',
+        group: 'widgets',
+        invertSwap: true
+      },
       showToolbar: this.component === 'slide'
     }
   },
