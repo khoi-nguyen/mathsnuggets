@@ -1,24 +1,21 @@
 <template lang="pug">
-div(:class="{ slide: component === 'slide' }")
-  div(@contextmenu.prevent.stop="$refs.menu.open" :class="{ slide: component === 'slide' }")
-    component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
-      div(:style="`column-count: ${payload.cols || 1}`")
-        draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions")
-          component(:is="childComponent" v-for="(child, index) in children")
-            node.mb-2(
-              :position="`${position}.children.${index}`"
-              @add-child="children.splice(index + 1, 0, $event)"
-              @delete="deleteChild(index)"
-              @save="$emit('save', $event)"
-              v-bind="child"
-            )
-  vue-context(ref="menu" :close-on-click="false")
-    context-menu(
-      :component="component"
-      @add-child="addChild"
-      @delete="$emit('delete')"
-      v-bind="attrs"
-    )
+div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
+  component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
+    draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions" :style="`column-count: ${payload.cols || 1}`")
+      component(:is="childComponent" v-for="(child, index) in children")
+        node.mb-2(
+          :position="`${position}.children.${index}`"
+          @add-child="children.splice(index + 1, 0, $event)"
+          @delete="deleteChild(index)"
+          @save="$emit('save', $event)"
+          v-bind="child"
+        )
+    vue-context(ref="menu" :close-on-click="false")
+      context-menu(
+        @add-child="addChild"
+        @delete="$emit('delete')"
+        v-bind="attrs"
+      )
 </template>
 
 <script>
@@ -72,7 +69,7 @@ export default {
       return attrs
     },
     childComponent () {
-      return this.component === 'list' ? 'li' : 'div'
+      return this.component === 'list' ? 'li' : 'template'
     }
   },
   methods: {
