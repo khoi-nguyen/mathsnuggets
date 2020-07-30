@@ -14,6 +14,7 @@ span(:name="name")
       :value="value"
       @dblclick="$event.target.select()"
       @focus="editing = true"
+      @keypress="keyPress"
       @keydown.enter.exact.stop.prevent="blur"
       @input="inputValue = $event.target.value"
       @change="blur"
@@ -118,6 +119,11 @@ export default {
     enterEditMode () {
       this.editing = true
       this.$nextTick(() => { this.$refs.field.select() })
+    },
+    keyPress (event) {
+      if (event.shiftKey && event.charCode === 63) {
+        event.stopPropagation()
+      }
     }
   }
 }
