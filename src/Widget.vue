@@ -56,9 +56,9 @@ export default {
         this.traceback = data.error ? data.traceback : ''
         forEach(data, (field, fieldName) => {
           if (field.computed) {
-            computed[fieldName] = field.html || field.value
+            computed[fieldName] = field.value || field.html
           } else if (!field.constraint && fieldName in (this.payload || {}) && this.payload[fieldName] !== (field.html || field.value)) {
-            this.updatePayload(fieldName, field.html || field.value)
+            this.updatePayload(fieldName, field.value || field.html)
           }
         })
         return computed
