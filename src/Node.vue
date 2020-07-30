@@ -5,7 +5,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
           :position="`${position}.children.${index}`"
-          @add-child="children.splice(index + 1, 0, $event)"
+          @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
           @save="$emit('save', $event)"
           v-bind="child"
@@ -83,6 +83,10 @@ export default {
         this.$emit('add-child', child)
       }
       this.$refs.menu.close()
+    },
+    insertChildAfter (position, child) {
+      this.$emit('save', { action: 'insert', [`${this.position}.children.${position + 1}`]: child })
+      this.children.splice(position + 1, 0, child)
     },
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
