@@ -20,7 +20,6 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
 
 <script>
 import draggable from 'vuedraggable'
-import { clone } from 'lodash'
 import { VueContext } from 'vue-context'
 
 import ContextMenu from './ContextMenu'
@@ -59,14 +58,13 @@ export default {
   },
   computed: {
     attrs () {
-      const attrs = clone(this.$props)
-      if (!attrs.children) {
-        attrs.children = []
+      return {
+        children: this.children || [],
+        component: this.component,
+        payload: this.payload || {},
+        position: this.position,
+        type: this.type
       }
-      if (!attrs.payload) {
-        attrs.payload = {}
-      }
-      return attrs
     },
     childComponent () {
       return this.component === 'list' ? 'li' : 'template'
