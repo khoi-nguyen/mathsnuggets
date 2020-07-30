@@ -60,7 +60,7 @@ mocha.describe('mathsnuggets', function () {
   this.timeout(100000)
 
   mocha.before(async function () {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] })
+    browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] })
     page = await browser.newPage()
     fetch('http://localhost:5000/api/auth/register', {
       method: 'POST',
@@ -104,8 +104,12 @@ mocha.describe('mathsnuggets', function () {
     await page.goto('http://localhost:5000/slideshow_builder')
     const data = await fetch('http://localhost:5000/api/tests', { method: 'GET' }).then(r => r.json())
     for (const widget in data) {
+      const slideTitle = await page.$('.present .box .title')
+      const date = await page.$('.present .box .date')
+      await slideTitle.click({ button: 'right' })
       const fields = data[widget]
       await selectWidget(page, widget)
+      await date.click({ button: 'left' })
       for (const fieldName in fields) {
         const value = fields[fieldName]
         await fillInField(page, `span[name="${fieldName}"] textarea, span[name="${fieldName}"] select`, value)
