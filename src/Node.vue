@@ -1,7 +1,7 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
   component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
-    draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions" :style="`column-count: ${payload.cols || 1}`")
+    draggable(:list="children" @change="dragAndDrop" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
           :position="`${position}.children.${index}`"
@@ -10,12 +10,8 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
           @save="$emit('save', $event)"
           v-bind="child"
         )
-    vue-context(ref="menu" :close-on-click="false")
-      context-menu(
-        @add-child="addChild"
-        @delete="$emit('delete')"
-        v-bind="attrs"
-      )
+  vue-context(ref="menu" :close-on-click="false")
+    context-menu(@add-child="addChild" @delete="$emit('delete')" v-bind="attrs")
 </template>
 
 <script>
@@ -37,17 +33,6 @@ export default {
     position: { type: String, default: '' },
     type: { type: String, default: '' }
   },
-  data () {
-    return {
-      draggableOptions: {
-        delay: 200,
-        fallBackOnBody: true,
-        ghostClass: 'has-background-white-ter',
-        group: 'widgets',
-        invertSwap: true
-      }
-    }
-  },
   watch: {
     payload: {
       handler () {
@@ -57,6 +42,16 @@ export default {
     }
   },
   computed: {
+    draggableOptions () {
+      return {
+        delay: 200,
+        fallBackOnBody: true,
+        ghostClass: 'has-background-white-ter',
+        group: 'widgets',
+        invertSwap: true,
+        style: { columnCount: this.payload.cols || 1 }
+      }
+    },
     attrs () {
       return {
         children: this.children || [],
@@ -67,7 +62,7 @@ export default {
       }
     },
     childComponent () {
-      return this.component === 'list' ? 'li' : 'template'
+      return this.component === 'list' ? 'li' : 'div'
     }
   },
   methods: {

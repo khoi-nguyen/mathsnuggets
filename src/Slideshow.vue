@@ -3,9 +3,8 @@
   .slides
     section(v-for="(slide, index) in children")
       node(
-        :component="slide.component"
-        :children="slide.children"
-        :payload.sync="slide.payload"
+        component="slide"
+        v-bind="slide"
         :position="`children.${index}`"
         @save="save"
       )
@@ -23,7 +22,7 @@ import Node from './Node'
 export default {
   title: 'Slideshow builder',
   data () {
-    const emptySlide = { component: 'slide', payload: {}, children: [] }
+    const emptySlide = { payload: {}, children: [] }
     return {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
