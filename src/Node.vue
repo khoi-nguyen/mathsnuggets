@@ -97,7 +97,12 @@ export default {
         action: 'update',
         [`${this.position}.children`]: event
       })
-      this.$set(this, 'children', event)
+      for (let i = 0; i < event.length; i++) {
+        this.$set(this.children, i, event[i])
+      }
+      if (this.children.length > event.length) {
+        this.children.splice(event.length, this.children.length - event.length)
+      }
     }
   },
   components: {
