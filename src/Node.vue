@@ -120,7 +120,7 @@ export default {
 <style scoped>
 .avoid-column {
   break-inside: avoid-column !important;
-  page-break-inside: avoid;
+  page-break-inside: avoid !important;
 }
 .slide {
   height: 100%;
