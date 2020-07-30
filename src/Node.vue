@@ -49,8 +49,7 @@ export default {
         ghostClass: 'has-background-white-ter',
         group: 'widgets',
         invertSwap: true
-      },
-      showToolbar: this.component === 'slide'
+      }
     }
   },
   watch: {
