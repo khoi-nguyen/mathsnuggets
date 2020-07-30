@@ -1,6 +1,6 @@
 <template lang="pug">
 .slide
-  slide-title(:title="payload.title" @input="updateTitle")
+  slide-title(v-model="payload.title")
   slot
 </template>
 
@@ -13,12 +13,6 @@ export default {
   },
   props: {
     payload: { type: Object, default: () => {} }
-  },
-  methods: {
-    updateTitle (value) {
-      this.$set(this.payload, 'title', value)
-      this.$emit('update:payload')
-    }
   }
 }
 </script>

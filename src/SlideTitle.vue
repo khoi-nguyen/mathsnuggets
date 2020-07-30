@@ -6,7 +6,7 @@ div.box
         @blur="$emit('input', $event.target.innerText)"
         @keydown.enter.prevent="$event.target.blur()"
         contenteditable
-        v-text="title"
+        v-text="value"
       )
       .column.is-narrow.date
         div {{ today }}
@@ -19,7 +19,7 @@ var moment = require('moment')
 
 export default {
   props: {
-    title: String
+    value: String
   },
   data () {
     return {
