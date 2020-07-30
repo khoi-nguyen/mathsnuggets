@@ -47,6 +47,7 @@ $weight-bold: 500;
 @import "reveal.js/dist/reveal.css";
 @import "~bulma/bulma.sass";
 @import "~buefy/src/scss/buefy";
+@import '~vue-context/src/sass/vue-context';
 
 .title {
   font-weight: 400;

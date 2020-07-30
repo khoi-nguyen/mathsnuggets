@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+.slide
   slide-title(:title="payload.title" @input="updateTitle")
   slot
 </template>

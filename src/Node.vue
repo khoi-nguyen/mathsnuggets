@@ -1,74 +1,48 @@
 <template lang="pug">
-.node
-  b-dropdown.float.has-text-grey-lighter(v-if="component !== 'slide'" hoverable)
-    span(slot="trigger")
-      b-icon(pack="fas" icon="ellipsis-v")
-    b-dropdown-item(v-if="component === 'list'")
-      b-checkbox(:value="payload.numbered" @input="updatePayload('numbered', $event)") Numbered list
-    b-dropdown-item(v-if="component === 'environment'" custom)
-      b-select(placeholder="Style" :value="payload.style" @input="updatePayload('style', $event)")
-        option(value="primary") Dark blue
-        option(value="link") Blue
-        option(value="info") Light blue
-        option(value="success") Green
-        option(value="warning") Yellow
-        option(value="danger") Red
-    b-dropdown-item(@click="$emit('delete')") Delete
-  component(
-    :is="component"
-    @save="$emit('save', $event)"
-    @update:payload="updatePayload"
-    v-bind="attrs"
-  )
-    div(:style="`column-count: ${payload.cols || 1}`")
-      draggable(
-        :delay="200"
-        :fallback-on-body="true"
-        :invert-swap="true"
-        :list="children"
-        @change="dragAndDrop"
-        ghost-class="has-background-white-ter"
-        group="widgets"
-      )
-        component(:is="childComponent" v-for="(child, index) in children")
-          node.mb-2(
-            :position="`${position}.children.${index}`"
-            @delete="deleteChild(index)"
-            @save="$emit('save', $event)"
-            v-bind="child"
-          )
-        .buttons.are-small(slot="footer")
-          b-button(@click="showToolbar = !showToolbar" type="is-text")
-            .toolbar-trigger
-              b-icon(pack="fas" icon="angle-double-right")
-          .buttons(v-if="showToolbar")
-            p.control
-              b-button
-                b-icon(pack="fas" icon="columns")
-            b-numberinput.numberinput(
-              :editable="false"
-              :value="payload.cols || 1"
-              @input="updatePayload('cols', $event)"
-              controls-position="compact"
-              icon-pack="fas"
-              size="is-small"
+div(:class="{ slide: component === 'slide' }")
+  div(@contextmenu.prevent.stop="$refs.menu.open" :class="{ slide: component === 'slide' }")
+    component(
+      :is="component"
+      @save="$emit('save', $event)"
+      v-bind="attrs"
+    )
+      div(:style="`column-count: ${payload.cols || 1}`")
+        draggable(
+          :delay="200"
+          :fallback-on-body="true"
+          :invert-swap="true"
+          :list="children"
+          @change="dragAndDrop"
+          ghost-class="has-background-white-ter"
+          group="widgets"
+        )
+          component(:is="childComponent" v-for="(child, index) in children")
+            node.mb-2(
+              :position="`${position}.children.${index}`"
+              @add-child="children.splice(index + 1, 0, $event)"
+              @delete="deleteChild(index)"
+              @save="$emit('save', $event)"
+              v-bind="child"
             )
-            b-button(@click="addChild('list')")
-              b-icon(pack="fas" icon="list")
-            b-button(@click="addChild('environment')")
-              b-icon(pack="fas" icon="cube")
-            widget-select(@select:widget="addChild('widget', $event)" size="is-small")
+  vue-context(ref="menu" :close-on-click="false")
+    context-menu(
+      :component="component"
+      @add-child="addChild"
+      @delete="$emit('delete')"
+      v-bind="attrs"
+    )
 </template>
 
 <script>
 import draggable from 'vuedraggable'
 import { clone } from 'lodash'
+import { VueContext } from 'vue-context'
 
+import ContextMenu from './ContextMenu'
 import Environment from './Environment'
 import List from './List'
 import Slide from './Slide'
 import Widget from './Widget'
-import WidgetSelect from './WidgetSelect'
 
 export default {
   name: 'node',
@@ -82,6 +56,14 @@ export default {
   data () {
     return {
       showToolbar: this.component === 'slide'
+    }
+  },
+  watch: {
+    payload: {
+      handler () {
+        this.$emit('save', { action: 'update', [`${this.position}.payload`]: this.payload })
+      },
+      deep: true
     }
   },
   computed: {
@@ -100,18 +82,22 @@ export default {
     }
   },
   methods: {
-    addChild (component, type) {
+    addChild (event) {
       const child = {
-        children: component !== 'widget' ? [] : undefined,
-        component: component,
+        children: event.component !== 'widget' ? [] : undefined,
+        component: event.component,
         payload: {},
-        type: component === 'widget' ? type : undefined
+        type: event.component === 'widget' ? event.type : undefined
       }
       this.$emit('save', {
         action: 'update',
         [`${this.position}.children.${this.children.length}`]: child
       })
-      this.children.push(child)
+      if (this.component !== 'widget') {
+        this.children.push(child)
+      } else {
+        this.$emit('add-child', child)
+      }
     },
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
@@ -132,39 +118,26 @@ export default {
       if (key !== false) {
         this.$set(this.payload, key, value)
       }
-      this.$emit('save', { action: 'update', [`${this.position}.payload`]: this.payload })
     }
   },
   components: {
+    ContextMenu,
     Environment,
     List,
     Slide,
+    VueContext,
     Widget,
-    WidgetSelect,
     draggable
   }
 }
 </script>
 
 <style scoped>
-.node > .float {
-  display: none;
-}
-.node:hover > .float {
-  display: block;
-  float: left;
-}
 .avoid-column {
   break-inside: avoid-column !important;
   page-break-inside: avoid;
 }
-.numberinput {
-  width: 90px;
-}
-.hidden {
-  visibility: hidden;
-}
-.toolbar-trigger {
-  color: #cccccc;
+.slide {
+  height: 100%;
 }
 </style>
