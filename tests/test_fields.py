@@ -115,7 +115,7 @@ def test_select_field():
 
 def test_markdown_field():
     test.markdown = "**strong**"
-    assert test.markdown == "<p><strong>strong</strong></p>\n"
+    assert test.markdown == "<p><strong>strong</strong></p>"
 
     export = type(test).markdown.export(test.markdown)
     assert export["valid"]

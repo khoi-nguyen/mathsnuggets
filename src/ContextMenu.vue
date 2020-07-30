@@ -10,9 +10,13 @@ div.dropdown-content
       option(value="success") Green
       option(value="warning") Yellow
       option(value="danger") Red
-  li.dropdown-item(@click="$emit('delete')")
-    b-icon(pack="fas" icon="trash")
-    span Delete
+  hr.dropdown-divider(v-if="component === 'list' || component === 'environment'")
+  li.dropdown-item(@click="addChild('widget', 'Pandoc')")
+    b-icon(pack="fas" icon="font")
+    span Add text
+  li.dropdown-item
+    widget-select(@select:widget="addChild('widget', $event)" size="is-small")
+  hr.dropdown-divider
   li.dropdown-item(v-if="component !== 'widget'")
     b-field(label="Columns")
       b-slider(:min="1" :max="4" :value="payload.cols || 1" @change="$set(payload, 'cols', $event)")
@@ -22,11 +26,10 @@ div.dropdown-content
   li.dropdown-item(@click="addChild('environment')")
     b-icon(pack="fas" icon="cube")
     span Add a block
-  li.dropdown-item(@click="addChild('widget', 'Pandoc')")
-    b-icon(pack="fas" icon="font")
-    span Add text
-  li.dropdown-item
-    widget-select(@select:widget="addChild('widget', $event)" size="is-small")
+  hr.dropdown-divider
+  li.dropdown-item(@click="$emit('delete')" v-if="component !== 'slide'")
+    b-icon(pack="fas" icon="trash")
+    span Delete
 </template>
 
 <script>
