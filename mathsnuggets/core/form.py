@@ -4,6 +4,7 @@ Form
 ====
 """
 import random
+import re
 import textwrap
 
 from mathsnuggets.core import fields
@@ -86,6 +87,25 @@ class Form:
                 yield (attr, value)
             except (ValueError, AttributeError, TypeError, AssertionError):
                 continue
+
+    def __str__(self):
+        """Transforms the object into a Vue template"""
+
+        def field_to_xml(match):
+            field = dict(getattr(type(self), match.group(1)))
+            payload = "computed" if field.get("computed") else "payload"
+            attrs = {"v-model": f"{payload}.{field['name']}"}
+            for prop, val in field.items():
+                prop = prop.replace("_", "-")
+                if not isinstance(val, str):
+                    prop = f":{prop}"
+                if val in [True, False]:
+                    val = "true" if val else "false"
+                attrs[prop] = val
+            attrs = " ".join([f'{prop}="{val}"' for prop, val in attrs.items()])
+            return f"<form-field {attrs} />"
+
+        return "<div>" + re.sub(r"`([a-z_]+)`", field_to_xml, self.template) + "</div>"
 
     def _fields(self, callback=None):
         """Iterates through all fields satisfying 'callback'"""
