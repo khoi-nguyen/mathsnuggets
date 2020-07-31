@@ -110,24 +110,12 @@ class Form:
     def _fields(self, callback=None):
         """Iterates through all fields satisfying 'callback'"""
         parts = []
-        if hasattr(self, "template"):
-            parts = textwrap.dedent(self.template).split("`")
-        count = 0
         for attr in self.__dir__():
             # Exclude non-fields
             if not isinstance(getattr(type(self), attr), fields.Field):
                 continue
             field_object = getattr(type(self), attr)
             field = dict(field_object)
-            field["order"] = count
-            count += 1
-            # Add context
-            if attr in parts:
-                pos = parts.index(attr)
-                field["order"] = pos - len(parts)
-                field["before"] = parts[pos - 1]
-                if pos == len(parts) - 2:
-                    field["after"] = parts[-1]
             # Add value
             try:
                 value = getattr(self, attr)
