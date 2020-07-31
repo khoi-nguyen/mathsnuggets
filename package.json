@@ -51,6 +51,7 @@
     "moment": "^2.27.0",
     "reveal.js": "^4.0.2",
     "typeface-fira-sans": "0.0.75",
+    "v-runtime-template": "^1.10.0",
     "v-tooltip": "^2.0.3",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2",
