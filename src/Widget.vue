@@ -1,7 +1,22 @@
 <template lang="pug">
 .is-size-3.avoid-column
+  b-dropdown.has-text-grey-lighter(v-if="generator" hoverable)
+    span(slot="trigger")
+      b-icon(pack="fas" icon="cogs")
+      span &nbsp;
+    b-dropdown-item(custom v-for="constraint in fields.filter(f => f.constraint)")
+      input(
+        :checked="constraint.name in payload ? payload[constraint.name] : constraint.value"
+        :disabled="constraint.protected"
+        @input="updatePayload(constraint.name, $event.target.checked)"
+        type="checkbox"
+        v-if="!constraint.hidden"
+      )
+      label {{ constraint.label }}
+    b-dropdown-item(custom paddingless)
+      b-button(type="is-info is-outlined" @click="generate()") Generate
   form-field(
-    v-for="(field, id) in fields"
+    v-for="(field, id) in fields.filter(f => !f.constraint && !f.random)"
     v-bind="field"
     :value="fieldValue(field)"
     @input="updatePayload(field.name, $event)"
@@ -10,7 +25,7 @@
 </template>
 
 <script>
-import { forEach } from 'lodash'
+import { clone, forEach } from 'lodash'
 
 import api from './ajax'
 import FormField from './FormField'
@@ -18,13 +33,18 @@ import ErrorMessage from './ErrorMessage'
 
 export default {
   props: {
-    payload: Object,
+    payload: { type: Object, default: () => {} },
     type: String
   },
   data () {
     return {
       error: '',
       traceback: ''
+    }
+  },
+  computed: {
+    generator () {
+      return this.fields.filter(f => f.constraint).length
     }
   },
   asyncComputed: {
@@ -56,7 +76,7 @@ export default {
     },
     fields: {
       async get () {
-        return (await api(`widgets/${this.type}`)).filter(f => !f.constraint && !f.random)
+        return await api(`widgets/${this.type}`)
       },
       default: []
     }
@@ -65,6 +85,18 @@ export default {
     fieldValue (field) {
       const payload = field.computed ? this.computed : this.payload
       return field.name in (payload || {}) && payload[field.name] ? payload[field.name] : ''
+    },
+    async generate () {
+      const data = await api(`widgets/${this.type}`, 'POST', this.payload)
+      this.error = data.error ? data.message : ''
+      this.traceback = data.error ? data.traceback : ''
+      const payload = clone(this.payload)
+      forEach(data, (field, fieldName) => {
+        if (!field.constraint && !field.computed && !field.random) {
+          payload[fieldName] = field.value
+        }
+      })
+      this.$emit('update:payload')
     },
     updatePayload (fieldName, value) {
       const field = this.fields.filter(f => f.name === fieldName)
@@ -75,6 +107,7 @@ export default {
         delete this.payload[fieldName]
       } else {
         this.$set(this.payload, fieldName, value)
+        this.$emit('update:payload')
       }
     }
   },
