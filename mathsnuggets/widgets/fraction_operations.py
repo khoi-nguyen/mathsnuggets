@@ -47,6 +47,7 @@ class FractionOperations(form.Form):
         self.c -= {0}
         self.d -= {0}
 
+
 def test_fractions():
     ex = FractionOperations(fraction_1="1/x", operation="+", fraction_2="1/(x + 1)")
     assert not isinstance(ex.solution, sympy.Add)

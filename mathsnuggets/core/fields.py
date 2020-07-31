@@ -273,7 +273,9 @@ class Markdown(Field):
 
     def sanitize(self, value):
         """Transform markdown to HTML"""
-        return pypandoc.convert_text(self.fmt.format(value=value), "html", format="md").rstrip()
+        return pypandoc.convert_text(
+            self.fmt.format(value=value), "html", format="md"
+        ).rstrip()
 
     def export(self, value):
         return {
