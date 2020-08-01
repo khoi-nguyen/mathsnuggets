@@ -26,24 +26,17 @@ export default {
         const computed = {}
         const data = await api(`widgets/${this.type}`, 'GET', this.payload)
         this.error = data.error ? data : {}
-        forEach(data, (field, fieldName) => {
-          if (field.computed) {
-            computed[fieldName] = field.value || field.html
-          } else if (!field.constraint && !field.random) {
-            this.$set(this.payload, fieldName, field.value || field.html)
-          }
+        forEach(data, (value, fieldName) => {
+          const payload = this.widgetData.fields[fieldName].computed ? computed : this.payload
+          this.$set(payload, fieldName, value)
         })
         return computed
       },
       default: {},
       shouldUpdate () {
-        let valid = !isEmpty(this.widgetData.fields)
-        forEach(filter(this.widgetData.fields, f => f.required && !f.default), (field) => {
-          if (!this.payload[field.name]) {
-            valid = false
-          }
-        })
-        return valid
+        return !isEmpty(this.widgetData.fields) && isEmpty(filter(this.widgetData.fields, f => {
+          return f.required && !f.default && !(f.name in this.payload)
+        }))
       }
     },
     widgetData: {

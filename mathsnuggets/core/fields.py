@@ -263,7 +263,7 @@ def range_constraint(*args, **kwargs):
 
 class Html(Field):
     def export(self, value):
-        return {"html": value, "valid": True if value else False}
+        return {"value": value, "valid": True if value else False}
 
 
 class Markdown(Field):
