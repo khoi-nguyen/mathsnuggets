@@ -13,6 +13,7 @@ let wrapper
 
 describe('Widget', () => {
   beforeEach(async () => {
+    fetch.resetMocks()
     fetch.mockResponse(JSON.stringify({
       fields: {
         equation: {
@@ -36,7 +37,6 @@ describe('Widget', () => {
       }
     })
     await flushPromises()
-    fetch.resetMocks()
   })
 
   it('loads the fields', () => {
@@ -48,8 +48,19 @@ describe('Widget', () => {
       equation: 'x^3',
       solution: 'x'
     }))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(fetch.mock.calls[0][0]).toEqual('/api/widgets/LinearEquation')
     wrapper.setProps({ payload: { equation: 'x^2' } })
     await flushPromises()
     expect(wrapper.vm.payload).toEqual({ equation: 'x^3' })
+    expect(fetch.mock.calls[1][0]).toEqual('/api/widgets/LinearEquation?equation=x%5E2')
+    expect(fetch.mock.calls[2][0]).toEqual('/api/widgets/LinearEquation?equation=x%5E3')
+    expect(fetch).toHaveBeenCalledTimes(3)
+    wrapper.vm.payload.equation = 'x^3'
+    await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(3)
+    wrapper.vm.payload.equation = 'x^2'
+    await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(5)
   })
 })
