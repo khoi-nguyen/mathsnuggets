@@ -135,8 +135,6 @@ def test_constraints():
     assert not test.constraint
     test.constraint = False
     assert test.constraint
-    export = list(test._fields(lambda f: f["name"] == "constraint"))[0][1]
-    assert not export["value"]
 
 
 def test_email():

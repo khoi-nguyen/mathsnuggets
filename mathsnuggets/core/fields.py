@@ -198,10 +198,6 @@ class RandomNumber(Field):
             return instance.__dict__["_random"][self.name]
         if self.name in instance.__dict__:
             return instance.__dict__[self.name]
-        return None
-
-    def export(self, instance):
-        return {}
 
     def sanitize(self, expr):
         """Check it is an appropriate range"""
@@ -229,9 +225,6 @@ class Constraint(Field):
 
     def sanitize(self, expr):
         return bool(expr)
-
-    def export(self, value):
-        return {"value": value, "valid": True}
 
 
 def constraint(*args, **kwargs):
@@ -263,7 +256,7 @@ def range_constraint(*args, **kwargs):
 
 class Html(Field):
     def export(self, value):
-        return {"html": value, "valid": True if value else False}
+        return {"value": value, "valid": True if value else False}
 
 
 class Markdown(Field):
@@ -273,7 +266,9 @@ class Markdown(Field):
 
     def sanitize(self, value):
         """Transform markdown to HTML"""
-        return pypandoc.convert_text(self.fmt.format(value=value), "html", format="md").rstrip()
+        return pypandoc.convert_text(
+            self.fmt.format(value=value), "html", format="md"
+        ).rstrip()
 
     def export(self, value):
         return {

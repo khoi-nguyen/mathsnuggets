@@ -4,7 +4,7 @@ Form
 ====
 """
 import random
-import textwrap
+import re
 
 from mathsnuggets.core import fields
 
@@ -27,7 +27,7 @@ class Form:
         for attr, field in self._fields(lambda f: "default" in f):
             setattr(self, attr, field["default"])
         for attr, value in kwargs.items():
-            if attr in dict(iter(self)):
+            if attr in dict(self._fields()):
                 setattr(self, attr, value)
 
     def generate(self):
@@ -61,14 +61,6 @@ class Form:
         if hasattr(self, "generator") and callable(self.generator):
             self.generator()
 
-    @property
-    def valid(self):
-        try:
-            self._validate()
-            return True
-        except (ValueError, AttributeError, TypeError, AssertionError):
-            return False
-
     def _validate(self):
         for attr, _ in self._fields(lambda f: f.get("required")):
             if getattr(self, attr) is None:
@@ -79,46 +71,40 @@ class Form:
             self.validate()
 
     def __iter__(self):
-        for attr in dir(self):
-            try:
-                value = getattr(self, attr)
-                assert not attr.startswith("_") and not callable(value)
-                yield (attr, value)
-            except (ValueError, AttributeError, TypeError, AssertionError):
+        for attr, _ in self._fields(
+            lambda f: not f.get("random") and not f.get("constraint")
+        ):
+            export = getattr(type(self), attr).export
+            value = getattr(self, attr, None)
+            if value is None:
                 continue
+            yield (attr, export(value).get("value"))
+
+    def __str__(self):
+        """Transforms the object into a Vue template"""
+
+        def field_to_xml(match):
+            field = dict(getattr(type(self), match.group(1)))
+            payload = "computed" if field.get("computed") else "payload"
+            attrs = {"v-model": f"{payload}.{field['name']}"}
+            for prop, val in field.items():
+                prop = prop.replace("_", "-")
+                if not isinstance(val, str):
+                    prop = f":{prop}"
+                if val in [True, False]:
+                    val = "true" if val else "false"
+                attrs[prop] = val
+            attrs = " ".join([f'{prop}="{val}"' for prop, val in attrs.items()])
+            return f"<form-field {attrs} />"
+
+        return "<div>" + re.sub(r"`([a-z_]+)`", field_to_xml, self.template) + "</div>"
 
     def _fields(self, callback=None):
         """Iterates through all fields satisfying 'callback'"""
-        parts = []
-        if hasattr(self, "template"):
-            parts = textwrap.dedent(self.template).split("`")
-        count = 0
         for attr in self.__dir__():
-            # Exclude non-fields
             if not isinstance(getattr(type(self), attr), fields.Field):
                 continue
-            field_object = getattr(type(self), attr)
-            field = dict(field_object)
-            field["order"] = count
-            count += 1
-            # Add context
-            if attr in parts:
-                pos = parts.index(attr)
-                field["order"] = pos - len(parts)
-                field["before"] = parts[pos - 1]
-                if pos == len(parts) - 2:
-                    field["after"] = parts[-1]
-            # Add value
-            try:
-                value = getattr(self, attr)
-                if field.get("constraint"):
-                    value = self.__dict__[attr] if attr in self.__dict__ else False
-                assert value is not None
-                field.update(field_object.export(value))
-            except (ValueError, AttributeError, TypeError, AssertionError):
-                pass
-            # Check if callback is satisfied
-            # Callback may use context, so this is done last
+            field = dict(getattr(type(self), attr))
             if callable(callback) and not callback(field):
                 continue
             yield (attr, field)

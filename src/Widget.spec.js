@@ -11,20 +11,23 @@ localVue.use(AsyncComputed)
 
 let wrapper
 
-describe('FormField', () => {
+describe('Widget', () => {
   beforeEach(async () => {
-    fetch.mockResponse(JSON.stringify([
-      {
-        name: 'equation',
-        required: true,
-        type: 'Equation'
+    fetch.mockResponse(JSON.stringify({
+      fields: {
+        equation: {
+          name: 'equation',
+          required: true,
+          type: 'Equation'
+        },
+        solution: {
+          computed: true,
+          name: 'solution',
+          type: 'Expression'
+        }
       },
-      {
-        computed: true,
-        name: 'solution',
-        type: 'Expression'
-      }
-    ]))
+      template: ''
+    }))
     wrapper = shallowMount(Widget, {
       localVue,
       propsData: {
@@ -37,23 +40,16 @@ describe('FormField', () => {
   })
 
   it('loads the fields', () => {
-    expect(wrapper.vm.fields.length).toBe(2)
+    expect(Object.keys(wrapper.vm.widgetData.fields).length).toBe(2)
   })
 
   it('updates the payload properly', async () => {
     fetch.mockResponse(JSON.stringify({
-      equation: { value: 'x^3' },
-      solution: {
-        computed: true,
-        value: 'x'
-      }
+      equation: 'x^3',
+      solution: 'x'
     }))
-    const field = wrapper.find('form-field-stub[name="equation"]')
-    await field.vm.$emit('input', 'x^2')
-    expect(wrapper.vm.payload).toEqual({ equation: 'x^2' })
     wrapper.setProps({ payload: { equation: 'x^2' } })
     await flushPromises()
     expect(wrapper.vm.payload).toEqual({ equation: 'x^3' })
-    expect(wrapper.emitted()['update:payload'].length).toBe(2)
   })
 })

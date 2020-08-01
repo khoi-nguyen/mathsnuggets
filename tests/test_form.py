@@ -1,3 +1,4 @@
+import pytest
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -26,22 +27,21 @@ def test_default_values():
 
 def test_validate():
     form.required = "Hello"
-    assert not form.valid
+    with pytest.raises(AttributeError):
+        form._validate()
 
     form.equation = "x^2"
-    assert form.valid
+    form._validate()
 
     form.required = None
-    assert not form.valid
+    with pytest.raises(AttributeError):
+        form._validate()
     form.required = "Hello"
 
 
 def test_export():
     form.required = "Hello"
     form.equation = "x^2"
-    assert form.valid
+    form._validate()
     export = dict(form._fields())
     assert len(export) == 2
-    assert export["equation"]["before"] == "Solve "
-    assert export["equation"]["order"] == -2
-    assert "value" in export["equation"]

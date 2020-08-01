@@ -90,12 +90,10 @@ def form_route(form):
             form.generate()
         if payload:
             form._validate()
-            return flask.jsonify(dict(form._fields()))
+            return flask.jsonify(dict(form))
     except (AttributeError, ValueError, TypeError, PermissionError) as error:
         raise InvalidUsage(str(error), 400, payload)
-    data = [f for n, f in form._fields()]
-    data.sort(key=lambda f: f.get("order"))
-    return flask.jsonify(data)
+    return flask.jsonify({"template": str(form), "fields": dict(form._fields())})
 
 
 login_manager = flask_login.LoginManager()

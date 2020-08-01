@@ -1,6 +1,6 @@
 <template lang="pug">
-b-message(type="is-danger" has-icon icon-pack="fas" icon="exclamation-triangle" v-if="error")
-  p {{ error }}
+b-message(type="is-danger" has-icon icon-pack="fas" icon="exclamation-triangle" v-if="message")
+  p {{ message }}
   b-button(type="is-danger" v-if="!showTraceback" @click="showTraceback = true") Show traceback
   pre(@click="showTraceback = false" v-if="showTraceback") {{ traceback }}
 </template>
@@ -9,7 +9,7 @@ b-message(type="is-danger" has-icon icon-pack="fas" icon="exclamation-triangle" 
 export default {
   name: 'ErrorMessage',
   props: {
-    error: String,
+    message: String,
     traceback: String
   },
   data () {

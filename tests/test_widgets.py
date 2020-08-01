@@ -5,11 +5,11 @@ def test_widgets():
     test_data = {k: v for k, v in widgets.info.items() if v.get("test")}
     for _name, info in test_data.items():
         form = info["class"](**info["test"])
-        assert form.valid
+        form._validate()
 
-        for _name, field in form._fields():
+        for name, field in form._fields():
             if field.get("computed") or field.get("required"):
-                assert field.get("value") or field.get("html")
+                assert dict(form)[name]
 
 
 def test_generators():
@@ -21,7 +21,7 @@ def test_generators():
 
         # Without constraints
         form.generate()
-        assert form.valid
+        form._validate()
 
         for name, _ in form._fields(
             lambda f: f.get("constraint") and not f.get("protected")
@@ -30,4 +30,4 @@ def test_generators():
             payload[name] = True
             form = getattr(widgets, widget)(**payload)
             form.generate()
-            assert form.valid
+            form._validate()

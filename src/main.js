@@ -1,11 +1,11 @@
 import 'regenerator-runtime/runtime'
 import AsyncComputed from 'vue-async-computed'
-import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
 import titleMixin from './titleMixin'
 
+const Vue = require('vue/dist/vue.js')
 const App = () => import('./App')
 const About = () => import('./About')
 const HomePage = () => import('./HomePage')
