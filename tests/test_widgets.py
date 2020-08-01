@@ -9,7 +9,7 @@ def test_widgets():
 
         for name, field in form._fields():
             if field.get("computed") or field.get("required"):
-                assert getattr(form, name) is not None
+                assert dict(form)[name]
 
 
 def test_generators():

@@ -198,10 +198,6 @@ class RandomNumber(Field):
             return instance.__dict__["_random"][self.name]
         if self.name in instance.__dict__:
             return instance.__dict__[self.name]
-        return None
-
-    def export(self, instance):
-        return {}
 
     def sanitize(self, expr):
         """Check it is an appropriate range"""
@@ -229,9 +225,6 @@ class Constraint(Field):
 
     def sanitize(self, expr):
         return bool(expr)
-
-    def export(self, value):
-        return {"value": value, "valid": True}
 
 
 def constraint(*args, **kwargs):
