@@ -72,7 +72,7 @@ def test_field_validation(client):
 def test_widget(client):
     response, data = get(client, "/api/widgets/Equation")
     assert response.status_code == 200
-    assert isinstance(data, list)
+    assert "fields" in data and "template" in data
 
     response, data = get(client, "/api/widgets/Eequation")
     assert response.status_code == 404
@@ -81,10 +81,10 @@ def test_widget(client):
 def test_widget_validation(client):
     response, data = get(client, "/api/widgets/Equation?equation=x^2")
     assert response.status_code == 200
-    assert data["solution"]["value"] == "[Eq(x, 0)]"
+    assert data["solution"] == "[Eq(x, 0)]"
 
     response, data = post(client, "/api/widgets/LinearEquation", {"one_step": "1"})
-    assert data["equation"]["value"]
+    assert data["equation"]
     assert response.status_code == 200
 
     response, data = get(client, "/api/widgets/Equation?equation=sin(")
