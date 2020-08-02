@@ -1,6 +1,5 @@
 <template lang="pug">
 span(:name="name")
-  span(v-html="before")
   span(v-if="!computed")
     component.field(
       :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
@@ -29,7 +28,6 @@ span(:name="name")
       @click="enterEditMode"
     )
     error-message(:message="error" :traceback="traceback" v-if="error")
-  span(v-html="after")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
     div(v-html="html" v-if="showComputed")
@@ -45,8 +43,6 @@ import ErrorMessage from './ErrorMessage'
 
 export default {
   props: {
-    after: String,
-    before: String,
     computed: Boolean,
     default: String,
     displayMode: Boolean,
