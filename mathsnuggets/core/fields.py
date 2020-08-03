@@ -150,6 +150,18 @@ class Expression(Field):
         }
 
 
+class Boolean(Field):
+    """Checkboxes"""
+    
+    def sanitize(self, expr):
+        return bool(expr)
+
+    def export(self, value):
+        return {
+            "value": bool(value),
+            "valid": True
+        }
+
 class Select(Field):
     """Select field"""
 
