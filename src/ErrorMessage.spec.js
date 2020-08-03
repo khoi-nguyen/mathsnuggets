@@ -18,7 +18,7 @@ describe('ErrorMessage', () => {
     })
   })
 
-  it('Is empty', () => {
+  it('is empty', () => {
     expect(wrapper.html()).toBe('')
   })
 
