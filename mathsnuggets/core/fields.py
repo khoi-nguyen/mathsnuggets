@@ -274,18 +274,13 @@ class Html(Field):
 class Markdown(Field):
     """Equation field"""
 
-    fmt = "{value}"
-
-    def sanitize(self, value):
-        """Transform markdown to HTML"""
-        return pypandoc.convert_text(
-            self.fmt.format(value=value), "html", format="md"
-        ).rstrip()
-
     def export(self, value):
+        html = pypandoc.convert_text(
+            value, "html", format="md", extra_args=["--katex"]
+        ).rstrip()
         return {
-            "html": value,
-            "value": pypandoc.convert_text(value, "md", format="html"),
+            "html": html,
+            "value": value,
             "valid": value != "",
         }
 

@@ -105,6 +105,13 @@ export default {
       traceback: ''
     }
   },
+  updated () {
+    var mathElements = document.getElementsByClassName('math')
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild
+      katex.render(texText.data, mathElements[i])
+    }
+  },
   methods: {
     blur (ev) {
       this.$emit('input', ev.target.value)
