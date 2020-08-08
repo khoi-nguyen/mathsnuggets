@@ -15,7 +15,6 @@ export default {
     },
     updateTitle (value) {
       this.$set(this.payload, 'title', value)
-      this.$emit('update:payload')
     }
   }
 }
