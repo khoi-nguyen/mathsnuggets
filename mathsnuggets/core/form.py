@@ -82,7 +82,9 @@ class Form:
 
     def __str__(self):
         """Transforms the object into a Vue template"""
+        return self._template(self.template)
 
+    def _template(self, string):
         def field_to_xml(match):
             field = dict(getattr(type(self), match.group(1)))
             payload = "computed" if field.get("computed") else "payload"
@@ -97,7 +99,7 @@ class Form:
             attrs = " ".join([f'{prop}="{val}"' for prop, val in attrs.items()])
             return f"<form-field {attrs} />"
 
-        return "<div>" + re.sub(r"`([a-z_]+)`", field_to_xml, self.template) + "</div>"
+        return "<div>" + re.sub(r"`([a-z_]+)`", field_to_xml, string) + "</div>"
 
     def _fields(self, callback=None):
         """Iterates through all fields satisfying 'callback'"""
