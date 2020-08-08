@@ -2,15 +2,8 @@
 span(:name="name")
   span(v-if="!computed")
     component.field(
-      :class="{'select': options.length, 'has-text-danger': !options.length, 'is-family-monospace': !options.length}"
       v-if="editing || !html"
-      ref="field"
-      :rows="rows"
-      :cols="cols"
-      :disabled="protected"
-      :placeholder="label"
-      :is="tag"
-      :value="value"
+      v-bind="attrs"
       @dblclick="$event.target.select()"
       @focus="editing = true"
       @keypress="keyPress"
@@ -80,17 +73,22 @@ export default {
     }
   },
   computed: {
-    cols () {
-      if (!this.inputValue) {
-        return (this.label || '').length
+    attrs () {
+      const value = this.inputValue ? this.inputValue : this.label || ''
+      return {
+        class: {
+          'has-text-danger': !this.options.length,
+          'is-family-monospace': !this.options.length,
+          select: this.options.length
+        },
+        cols: _.maxBy(value.split('\n'), (line) => (line.length)).length,
+        disabled: this.protected,
+        is: this.options.length ? 'select' : 'textarea',
+        placeholder: this.label,
+        ref: 'field',
+        rows: value.split('\n').length,
+        value: this.value
       }
-      return _.maxBy(this.inputValue.split('\n'), (line) => (line.length)).length + 0
-    },
-    rows () {
-      return this.inputValue ? this.inputValue.split('\n').length : 1
-    },
-    tag () {
-      return this.options.length ? 'select' : 'textarea'
     }
   },
   watch: {
