@@ -1,6 +1,6 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
-  component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
+  component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :class="{fragment: component !== 'slide'}")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
