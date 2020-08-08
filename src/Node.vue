@@ -122,6 +122,10 @@ export default {
   break-inside: avoid-column !important;
   page-break-inside: avoid !important;
 }
+.reveal .slides section .fragment {
+  opacity: 0.1;
+  visibility: visible;
+}
 .slide {
   height: 100%;
 }
