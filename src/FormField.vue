@@ -110,7 +110,9 @@ export default {
     for (var i = 0; i < mathElements.length; i++) {
       var displayMode = !mathElements[i].classList.contains('inline')
       var texText = mathElements[i].firstChild
-      katex.render(texText.data, mathElements[i], { displayMode })
+      if (texText && texText.data) {
+        katex.render(texText.data, mathElements[i], { displayMode })
+      }
     }
   },
   methods: {
