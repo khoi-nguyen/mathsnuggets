@@ -65,11 +65,11 @@ describe('FormField', () => {
         type: 'Markdown'
       }
     })
-    expect(wrapper.vm.cols).toBe(5)
+    expect(wrapper.vm.attrs.cols).toBe(5)
     expect(wrapper.find('textarea').exists()).toBe(true)
     wrapper.find('textarea').setValue('Bonjour\nHello')
-    expect(wrapper.vm.cols).toBe(7)
-    expect(wrapper.vm.rows).toBe(2)
+    expect(wrapper.vm.attrs.cols).toBe(7)
+    expect(wrapper.vm.attrs.rows).toBe(2)
     wrapper.find('textarea').trigger('blur')
     expect(wrapper.emitted().input).toEqual([['Bonjour\nHello']])
     wrapper.setProps({ value: '**hello**' })
