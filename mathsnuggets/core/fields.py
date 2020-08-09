@@ -225,6 +225,12 @@ class RandomNumber(Field):
             raise ValueError(f"{repr(expr)} is not a valid expression for {self.name}")
         return self.sanitize(list(range(*numbers)))
 
+    def export(self, value):
+        return {
+            "valid": True,
+            "value": [int(i) for i in value],
+        }
+
 
 class Constraint(Field):
     """Constraint"""

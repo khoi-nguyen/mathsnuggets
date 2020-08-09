@@ -1,6 +1,8 @@
 <template lang="pug">
 span(:name="name")
-  span(v-if="!computed")
+  b-field(:label="label" v-if="random")
+    b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
+  span(v-if="!computed && !constraint && !random")
     component.field(
       v-if="editing || !html"
       v-bind="attrs"
@@ -37,6 +39,7 @@ import ErrorMessage from './ErrorMessage'
 export default {
   props: {
     computed: Boolean,
+    constraint: Boolean,
     default: String,
     displayMode: Boolean,
     hidden: Boolean,
@@ -44,8 +47,9 @@ export default {
     name: String,
     options: { type: Array, default: () => [] },
     protected: Boolean,
+    random: Boolean,
     type: String,
-    value: String
+    value: [String, Array, Boolean]
   },
   components: {
     ErrorMessage
@@ -53,7 +57,7 @@ export default {
   asyncComputed: {
     async html () {
       const value = !this.value && this.default ? this.default : this.value
-      if (!value || this.type === 'Html') {
+      if (!value || this.type === 'Html' || this.random) {
         return value
       }
       const payload = { value: value, options: this.options }
@@ -88,6 +92,19 @@ export default {
         ref: 'field',
         rows: value.split('\n').length,
         value: this.value
+      }
+    },
+    rangeValue: {
+      get () {
+        let value = this.value || this.default
+        if (typeof value === 'string' || value instanceof String) {
+          value = _.map(value.split(','), parseFloat)
+        }
+        console.log(value)
+        return [_.min(value), _.max(value)]
+      },
+      set (value) {
+        this.$emit('input', _.range(value[0], value[1] + 1))
       }
     }
   },
