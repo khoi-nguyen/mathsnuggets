@@ -16,6 +16,13 @@ class QuadraticEquations(equation.Equation):
     e = fields.RandomNumber("e")
     f = fields.RandomNumber("f")
 
+    generator_template = """
+        The generator expands the left-hand side of:
+        <span class="math">
+            a(x - x_1) (x - x_2) + dx^2 + e x + f = dx^2 + ex + f
+        </span>
+    """
+
     def generator(self):
         self.equation = sympy.Eq(
             sympy.expand(
