@@ -115,12 +115,11 @@ def test_select_field():
 
 def test_markdown_field():
     test.markdown = "**strong**"
-    assert test.markdown == "<p><strong>strong</strong></p>"
+    assert test.markdown == "**strong**"
 
     export = type(test).markdown.export(test.markdown)
     assert export["valid"]
-    test.markdown = export["value"]
-    assert test.markdown == export["html"]
+    assert export["html"] == "<p><strong>strong</strong></p>"
 
 
 def test_matrix():
