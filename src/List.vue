@@ -8,7 +8,7 @@
 <script>
 export default {
   props: {
-    children: [],
+    children: Array,
     payload: { type: Object, default: () => {} }
   }
 }
