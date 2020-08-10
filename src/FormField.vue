@@ -101,7 +101,6 @@ export default {
         if (typeof value === 'string' || value instanceof String) {
           value = _.map(value.split(','), parseFloat)
         }
-        console.log(value)
         return [_.min(value), _.max(value)]
       },
       set (value) {
