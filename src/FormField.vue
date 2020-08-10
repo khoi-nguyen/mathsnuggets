@@ -1,7 +1,8 @@
 <template lang="pug">
 span(:name="name")
-  b-field(:label="label" v-if="random")
-    b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
+  b-field(:label="label" v-if="random || constraint" horizontal)
+    b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy v-if="random")
+    b-checkbox(v-if="constraint" v-model="checkboxValue" :disabled="protected")
   span(v-if="!computed && !constraint && !random")
     component.field(
       v-if="editing || !html"
@@ -105,6 +106,14 @@ export default {
       },
       set (value) {
         this.$emit('input', _.range(value[0], value[1] + 1))
+      }
+    },
+    checkboxValue: {
+      get () {
+        return Boolean(this.value || this.default)
+      },
+      set (value) {
+        this.$emit('input', value)
       }
     }
   },

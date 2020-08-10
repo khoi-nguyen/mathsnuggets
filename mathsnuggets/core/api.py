@@ -97,7 +97,9 @@ def form_route(form):
         {
             "template": str(form),
             "fields": dict(form._fields()),
-            "generator": form._template(getattr(form, "generator_template", "")),
+            "generator_template": form._template(getattr(form, "generator_template", "")),
+            "constraints": form.get_fields_as_template("constraint"),
+            "random_numbers": form.get_fields_as_template("random"),
         }
     )
 
