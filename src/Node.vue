@@ -49,7 +49,7 @@ export default {
         ghostClass: 'has-background-white-ter',
         group: 'widgets',
         invertSwap: true,
-        style: { columnCount: this.payload.cols || 1 }
+        style: { columnCount: (this.payload || {}).cols || 1 }
       }
     },
     attrs () {
