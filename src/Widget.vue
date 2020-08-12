@@ -9,7 +9,7 @@ form.is-size-3.avoid-column
 </template>
 
 <script>
-import { isEmpty, filter, forEach } from 'lodash'
+import { isEmpty, filter, forEach, pickBy } from 'lodash'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
@@ -24,11 +24,19 @@ export default {
   data () {
     return { error: {} }
   },
+  computed: {
+    solverPayload () {
+      return pickBy(this.payload, (value, fieldName) => {
+        const field = this.widgetData.fields[fieldName]
+        return !field.random && !field.constraint
+      })
+    }
+  },
   asyncComputed: {
     computed: {
       async get () {
         const computed = {}
-        const data = await api(`widgets/${this.type}`, 'GET', this.payload)
+        const data = await api(`widgets/${this.type}`, 'GET', this.solverPayload)
         this.error = data.error ? data : {}
         forEach(data, (value, fieldName) => {
           const payload = this.widgetData.fields[fieldName].computed ? computed : this.payload
@@ -39,7 +47,7 @@ export default {
       default: {},
       shouldUpdate () {
         return !isEmpty(this.widgetData.fields) && isEmpty(filter(this.widgetData.fields, f => {
-          return f.required && !f.default && !(f.name in this.payload)
+          return f.required && !f.default && !(f.name in this.payload) && !f.random && !f.constraint
         }))
       }
     },
