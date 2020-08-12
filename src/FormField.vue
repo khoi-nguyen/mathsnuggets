@@ -41,7 +41,7 @@ export default {
   props: {
     computed: Boolean,
     constraint: Boolean,
-    default: String,
+    default: [String, Array, Boolean],
     displayMode: Boolean,
     hidden: Boolean,
     label: String,
