@@ -58,7 +58,7 @@ export default {
   asyncComputed: {
     async html () {
       const value = !this.value && this.default ? this.default : this.value
-      if (!value || this.type === 'Html' || this.random) {
+      if (!value || this.type === 'Html' || this.random || this.constraint) {
         return value
       }
       const payload = { value: value, options: this.options }
