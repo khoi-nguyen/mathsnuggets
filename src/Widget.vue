@@ -24,19 +24,14 @@ export default {
   data () {
     return { error: {} }
   },
-  computed: {
-    solverPayload () {
-      return pickBy(this.payload, (value, fieldName) => {
-        const field = this.widgetData.fields[fieldName]
-        return !field.random && !field.constraint
-      })
-    }
-  },
   asyncComputed: {
     computed: {
       async get () {
         const computed = {}
-        const data = await api(`widgets/${this.type}`, 'GET', this.solverPayload)
+        const data = await api(`widgets/${this.type}`, 'GET', pickBy(this.payload, (value, fieldName) => {
+          const field = this.widgetData.fields[fieldName]
+          return !field.random && !field.constraint
+        }))
         this.error = data.error ? data : {}
         forEach(data, (value, fieldName) => {
           const payload = this.widgetData.fields[fieldName].computed ? computed : this.payload
@@ -47,7 +42,7 @@ export default {
       default: {},
       shouldUpdate () {
         return !isEmpty(this.widgetData.fields) && isEmpty(filter(this.widgetData.fields, f => {
-          return f.required && !f.default && !(f.name in this.payload) && !f.random && !f.constraint
+          return f.required && !f.default && !(f.name in this.payload)
         }))
       }
     },
