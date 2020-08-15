@@ -2,8 +2,12 @@
 form.is-size-3.avoid-column
   .is-size-6
     v-runtime-template(:template="widgetData.generator_template")
-    v-runtime-template.constraints(:template="widgetData.random_numbers")
-    v-runtime-template.constraints(:template="widgetData.constraints")
+    .columns
+      v-runtime-template.column(:template="widgetData.random_numbers")
+      v-runtime-template.column(:template="widgetData.constraints")
+  .has-text-centered.buttons
+    b-button(@click="solve(true)" type="is-primary") Generate
+  hr
   v-runtime-template(:template="widgetData.template")
   error-message(v-bind="error" v-if="error")
 </template>
