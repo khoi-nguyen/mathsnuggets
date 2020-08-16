@@ -1,8 +1,9 @@
 <template lang="pug">
 span(:name="name")
-  b-field(:label="label" v-if="random || constraint" horizontal)
-    b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy v-if="random")
-    b-checkbox(v-if="constraint" v-model="checkboxValue" :disabled="protected")
+  b-field(:label="label" v-if="random" horizontal)
+    b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
+  .field(v-if="constraint")
+    b-checkbox(v-model="checkboxValue" :disabled="protected") {{ label }}
   span(v-if="!computed && !constraint && !random")
     component.field(
       v-if="editing || !html"
