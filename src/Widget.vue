@@ -76,7 +76,8 @@ export default {
           this.solve()
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   asyncComputed: {
