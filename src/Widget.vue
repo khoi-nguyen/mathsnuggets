@@ -72,6 +72,9 @@ export default {
   watch: {
     solverPayload: {
       handler (newValue, oldValue) {
+        if (!this.widgetData) {
+          return false
+        }
         const isValid = !isEmpty(this.widgetData.fields) && isEmpty(filter(this.widgetData.fields, f => {
           return f.required && !f.default && !this.payload[f.name]
         }))
