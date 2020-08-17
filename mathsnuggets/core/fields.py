@@ -199,7 +199,6 @@ class RandomNumber(Field):
     """Random Number field"""
 
     default = "-10, 10"
-    hidden = True
     random = True
 
     def callback(self, instance):

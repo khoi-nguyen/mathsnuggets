@@ -1,5 +1,5 @@
 <template lang="pug">
-span(:name="name")
+span(:name="name" v-if="!hidden")
   b-field(:label="label" v-if="random" horizontal)
     b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
   .field(v-if="constraint")
