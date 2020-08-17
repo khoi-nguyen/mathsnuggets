@@ -1,6 +1,6 @@
 <template lang="pug">
 form.avoid-column
-  v-runtime-template(:template="generatorTemplate")
+  v-runtime-template(:template="generatorTemplate" v-if="hasGenerator")
   v-runtime-template.is-size-3(:template="widgetData.template")
   error-message(v-bind="error" v-if="error")
 </template>
@@ -50,6 +50,9 @@ export default {
           </div>
         </div>
       `
+    },
+    hasGenerator () {
+      return !isEmpty(filter(this.widgetData.fields, f => f.random || f.constraint))
     }
   },
   methods: {
