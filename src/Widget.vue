@@ -1,14 +1,7 @@
 <template lang="pug">
-form.is-size-3.avoid-column
-  .is-size-6
-    v-runtime-template(:template="widgetData.generator_template")
-    .columns
-      v-runtime-template.column(:template="widgetData.random_numbers")
-      v-runtime-template.column(:template="widgetData.constraints")
-  .has-text-centered.buttons
-    b-button(@click="solve(true)" type="is-primary") Generate
-  hr
-  v-runtime-template(:template="widgetData.template")
+form.avoid-column
+  v-runtime-template(:template="generatorTemplate")
+  v-runtime-template.is-size-3(:template="widgetData.template")
   error-message(v-bind="error" v-if="error")
 </template>
 
@@ -43,6 +36,20 @@ export default {
         const field = this.widgetData.fields[fieldName]
         return field.random || field.constraint
       })
+    },
+    generatorTemplate () {
+      return `
+        <div class="modal-card modal-card-body">
+          ${this.widgetData.generator_template}
+          <div class="columns">
+              <div class="column">${this.widgetData.random_numbers}</div>
+              <div class="column">${this.widgetData.constraints}</div>
+          </div>
+          <div class="buttons">
+            <b-button @click="solve(true)">Generate</b-button>
+          </div>
+        </div>
+      `
     }
   },
   methods: {
