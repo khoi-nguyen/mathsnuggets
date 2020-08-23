@@ -1,5 +1,8 @@
 <template lang="pug">
 div.dropdown-content
+  li.dropdown-item(@click="$set(state, 'showGenerator', true)" v-if="component === 'widget'")
+    b-icon(pack="fas" icon="cogs")
+    span Generator
   li.dropdown-item(v-if="component === 'list'")
     b-checkbox(v-model="payload.numbered") Numbered list
   li.dropdown-item(v-if="component === 'environment'" custom)
@@ -38,7 +41,8 @@ import WidgetSelect from './WidgetSelect'
 export default {
   props: {
     component: String,
-    payload: Object
+    payload: Object,
+    state: Object
   },
   components: {
     WidgetSelect

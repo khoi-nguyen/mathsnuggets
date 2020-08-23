@@ -33,6 +33,11 @@ export default {
     position: { type: String, default: '' },
     type: { type: String, default: '' }
   },
+  data () {
+    return {
+      state: {}
+    }
+  },
   watch: {
     payload: {
       handler () {
@@ -58,6 +63,7 @@ export default {
         component: this.component,
         payload: this.payload || {},
         position: this.position,
+        state: this.state,
         type: this.type
       }
     },

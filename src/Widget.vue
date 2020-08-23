@@ -1,7 +1,7 @@
 <template lang="pug">
 form.avoid-column
-  v-runtime-template(:template="generatorTemplate" v-if="hasGenerator")
   v-runtime-template.is-size-3(:template="widgetData.template")
+  v-runtime-template(:template="generatorTemplate")
   error-message(v-bind="error" v-if="error")
 </template>
 
@@ -16,12 +16,14 @@ import ErrorMessage from './ErrorMessage'
 export default {
   props: {
     payload: Object,
+    state: Object,
     type: String
   },
   data () {
     return {
       computed: {},
-      error: {}
+      error: {},
+      showGenerator: false
     }
   },
   computed: {
@@ -39,16 +41,27 @@ export default {
     },
     generatorTemplate () {
       return `
-        <div class="modal-card modal-card-body">
-          ${this.widgetData.generator_template}
-          <div class="columns">
-              <div class="column">${this.widgetData.random_numbers}</div>
-              <div class="column">${this.widgetData.constraints}</div>
+        <b-modal :active.sync="state.showGenerator">
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Generator</p>
+              <button type="button" class="delete" @click="state.showGenerator = false" />
+            </header>
+            <section class="modal-card-body">
+              <p class="is-size-3">${this.widgetData.template}</p>
+              <hr />
+              ${this.widgetData.generator_template}
+              <div class="columns">
+                  <div class="column">${this.widgetData.random_numbers}</div>
+                  <div class="column">${this.widgetData.constraints}</div>
+              </div>
+            </section>
+            <footer class="modal-card-foot buttons">
+              <b-button type="is-primary" @click="solve(true)">Generate</b-button>
+              <b-button type="is-danger" @click="state.showGenerator = false">Close</b-button>
+            </footer>
           </div>
-          <div class="buttons">
-            <b-button @click="solve(true)">Generate</b-button>
-          </div>
-        </div>
+        </b-modal>
       `
     },
     hasGenerator () {
