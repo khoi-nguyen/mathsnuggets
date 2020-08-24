@@ -28,12 +28,21 @@ export default {
   },
   computed: {
     solverPayload () {
+      if (!(this.widgetData || {}).fields) {
+        return {}
+      }
       return pickBy(this.payload, (value, fieldName) => {
         const field = this.widgetData.fields[fieldName]
+        if (!field) {
+          return false
+        }
         return !field.random && !field.constraint
       })
     },
     generatorPayload () {
+      if (!(this.widgetData || {}).fields) {
+        return {}
+      }
       return pickBy(this.payload, (value, fieldName) => {
         const field = this.widgetData.fields[fieldName]
         return field.random || field.constraint
@@ -75,6 +84,9 @@ export default {
       const data = await api(`widgets/${this.type}`, method, payload)
       this.error = data.error ? data : {}
       forEach(data, (value, fieldName) => {
+        if (!(fieldName in this.widgetData.fields)) {
+          return false
+        }
         const payload = this.widgetData.fields[fieldName].computed ? this.computed : this.payload
         if (payload[fieldName] !== value) {
           this.$set(payload, fieldName, value)
@@ -95,8 +107,7 @@ export default {
           this.solve()
         }
       },
-      deep: true,
-      immediate: true
+      deep: true
     }
   },
   asyncComputed: {
@@ -111,6 +122,12 @@ export default {
         constraints: '',
         random_numbers: ''
       }
+    }
+  },
+  async mounted () {
+    if (this.payload) {
+      await this.$nextTick()
+      this.solve()
     }
   },
   components: {
