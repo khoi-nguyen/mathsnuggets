@@ -129,7 +129,7 @@ export default {
   page-break-inside: avoid !important;
 }
 .reveal .slides section .fragment {
-  opacity: 0.1;
+  opacity: 0.3;
   visibility: visible;
 }
 .slide {
