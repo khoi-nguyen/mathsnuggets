@@ -17,7 +17,7 @@ div
         p.panel-tabs
           a All
         div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
-          a(:href="`/resources/${lesson.slug}`").panel-block
+          a(:href="`/resources/${lesson.year}/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow.has-text-centered
                 i.fa-4x.fas.fa-chalkboard-teacher
@@ -110,8 +110,8 @@ export default {
           editable: true
         },
         {
-          name: 'authors',
-          label: 'Authors',
+          name: 'year',
+          label: 'Year Group',
           editable: true
         },
         {

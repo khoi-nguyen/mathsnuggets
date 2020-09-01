@@ -23,7 +23,7 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
-  { path: '/resources/:slug', component: Slideshow },
+  { path: '/resources/:year/:slug', component: Slideshow },
   { path: '/slideshow_builder', component: Slideshow }
 ]
 
