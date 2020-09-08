@@ -22,6 +22,7 @@ class Geogebra(form.Form):
         """Get HTML code of embedded YouTube video"""
         url = self.url.split("/")[-1]
         url = f"https://www.geogebra.org/material/iframe/id/{url}/width/{self.width}/height/{self.height}"
+        url += "/ai/false/smb/false/stb/false"
         return f"""
           <iframe scrolling="no"
             src="{url}"
