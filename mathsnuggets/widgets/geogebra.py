@@ -12,12 +12,12 @@ class Geogebra(form.Form):
     """Geogebra"""
 
     name = "Geogebra"
-    url = fields.Field("URL")
+    url = fields.Field("URL", required=True)
     width = fields.Field("Width", default=800)
     height = fields.Field("Width", default=600)
     template = """`url` (`width`x`height`) `geogebra`"""
 
-    @fields.computed("Geogebra", field=fields.Html)
+    @fields.computed("Geogebra", field=fields.Html, nohide=True)
     def geogebra(self):
         """Get HTML code of embedded YouTube video"""
         url = self.url.split("/")[-1]
