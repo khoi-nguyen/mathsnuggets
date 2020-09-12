@@ -1,4 +1,7 @@
 export default async function api (url, method = 'GET', payload = false, cache = false) {
+  if (payload.src) {
+    method = 'POST'
+  }
   const obj = { method: method }
   if (method === 'POST') {
     obj.headers = { 'Content-Type': 'application/json' }
