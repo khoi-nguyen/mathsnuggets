@@ -71,12 +71,6 @@ export default {
       return this.component === 'list' ? 'li' : 'div'
     }
   },
-  created () {
-    window.addEventListener('paste', this.onPaste.bind(this))
-  },
-  destroyed () {
-    window.removeEventListener('paste', this.onPaste.bind(this))
-  },
   methods: {
     addChild (event) {
       const child = {
@@ -103,24 +97,6 @@ export default {
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
       this.children.splice(index, 1)
-    },
-    onPaste (event) {
-      const item = event.clipboardData.items[0]
-
-      if (item.type.indexOf('image') === 0) {
-        const blob = item.getAsFile()
-        const reader = new FileReader()
-        reader.onload = function (e) {
-          this.insertChildAfter(this.children.length - 1, {
-            component: 'widget',
-            type: 'Image',
-            payload: {
-              src: e.target.result
-            }
-          })
-        }.bind(this)
-        reader.readAsDataURL(blob)
-      }
     },
     updateChildren (event) {
       this.$emit('save', {

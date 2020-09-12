@@ -8,6 +8,9 @@
         :position="`children.${index}`"
         @save="save"
       )
+      .clipboard
+        draggable(v-model="clipboard" group="widgets")
+          node(v-bind="image" v-for="(image, i) in clipboard" component="widget")
 </template>
 
 <script>
@@ -26,6 +29,7 @@ export default {
     return {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
+      clipboard: [],
       emptySlide: emptySlide,
       saveStack: []
     }
@@ -36,7 +40,31 @@ export default {
       return slug ? `slideshows/${slug}` : false
     }
   },
+  created () {
+    window.addEventListener('paste', this.onPaste.bind(this))
+  },
+  destroyed () {
+    window.removeEventListener('paste', this.onPaste.bind(this))
+  },
   methods: {
+    onPaste (event) {
+      const item = event.clipboardData.items[0]
+
+      if (item.type.indexOf('image') === 0) {
+        const blob = item.getAsFile()
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          this.clipboard.push({
+            component: 'widget',
+            type: 'Image',
+            payload: {
+              src: e.target.result
+            }
+          })
+        }.bind(this)
+        reader.readAsDataURL(blob)
+      }
+    },
     save (payload) {
       if (!isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(cloneDeep(this.emptySlide))
@@ -81,5 +109,12 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
+}
+.clipboard {
+  position: absolute;
+  opacity: 1;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
 }
 </style>
