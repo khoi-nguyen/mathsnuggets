@@ -113,7 +113,7 @@ def load_user(identifier):
     return user if user.email else None
 
 
-@api.route("/auth/register", methods=["POST"])
+# @api.route("/auth/register", methods=["POST"])
 def register():
     payload = flask.request.get_json()
     user = models.User(email=payload["email"])
