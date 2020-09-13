@@ -1,7 +1,7 @@
 <template lang="pug">
 .container.avoid-column
   article.message.is-medium(:class="`is-${payload.style || 'primary'}`")
-    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
+    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur" v-text="payload.title")
     .message-body
       slot
 </template>
