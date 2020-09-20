@@ -48,21 +48,24 @@ export default {
   },
   methods: {
     onPaste (event) {
-      const item = event.clipboardData.items[0]
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items
 
-      if (item.type.indexOf('image') === 0) {
-        const blob = item.getAsFile()
-        const reader = new FileReader()
-        reader.onload = function (e) {
-          this.clipboard.push({
-            component: 'widget',
-            type: 'Image',
-            payload: {
-              src: e.target.result
-            }
-          })
-        }.bind(this)
-        reader.readAsDataURL(blob)
+      for (const index in items) {
+        const item = items[index]
+        if (item.kind === 'file') {
+          const blob = item.getAsFile()
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            this.clipboard.push({
+              component: 'widget',
+              type: 'Image',
+              payload: {
+                src: e.target.result
+              }
+            })
+          }.bind(this)
+          reader.readAsDataURL(blob)
+        }
       }
     },
     save (payload) {
