@@ -1,6 +1,6 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
-  component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :class="{fragment: component !== 'slide'}")
+  component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
@@ -128,10 +128,6 @@ export default {
 .avoid-column {
   break-inside: avoid-column !important;
   page-break-inside: avoid !important;
-}
-.reveal .slides section .fragment {
-  opacity: 0.3;
-  visibility: visible;
 }
 .slide {
   height: 100%;
