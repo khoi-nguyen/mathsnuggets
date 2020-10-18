@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     insertSlide (index) {
-      this.$emit('save', { action: 'insert', [`children.${index}`]: cloneDeep(this.emptySlide) })
+      this.save({ action: 'insert', [`children.${index}`]: cloneDeep(this.emptySlide) })
       this.children.splice(index, 0, cloneDeep(this.emptySlide))
     },
     onPaste (event) {
