@@ -33,6 +33,9 @@ div.dropdown-content
   li.dropdown-item(@click="$emit('delete')" v-if="component !== 'slide'")
     b-icon(pack="fas" icon="trash")
     span Delete
+  hr.dropdown-divider
+  li.dropdown-item(@click="$emit('insert-slide')")
+    span Insert slide before
 </template>
 
 <script>

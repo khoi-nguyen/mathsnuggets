@@ -7,11 +7,12 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
           :position="`${position}.children.${index}`"
           @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
+          @insert-slide="$emit('insert-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
         )
   vue-context(ref="menu" :close-on-click="false")
-    context-menu(@add-child="addChild" @delete="$emit('delete')" v-bind="attrs")
+    context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" v-bind="attrs")
 </template>
 
 <script>

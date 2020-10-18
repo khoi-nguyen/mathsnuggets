@@ -6,6 +6,7 @@
         component="slide"
         v-bind="slide"
         :position="`children.${index}`"
+        @insert-slide="insertSlide(index)"
         @save="save"
       )
       .clipboard
@@ -47,6 +48,10 @@ export default {
     window.removeEventListener('paste', this.onPaste.bind(this))
   },
   methods: {
+    insertSlide (index) {
+      this.$emit('save', { action: 'insert', [`children.${index}`]: cloneDeep(this.emptySlide) })
+      this.children.splice(index, 0, cloneDeep(this.emptySlide))
+    },
     onPaste (event) {
       const items = (event.clipboardData || event.originalEvent.clipboardData).items
 
