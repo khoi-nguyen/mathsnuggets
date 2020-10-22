@@ -23,7 +23,7 @@ export default async function api (url, method = 'GET', payload = false, cache =
     }
   }
   const data = await fetch(`/api/${url}`, obj).then(r => r.json())
-  if (cache) {
+  if (method === 'GET' && cache) {
     localStorage.setItem(sessionKey, JSON.stringify(data))
   }
   return data
