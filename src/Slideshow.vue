@@ -92,9 +92,13 @@ export default {
   async mounted () {
     Reveal.initialize({
       center: false,
+      hash: true,
+      help: false,
       height: '100%',
       margin: 0,
+      pause: false,
       slideNumber: 'c/t',
+      touch: false,
       transition: 'none',
       width: '100%'
     })
