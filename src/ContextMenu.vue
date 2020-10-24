@@ -6,6 +6,7 @@ div.dropdown-content
   li.dropdown-item(v-if="component === 'list'")
     b-checkbox(v-model="payload.numbered") Numbered list
   li.dropdown-item(v-if="component === 'environment'" custom)
+    b-checkbox(v-model="payload.collapsed") Collapse when loading
     b-select(placeholder="Style" v-model="payload.style")
       option(value="primary") Dark blue
       option(value="link") Blue
