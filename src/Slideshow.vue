@@ -4,6 +4,7 @@
     section(v-for="(slide, index) in children")
       node(
         component="slide"
+        :editable="authState.loggedIn"
         v-bind="slide"
         :position="`children.${index}`"
         @insert-slide="insertSlide(index)"

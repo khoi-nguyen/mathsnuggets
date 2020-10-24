@@ -1,6 +1,6 @@
 <template lang="pug">
 .slide
-  slide-title(v-model="payload.title")
+  slide-title(v-model="payload.title" :editable="editable")
   slot
 </template>
 
@@ -12,6 +12,7 @@ export default {
     SlideTitle
   },
   props: {
+    editable: Boolean,
     payload: { type: Object, default: () => {} }
   }
 }
