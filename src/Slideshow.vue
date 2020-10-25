@@ -10,14 +10,14 @@
         @insert-slide="insertSlide(index)"
         @save="save"
       )
-      .tray
-        b-button(@click="graphing = true")
+      .tray.buttons.are-medium
+        b-button(@click="graphing = true" type="is-link")
           b-icon(pack="fas" icon="chart-line")
-        b-button(@click="config.hideImages = !config.hideImages")
+        b-button(@click="config.hideImages = !config.hideImages" type="is-success")
           b-icon(pack="fas" icon="image" v-if="config.hideImages")
           b-icon(pack="fas" icon="chalkboard" v-if="!config.hideImages")
         b-dropdown(position="is-top-right" :mobile-modal="false")
-          b-button(slot="trigger")
+          b-button(slot="trigger" type="is-info")
             b-icon(pack="fas" icon="calculator")
           iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
         b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
