@@ -10,6 +10,14 @@
         @insert-slide="insertSlide(index)"
         @save="save"
       )
+      .tray
+        b-button(@click="graphing = true")
+          b-icon(pack="fas" icon="chart-line")
+        b-modal(:active.sync="graphing" full-screen has-modal-card)
+          .modal-card
+            header.modal-card-head Graphing calculator
+            .modal-card-body
+              iframe(src="https://www.desmos.com/calculator" width="100%" height="100%")
       .clipboard
         draggable(v-model="clipboard" group="widgets")
           node(v-bind="image" v-for="(image, i) in clipboard" component="widget")
@@ -33,6 +41,7 @@ export default {
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       clipboard: [],
       emptySlide: emptySlide,
+      graphing: false,
       saveStack: []
     }
   },
@@ -129,5 +138,12 @@ export default {
   z-index: 10000;
   bottom: 0;
   right: 0;
+}
+.tray {
+  position: absolute;
+  opacity: 1;
+  z-index: 10000;
+  bottom: 25px;
+  left: 20px;
 }
 </style>
