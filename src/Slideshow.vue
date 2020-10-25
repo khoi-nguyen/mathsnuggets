@@ -16,11 +16,11 @@
         b-button(@click="config.hideImages = !config.hideImages")
           b-icon(pack="fas" icon="image" v-if="config.hideImages")
           b-icon(pack="fas" icon="chalkboard" v-if="!config.hideImages")
-        b-modal(:active.sync="graphing" full-screen has-modal-card)
+        b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
           .modal-card
             header.modal-card-head Graphing calculator
             .modal-card-body
-              iframe(src="https://www.desmos.com/calculator" width="100%" height="100%")
+              iframe(src="https://www.geogebra.org/graphing" width="100%" height="100%")
       .clipboard
         draggable(v-model="clipboard" group="widgets")
           node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
