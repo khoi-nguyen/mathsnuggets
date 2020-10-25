@@ -4,15 +4,16 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
-          :editable="editable"
+          :config="config"
           :position="`${position}.children.${index}`"
           @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
           @insert-slide="$emit('insert-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
+          v-if="child.type != 'Image' || !config.hideImages"
         )
-  vue-context(ref="menu" :close-on-click="false" v-if="editable")
+  vue-context(ref="menu" :close-on-click="false" v-if="config.authState.loggedIn")
     context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" v-bind="attrs")
 </template>
 
@@ -31,7 +32,7 @@ export default {
   props: {
     children: { type: Array, default: () => [] },
     component: { type: String, default: 'slide' },
-    editable: { type: Boolean, default: false },
+    config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     type: { type: String, default: '' }
@@ -64,7 +65,7 @@ export default {
       return {
         children: this.children || [],
         component: this.component,
-        editable: this.editable,
+        config: this.config || {},
         payload: this.payload || {},
         position: this.position,
         state: this.state,

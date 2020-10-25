@@ -4,7 +4,7 @@
     section(v-for="(slide, index) in children")
       node(
         component="slide"
-        :editable="authState.loggedIn"
+        :config="config"
         v-bind="slide"
         :position="`children.${index}`"
         @insert-slide="insertSlide(index)"
@@ -13,6 +13,9 @@
       .tray
         b-button(@click="graphing = true")
           b-icon(pack="fas" icon="chart-line")
+        b-button(@click="config.hideImages = !config.hideImages")
+          b-icon(pack="fas" icon="image" v-if="config.hideImages")
+          b-icon(pack="fas" icon="chalkboard" v-if="!config.hideImages")
         b-modal(:active.sync="graphing" full-screen has-modal-card)
           .modal-card
             header.modal-card-head Graphing calculator
@@ -20,7 +23,7 @@
               iframe(src="https://www.desmos.com/calculator" width="100%" height="100%")
       .clipboard
         draggable(v-model="clipboard" group="widgets")
-          node(v-bind="image" v-for="(image, i) in clipboard" component="widget")
+          node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
 </template>
 
 <script>
@@ -40,6 +43,10 @@ export default {
       authState: auth.state,
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       clipboard: [],
+      config: {
+        authState: auth.state,
+        hideImages: false
+      },
       emptySlide: emptySlide,
       graphing: false,
       saveStack: []
