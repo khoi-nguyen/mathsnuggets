@@ -16,6 +16,10 @@
         b-button(@click="config.hideImages = !config.hideImages")
           b-icon(pack="fas" icon="image" v-if="config.hideImages")
           b-icon(pack="fas" icon="chalkboard" v-if="!config.hideImages")
+        b-dropdown(position="is-top-right" :mobile-modal="false")
+          b-button(slot="trigger")
+            b-icon(pack="fas" icon="calculator")
+          iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
         b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
           .modal-card
             header.modal-card-head Graphing calculator
