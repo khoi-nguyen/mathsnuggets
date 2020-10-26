@@ -13,9 +13,9 @@
       .tray.buttons.are-medium
         b-button(@click="graphing = true" type="is-link")
           b-icon(pack="fas" icon="chart-line")
-        b-button(@click="config.hideImages = !config.hideImages" type="is-success")
-          b-icon(pack="fas" icon="image" v-if="config.hideImages")
-          b-icon(pack="fas" icon="chalkboard" v-if="!config.hideImages")
+        b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success")
+          b-icon(pack="fas" icon="image" v-if="config.whiteboardMode")
+          b-icon(pack="fas" icon="chalkboard" v-if="!config.whiteboardMode")
         b-dropdown(position="is-top-right" :mobile-modal="false")
           b-button(slot="trigger" type="is-info")
             b-icon(pack="fas" icon="calculator")
@@ -49,7 +49,7 @@ export default {
       clipboard: [],
       config: {
         authState: auth.state,
-        hideImages: false
+        whiteboardMode: false
       },
       emptySlide: emptySlide,
       graphing: false,

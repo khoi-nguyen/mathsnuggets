@@ -11,7 +11,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
           @insert-slide="$emit('insert-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
-          :class="{invisible: child.type === 'Image' && config.hideImages}"
+          :class="{invisible: config.whiteboardMode}"
         )
   vue-context(ref="menu" :close-on-click="false" v-if="config.authState.loggedIn")
     context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" v-bind="attrs")
