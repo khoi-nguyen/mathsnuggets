@@ -11,6 +11,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
           @insert-slide="$emit('insert-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
+          v-if="child.component"
           :class="{invisible: config.whiteboardMode}"
         )
   vue-context(ref="menu" :close-on-click="false" v-if="config.authState.loggedIn")
@@ -31,7 +32,7 @@ export default {
   name: 'node',
   props: {
     children: { type: Array, default: () => [] },
-    component: { type: String, default: 'slide' },
+    component: { type: String, default: '' },
     config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
