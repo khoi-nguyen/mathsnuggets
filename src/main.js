@@ -23,6 +23,9 @@ const routes = [
   { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
+  { path: '/resources/', component: Resources },
+  { path: '/resources/:year', component: Resources },
+  { path: '/resources/:year/', component: Resources },
   { path: '/resources/:year/:slug', component: Slideshow },
   { path: '/slideshow_builder', component: Slideshow }
 ]

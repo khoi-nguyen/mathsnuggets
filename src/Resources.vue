@@ -66,7 +66,11 @@ import _ from 'lodash'
 export default {
   title: 'Teaching Resources',
   async mounted () {
-    const data = await api('slideshows')
+    let payload = {}
+    if (this.$route.params.year) {
+      payload = { year: this.$route.params.year }
+    }
+    const data = await api('slideshows', 'GET', payload)
     this.lessons = data.concat([{ title: '' }])
   },
   methods: {
