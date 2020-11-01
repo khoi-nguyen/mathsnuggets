@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     slides () {
-      return this.$route.path.startsWith('/resources/') || this.$route.path.startsWith('/slideshow')
+      return /^\/(resources\/.*\/.|slideshow)/.test(this.$route.path)
     }
   },
   mounted () {
