@@ -15,8 +15,9 @@ div
             span.icon.is-left
               i.fas.fa-search(aria-hidden='true')
         p.panel-tabs
-          a All
-        div(v-for="(lesson, index) in lessons" v-if="index < lessons.length - 1")
+          router-link(to="/resources") All
+          router-link(:to="`/resources/` + group" v-for="group in yearGroups") {{ group }}
+        div(v-for="(lesson, index) in filteredLessons" v-if="index < lessons.length - 1")
           a(:href="`/resources/${lesson.year}/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow.has-text-centered
@@ -66,12 +67,19 @@ import _ from 'lodash'
 export default {
   title: 'Teaching Resources',
   async mounted () {
-    let payload = {}
-    if (this.$route.params.year) {
-      payload = { year: this.$route.params.year }
-    }
-    const data = await api('slideshows', 'GET', payload)
+    const data = await api('slideshows', 'GET')
     this.lessons = data.concat([{ title: '' }])
+  },
+  computed: {
+    filteredLessons () {
+      const year = this.$route.params.year || false
+      return this.lessons.filter(function (lesson) {
+        return lesson.year === year || year === false
+      })
+    },
+    yearGroups () {
+      return _.uniq(this.lessons.map((lesson) => lesson.year))
+    }
   },
   methods: {
     openModal (index, create = false) {

@@ -26,8 +26,7 @@ def form_list():
 @api.route("/slideshows", methods=["GET"])
 @cache.memoize()
 def list_slideshows():
-    payload = flask.request.args or {}
-    return flask.jsonify([dict(s) for s in models.Slideshow.find(payload)])
+    return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
 
 @api.route("/slideshows/<slug>", methods=["GET"])
