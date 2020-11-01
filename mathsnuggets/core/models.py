@@ -48,7 +48,11 @@ class Model:
         if "_id" in query and query["_id"]:
             self._id = query["_id"]
             query["_id"] = self._id
-        data = db.collections[self._collection].find_one(query)
+        args = [query]
+        if "children" in query:
+            query.pop("children")
+            args.append({"children": 0})
+        data = db.collections[self._collection].find_one(*args)
         if not data or not query:
             return None
         for attr, val in data.items():
@@ -100,7 +104,7 @@ class Model:
 
         """
         for document in db.collections[cls._collection].find(*args, **kwargs):
-            yield cls(_id=document["_id"])
+            yield cls(_id=document["_id"], children=False)
 
     def update(self, patch, save=True):
         """Update the current document

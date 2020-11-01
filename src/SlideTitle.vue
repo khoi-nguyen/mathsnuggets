@@ -1,11 +1,11 @@
 <template lang="pug">
 div.box
-  h2.title
+  h2.title(:class="{editable: config.authState.loggedIn}")
     .columns.is-vcentered
       .column.slide-title(
         @blur="$emit('input', $event.target.innerText)"
         @keydown.enter.prevent="$event.target.blur()"
-        contenteditable
+        :contenteditable="config.authState.loggedIn"
         v-text="value"
       )
       .column.is-narrow.date
@@ -19,6 +19,7 @@ var moment = require('moment')
 
 export default {
   props: {
+    config: Object,
     value: String
   },
   data () {
@@ -47,6 +48,9 @@ div h2 {
   font-size: 3em;
   margin-bottom: 0.5em;
   padding: 0.2em;
+}
+div h2.editable {
+  background-color: #173828;
 }
 .date {
   font-size: 0.5em;
