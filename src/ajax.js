@@ -1,4 +1,7 @@
 export default async function api (url, method = 'GET', payload = false, cache = false) {
+  if (payload.src) {
+    method = 'POST'
+  }
   const obj = { method: method }
   if (method === 'POST') {
     obj.headers = { 'Content-Type': 'application/json' }
@@ -14,14 +17,14 @@ export default async function api (url, method = 'GET', payload = false, cache =
         char = '&'
       }
     }
-    const cached = sessionStorage.getItem(sessionKey)
+    const cached = localStorage.getItem(sessionKey)
     if (cached !== null && cache) {
       return JSON.parse(cached)
     }
   }
   const data = await fetch(`/api/${url}`, obj).then(r => r.json())
   if (method === 'GET' && cache) {
-    sessionStorage.setItem(sessionKey, JSON.stringify(data))
+    localStorage.setItem(sessionKey, JSON.stringify(data))
   }
   return data
 }

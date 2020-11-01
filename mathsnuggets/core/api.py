@@ -26,7 +26,8 @@ def form_list():
 @api.route("/slideshows", methods=["GET"])
 @cache.memoize()
 def list_slideshows():
-    return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
+    payload = flask.request.args or {}
+    return flask.jsonify([dict(s) for s in models.Slideshow.find(payload)])
 
 
 @api.route("/slideshows/<slug>", methods=["GET"])
@@ -113,7 +114,7 @@ def load_user(identifier):
     return user if user.email else None
 
 
-@api.route("/auth/register", methods=["POST"])
+# @api.route("/auth/register", methods=["POST"])
 def register():
     payload = flask.request.get_json()
     user = models.User(email=payload["email"])

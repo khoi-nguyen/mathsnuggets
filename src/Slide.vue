@@ -1,6 +1,6 @@
 <template lang="pug">
 .slide
-  slide-title(v-model="payload.title")
+  slide-title(v-model="payload.title" :config="config")
   slot
 </template>
 
@@ -12,6 +12,7 @@ export default {
     SlideTitle
   },
   props: {
+    config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} }
   }
 }

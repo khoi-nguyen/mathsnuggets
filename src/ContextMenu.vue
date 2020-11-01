@@ -6,6 +6,7 @@ div.dropdown-content
   li.dropdown-item(v-if="component === 'list'")
     b-checkbox(v-model="payload.numbered") Numbered list
   li.dropdown-item(v-if="component === 'environment'" custom)
+    b-checkbox(v-model="payload.collapsed") Collapse when loading
     b-select(placeholder="Style" v-model="payload.style")
       option(value="primary") Dark blue
       option(value="link") Blue
@@ -33,6 +34,9 @@ div.dropdown-content
   li.dropdown-item(@click="$emit('delete')" v-if="component !== 'slide'")
     b-icon(pack="fas" icon="trash")
     span Delete
+  hr.dropdown-divider
+  li.dropdown-item(@click="$emit('insert-slide')")
+    span Insert slide before
 </template>
 
 <script>

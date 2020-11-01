@@ -1,17 +1,21 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
-  component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :class="{fragment: component !== 'slide'}")
+  component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
+          :config="config"
           :position="`${position}.children.${index}`"
           @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
+          @insert-slide="$emit('insert-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
+          v-if="child.component"
+          :class="{invisible: config.whiteboardMode}"
         )
-  vue-context(ref="menu" :close-on-click="false")
-    context-menu(@add-child="addChild" @delete="$emit('delete')" v-bind="attrs")
+  vue-context(ref="menu" :close-on-click="false" v-if="config.authState.loggedIn")
+    context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" v-bind="attrs")
 </template>
 
 <script>
@@ -28,7 +32,8 @@ export default {
   name: 'node',
   props: {
     children: { type: Array, default: () => [] },
-    component: { type: String, default: 'slide' },
+    component: { type: String, default: '' },
+    config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     type: { type: String, default: '' }
@@ -61,6 +66,7 @@ export default {
       return {
         children: this.children || [],
         component: this.component,
+        config: this.config || {},
         payload: this.payload || {},
         position: this.position,
         state: this.state,
@@ -128,11 +134,10 @@ export default {
   break-inside: avoid-column !important;
   page-break-inside: avoid !important;
 }
-.reveal .slides section .fragment {
-  opacity: 0.3;
-  visibility: visible;
-}
 .slide {
   height: 100%;
+}
+.invisible {
+  visibility: hidden;
 }
 </style>

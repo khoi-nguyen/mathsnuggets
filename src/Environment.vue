@@ -1,9 +1,10 @@
 <template lang="pug">
 .container.avoid-column
-  article.message.is-medium(:class="`is-${payload.style || 'primary'}`")
-    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur") {{ payload.title }}
-    .message-body
-      slot
+  b-collapse.message.is-medium(:class="`is-${payload.style || 'primary'}`" :open="!payload.collapsed")
+    h3.message-header(contenteditable @blur="blur" @keydown.enter.prevent="blur" v-text="payload.title" slot="trigger")
+    article
+      .message-body
+        slot
 </template>
 
 <script>

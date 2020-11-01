@@ -26,8 +26,8 @@ span(:name="name" v-if="!hidden")
     )
     error-message(:message="error" :traceback="traceback" v-if="error")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
-    b-button.computed-field(type="is-success" v-if="!showComputed" icon-left="square-root-alt" icon-pack="fas") {{ label }}
-    div(v-html="html" v-if="showComputed")
+    b-button.computed-field(type="is-success" v-if="!showComputed && !nohide" icon-left="square-root-alt" icon-pack="fas") {{ label }}
+    div(v-html="html" v-if="showComputed || nohide")
 </template>
 
 <script>
@@ -47,6 +47,7 @@ export default {
     hidden: Boolean,
     label: String,
     name: String,
+    nohide: Boolean,
     options: { type: Array, default: () => [] },
     protected: Boolean,
     random: Boolean,
