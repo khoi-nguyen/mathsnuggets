@@ -1,5 +1,5 @@
 <template lang="pug">
-.reveal(:class="{graphPaper: config.graphPaper}")
+.reveal(:class="{graphPaper: config.graphPaper, halfwidth: config.columns}")
   .slides
     section(v-for="(slide, index) in children")
       node(
@@ -18,6 +18,8 @@
           b-icon(pack="fas" icon="chalkboard" v-if="!config.whiteboardMode")
         b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger")
           b-icon(pack="fas" icon="th")
+        b-button(type="is-warning" @click="config.columns = !config.columns")
+          b-icon(pack="fas" icon="columns")
         b-dropdown(position="is-top-right" :mobile-modal="false")
           b-button(slot="trigger" type="is-info")
             b-icon(pack="fas" icon="calculator")
@@ -51,6 +53,7 @@ export default {
       clipboard: [],
       config: {
         authState: auth.state,
+        columns: false,
         graphPaper: false,
         whiteboardMode: false
       },
@@ -143,6 +146,10 @@ export default {
 <style scoped>
 .graphPaper {
   background: url('https://upload.wikimedia.org/wikipedia/commons/9/9f/Graph-paper.svg');
+}
+.halfwidth {
+  margin-right: auto;
+  width: 50%;
 }
 .reveal .slides section {
   height: 100%;
