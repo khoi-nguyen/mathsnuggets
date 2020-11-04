@@ -18,7 +18,7 @@
           b-icon(pack="fas" icon="chalkboard" v-if="!config.whiteboardMode")
         b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger")
           b-icon(pack="fas" icon="th")
-        b-button(type="is-warning" @click="config.columns = !config.columns")
+        b-button(type="is-warning" @click="splitWindow()")
           b-icon(pack="fas" icon="columns")
         b-dropdown(position="is-top-right" :mobile-modal="false")
           b-button(slot="trigger" type="is-info")
@@ -114,6 +114,10 @@ export default {
         api(this.apiUrl, 'POST', this.saveStack)
         this.saveStack = []
       }
+    },
+    splitWindow () {
+      this.config.columns = !this.config.columns
+      Reveal.configure({ width: this.config.columns ? '50%' : '100%' })
     }
   },
   async mounted () {
@@ -147,9 +151,9 @@ export default {
 .graphPaper {
   background: url('https://upload.wikimedia.org/wikipedia/commons/9/9f/Graph-paper.svg');
 }
-.halfwidth {
+.reveal .slides {
   margin-right: auto;
-  width: 50%;
+  margin-left: 0;
 }
 .reveal .slides section {
   height: 100%;
