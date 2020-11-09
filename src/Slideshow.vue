@@ -20,6 +20,8 @@
           b-icon(pack="fas" icon="th")
         b-button(type="is-warning" @click="splitWindow()")
           b-icon(pack="fas" icon="columns")
+        b-button(@click="geometry = true")
+          b-icon(pack="fas" icon="drafting-compass")
         b-dropdown(position="is-top-right" :mobile-modal="false")
           b-button(slot="trigger" type="is-info")
             b-icon(pack="fas" icon="calculator")
@@ -29,6 +31,11 @@
             header.modal-card-head Graphing calculator
             .modal-card-body
               iframe(src="https://www.geogebra.org/graphing" width="100%" height="100%")
+        b-modal(:active.sync="geometry" full-screen has-modal-card :destroy-on-hide="false")
+          .modal-card
+            header.modal-card-head Geometry
+            .modal-card-body
+              iframe(src="https://www.geogebra.org/geometry" width="100%" height="100%")
       .clipboard
         draggable(v-model="clipboard" group="widgets")
           node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
@@ -58,6 +65,7 @@ export default {
         whiteboardMode: false
       },
       emptySlide: emptySlide,
+      geometry: false,
       graphing: false,
       saveStack: []
     }
