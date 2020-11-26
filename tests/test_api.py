@@ -33,7 +33,9 @@ def get(client, url, get_data=True):
 
 def post(client, url, payload, get_data=True):
     response = client.post(
-        url, data=flask.json.dumps(payload), content_type="application/json",
+        url,
+        data=flask.json.dumps(payload),
+        content_type="application/json",
     )
     if not get_data:
         return response
@@ -135,7 +137,9 @@ def test_save_slideshow(client, mock_mongo):
     )
     assert response.status_code == 200
     response, data = post(
-        client, f"/api/slideshows/{str(slideshow['_id'])}", {"title": "Hello"},
+        client,
+        f"/api/slideshows/{str(slideshow['_id'])}",
+        {"title": "Hello"},
     )
     assert response.status_code == 200
     assert data["title"] == "Hello"
@@ -148,7 +152,11 @@ def test_save_slideshow(client, mock_mongo):
     assert response.status_code == 200
 
     count = db.slideshows.count_documents({})
-    response, data = post(client, "/api/slideshows/", {"title": "Hello"},)
+    response, data = post(
+        client,
+        "/api/slideshows/",
+        {"title": "Hello"},
+    )
     assert response.status_code == 200
     assert db.slideshows.count_documents({}) == count + 1
 
