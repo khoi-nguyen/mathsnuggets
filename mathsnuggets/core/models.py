@@ -271,3 +271,12 @@ class User(Model):
 
     def check_password(self, password):
         return type(self).password.check(password, self.password)
+
+
+class Vote(Model):
+
+    _collection = "votes"
+
+    user = fields.Field("User")
+    survey = fields.Field("Survey name")
+    value = fields.Field("Value")

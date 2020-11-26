@@ -1,3 +1,4 @@
+import uuid
 import os
 import traceback
 
@@ -21,6 +22,25 @@ def is_post():
 @cache.cached()
 def form_list():
     return flask.jsonify(widget_data)
+
+
+@api.route("/surveys/<survey>", methods=["GET"])
+def count_votes(survey):
+    return flask.jsonify([dict(s) for s in models.Vote.find({"survey": survey})])
+
+
+@api.route("/surveys/<survey>", methods=["POST"])
+def cast_vote(survey):
+    user = flask.request.cookies.get("voter_id") or uuid.uuid1()
+    vote = models.Vote(user=user, survey=survey)
+    if not vote.survey:
+        vote.user = user
+        vote.survey = survey
+    vote.update(flask.request.get_json())
+    response = flask.jsonify(dict(vote))
+    if not flask.request.cookies.get("voter_id"):
+        response.set_cookie("voter_id", str(user))
+    return response
 
 
 @api.route("/slideshows", methods=["GET"])
