@@ -15,7 +15,12 @@ class Geogebra(form.Form):
     url = fields.Field("URL", required=True)
     width = fields.Field("Width", default=800)
     height = fields.Field("Width", default=600)
-    template = """`url` (`width`x`height`) `geogebra`"""
+    template = """
+        <div v-if="config.edit">
+            `url` (`width`x`height`)
+        </div>
+        `geogebra`
+    """
 
     @fields.computed("Geogebra", field=fields.Html, nohide=True)
     def geogebra(self):

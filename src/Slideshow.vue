@@ -22,6 +22,8 @@
           b-icon(pack="fas" icon="columns")
         b-button(@click="geometry = true")
           b-icon(pack="fas" icon="drafting-compass")
+        b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn")
+          b-icon(pack="fas" icon="edit")
         b-dropdown(position="is-top-right" :mobile-modal="false")
           b-button(slot="trigger" type="is-info")
             b-icon(pack="fas" icon="calculator")
@@ -60,6 +62,7 @@ export default {
       clipboard: [],
       config: {
         authState: auth.state,
+        edit: false,
         columns: false,
         graphPaper: false,
         whiteboardMode: false
