@@ -21,6 +21,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.m
 <script>
 import draggable from 'vuedraggable'
 import { VueContext } from 'vue-context'
+import { cloneDeep } from 'lodash'
 
 import ContextMenu from './ContextMenu'
 import Environment from './Environment'
@@ -46,7 +47,11 @@ export default {
   watch: {
     payload: {
       handler () {
-        this.$emit('save', { action: 'update', [`${this.position}.payload`]: this.payload })
+        const payload = cloneDeep(this.payload)
+        if (this.type === 'Survey') {
+          delete payload.answer
+        }
+        this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
       },
       deep: true
     }

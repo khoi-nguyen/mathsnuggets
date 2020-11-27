@@ -3,6 +3,12 @@ form.avoid-column
   v-runtime-template.is-size-3(:template="widgetData.template")
   v-runtime-template(:template="generatorTemplate")
   error-message(v-bind="error" v-if="error")
+  .container
+    .survey.columns(v-if="type === 'Survey' && config.authState.loggedIn")
+      .column
+        b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
+      .column.is-narrow
+        b-button(@click.prevent="getVoteData" type="is-primary") Update results
 </template>
 
 <script>
@@ -15,6 +21,7 @@ import ErrorMessage from './ErrorMessage'
 
 export default {
   props: {
+    config: Object,
     payload: Object,
     state: Object,
     type: String
@@ -23,7 +30,8 @@ export default {
     return {
       computed: {},
       error: {},
-      showGenerator: false
+      showGenerator: false,
+      voteData: [],
     }
   },
   computed: {
@@ -75,6 +83,15 @@ export default {
     },
     hasGenerator () {
       return !isEmpty(filter(this.widgetData.fields, f => f.random || f.constraint))
+    },
+    correctAnswers () {
+      return this.voteData.filter(vote => vote.value === this.solverPayload.correct_answer).length
+    },
+    totalAnswers () {
+      return this.voteData.length
+    },
+    percentageCorrectAnswers () {
+      return this.totalAnswers ? this.correctAnswers * 100 / this.totalAnswers : 0
     }
   },
   methods: {
@@ -92,6 +109,14 @@ export default {
           this.$set(payload, fieldName, value)
         }
       })
+      if (this.type === 'Survey' && data.name && data.answer) {
+        api(`surveys/${data.name}`, 'POST', { value: data.answer })
+      }
+    },
+    async getVoteData () {
+      if (this.solverPayload.name) {
+        this.voteData = await api(`surveys/${this.solverPayload.name}`, 'GET')
+      }
     }
   },
   watch: {
@@ -137,3 +162,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.reveal .survey .progress {
+  display: block;
+  height: 1.5em;
+  position: static;
+}
+</style>
