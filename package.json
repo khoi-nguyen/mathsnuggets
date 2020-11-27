@@ -1,6 +1,9 @@
 {
   "name": "mathsnuggets",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.19.0"
+  },
   "description": "",
   "main": "src/index.html",
   "directories": {
