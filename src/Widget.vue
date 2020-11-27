@@ -7,8 +7,9 @@ form.avoid-column
     .survey.columns(v-if="type === 'Survey' && config.authState.loggedIn")
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
-      .column.is-narrow
+      .column.is-narrow.buttons
         b-button(@click.prevent="getVoteData" type="is-primary") Update results
+        b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
 
 <script>
@@ -31,7 +32,7 @@ export default {
       computed: {},
       error: {},
       showGenerator: false,
-      voteData: [],
+      voteData: []
     }
   },
   computed: {
@@ -95,6 +96,9 @@ export default {
     }
   },
   methods: {
+    deleteVotes () {
+      api(`surveys/${this.solverPayload.name}`, 'DELETE')
+    },
     async solve (generator = false) {
       const method = generator ? 'POST' : 'GET'
       const payload = generator ? this.generatorPayload : this.solverPayload
@@ -153,6 +157,9 @@ export default {
     if (this.payload) {
       await this.$nextTick()
       this.solve()
+    }
+    if (this.config.authState.loggedIn) {
+      setInterval(this.getVoteData, 5000)
     }
   },
   components: {
