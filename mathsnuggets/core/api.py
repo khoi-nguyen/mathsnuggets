@@ -37,7 +37,7 @@ def delete_votes(survey):
 
 @api.route("/surveys/<survey>", methods=["POST"])
 def cast_vote(survey):
-    user = flask.request.cookies.get("voter_id") or uuid.uuid1()
+    user = flask.request.cookies.get("voter_id") or str(uuid.uuid1())
     vote = models.Vote(user=user, survey=survey)
     if not vote.survey:
         vote.user = user
