@@ -8,7 +8,6 @@ form.avoid-column
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
       .column.is-narrow.buttons
-        b-button(@click.prevent="getVoteData" type="is-primary") Update results
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
 
