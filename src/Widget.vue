@@ -44,7 +44,7 @@ export default {
         if (!field) {
           return false
         }
-        return !field.random && !field.constraint
+        return !field.random && !field.constraint && !(value === '')
       })
     },
     generatorPayload () {

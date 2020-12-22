@@ -1,3 +1,5 @@
+import uuid
+
 import flask
 
 from mathsnuggets.core import fields, form
@@ -13,6 +15,10 @@ class Survey(form.Form):
     template = """
         <p>Your answer: `answer`</p>
         <div v-if="config.edit">
-            <p>Correct answer: `correct_answer` (`name`)</p>
+            <p>Correct answer: `correct_answer`</p>
         </div>
     """
+
+    def validate(self):
+        if not self.name:
+            self.name = str(uuid.uuid1())
