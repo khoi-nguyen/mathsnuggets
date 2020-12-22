@@ -181,21 +181,21 @@ def test_delete_slideshow(client, mock_mongo):
     assert db.slideshows.count_documents({}) == count - 1
 
 
-def test_register(client, mock_mongo):
-    response, data = post(client, "/api/auth/register", {"email": "", "password": ""})
-    assert response.status_code == 400
-
-    response, data = post(
-        client, "/api/auth/register", {"email": "test@test.com", "password": "testtest"}
-    )
-    assert response.status_code == 400
-
-    response, data = post(
-        client,
-        "/api/auth/register",
-        {"email": "test2@test.com", "password": "testtest"},
-    )
-    assert response.status_code == 200
+# def test_register(client, mock_mongo):
+#     response, data = post(client, "/api/auth/register", {"email": "", "password": ""})
+#     assert response.status_code == 400
+# 
+#     response, data = post(
+#         client, "/api/auth/register", {"email": "test@test.com", "password": "testtest"}
+#     )
+#     assert response.status_code == 400
+# 
+#     response, data = post(
+#         client,
+#         "/api/auth/register",
+#         {"email": "test2@test.com", "password": "testtest"},
+#     )
+#     assert response.status_code == 200
 
 
 def test_login_logout(client, mock_mongo):
@@ -246,14 +246,14 @@ def test_delete_test_user(client, mock_mongo):
     assert response.status_code == 204
     assert db.collections.users.count_documents({}) == count - 1
 
-    response = post(
-        client,
-        "/api/auth/register",
-        {"email": "test@test.com", "password": "testtest"},
-        get_data=False,
-    )
-    assert response.status_code == 200
-    assert db.collections.users.count_documents({}) == count
+    # response = post(
+    #     client,
+    #     "/api/auth/register",
+    #     {"email": "test@test.com", "password": "testtest"},
+    #     get_data=False,
+    # )
+    # assert response.status_code == 200
+    # assert db.collections.users.count_documents({}) == count
 
 
 def test_static_routes(client):
