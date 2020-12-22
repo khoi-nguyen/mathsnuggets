@@ -1,7 +1,5 @@
 import uuid
 
-import flask
-
 from mathsnuggets.core import fields, form
 
 

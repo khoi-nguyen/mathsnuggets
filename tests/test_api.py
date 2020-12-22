@@ -184,12 +184,12 @@ def test_delete_slideshow(client, mock_mongo):
 # def test_register(client, mock_mongo):
 #     response, data = post(client, "/api/auth/register", {"email": "", "password": ""})
 #     assert response.status_code == 400
-# 
+#
 #     response, data = post(
 #         client, "/api/auth/register", {"email": "test@test.com", "password": "testtest"}
 #     )
 #     assert response.status_code == 400
-# 
+#
 #     response, data = post(
 #         client,
 #         "/api/auth/register",

@@ -1,7 +1,5 @@
 import statistics
 
-import sympy
-
 from mathsnuggets.core import fields, form
 
 
