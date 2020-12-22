@@ -24,4 +24,4 @@ pytest-mongodb
 pytest-xdist
 python-slugify
 sphinx-rtd-theme
-sympy
+sympy==1.6.2
