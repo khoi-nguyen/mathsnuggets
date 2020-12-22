@@ -32,13 +32,13 @@ describe('API calls', () => {
     fetch.mockResponse(response)
 
     await api('fields/Equation', 'GET', { value: 'x' })
-    expect(sessionStorage.length).toBe(0)
+    expect(localStorage.length).toBe(0)
 
     await api('fields/Equation', 'POST', { value: 'x' }, true)
-    expect(sessionStorage.length).toBe(0)
+    expect(localStorage.length).toBe(0)
 
     await api('fields/Equation', 'GET', { value: 'x' }, true)
-    expect(sessionStorage.getItem('fields/Equation?value=x')).toEqual(response)
+    expect(localStorage.getItem('fields/Equation?value=x')).toEqual(response)
 
     await api('fields/Equation', 'GET', { value: 'x' }, true)
     expect(fetch).toHaveBeenCalledTimes(3)

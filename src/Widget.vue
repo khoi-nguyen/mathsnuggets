@@ -4,7 +4,7 @@ form.avoid-column
   v-runtime-template(:template="generatorTemplate")
   error-message(v-bind="error" v-if="error")
   .container
-    .survey.columns(v-if="type === 'Survey' && config.authState.loggedIn")
+    .survey.columns(v-if="type === 'Survey' && config && config.authState && config.authState.loggedIn")
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
       .column.is-narrow.buttons
@@ -157,7 +157,7 @@ export default {
       await this.$nextTick()
       this.solve()
     }
-    if (this.config.authState.loggedIn) {
+    if (this.config && this.config.authState && this.config.authState.loggedIn) {
       setInterval(this.getVoteData, 5000)
     }
   },

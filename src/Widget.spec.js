@@ -61,6 +61,9 @@ describe('Widget', () => {
     expect(fetch).toHaveBeenCalledTimes(3)
     wrapper.vm.payload.equation = 'x^2'
     await flushPromises()
-    expect(fetch).toHaveBeenCalledTimes(5)
+    expect(fetch).toHaveBeenCalledTimes(3)
+    wrapper.vm.payload.equation = 'x^4'
+    await flushPromises()
+    expect(fetch).toHaveBeenCalledTimes(4)
   })
 })
