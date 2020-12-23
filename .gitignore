@@ -10,3 +10,4 @@ docs/source/apidoc
 env/
 htmlcov/
 node_modules/
+storage/
