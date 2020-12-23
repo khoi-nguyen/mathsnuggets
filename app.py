@@ -33,8 +33,9 @@ def default(path="index.html"):
     if path.startswith("docs/"):
         folder = "docs/build/html/"
         path = path[5:] if len(path) > 5 else "index.html"
-    elif path.startswith("storage"):
-        folder = "./"
+    elif path.startswith("storage/"):
+        folder = os.environ.get("STORAGE", "./storage/")
+        path = path[8:]
     elif path.startswith("_static"):
         folder = "docs/build/html/"
     elif path == "favicon.ico":
