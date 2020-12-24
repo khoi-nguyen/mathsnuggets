@@ -30,6 +30,7 @@ def count_votes(survey):
 
 
 @api.route("/surveys/<survey>", methods=["DELETE"])
+@flask_login.login_required
 def delete_votes(survey):
     for vote in models.Vote.find({"survey": survey}):
         vote.delete()
