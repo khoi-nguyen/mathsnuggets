@@ -15,10 +15,13 @@ div
             span.icon.is-left
               i.fas.fa-search(aria-hidden='true')
         p.panel-tabs
-          router-link(to="/resources") All
-          router-link(:to="`/resources/` + group" v-for="group in yearGroups") {{ group }}
+          router-link(to="/resources") All teachers
+          router-link(:to="`/resources/${teacher}`" v-for="teacher in teachers") {{ teacher }}
+        p.panel-tabs(v-if="$route.params.teacher")
+          router-link(to="/resources") All year groups
+          router-link(:to="`/resources/${$route.params.teacher}/` + group" v-for="group in yearGroups") {{ group }}
         div(v-for="(lesson, index) in filteredLessons" v-if="index < lessons.length - 1")
-          a(:href="`/resources/${lesson.year}/${lesson.slug}`").panel-block
+          a(:href="`/resources/${lesson.teacher}/${lesson.year}/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow.has-text-centered
                 i.fa-4x.fas.fa-chalkboard-teacher
@@ -72,12 +75,19 @@ export default {
   },
   computed: {
     filteredLessons () {
+      const teacher = this.$route.params.teacher || false
       const year = this.$route.params.year || false
       return this.lessons.filter(function (lesson) {
-        return lesson.year === year || year === false
+        return (lesson.year === year || year === false) && (lesson.teacher === teacher || teacher === false)
       })
     },
+    teachers () {
+      return _.uniq(this.lessons.map((lesson) => lesson.teacher))
+    },
     yearGroups () {
+      if (this.$route.params.teacher) {
+        return _.uniq(this.lessons.filter(l => l.teacher === this.$route.params.teacher).map(l => l.year))
+      }
       return _.uniq(this.lessons.map((lesson) => lesson.year))
     }
   },
@@ -124,6 +134,11 @@ export default {
         {
           name: 'year',
           label: 'Year Group',
+          editable: true
+        },
+        {
+          name: 'teacher',
+          label: 'Teacher',
           editable: true
         },
         {

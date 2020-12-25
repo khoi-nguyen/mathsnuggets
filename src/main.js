@@ -24,9 +24,11 @@ const routes = [
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
   { path: '/resources/', component: Resources },
-  { path: '/resources/:year', component: Resources },
-  { path: '/resources/:year/', component: Resources },
-  { path: '/resources/:year/:slug', component: Slideshow },
+  { path: '/resources/:teacher', component: Resources },
+  { path: '/resources/:teacher/', component: Resources },
+  { path: '/resources/:teacher/:year', component: Resources },
+  { path: '/resources/:teacher/:year/', component: Resources },
+  { path: '/resources/:teacher/:year/:slug', component: Slideshow },
   { path: '/slideshow_builder', component: Slideshow }
 ]
 

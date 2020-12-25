@@ -75,8 +75,8 @@ export default {
   },
   computed: {
     apiUrl () {
-      const slug = this.$route.params.slug
-      return slug ? `slideshows/${slug}` : false
+      const params = this.$route.params
+      return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
     }
   },
   created () {
