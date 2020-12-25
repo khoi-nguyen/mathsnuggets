@@ -1,5 +1,10 @@
 <template lang="pug">
   .container
+    p(v-if="!showStats")
+      span Your answer: &nbsp;
+      slot
+      b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
+      b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
     .survey.columns(v-if="showStats")
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
