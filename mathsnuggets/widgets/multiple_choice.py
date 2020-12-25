@@ -2,6 +2,7 @@ import uuid
 
 from mathsnuggets.core import fields, form
 
+
 class MultipleChoice(form.Form):
     """Multiple Choice"""
 
@@ -14,23 +15,36 @@ class MultipleChoice(form.Form):
     option_c = fields.Expression("Option C")
     option_d = fields.Expression("Option D")
 
-    template = """
-        <ul v-if="config.edit">
-            Correct answer: `correct_answer`
-        </ul>
-        <div class="container buttons are-medium">
-            <b-button>A: `option_a`</b-button>
-            <b-button>B: `option_b`</b-button>
-            <b-button>C: `option_c`</b-button>
-            <b-button>D: `option_d`</b-button>
-        </div>
-        <survey
-            :name="payload.name"
-            :showStats="config.authState.loggedIn"
-            :correct="computed.correct"
-            :value="payload.answer">
-            `answer`
-        </survey>
+    @property
+    def template(self):
+        buttons = []
+        for ltr in ["a", "b", "c", "d"]:
+            buttons.append(
+                f"""
+                <b-button @click="$set(payload, 'answer', '{ltr.upper()}')"
+                    type="is-primary"
+                    v-if="'{ltr.upper()}' === payload.answer">
+                    {ltr.upper()}: `option_{ltr}`
+                </b-button>
+                <b-button @click="$set(payload, 'answer', '{ltr.upper()}')" v-else>
+                    {ltr.upper()}: `option_{ltr}`
+                </b-button>
+            """
+            )
+        return f"""
+            <ul v-if="config.edit">
+                Correct answer: `correct_answer`
+            </ul>
+            <div class="container buttons are-large">
+                {"".join(buttons)}
+            </div>
+            <survey
+                :name="payload.name"
+                :showStats="config.authState.loggedIn"
+                :correct="computed.correct"
+                :value="payload.answer">
+                `answer`
+            </survey>
     """
 
     @fields.computed("Correct", field=fields.Boolean)
