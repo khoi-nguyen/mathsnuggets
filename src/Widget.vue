@@ -3,24 +3,20 @@ form.avoid-column
   v-runtime-template.is-size-3(:template="widgetData.template")
   v-runtime-template(:template="generatorTemplate")
   error-message(v-bind="error" v-if="error")
-  .container
-    .survey.columns(v-if="type === 'Survey' && config && config.authState && config.authState.loggedIn")
-      .column
-        b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
-      .column.is-narrow.buttons
-        b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
 
 <script>
-import { isEmpty, isEqual, filter, forEach, pickBy } from 'lodash'
+import { isEmpty, isEqual, filter, forEach, map, pickBy } from 'lodash'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
+import Survey from './Survey'
 
 export default {
   props: {
+    blacklist: Array,
     config: Object,
     payload: Object,
     state: Object,
@@ -30,8 +26,7 @@ export default {
     return {
       computed: {},
       error: {},
-      showGenerator: false,
-      voteData: []
+      showGenerator: false
     }
   },
   computed: {
@@ -83,21 +78,9 @@ export default {
     },
     hasGenerator () {
       return !isEmpty(filter(this.widgetData.fields, f => f.random || f.constraint))
-    },
-    correctAnswers () {
-      return this.voteData.filter(vote => vote.value === this.solverPayload.correct_answer).length
-    },
-    totalAnswers () {
-      return this.voteData.length
-    },
-    percentageCorrectAnswers () {
-      return this.totalAnswers ? this.correctAnswers * 100 / this.totalAnswers : 0
     }
   },
   methods: {
-    deleteVotes () {
-      api(`surveys/${this.solverPayload.name}`, 'DELETE')
-    },
     async solve (generator = false) {
       const method = generator ? 'POST' : 'GET'
       const payload = generator ? this.generatorPayload : this.solverPayload
@@ -112,14 +95,6 @@ export default {
           this.$set(payload, fieldName, value)
         }
       })
-      if (this.type === 'Survey' && data.name && data.answer) {
-        api(`surveys/${data.name}`, 'POST', { value: data.answer })
-      }
-    },
-    async getVoteData () {
-      if (this.solverPayload.name) {
-        this.voteData = await api(`surveys/${this.solverPayload.name}`, 'GET')
-      }
     }
   },
   watch: {
@@ -136,6 +111,9 @@ export default {
         }
       },
       deep: true
+    },
+    widgetData (data) {
+      this.$emit('update:blacklist', map(filter(this.widgetData.fields, f => f.nosave), f => f.name))
     }
   },
   asyncComputed: {
@@ -157,22 +135,12 @@ export default {
       await this.$nextTick()
       this.solve()
     }
-    if (this.config && this.config.authState && this.config.authState.loggedIn) {
-      setInterval(this.getVoteData, 5000)
-    }
   },
   components: {
     ErrorMessage,
     FormField,
+    Survey,
     VRuntimeTemplate
   }
 }
 </script>
-
-<style>
-.reveal .survey .progress {
-  display: block;
-  height: 1.5em;
-  position: static;
-}
-</style>

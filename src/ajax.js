@@ -1,5 +1,5 @@
 export default async function api (url, method = 'GET', payload = false, cache = false) {
-  if (payload.src || url === 'widgets/Survey') {
+  if (payload.src) {
     method = 'POST'
   }
   const obj = { method: method }

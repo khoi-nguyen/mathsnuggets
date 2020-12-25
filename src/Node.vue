@@ -1,6 +1,6 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
-  component(:is="component" @save="$emit('save', $event)" v-bind="attrs")
+  component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :blacklist.sync="blacklist")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
@@ -41,6 +41,7 @@ export default {
   },
   data () {
     return {
+      blacklist: [],
       state: {}
     }
   },
@@ -48,8 +49,8 @@ export default {
     payload: {
       handler () {
         const payload = cloneDeep(this.payload)
-        if (this.type === 'Survey') {
-          delete payload.answer
+        for (var i = 0; i < this.blacklist.length; i++) {
+          delete payload[this.blacklist[i]]
         }
         this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
       },
