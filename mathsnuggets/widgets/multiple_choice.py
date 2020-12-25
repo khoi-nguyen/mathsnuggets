@@ -10,10 +10,10 @@ class MultipleChoice(form.Form):
     answer = fields.Select("Your answer", nosave=True, options=["", "A", "B", "C", "D"])
     correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D"])
 
-    option_a = fields.Expression("Option A")
-    option_b = fields.Expression("Option B")
-    option_c = fields.Expression("Option C")
-    option_d = fields.Expression("Option D")
+    option_a = fields.Markdown("Option A")
+    option_b = fields.Markdown("Option B")
+    option_c = fields.Markdown("Option C")
+    option_d = fields.Markdown("Option D")
 
     @property
     def template(self):
@@ -24,10 +24,10 @@ class MultipleChoice(form.Form):
                 <b-button @click="$set(payload, 'answer', '{ltr.upper()}')"
                     type="is-primary"
                     v-if="'{ltr.upper()}' === payload.answer">
-                    {ltr.upper()}: `option_{ltr}`
+                    `option_{ltr}`
                 </b-button>
                 <b-button @click="$set(payload, 'answer', '{ltr.upper()}')" v-else>
-                    {ltr.upper()}: `option_{ltr}`
+                    `option_{ltr}`
                 </b-button>
             """
             )
