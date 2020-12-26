@@ -145,9 +145,12 @@ def load_user(identifier):
     return user if user.email else None
 
 
-# @api.route("/auth/register", methods=["POST"])
+@api.route("/auth/register", methods=["POST"])
 def register():
     payload = flask.request.get_json()
+    registration_pw = payload.pop("registration_password")
+    if registration_pw != os.environ.get("REGISTRATION_PASSWORD", ""):
+        raise InvalidUsage(f"Registration password incorrect", 400, payload)
     user = models.User(email=payload["email"])
     if user.email:
         raise InvalidUsage(f"User {user.email} already exists", 400, payload)
