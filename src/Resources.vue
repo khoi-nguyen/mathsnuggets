@@ -31,7 +31,7 @@ div
                     span.link(@click.stop.prevent="openModal(index)") Edit metadata
                   li
                     b-icon(pack="fas" icon="trash")
-                    span.link(@click.prevent="openDeleteModal(index, lesson.slug)") Delete slideshow
+                    span.link(@click.prevent="openDeleteModal(index, lesson.teacher, lesson.year, lesson.slug)") Delete slideshow
               .column
                 h3.title {{ lesson.title }}
                 dl
@@ -58,7 +58,7 @@ div
         button.delete(@click="deleteModal = false")
       section.modal-card-body Are you sure you want to delete the slideshow {{ lessons[lessonIndex].title }}?
       footer.modal-card-foot
-        button.button.is-success(@click="deleteSlideshow(lessonIndex, slug)") Delete
+        button.button.is-success(@click="deleteSlideshow(lessonIndex, teacher, year, slug)") Delete
         button.button(@click="deleteModal = false") Cancel
 </template>
 
@@ -97,13 +97,15 @@ export default {
       this.modal = true
       this.create = create
     },
-    openDeleteModal (index, slug) {
+    openDeleteModal (index, teacher, year, slug) {
       this.deleteModal = true
       this.lessonIndex = index
+      this.teacher = teacher
+      this.year = year
       this.slug = slug
     },
-    deleteSlideshow (index, slug) {
-      api(`slideshows/${slug}`, 'DELETE')
+    deleteSlideshow (index, teacher, year, slug) {
+      api(`slideshows/${teacher}/${year}/${slug}`, 'DELETE')
       this.lessons.splice(index, 1)
       this.deleteModal = false
     },
@@ -112,9 +114,16 @@ export default {
       _.forEach(this.$refs.modalFields, function (field) {
         payload[field.$attrs.name] = field.$el.children[0].value
       })
-      const data = await api(`slideshows/${this.create ? '' : this.lessons[this.lessonIndex].slug}`, 'POST', payload)
+      let url = 'slideshows/'
+      if (!this.create) {
+        const lesson = this.lessons[this.lessonIndex]
+        url += `${lesson.teacher}/${lesson.year}/${lesson.slug}`
+      }
+      const data = await api(url, 'POST', payload)
       this.$set(this.lessons, this.lessonIndex, data)
-      this.$set(this.lessons, this.lessonIndex + 1, { title: '' })
+      if (this.create) {
+        this.$set(this.lessons, this.lessons.length, { title: '' })
+      }
       this.modal = false
     }
   },
@@ -124,6 +133,8 @@ export default {
       create: false,
       deleteModal: false,
       slug: '',
+      teacher: '',
+      year: '',
       lessonIndex: 0,
       fields: [
         {
