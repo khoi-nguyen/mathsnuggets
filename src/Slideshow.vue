@@ -10,37 +10,37 @@
         @insert-slide="insertSlide(index)"
         @save="save"
       )
-      .tray.buttons.are-medium
-        b-button(@click="graphing = true" type="is-link")
-          b-icon(pack="fas" icon="chart-line")
-        b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success")
-          b-icon(pack="fas" icon="image" v-if="config.whiteboardMode")
-          b-icon(pack="fas" icon="chalkboard" v-if="!config.whiteboardMode")
-        b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger")
-          b-icon(pack="fas" icon="th")
-        b-button(type="is-warning" @click="splitWindow()")
-          b-icon(pack="fas" icon="columns")
-        b-button(@click="geometry = true")
-          b-icon(pack="fas" icon="drafting-compass")
-        b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn")
-          b-icon(pack="fas" icon="edit")
-        b-dropdown(position="is-top-right" :mobile-modal="false")
-          b-button(slot="trigger" type="is-info")
-            b-icon(pack="fas" icon="calculator")
-          iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
-        b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
-          .modal-card
-            header.modal-card-head Graphing calculator
-            .modal-card-body
-              iframe(src="https://www.geogebra.org/graphing" width="100%" height="100%")
-        b-modal(:active.sync="geometry" full-screen has-modal-card :destroy-on-hide="false")
-          .modal-card
-            header.modal-card-head Geometry
-            .modal-card-body
-              iframe(src="https://www.geogebra.org/geometry" width="100%" height="100%")
-      .clipboard
-        draggable(v-model="clipboard" group="widgets")
-          node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
+  .tray.buttons.are-medium
+    b-button(@click="graphing = true" type="is-link")
+      b-icon(pack="fas" icon="chart-line")
+    b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success")
+      b-icon(pack="fas" icon="image" v-if="config.whiteboardMode")
+      b-icon(pack="fas" icon="chalkboard" v-if="!config.whiteboardMode")
+    b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger")
+      b-icon(pack="fas" icon="th")
+    b-button(type="is-warning" @click="splitWindow()")
+      b-icon(pack="fas" icon="columns")
+    b-button(@click="geometry = true")
+      b-icon(pack="fas" icon="drafting-compass")
+    b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn")
+      b-icon(pack="fas" icon="edit")
+    b-dropdown(position="is-top-right" :mobile-modal="false")
+      b-button(slot="trigger" type="is-info")
+        b-icon(pack="fas" icon="calculator")
+      iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
+    b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
+      .modal-card
+        header.modal-card-head Graphing calculator
+        .modal-card-body
+          iframe(src="https://www.geogebra.org/graphing" width="100%" height="100%")
+    b-modal(:active.sync="geometry" full-screen has-modal-card :destroy-on-hide="false")
+      .modal-card
+        header.modal-card-head Geometry
+        .modal-card-body
+          iframe(src="https://www.geogebra.org/geometry" width="100%" height="100%")
+  .clipboard
+    draggable(v-model="clipboard" group="widgets")
+      node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
 </template>
 
 <script>
