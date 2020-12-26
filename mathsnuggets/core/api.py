@@ -71,7 +71,7 @@ def save_slideshow(teacher=False, year=False, slug=False):
     slideshow = models.Slideshow(**params)
     slideshow.update(flask.request.get_json())
     cache.delete_memoized(list_slideshows)
-    cache.delete_memoized(load_slideshow, slug)
+    cache.delete_memoized(load_slideshow, teacher, year, slug)
     return flask.jsonify(dict(slideshow))
 
 
@@ -82,7 +82,7 @@ def delete_slideshow(teacher=False, year=False, slug=False):
     slideshow = models.Slideshow(**params)
     slideshow.delete()
     cache.delete_memoized(list_slideshows)
-    cache.delete_memoized(load_slideshow, slug)
+    cache.delete_memoized(load_slideshow, teacher, year, slug)
     return "", 204
 
 
