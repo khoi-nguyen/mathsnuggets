@@ -280,3 +280,10 @@ class Vote(Model):
     user = fields.Field("User")
     survey = fields.Field("Survey name")
     value = fields.Field("Value")
+
+
+class Identity(Model):
+    _collection = "identity"
+
+    username = fields.Field("Username")
+    nickname = fields.Field("Nickname")

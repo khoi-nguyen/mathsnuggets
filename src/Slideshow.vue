@@ -28,6 +28,8 @@
       b-button(slot="trigger" type="is-info")
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
+    span &nbsp;&nbsp;
+    form-field(:value="nickname" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
       .modal-card
         header.modal-card-head Graphing calculator
@@ -50,6 +52,7 @@ import draggable from 'vuedraggable'
 
 import { auth } from './auth.js'
 import api from './ajax'
+import FormField from './FormField'
 import Node from './Node'
 
 export default {
@@ -70,6 +73,7 @@ export default {
       emptySlide: emptySlide,
       geometry: false,
       graphing: false,
+      nickname: '',
       saveStack: []
     }
   },
@@ -129,6 +133,10 @@ export default {
     splitWindow () {
       this.config.columns = !this.config.columns
       Reveal.configure({ width: this.config.columns ? '50%' : '100%' })
+    },
+    updateNickname (nickname) {
+      this.nickname = nickname
+      api('auth/nickname', 'POST', { nickname })
     }
   },
   async mounted () {
@@ -150,9 +158,12 @@ export default {
         this.children = data
       }
     }
+    const identity = await api('auth/nickname')
+    this.nickname = identity.nickname || ''
   },
   components: {
     draggable,
+    FormField,
     Node
   }
 }

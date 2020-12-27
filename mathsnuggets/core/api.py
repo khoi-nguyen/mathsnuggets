@@ -38,16 +38,13 @@ def delete_votes(survey):
 
 @api.route("/surveys/<survey>", methods=["POST"])
 def cast_vote(survey):
-    user = flask.request.cookies.get("voter_id") or str(uuid.uuid1())
+    user = flask.request.cookies.get("voter_id")
     vote = models.Vote(user=user, survey=survey)
     if not vote.survey:
         vote.user = user
         vote.survey = survey
     vote.update(flask.request.get_json())
-    response = flask.jsonify(dict(vote))
-    if not flask.request.cookies.get("voter_id"):
-        response.set_cookie("voter_id", str(user))
-    return response
+    return flask.jsonify(dict(vote))
 
 
 @api.route("/slideshows", methods=["GET"])
@@ -165,14 +162,34 @@ def register():
 def login():
     payload = flask.request.get_json()
     if not payload:
-        return flask.jsonify(
-            {"is_authenticated": flask_login.current_user.is_authenticated}
+        user = flask_login.current_user
+        response = flask.jsonify(
+            {
+                "is_authenticated": user.is_authenticated,
+                "email": getattr(user, "email", False),
+                "voter_id": flask.request.cookies.get("voter_id") or str(uuid.uuid1())
+            }
         )
+        if not flask.request.cookies.get("voter_id"):
+            response.set_cookie("voter_id", str(user))
+        return response
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):
         raise InvalidUsage("Incorrect email or password")
     flask_login.login_user(user)
     return flask.jsonify({"success": True})
+
+
+@api.route("/auth/nickname", methods=["GET", "POST"])
+def update_nickname():
+    payload = flask.request.get_json()
+    anonymous_id = flask.request.cookies.get("voter_id")
+    username = getattr(flask_login.current_user, "email", anonymous_id)
+    identity = models.Identity(username=username)
+    if payload:
+        payload["username"] = username
+        identity.update(payload)
+    return flask.jsonify(dict(identity))
 
 
 @api.route("/auth/logout")
