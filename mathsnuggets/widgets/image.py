@@ -29,7 +29,8 @@ class Image(form.Form):
     def image(self):
         return (
             f"""<img src="{self.src}" """
-            + f"""width="{self.zoom * self.width}" height="{self.zoom * self.height}" />"""
+            + f"""width="{self.zoom * self.width}" """
+            + f"""height="{self.zoom * self.height}"/>"""
         )
 
     def validate(self):

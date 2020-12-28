@@ -42,13 +42,21 @@ def delete_votes(survey):
 
 @api.route("/surveys/<survey>", methods=["POST"])
 def cast_vote(survey):
-    user = flask.request.cookies.get("voter_id")
+    user = str(flask.request.cookies.get("voter_id"))
     vote = models.Vote(user=user, survey=survey)
     if not vote.survey:
         vote.user = user
         vote.survey = survey
     vote.update(flask.request.get_json())
+    socketio.emit(
+        "voteReceived", {"user": str(vote.user), "value": vote.value}, room=survey
+    )
     return flask.jsonify(dict(vote))
+
+
+@socketio.on("join")
+def join(survey):
+    flask_socketio.join_room(survey)
 
 
 @api.route("/slideshows", methods=["GET"])
@@ -151,7 +159,7 @@ def register():
     payload = flask.request.get_json()
     registration_pw = payload.pop("registration_password")
     if registration_pw != os.environ.get("REGISTRATION_PASSWORD", ""):
-        raise InvalidUsage(f"Registration password incorrect", 400, payload)
+        raise InvalidUsage("Registration password incorrect", 400, payload)
     user = models.User(email=payload["email"])
     if user.email:
         raise InvalidUsage(f"User {user.email} already exists", 400, payload)
@@ -167,15 +175,16 @@ def login():
     payload = flask.request.get_json()
     if not payload:
         user = flask_login.current_user
+        voter_id = flask.request.cookies.get("voter_id") or str(uuid.uuid1())
         response = flask.jsonify(
             {
                 "is_authenticated": user.is_authenticated,
                 "email": getattr(user, "email", False),
-                "voter_id": flask.request.cookies.get("voter_id") or str(uuid.uuid1())
+                "voter_id": voter_id,
             }
         )
         if not flask.request.cookies.get("voter_id"):
-            response.set_cookie("voter_id", str(user))
+            response.set_cookie("voter_id", voter_id)
         return response
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):

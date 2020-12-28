@@ -2,6 +2,7 @@ import 'regenerator-runtime/runtime'
 import AsyncComputed from 'vue-async-computed'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
+import VueSocketIO from 'vue-socket.io'
 
 import titleMixin from './titleMixin'
 
@@ -16,6 +17,9 @@ const Slideshow = () => import('./Slideshow')
 Vue.use(AsyncComputed)
 Vue.use(Buefy)
 Vue.use(VueRouter)
+Vue.use(new VueSocketIO({
+  connection: 'http://mathsnuggets.co.uk:443'
+}))
 Vue.mixin(titleMixin)
 
 const routes = [

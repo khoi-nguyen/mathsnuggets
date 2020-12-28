@@ -14,6 +14,7 @@
 
 <script>
 import api from './ajax'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -24,34 +25,46 @@ export default {
   },
   data () {
     return {
-      voteData: []
+      voteData: {}
     }
   },
   computed: {
     correctAnswers () {
-      return this.totalAnswers ? this.voteData.filter(vote => vote.value).length : 0
+      return _.reduce(this.voteData, function (sum, value, user) {
+        return sum + (value ? 1 : 0)
+      }, 0)
     },
     totalAnswers () {
-      return this.voteData.length
+      return Object.keys(this.voteData).length
     },
     percentageCorrectAnswers () {
       return this.totalAnswers ? this.correctAnswers * 100 / this.totalAnswers : 0
     }
   },
+  sockets: {
+    voteReceived (data) {
+      this.$set(this.voteData, data.user, data.value)
+    }
+  },
   methods: {
     deleteVotes () {
       api(`surveys/${this.name}`, 'DELETE')
-      this.voteData = []
+      this.voteData = {}
     },
     async getVoteData () {
       if (this.name) {
-        this.voteData = await api(`surveys/${this.name}`, 'GET')
+        this.$set(this, 'voteData', {})
+        const data = await api(`surveys/${this.name}`, 'GET')
+        for (var i = 0; i < data.length; i++) {
+          this.$set(this.voteData, data[i].user, data[i].value)
+        }
       }
     }
   },
   async mounted () {
-    if (this.showStats) {
-      setInterval(this.getVoteData, 5000)
+    if (this.name && this.showStats) {
+      await this.getVoteData()
+      this.$socket.emit('join', this.name)
     }
     if (this.value) {
       api(`surveys/${this.name}`, 'POST', { value: this.correct })
