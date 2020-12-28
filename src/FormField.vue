@@ -44,7 +44,7 @@ export default {
     constraint: Boolean,
     default: [String, Array, Boolean],
     displayMode: Boolean,
-    editable: Boolean,
+    editable: { type: Boolean, default: true },
     hidden: Boolean,
     label: String,
     name: String,
