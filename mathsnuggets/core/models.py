@@ -279,7 +279,8 @@ class Vote(Model):
 
     user = fields.Field("User")
     survey = fields.Field("Survey name")
-    value = fields.Field("Value")
+    value = fields.Field("Value", default=False)
+    edit_count = fields.Field("Count")
 
 
 class Identity(Model):

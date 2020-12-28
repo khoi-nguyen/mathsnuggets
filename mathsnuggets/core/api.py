@@ -47,12 +47,15 @@ def cast_vote(survey):
     if not vote.survey:
         vote.user = user
         vote.survey = survey
-    vote.update(flask.request.get_json())
-    socketio.emit(
-        "voteReceived",
-        {"user": str(vote.user), "value": vote.value, "survey": survey},
-        room=survey,
-    )
+        vote.edit_count = -1
+    vote.edit_count += 1
+    if not vote.value:
+        vote.update(flask.request.get_json())
+        socketio.emit(
+            "voteReceived",
+            {"user": str(vote.user), "value": vote.value, "survey": survey},
+            room=survey,
+        )
     return flask.jsonify(dict(vote))
 
 
