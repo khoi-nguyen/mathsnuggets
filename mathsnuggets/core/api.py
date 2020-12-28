@@ -4,11 +4,14 @@ import uuid
 
 import flask
 import flask_login
+import flask_socketio
 
 from mathsnuggets import widgets
 from mathsnuggets.core import cache, fields, form, models
 
 api = flask.Blueprint("api", __name__)
+
+socketio = flask_socketio.SocketIO()
 
 widget_names = [n for n in dir(widgets) if n[0].isupper() and n[1].islower()]
 widget_data = [{"path": n, "name": getattr(widgets, n).__doc__} for n in widget_names]
