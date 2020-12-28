@@ -1,5 +1,5 @@
 <template lang="pug">
-div(:class="{ slide: component === 'slide' }" @contextmenu.prevent.stop="$refs.menu.open")
+div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
   component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :blacklist.sync="blacklist")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
@@ -109,6 +109,13 @@ export default {
     deleteChild (index) {
       this.$emit('save', { action: 'delete', [`${this.position}.children.${index}`]: '' })
       this.children.splice(index, 1)
+    },
+    openMenu (event) {
+      if (this.config.edit) {
+        this.$refs.menu.open(event)
+        event.preventDefault()
+        event.stopPropagation()
+      }
     },
     updateChildren (event) {
       this.$emit('save', {
