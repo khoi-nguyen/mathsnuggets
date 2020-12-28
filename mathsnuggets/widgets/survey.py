@@ -7,7 +7,7 @@ class Survey(form.Form):
     """Survey"""
 
     name = fields.Field("Survey name")
-    answer = fields.Expression("Your answer", nosave=True)
+    answer = fields.Expression("Your answer", nosave=True, editable=True)
     correct_answer = fields.Expression("Correct Answer")
 
     template = """
