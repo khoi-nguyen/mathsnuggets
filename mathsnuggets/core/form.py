@@ -88,7 +88,10 @@ class Form:
         def field_to_xml(match):
             field = dict(getattr(type(self), match.group(1)))
             payload = "computed" if field.get("computed") else "payload"
-            attrs = {"v-model": f"{payload}.{field['name']}"}
+            attrs = {
+                "v-model": f"{payload}.{field['name']}",
+                ":editable": "config.edit",
+            }
             for prop, val in field.items():
                 prop = prop.replace("_", "-")
                 if not isinstance(val, str):

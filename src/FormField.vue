@@ -44,6 +44,7 @@ export default {
     constraint: Boolean,
     default: [String, Array, Boolean],
     displayMode: Boolean,
+    editable: Boolean,
     hidden: Boolean,
     label: String,
     name: String,
@@ -148,8 +149,10 @@ export default {
       this.editing = false
     },
     enterEditMode () {
-      this.editing = true
-      this.$nextTick(() => { this.$refs.field.select() })
+      if (this.editable) {
+        this.editing = true
+        this.$nextTick(() => { this.$refs.field.select() })
+      }
     },
     keyPress (event) {
       if (event.shiftKey && event.charCode === 63) {
