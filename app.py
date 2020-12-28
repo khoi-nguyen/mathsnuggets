@@ -12,6 +12,7 @@ app = flask.Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "hello").encode("UTF-8")
 app.register_blueprint(api.api, url_prefix="/api")
 api.login_manager.init_app(app)
+api.socketio.init_app(app)
 cache.cache.init_app(app)
 
 
@@ -46,7 +47,7 @@ def default(path="index.html"):
 
 def init():
     if __name__ == "__main__":
-        app.run(debug=True, host="0.0.0.0")
+        api.socketio.run(app, debug=True)
 
 
 init()
