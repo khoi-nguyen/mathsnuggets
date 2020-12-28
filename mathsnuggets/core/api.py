@@ -37,6 +37,7 @@ def count_votes(survey):
 def delete_votes(survey):
     for vote in models.Vote.find({"survey": survey}):
         vote.delete()
+    return flask.jsonify({"success": True})
 
 
 @api.route("/surveys/<survey>", methods=["POST"])
