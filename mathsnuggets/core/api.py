@@ -49,7 +49,9 @@ def cast_vote(survey):
         vote.survey = survey
     vote.update(flask.request.get_json())
     socketio.emit(
-        "voteReceived", {"user": str(vote.user), "value": vote.value}, room=survey
+        "voteReceived",
+        {"user": str(vote.user), "value": vote.value, "survey": survey},
+        room=survey,
     )
     return flask.jsonify(dict(vote))
 

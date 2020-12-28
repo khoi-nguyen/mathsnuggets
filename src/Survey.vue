@@ -43,7 +43,9 @@ export default {
   },
   sockets: {
     voteReceived (data) {
-      this.$set(this.voteData, data.user, data.value)
+      if (data.survey === this.name) {
+        this.$set(this.voteData, data.user, data.value)
+      }
     }
   },
   methods: {
