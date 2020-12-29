@@ -19,12 +19,13 @@ class Plot(form.Form):
     x_max = fields.Expression("x max", default="10")
 
     template = """
-        Plot `function` for `x` between `x_min` and `x_max`
-
+        <div v-if="config.edit">
+            Plot `function` for `x` between `x_min` and `x_max`
+        </div>
         `plot`
     """
 
-    @fields.computed("Plot", field=fields.Html)
+    @fields.computed("Plot", field=fields.Html, nohide=True)
     @fields.figure
     def plot(self):
         """Use SymPy/matplotlib to generate an SVG graph"""
