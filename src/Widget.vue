@@ -42,6 +42,12 @@ export default {
         return !field.random && !field.constraint && !(value === '')
       })
     },
+    survey () {
+      if (!(this.widgetData || {}).template) {
+        return false
+      }
+      return this.widgetData.template.includes('<survey')
+    },
     generatorPayload () {
       if (!(this.widgetData || {}).fields) {
         return {}
@@ -82,7 +88,7 @@ export default {
   },
   methods: {
     async solve (generator = false) {
-      const method = generator ? 'POST' : 'GET'
+      const method = (generator || this.survey) ? 'POST' : 'GET'
       const payload = generator ? this.generatorPayload : this.solverPayload
       const data = await api(`widgets/${this.type}`, method, payload, !generator)
       this.error = data.error ? data : {}
