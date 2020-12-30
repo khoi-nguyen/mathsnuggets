@@ -21,14 +21,19 @@ class MultipleChoice(form.Form):
         for ltr in ["a", "b", "c", "d"]:
             buttons.append(
                 f"""
-                <b-button @click="$set(payload, 'answer', '{ltr.upper()}')"
-                    type="is-primary"
-                    v-if="'{ltr.upper()}' === payload.answer">
-                    `option_{ltr}`
-                </b-button>
-                <b-button @click="$set(payload, 'answer', '{ltr.upper()}')" v-else>
-                    `option_{ltr}`
-                </b-button>
+                <span v-if="!config.edit">
+                    <b-button @click="$set(payload, 'answer', '{ltr.upper()}')"
+                        type="is-primary"
+                        v-if="'{ltr.upper()}' === payload.answer">
+                        `option_{ltr}`
+                    </b-button>
+                    <b-button @click="$set(payload, 'answer', '{ltr.upper()}')" v-else>
+                        `option_{ltr}`
+                    </b-button>
+                </span>
+                <span v-else>
+                    <b-button>`option_{ltr}`</b-button>
+                </span>
             """
             )
         return f"""
