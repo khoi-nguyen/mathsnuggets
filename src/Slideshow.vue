@@ -28,6 +28,14 @@
       b-button(slot="trigger" type="is-info")
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
+    b-dropdown(position="is-top-right" :mobile-modal="false" @active-change="openChat")
+      b-button(:type="chatButtonType" slot="trigger")
+        b-icon(pack="fas" icon="comment")
+      .chat
+        b-dropdown-item(v-for="message in chat")
+          h5 {{ message.nickname }}
+          form-field(type="Markdown" :value="message.message" :editable="false")
+      form-field(type="Field" @input="sendMessage" label="Your message" value="")
     span &nbsp;&nbsp;
     form-field(:value="nickname" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
@@ -61,6 +69,7 @@ export default {
     const emptySlide = { payload: {}, children: [] }
     return {
       authState: auth.state,
+      chat: [],
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       clipboard: [],
       config: {
@@ -73,7 +82,9 @@ export default {
       emptySlide: emptySlide,
       geometry: false,
       graphing: false,
+      displayChat: false,
       nickname: '',
+      newMessages: false,
       saveStack: []
     }
   },
@@ -81,6 +92,9 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
+    },
+    chatButtonType () {
+      return this.newMessages ? 'is-danger' : 'is-success'
     }
   },
   created () {
@@ -115,6 +129,12 @@ export default {
         }
       }
     },
+    openChat (event) {
+      this.displayChat = event
+      if (event) {
+        this.newMessages = false
+      }
+    },
     save (payload) {
       if (!isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(cloneDeep(this.emptySlide))
@@ -122,6 +142,11 @@ export default {
       if (this.apiUrl && this.authState.loggedIn) {
         this.saveStack.push(payload)
         setTimeout(this.sendSaveStack, 200)
+      }
+    },
+    sendMessage (message) {
+      if (message) {
+        api('chat', 'POST', { message })
       }
     },
     sendSaveStack () {
@@ -137,6 +162,16 @@ export default {
     updateNickname (nickname) {
       this.nickname = nickname
       api('auth/nickname', 'POST', { nickname })
+    }
+  },
+  sockets: {
+    messageReceived (data) {
+      if (!isEqual(this.chat[this.chat.length - 1], data)) {
+        this.$set(this.chat, this.chat.length, data)
+        if (!this.displayChat) {
+          this.newMessages = true
+        }
+      }
     }
   },
   async mounted () {
@@ -181,6 +216,10 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
+}
+.chat {
+  max-height: 400px;
+  overflow-y: auto;
 }
 .clipboard {
   position: absolute;
