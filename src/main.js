@@ -18,7 +18,7 @@ Vue.use(AsyncComputed)
 Vue.use(Buefy)
 Vue.use(VueRouter)
 Vue.use(new VueSocketIO({
-  connection: process.env.APP_URL
+  connection: window.location.origin
 }))
 Vue.mixin(titleMixin)
 
