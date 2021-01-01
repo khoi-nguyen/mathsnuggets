@@ -18,7 +18,7 @@ Vue.use(AsyncComputed)
 Vue.use(Buefy)
 Vue.use(VueRouter)
 Vue.use(new VueSocketIO({
-  connection: 'https://mathsnuggets.co.uk:443'
+  connection: process.env.APP_URL
 }))
 Vue.mixin(titleMixin)
 
