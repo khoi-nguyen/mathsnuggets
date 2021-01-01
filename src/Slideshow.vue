@@ -146,7 +146,7 @@ export default {
     },
     sendMessage (message) {
       if (message) {
-        api('chat', 'POST', { message })
+        api('chat', 'POST', { message, url: this.apiUrl })
       }
     },
     sendSaveStack () {
@@ -166,7 +166,7 @@ export default {
   },
   sockets: {
     messageReceived (data) {
-      if (!isEqual(this.chat[this.chat.length - 1], data)) {
+      if (!isEqual(this.chat[this.chat.length - 1], data) && data.url === this.apiUrl) {
         this.$set(this.chat, this.chat.length, data)
         if (!this.displayChat) {
           this.newMessages = true

@@ -72,7 +72,12 @@ def chat():
     nick = models.Identity(username=user).nickname
     socketio.emit(
         "messageReceived",
-        {"user": user, "nickname": nick or "Anonymous", "message": payload["message"]},
+        {
+            "user": user,
+            "nickname": nick or "Anonymous",
+            "message": payload["message"],
+            "url": payload["url"],
+        },
     )
     return flask.jsonify({"success": True})
 
