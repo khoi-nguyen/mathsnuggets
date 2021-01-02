@@ -47,6 +47,7 @@ class MultipleChoice(form.Form):
                 :name="payload.name"
                 :showStats="config.authState.loggedIn"
                 :correct="computed.correct"
+                :max-attempts="1"
                 :value="payload.answer">
                 `answer`
             </survey>

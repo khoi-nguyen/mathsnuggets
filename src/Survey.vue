@@ -21,6 +21,7 @@ export default {
     name: String,
     showStats: Boolean,
     correct: Boolean,
+    maxAttempts: { type: Number, default: 3 },
     value: String
   },
   data () {
@@ -69,7 +70,7 @@ export default {
       this.$socket.emit('join', this.name)
     }
     if (this.value) {
-      api(`surveys/${this.name}`, 'POST', { value: this.correct })
+      api(`surveys/${this.name}`, 'POST', { value: this.correct, maxAttempts: this.maxAttempts })
     }
   }
 }
