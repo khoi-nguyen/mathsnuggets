@@ -31,7 +31,7 @@
       b-button(:type="chatButtonType" slot="trigger")
         b-icon(pack="fas" icon="comment")
       .chat
-        b-dropdown-item(v-for="message in chat")
+        b-dropdown-item(v-for="(message, index) in chat" @click="deleteChatMessage(index)")
           h5 {{ message.nickname }}
           form-field(type="Markdown" :value="message.message" :editable="false")
       form-field(type="Field" @input="sendMessage" label="Your message" value="")
@@ -103,6 +103,11 @@ export default {
     window.removeEventListener('paste', this.onPaste.bind(this))
   },
   methods: {
+    deleteChatMessage (index) {
+      if (this.config.authState.loggedIn) {
+        api('chat/delete', 'POST', this.chat[index])
+      }
+    },
     insertSlide (index) {
       this.save({ action: 'insert', [`children.${index}`]: cloneDeep(this.emptySlide) })
       this.children.splice(index, 0, cloneDeep(this.emptySlide))
@@ -164,6 +169,13 @@ export default {
     }
   },
   sockets: {
+    deleteMessage (data) {
+      for (var i = 0; i < this.chat.length; i++) {
+        if (isEqual(this.chat[i], data)) {
+          this.chat.splice(i, 1)
+        }
+      }
+    },
     messageReceived (data) {
       if (!isEqual(this.chat[this.chat.length - 1], data) && data.url === this.apiUrl) {
         this.$set(this.chat, this.chat.length, data)

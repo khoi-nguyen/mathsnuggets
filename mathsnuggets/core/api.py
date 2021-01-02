@@ -82,6 +82,14 @@ def chat():
     return flask.jsonify({"success": True})
 
 
+@api.route("chat/delete", methods=["POST"])
+def delete_message():
+    payload = flask.request.get_json()
+    if flask_login.current_user.is_authenticated:
+        socketio.emit("deleteMessage", payload)
+    return flask.jsonify({"success": True})
+
+
 @api.route("/slideshows", methods=["GET"])
 @cache.memoize()
 def list_slideshows():
