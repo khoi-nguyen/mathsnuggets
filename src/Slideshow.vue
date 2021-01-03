@@ -27,7 +27,7 @@
       b-button(slot="trigger" type="is-info")
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
-    b-dropdown(position="is-top-right" :mobile-modal="false" @active-change="openChat")
+    b-dropdown(position="is-top-right" :mobile-modal="false" @active-change="openChat" :close-on-click="false")
       b-button(:type="chatButtonType" slot="trigger")
         b-icon(pack="fas" icon="comment")
       .chat
