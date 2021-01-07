@@ -10,7 +10,7 @@ class Survey(form.Form):
 
     name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
-    correct_answer = fields.Expression("Correct Answer")
+    correct_answer = fields.Expression("Correct Answer", required=True)
 
     template = """
         <p v-if="config.edit">Correct answer: `correct_answer`</p>
@@ -25,6 +25,8 @@ class Survey(form.Form):
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
+        if self.answer is None:
+            return False
         return sympy.simplify(self.answer - self.correct_answer) == 0
 
     def validate(self):
