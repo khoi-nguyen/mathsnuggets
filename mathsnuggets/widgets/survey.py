@@ -1,5 +1,7 @@
 import uuid
 
+import sympy
+
 from mathsnuggets.core import fields, form
 
 
@@ -23,7 +25,7 @@ class Survey(form.Form):
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
-        return self.answer == self.correct_answer
+        return sympy.simplify(self.answer - self.correct_answer) == 0
 
     def validate(self):
         if not self.name:
