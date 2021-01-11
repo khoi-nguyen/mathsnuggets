@@ -27,7 +27,7 @@ class SimplificationQuestion(form.Form):
     def correct(self):
         if not self.answer:
             return False
-        return self.answer == sympy.simplify(self.expression)
+        return str(self.answer) == str(sympy.simplify(self.expression))
 
     def validate(self):
         if not self.name:
