@@ -11,9 +11,13 @@ class Survey(form.Form):
     name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     correct_answer = fields.Expression("Correct Answer", required=True)
+    max_error = fields.Expression("Maximal error", default=0)
 
     template = """
-        <p v-if="config.edit">Correct answer: `correct_answer`</p>
+        <p v-if="config.edit">
+            Correct answer: `correct_answer`
+            Tolerated error: `max_error`
+        </p>
         <survey
             :name="payload.name"
             :showStats="config.authState.loggedIn"
@@ -27,7 +31,10 @@ class Survey(form.Form):
     def correct(self):
         if self.answer is None:
             return False
-        return sympy.simplify(self.answer - self.correct_answer) == 0
+        return (
+            sympy.Abs(sympy.simplify(self.answer - self.correct_answer))
+            <= self.max_error
+        )
 
     def validate(self):
         if not self.name:
