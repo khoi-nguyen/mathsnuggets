@@ -13,7 +13,12 @@ class Youtube(form.Form):
 
     name = "YouTube"
     url = fields.Field("URL")
-    template = """`url` `video`"""
+    template = """
+        <div v-if="config.edit">
+            `url`
+        </div>
+        `video`
+    """
 
     @fields.computed("Youtube Video", field=fields.Html, nohide=True)
     def video(self):
