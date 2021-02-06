@@ -31,7 +31,7 @@ class Plot(form.Form):
         """Use SymPy/matplotlib to generate an SVG graph"""
         data = (self.x, self.x_min, self.x_max)
         graph = sympy.plot(*self.functions, data, show=False, ylabel="y")
-        colors = [False, 'green', 'red', 'orange']
+        colors = [False, 'red', 'green', 'orange']
         for index in range(len(self.functions)):
             if index < len(colors) and colors[index]:
                 graph[index].line_color = colors[index]
