@@ -90,7 +90,7 @@ export default {
     async solve (generator = false) {
       const method = (generator || this.survey) ? 'POST' : 'GET'
       const payload = generator ? this.generatorPayload : this.solverPayload
-      const data = await api(`widgets/${this.type}`, method, payload, !generator)
+      const data = await api(`widgets/${this.type}`, method, payload)
       this.error = data.error ? data : {}
       forEach(data, (value, fieldName) => {
         if (!(fieldName in this.widgetData.fields)) {
