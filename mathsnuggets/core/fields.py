@@ -150,6 +150,20 @@ class Expression(Field):
         }
 
 
+class ExpressionList(Field):
+    def sanitize(self, expr):
+        if isinstance(expr, str):
+            return [parse(e) for e in expr.split(",")]
+        return parse(expr)
+
+    def export(self, value):
+        return {
+            "value": f"{','.join([str(v) for v in value])}",
+            "latex": sympy.latex(value),
+            "valid": value is not None,
+        }
+
+
 class NumberList(Field):
     def sanitize(self, expr):
         if isinstance(expr, str):
