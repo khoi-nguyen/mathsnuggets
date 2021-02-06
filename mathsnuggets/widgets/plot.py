@@ -17,6 +17,7 @@ class Plot(form.Form):
     x = fields.Expression("Variable", default="x")
     x_min = fields.Expression("x min", default="-10")
     x_max = fields.Expression("x max", default="10")
+    equal_aspect = fields.Boolean("Equal aspect", default=True)
 
     template = """
         <div v-if="config.edit">
@@ -39,3 +40,8 @@ class Plot(form.Form):
         backend.matplotlib.use("agg")
         backend.process_series()
         backend.fig.tight_layout()
+        ax = backend.ax[0]
+        if self.equal_aspect:
+            ax.axis("tight")
+            ax.set_aspect("equal")
+        ax.grid(True)
