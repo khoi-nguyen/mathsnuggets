@@ -13,7 +13,7 @@ test = {"function": "sin x"}
 class Plot(form.Form):
     """Plot functions"""
 
-    functions = fields.ExpressionList("Functions")
+    functions = fields.ExpressionList("Functions", required=True)
     x = fields.Expression("Variable", default="x")
     x_min = fields.Expression("x min", default="-10")
     x_max = fields.Expression("x max", default="10")
