@@ -6,7 +6,7 @@ from mathsnuggets.core import fields, form
 
 
 class Survey(form.Form):
-    """Survey"""
+    """Marked question"""
 
     name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
