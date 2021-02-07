@@ -35,7 +35,7 @@ export default {
 </style>
 
 <style>
-.slide-contents button, .slide-contents iframe, .slide-contents .base {
+.slide-contents button, .reveal .slide-contents iframe, .slide-contents .base {
   z-index: 300;
 }
 </style>
