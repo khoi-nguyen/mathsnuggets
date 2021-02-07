@@ -1,8 +1,9 @@
 <template lang="pug">
 .slide
   slide-title(v-model="payload.title" :config="config")
-  whiteboard.whiteboard(:name="position" v-if="!config.edit")
-  slot
+  .slide-contents
+    whiteboard.whiteboard(:name="position" v-if="!config.edit")
+    slot
 </template>
 
 <script>
@@ -23,8 +24,18 @@ export default {
 </script>
 
 <style scoped>
+.slide-contents {
+  position: relative;
+}
 .whiteboard {
   position: absolute;
   top: 0;
+  z-index: 200;
+}
+</style>
+
+<style>
+.slide-contents button, .slide-contents iframe, .slide-contents .base {
+  z-index: 300;
 }
 </style>

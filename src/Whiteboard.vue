@@ -1,10 +1,20 @@
 <template lang="pug">
 div
   canvas(:id="canvasId" :width="width" :height="height")
+  .bar.buttons.are-medium
+    b-button(@click="canvas.isDrawingMode = !canvas.isDrawingMode" type="is-success is-inverted")
+      b-icon(pack="fas" icon="pen")
+    b-button(@click="canvas.clear()" type="is-danger is-inverted")
+      b-icon(pack="fas" icon="eraser")
+    b-button(@click="canvas.undo()" type="is-warning is-inverted")
+      b-icon(pack="fas" icon="undo")
+    b-button(@click="canvas.redo()" type="is-link is-inverted")
+      b-icon(pack="fas" icon="redo")
 </template>
 
 <script>
 import { fabric } from 'fabric'
+import 'fabric-history'
 
 export default {
   title: 'Whiteboard',
@@ -24,8 +34,8 @@ export default {
     }
   },
   mounted () {
-    this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: true })
-    this.canvas.isDrawingMode = true
+    this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
+    this.canvas.historyInit()
     this.canvas.freeDrawingBrush.color = 'darkblue'
     this.canvas.freeDrawingBrush.width = 2
     this.canvas.renderAll()
@@ -36,3 +46,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.bar {
+  position: absolute;
+  text-align: center;
+  top: 0;
+  right: 0;
+}
+</style>
