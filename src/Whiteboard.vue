@@ -2,7 +2,7 @@
 div
   canvas(:id="canvasId" :width="width" :height="height")
   .bar.buttons.are-medium
-    b-button(@click="canvas.isDrawingMode = !canvas.isDrawingMode" type="is-success is-inverted")
+    b-button(@click="toggleDrawingMode" type="is-success is-inverted")
       b-icon(pack="fas" icon="pen")
     b-button(@click="canvas.clear()" type="is-danger is-inverted")
       b-icon(pack="fas" icon="eraser")
@@ -33,11 +33,16 @@ export default {
       width: window.innerWidth
     }
   },
+  methods: {
+    toggleDrawingMode () {
+      this.canvas.isDrawingMode = !this.canvas.isDrawingMode
+      this.canvas.freeDrawingBrush.color = 'darkblue'
+      this.canvas.freeDrawingBrush.width = 3
+    }
+  },
   mounted () {
     this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
     this.canvas.historyInit()
-    this.canvas.freeDrawingBrush.color = 'darkblue'
-    this.canvas.freeDrawingBrush.width = 2
     this.canvas.renderAll()
     window.addEventListener('resize', () => {
       this.height = window.innerHeight
