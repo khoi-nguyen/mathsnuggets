@@ -48,6 +48,7 @@ $weight-bold: 500;
 @import "~bulma/bulma.sass";
 @import "~buefy/src/scss/buefy";
 @import '~vue-context/src/sass/vue-context';
+@import './highlight.css';
 
 .title {
   font-weight: 400;
