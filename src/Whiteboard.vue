@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  canvas(:id="canvasId" :width="width" :height="height")
+  canvas(:id="canvasId")
   .bar.buttons.are-medium
     b-button(@click="toggleDrawingMode" type="is-success is-inverted")
       b-icon(pack="fas" icon="pen")
@@ -36,12 +36,14 @@ export default {
   data () {
     return {
       color: 'darkblue',
-      canvas: false,
-      height: window.innerHeight,
-      width: window.innerWidth
+      canvas: false
     }
   },
   methods: {
+    getWindowDimensions () {
+      this.canvas.setWidth(window.innerWidth)
+      this.canvas.setHeight(window.innerHeight)
+    },
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
       this.canvas.freeDrawingBrush.color = this.color
@@ -56,12 +58,15 @@ export default {
   mounted () {
     this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
     this.toggleDrawingMode()
-    this.canvas.historyInit()
     this.canvas.renderAll()
-    window.addEventListener('resize', () => {
-      this.height = window.innerHeight
-      this.width = window.innerWidth
+    this.$nextTick(function () {
+      window.addEventListener('resize', this.getWindowDimensions)
+      this.getWindowDimensions()
+      this.canvas.historyInit()
     })
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
 </script>
