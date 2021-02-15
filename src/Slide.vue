@@ -32,6 +32,7 @@ export default {
 </style>
 
 <style>
+.slide-contents a,
 .slide-contents button,
 .reveal .slide-contents iframe,
 .slide-contents h3.message-header,
