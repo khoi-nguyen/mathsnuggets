@@ -24,9 +24,6 @@ export default {
 </script>
 
 <style scoped>
-.slide-contents {
-  position: relative;
-}
 .whiteboard {
   position: absolute;
   top: 0;

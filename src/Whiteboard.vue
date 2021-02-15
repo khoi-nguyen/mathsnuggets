@@ -56,8 +56,7 @@ export default {
 <style scoped>
 .bar {
   position: absolute;
-  text-align: center;
+  left: 55%;
   top: 0;
-  right: 0;
 }
 </style>
