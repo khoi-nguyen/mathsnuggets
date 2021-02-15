@@ -32,7 +32,13 @@ export default {
 </style>
 
 <style>
-.slide-contents button, .reveal .slide-contents iframe, .slide-contents .base {
+.slide-contents button,
+.reveal .slide-contents iframe,
+.slide-contents h3.message-header,
+.slide-contents .base {
   z-index: 300;
+}
+.slide-contents iframe {
+  position: relative;
 }
 </style>
