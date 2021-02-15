@@ -41,7 +41,8 @@ export default {
     }
   },
   mounted () {
-    this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: true })
+    this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
+    this.toggleDrawingMode()
     this.canvas.historyInit()
     this.canvas.renderAll()
     window.addEventListener('resize', () => {
