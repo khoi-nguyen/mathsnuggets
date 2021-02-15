@@ -10,6 +10,13 @@ div
       b-icon(pack="fas" icon="undo")
     b-button(@click="canvas.redo()" type="is-link is-inverted")
       b-icon(pack="fas" icon="redo")
+    b-dropdown(v-model="color" :triggers="['hover']")
+      b-button(slot="trigger" type="is-info is-inverted")
+        b-icon(pack="fas" icon="palette")
+      b-dropdown-item(value="darkblue") Blue
+      b-dropdown-item(value="darkred") Red
+      b-dropdown-item(value="darkgreen") Green
+      b-dropdown-item(value="black") Black
 </template>
 
 <script>
@@ -28,6 +35,7 @@ export default {
   },
   data () {
     return {
+      color: 'darkblue',
       canvas: false,
       height: window.innerHeight,
       width: window.innerWidth
@@ -36,8 +44,13 @@ export default {
   methods: {
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
-      this.canvas.freeDrawingBrush.color = 'darkblue'
+      this.canvas.freeDrawingBrush.color = this.color
       this.canvas.freeDrawingBrush.width = 3
+    }
+  },
+  watch: {
+    color (newColor) {
+      this.canvas.freeDrawingBrush.color = newColor
     }
   },
   mounted () {
