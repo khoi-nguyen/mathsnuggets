@@ -11,7 +11,7 @@ div
     b-button(@click="canvas.redo()" type="is-link is-inverted")
       b-icon(pack="fas" icon="redo")
     b-dropdown(v-model="color" :triggers="['hover']")
-      b-button(slot="trigger" type="is-info is-inverted")
+      b-button(slot="trigger" :type="colorButtonType")
         b-icon(pack="fas" icon="palette")
       b-dropdown-item(value="darkblue") Blue
       b-dropdown-item(value="darkred") Red
@@ -31,6 +31,15 @@ export default {
   computed: {
     canvasId () {
       return this.name.split('.').join('_')
+    },
+    colorButtonType () {
+      const style = {
+        darkblue: 'is-info',
+        darkred: 'is-danger',
+        darkgreen: 'is-success',
+        black: ''
+      }
+      return 'is-inverted ' + style[this.color]
     }
   },
   data () {
