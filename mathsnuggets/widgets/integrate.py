@@ -10,8 +10,12 @@ class Integrate(form.Form):
 
     template = """
         Integrate `function`
-        <span v-if="config.edit || payload.x != 'x'">with respect to `x`</span>
-        <span v-if="config.edit || (payload.a && payload.b)">between `a` and `b`</span>
+        <span v-if="config.edit || payload.x != 'x'">
+            with respect to `x`
+        </span>
+        <span v-if="config.edit || (payload.a && payload.b)">
+            between `a` and `b`
+        </span>
         `integral`
     """
 
