@@ -2,7 +2,7 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="config.authState.loggedIn && !config.edit" v-model="payload.canvas")
+    whiteboard.whiteboard(:name="position" v-if="!config.edit" v-model="payload.canvas" :read-only="!config.authState.loggedIn")
     slot
 </template>
 

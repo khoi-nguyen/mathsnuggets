@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   canvas(:id="canvasId")
-  .bar.buttons.are-medium
+  .bar.buttons.are-medium(v-if="!readOnly")
     b-button(@click="toggleDrawingMode" type="is-success is-inverted")
       b-icon(pack="fas" icon="pen")
     b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
@@ -30,6 +30,7 @@ import 'fabric-history'
 export default {
   props: {
     name: String,
+    readOnly: Boolean,
     value: Object
   },
   computed: {
@@ -88,7 +89,9 @@ export default {
   },
   mounted () {
     this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
-    this.toggleDrawingMode()
+    if (!this.readOnly) {
+      this.toggleDrawingMode()
+    }
     this.canvas.renderAll()
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowDimensions)
