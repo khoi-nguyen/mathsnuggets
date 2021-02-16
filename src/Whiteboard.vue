@@ -3,7 +3,7 @@ div
   canvas(:id="canvasId")
   .bar.buttons.are-medium
     b-button(@click="toggleDrawingMode" type="is-success is-inverted")
-      b-icon(pack="fas" icon="pen")
+      b-icon(pack="fas" :icon="canvas.isDrawingMode ? 'mouse-pointer' : 'cursor'")
     b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
       b-icon(pack="fas" icon="eraser")
     b-button(@click="canvas.clear()" type="is-danger is-inverted")
