@@ -5,50 +5,48 @@ div
       div.container
         div.is-large
           i.fa-4x.fas.fa-info
-        h1.title.is-2 About us
+        h1.title.is-2 About
   .container
-    .card-content.content
-      h2.title.is-1 Hello to you, reader!
-      p.is-size-4.
-        We are two Teachers of Mathematics seeking to facilitate teaching and learning
-        mathematics. Having met at the #[a(href="https://ox.ac.uk") University of Oxford] and enjoyed a short-lived
-        PGCE course together, we decided to create this website to facilitate the creation of teaching resources.
-    .columns.has-text-centered
+    .columns
       .column
-        .card-content
-          h2.title.is-2 Khoi Nguyen
-          h4.subtitle.is-4 Main Developer
-          p.content.
-            Hello! My name is Khoi and I am the main developer on this project.
-            My responsibility is to implement new features
-            and ensure the software works well.
+        .card-content.content
+          h2.title.is-1 About Mr Nuggets
+          p.is-size-4.
+            My name is Khoi Nguyen
+            (my pupils call me Mr Nuggets because they can't pronounce my name)
+            and I teach Mathematics at #[a(href="https://kingscollegeschools.org/madrid/schhool/") King's College] in Madrid.
           p.content.
             I am a pure mathematician by education.
-            I got my MMath from the
+            I got my MMath (Part III) from the
             #[a(href="https://cam.ac.uk") University of Cambridge] in 2012,
             followed by a PhD from
             #[a(href="https://imperial.ac.uk") Imperial College] in 2016.
             I started teaching shortly afterwards,
             and obtained by PGCE from the
             #[a(href="https://ox.ac.uk") University of Oxford] in 2020.
-            I now work as a Teacher of Mathematics at the
-            #[a(href="https://kingscollegeschools.org/madrid/school/") British School of Madrid].
           p.content.
             Outside of teaching, I enjoy playing piano and table tennis.
             I represented Oxford's first team in the 77#[sup th]
             Table Tennis Varsity match against Cambridge.
       .column
-        .card-content
-          h2.title.is-2 Tom Chambaud
-          h4.subtitle.is-4 Apprentice Developer
-          p.content.
-            As you may have guessed, I am part French (half to be precise) and, as of September
-            2020, a Teacher of Mathematics at Sandwell Academy. In 2019, I graduated from #[a(href="https://keele.ac.uk") Keele University]
-            with a First-Class honours degree in Mathematics and obtained my PGCE qualification from the
-            #[a(href="https://ox.ac.uk") University of Oxford] the following year.
-          p.content.
-            I am passionate about helping young people and enjoying life outside of teaching. My hobbies include
-            competitive badminton, cooking great food and playing piano!
+        .card-content.content
+          h2.title.is-1 About MathsNuggets
+          p.is-size-4.
+            The aim is to automate the teacher's job as much as possible
+            in order to create highly interactive teaching resources.
+            The key functionalities are the following.
+          ul
+            li.
+              #[strong Automatic marking.]
+              Assess and follow your pupils' progress in real time during the lesson,
+              even if they are at home.
+            li.
+              #[strong Automatic solving.]
+              Ensure your solutions are always correct.
+            li.
+              #[strong Exercise generator.]
+              Let the computer create your exercise
+              and ensure that the solutions are appropriate.
 </template>
 
 <script>
