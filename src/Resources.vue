@@ -11,7 +11,7 @@ div
       p.panel-heading Lessons
         .panel-block
           p.control.has-icons-left
-            input.input(type='text' placeholder='Search')
+            input.input(type="text" placeholder="Search" v-model="searchString")
             span.icon.is-left
               i.fas.fa-search(aria-hidden='true')
         p.panel-tabs
@@ -77,12 +77,18 @@ export default {
     filteredLessons () {
       const teacher = this.$route.params.teacher || false
       const year = this.$route.params.year || false
-      return this.lessons.filter(function (lesson) {
-        return (lesson.year === year || year === false) && (lesson.teacher === teacher || teacher === false)
+      return this.lessons.filter((lesson) => {
+        if ((year && lesson.year !== year) || (teacher && lesson.teacher !== teacher)) {
+          return false
+        }
+        if (this.searchString) {
+          return lesson.title.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
+        }
+        return true
       })
     },
     realIndex () {
-      if (this.lessonIndex) {
+      if (this.filteredLessons && this.lessonIndex) {
         return this.lessons.indexOf(this.filteredLessons[this.lessonIndex])
       } else {
         return -1
@@ -140,6 +146,7 @@ export default {
       authState: auth.state,
       create: false,
       deleteModal: false,
+      searchString: '',
       slug: '',
       teacher: '',
       year: '',
