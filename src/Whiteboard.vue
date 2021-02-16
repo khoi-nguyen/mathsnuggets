@@ -8,7 +8,7 @@ div
       b-icon(pack="fas" icon="eraser")
     b-button(@click="canvas.clear()" type="is-danger is-inverted")
       b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="$emit('input', canvas.toJSON())" type="is-info is-inverted")
+    b-button(@click="save" type="is-info is-inverted")
       b-icon(pack="fas" icon="save")
     b-button(@click="canvas.undo()" type="is-warning is-inverted")
       b-icon(pack="fas" icon="undo")
@@ -26,6 +26,8 @@ div
 <script>
 import { fabric } from 'fabric'
 import 'fabric-history'
+
+import api from './ajax'
 
 export default {
   props: {
@@ -47,6 +49,13 @@ export default {
       return 'is-inverted ' + style[this.color]
     }
   },
+  sockets: {
+    writingReceived (data) {
+      if (data.url === this.$route.path && data.name === this.name) {
+        this.$emit('input', data.value)
+      }
+    }
+  },
   data () {
     return {
       color: 'darkblue',
@@ -63,6 +72,14 @@ export default {
     getWindowDimensions () {
       this.canvas.setWidth(window.innerWidth)
       this.canvas.setHeight(window.innerHeight)
+    },
+    save () {
+      this.$emit('input', this.canvas.toJSON())
+      api('whiteboard', 'POST', {
+        name: this.name,
+        url: this.$route.path,
+        value: this.canvas.toJSON()
+      })
     },
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode

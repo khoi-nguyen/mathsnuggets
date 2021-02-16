@@ -27,6 +27,13 @@ def form_list():
     return flask.jsonify(widget_data)
 
 
+@api.route("/whiteboard", methods=["POST"])
+def whiteboard():
+    payload = flask.request.get_json()
+    socketio.emit("writingReceived", payload)
+    return flask.jsonify({})
+
+
 @api.route("/surveys/<survey>", methods=["GET"])
 def count_votes(survey):
     return flask.jsonify([dict(s) for s in models.Vote.find({"survey": survey})])
