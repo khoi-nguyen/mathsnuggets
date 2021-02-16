@@ -24,7 +24,6 @@ import { fabric } from 'fabric'
 import 'fabric-history'
 
 export default {
-  title: 'Whiteboard',
   props: {
     name: String
   },
@@ -71,7 +70,6 @@ export default {
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowDimensions)
       this.getWindowDimensions()
-      this.canvas.historyInit()
     })
   },
   beforeDestroy () {
