@@ -10,6 +10,7 @@ class Taylor(form.Form):
     expression = fields.Expression("Expression")
     x = fields.Expression("x", default="x")
     order = fields.Expression("Order", default=6)
+    x0 = fields.Expression("x0", default=0)
 
     @fields.computed("Taylor")
     def taylor(self):
