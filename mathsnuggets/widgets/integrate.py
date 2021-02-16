@@ -9,13 +9,21 @@ class Integrate(form.Form):
     """Integrate"""
 
     template = """
-        Integrate `function` with respect to `x` `integral`
+        Integrate `function`
+        <span v-if="config.edit || payload.x != 'x'">with respect to `x`</span>
+        <span v-if="config.edit || (payload.a && payload.b)">between `a` and `b`</span>
+        `integral`
     """
 
     function = fields.Expression("Function")
     x = fields.Expression("x", default="x")
+    a = fields.Expression("a")
+    b = fields.Expression("b")
 
     @fields.computed("Integral")
     def integral(self):
-        integral = sympy.Integral(self.function, self.x)
+        params = self.x
+        if self.a != None and self.b != None:
+            params = (self.x, self.a, self.b)
+        integral = sympy.Integral(self.function, params)
         return sympy.Eq(integral, integral.doit())
