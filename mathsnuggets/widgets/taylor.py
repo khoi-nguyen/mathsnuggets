@@ -2,17 +2,14 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
-test = {"function": "x sin x"}
-
-
 class Taylor(form.Form):
     """Taylor Expansion"""
 
-    template = """Expand `expression``expand`"""
+    template = """Taylor expansion of `expression` of order `order` with respect to `x` around `x0`"""
 
     expression = fields.Expression("Expression")
     x = fields.Expression("x", default="x")
-    order = 6
+    order = fields.Expression("Order", default=6)
 
     @fields.computed("Taylor")
     def taylor(self):
