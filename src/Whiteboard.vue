@@ -6,6 +6,8 @@ div
       b-icon(pack="fas" icon="pen")
     b-button(@click="canvas.clear()" type="is-danger is-inverted")
       b-icon(pack="fas" icon="eraser")
+    b-button(@click="$emit('input', canvas.toJSON())" type="is-info is-inverted")
+      b-icon(pack="fas" icon="save")
     b-button(@click="canvas.undo()" type="is-warning is-inverted")
       b-icon(pack="fas" icon="undo")
     b-button(@click="canvas.redo()" type="is-link is-inverted")
@@ -25,7 +27,8 @@ import 'fabric-history'
 
 export default {
   props: {
-    name: String
+    name: String,
+    value: Object
   },
   computed: {
     canvasId () {
@@ -61,6 +64,18 @@ export default {
   watch: {
     color (newColor) {
       this.canvas.freeDrawingBrush.color = newColor
+    },
+    value: {
+      immediate: true,
+      handler (json) {
+        if (json) {
+          this.$nextTick(() => {
+            this.canvas.loadFromJSON(json, () => {
+              this.canvas.renderAll()
+            })
+          })
+        }
+      }
     }
   },
   mounted () {
