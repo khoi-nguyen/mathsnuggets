@@ -14,7 +14,7 @@ div
           p.is-size-4.
             My name is Khoi Nguyen
             (my pupils call me Mr Nuggets because they can't pronounce my name)
-            and I teach Mathematics at #[a(href="https://kingscollegeschools.org/madrid/schhool/") King's College] in Madrid.
+            and I teach Mathematics at #[a(href="https://kingscollegeschools.org/madrid/school/") King's College] in Madrid.
           p.content.
             I am a pure mathematician by education.
             I got my MMath (Part III) from the
@@ -51,7 +51,7 @@ div
 
 <script>
 export default {
-  title: 'About us',
+  title: 'About',
   name: 'About'
 }
 </script>
