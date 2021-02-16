@@ -47,7 +47,7 @@ div
         button.delete(@click="modal = false")
       section.modal-card-body
         b-field(:label="field.label" v-for="field in fields" v-if="field.editable")
-          b-input(:value="lessons[lessonIndex][field.name]" ref="modalFields" :name="field.name")
+          b-input(:value="filteredLessons[lessonIndex][field.name]" ref="modalFields" :name="field.name")
       footer.modal-card-foot
         button.button.is-success(@click="editMetadata") Save
         button.button(@click="modal = false") Cancel
@@ -56,7 +56,7 @@ div
       header.modal-card-head
         h3.modal-card-title Delete
         button.delete(@click="deleteModal = false")
-      section.modal-card-body Are you sure you want to delete the slideshow {{ lessons[lessonIndex].title }}?
+      section.modal-card-body Are you sure you want to delete the slideshow {{ filteredLessons[lessonIndex].title }}?
       footer.modal-card-foot
         button.button.is-success(@click="deleteSlideshow(lessonIndex, teacher, year, slug)") Delete
         button.button(@click="deleteModal = false") Cancel
@@ -80,6 +80,13 @@ export default {
       return this.lessons.filter(function (lesson) {
         return (lesson.year === year || year === false) && (lesson.teacher === teacher || teacher === false)
       })
+    },
+    realIndex () {
+      if (this.lessonIndex) {
+        return this.lessons.indexOf(this.filteredLessons[this.lessonIndex])
+      } else {
+        return -1
+      }
     },
     teachers () {
       return _.uniq(this.lessons.map((lesson) => lesson.teacher))
@@ -106,7 +113,8 @@ export default {
     },
     deleteSlideshow (index, teacher, year, slug) {
       api(`slideshows/${teacher}/${year}/${slug}`, 'DELETE')
-      this.lessons.splice(index, 1)
+      this.lessonIndex = index
+      this.lessons.splice(this.realIndex, 1)
       this.deleteModal = false
     },
     async editMetadata () {
@@ -116,11 +124,11 @@ export default {
       })
       let url = 'slideshows/'
       if (!this.create) {
-        const lesson = this.lessons[this.lessonIndex]
+        const lesson = this.lessons[this.realIndex]
         url += `${lesson.teacher}/${lesson.year}/${lesson.slug}`
       }
       const data = await api(url, 'POST', payload)
-      this.$set(this.lessons, this.lessonIndex, data)
+      this.$set(this.lessons, this.realIndex, data)
       if (this.create) {
         this.$set(this.lessons, this.lessons.length, { title: '' })
       }
