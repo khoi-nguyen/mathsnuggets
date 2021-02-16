@@ -4,8 +4,10 @@ div
   .bar.buttons.are-medium
     b-button(@click="toggleDrawingMode" type="is-success is-inverted")
       b-icon(pack="fas" icon="pen")
-    b-button(@click="canvas.clear()" type="is-danger is-inverted")
+    b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
       b-icon(pack="fas" icon="eraser")
+    b-button(@click="canvas.clear()" type="is-danger is-inverted")
+      b-icon(pack="fas" icon="chalkboard")
     b-button(@click="$emit('input', canvas.toJSON())" type="is-info is-inverted")
       b-icon(pack="fas" icon="save")
     b-button(@click="canvas.undo()" type="is-warning is-inverted")
@@ -51,6 +53,12 @@ export default {
     }
   },
   methods: {
+    deleteObjects () {
+      this.canvas.getActiveObjects().forEach((obj) => {
+        this.canvas.remove(obj)
+      })
+      this.canvas.discardActiveObject().renderAll()
+    },
     getWindowDimensions () {
       this.canvas.setWidth(window.innerWidth)
       this.canvas.setHeight(window.innerHeight)
