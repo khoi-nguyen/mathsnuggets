@@ -3,7 +3,7 @@ footer.footer
   .container.content
     .columns
       .column
-        p #[b-icon(pack="far" icon="copyright")] #[strong MathsNuggets] by K. Nguyen and T. Chambaud (2020).
+        p #[b-icon(pack="far" icon="copyright")] #[strong MathsNuggets] by K. Nguyen (2020).
       .column.is-narrow
         dl.content
           dt License
