@@ -34,7 +34,11 @@ class StandardFormQuestion(form.Form):
             if self.answer.func != sympy.Mul or len(self.answer.args) != 2:
                 return False
             x, power = self.answer.args[0], self.answer.args[1]
-            if x not in sympy.Interval.Ropen(1, 10) or power.func != sympy.Pow or power.args[0] != 10:
+            if (
+                x not in sympy.Interval.Ropen(1, 10)
+                or power.func != sympy.Pow
+                or power.args[0] != 10
+            ):
                 return False
         return sympy.simplify(self.answer - self.expression) == 0
 

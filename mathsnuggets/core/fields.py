@@ -307,7 +307,10 @@ class Markdown(Field):
 
     def export(self, value):
         html = pypandoc.convert_text(
-            value, "html", format="md", extra_args=["--katex", "--highlight-style", "pygments"]
+            value,
+            "html",
+            format="md",
+            extra_args=["--katex", "--highlight-style", "pygments"],
         ).rstrip()
         return {
             "html": html,
