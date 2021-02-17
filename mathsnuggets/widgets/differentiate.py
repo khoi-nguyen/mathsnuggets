@@ -10,14 +10,14 @@ class Differentiate(form.Form):
 
     template = """
         Differentiate `function`
-        <span v-if="config.edit || (payload.n != '1')">
+        <span v-if="config.edit || payload.n !== '1'">
             <span v-if="!config.edit && payload.n === '2'">
                 twice
             </span>
             <span v-else>
             `n` times
             </span>
-        <span>
+        </span>
         <span v-if="config.edit || payload.x != 'x'">
             with respect to `x`
         </span>
