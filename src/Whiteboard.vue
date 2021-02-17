@@ -6,10 +6,8 @@ div
       b-icon(pack="fas" icon="pen")
     b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
       b-icon(pack="fas" icon="eraser")
-    b-button(@click="canvas.clear()" type="is-danger is-inverted")
+    b-button(@click="canvas.clear(); save()" type="is-danger is-inverted")
       b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="save" type="is-info is-inverted")
-      b-icon(pack="fas" icon="save")
     b-button(@click="canvas.undo()" type="is-warning is-inverted")
       b-icon(pack="fas" icon="undo")
     b-button(@click="canvas.redo()" type="is-link is-inverted")
@@ -26,6 +24,7 @@ div
 <script>
 import { fabric } from 'fabric'
 import 'fabric-history'
+import _ from 'lodash'
 
 import api from './ajax'
 
@@ -51,7 +50,7 @@ export default {
   },
   sockets: {
     writingReceived (data) {
-      if (data.url === this.$route.path && data.name === this.name) {
+      if (data.url === this.$route.path && data.name === this.name && this.readOnly) {
         this.$emit('input', data.value)
       }
     }
@@ -74,11 +73,16 @@ export default {
       this.canvas.setHeight(window.innerHeight)
     },
     save () {
-      this.$emit('input', this.canvas.toJSON())
-      api('whiteboard', 'POST', {
-        name: this.name,
-        url: this.$route.path,
-        value: this.canvas.toJSON()
+      this.$nextTick(() => {
+        const json = this.canvas.toJSON()
+        if (!_.isEqual(this.value, json)) {
+          api('whiteboard', 'POST', {
+            name: this.name,
+            url: this.$route.path,
+            value: json
+          })
+          this.$emit('input', this.canvas.toJSON())
+        }
       })
     },
     toggleDrawingMode () {
@@ -110,6 +114,9 @@ export default {
       this.toggleDrawingMode()
     }
     this.canvas.renderAll()
+    this.canvas.on('object:added', this.save.bind(this))
+    this.canvas.on('object:removed', this.save.bind(this))
+    this.canvas.on('object:modified', this.save.bind(this))
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowDimensions)
       this.getWindowDimensions()
