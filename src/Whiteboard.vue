@@ -97,8 +97,8 @@ export default {
     },
     value: {
       immediate: true,
-      handler (json) {
-        if (json) {
+      handler (json, oldValue) {
+        if (json && (this.readOnly || !oldValue)) {
           this.$nextTick(() => {
             this.canvas.loadFromJSON(json, () => {
               this.canvas.renderAll()
