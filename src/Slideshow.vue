@@ -34,7 +34,7 @@
         b-dropdown-item(v-for="(message, index) in chat" @click="deleteChatMessage(index)")
           h5 {{ message.nickname }}
           form-field(type="Markdown" :value="message.message" :editable="false")
-      form-field(type="Field" @input="sendMessage" label="Your message" value="")
+      b-input(v-model="chatMessage" @keydown.enter.native="sendMessage")
     span &nbsp;&nbsp;
     form-field(:value="nickname" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
@@ -69,6 +69,7 @@ export default {
     return {
       authState: auth.state,
       chat: [],
+      chatMessage: '',
       children: [cloneDeep(emptySlide), cloneDeep(emptySlide)],
       clipboard: [],
       config: {
@@ -148,9 +149,10 @@ export default {
         setTimeout(this.sendSaveStack, 200)
       }
     },
-    sendMessage (message) {
-      if (message) {
-        api('chat', 'POST', { message, url: this.apiUrl })
+    sendMessage () {
+      if (this.chatMessage !== '') {
+        api('chat', 'POST', { message: this.chatMessage, url: this.apiUrl })
+        this.chatMessage = ''
       }
     },
     sendSaveStack () {
