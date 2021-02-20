@@ -12,14 +12,17 @@ class Triangle(form.Form):
     """Draw a triangle"""
 
     template = """
-        Vertices labels: `A`, `B`, `C`<br>
-        Lengths: `a`, `b`, `c`<br>
-        Angles: `alpha`, `beta`, `gamma`<br>
+        <div v-if="config.edit">
+            Vertices labels: `A`, `B`, `C`<br>
+            Lengths: `a`, `b`, `c`<br>
+            Angles: `alpha`, `beta`, `gamma`<br>
+        </div>
+        `triangle`
     """
 
-    A = fields.Expression("A")
-    B = fields.Expression("B")
-    C = fields.Expression("C")
+    A = fields.Expression("A", default="A")
+    B = fields.Expression("B", default="B")
+    C = fields.Expression("C", default="C")
 
     a = fields.Expression("a")
     b = fields.Expression("b")
@@ -30,7 +33,7 @@ class Triangle(form.Form):
     gamma = fields.Expression("gamma")
     obtuse = fields.Field("Obtuse (sine law ambiguity)", default=False)
 
-    @fields.computed("Triangle", field=fields.Html)
+    @fields.computed("Triangle", field=fields.Html, nohide=True)
     @fields.figure
     def triangle(self):
         # Prepare figure
@@ -133,8 +136,8 @@ class Triangle(form.Form):
         ]
         if not all(equations):
             raise ValueError("There are no triangles satisfying the conditions")
-        if self.obtuse and not [a for a in angles if a > sympy.pi / 2]:
-            raise ValueError("Could not find an appropriate obtuse triangle")
+        # if self.obtuse and not [a for a in angles if a > sympy.pi / 2]:
+        #     raise ValueError("Could not find an appropriate obtuse triangle")
 
         return [
             numpy.array([0, 0]),
