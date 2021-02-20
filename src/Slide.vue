@@ -34,11 +34,15 @@ export default {
 <style>
 .slide-contents a,
 .slide-contents button,
+.slide-contents textarea.field,
+.slide-contents select.field,
 .reveal .slide-contents iframe,
 .slide-contents h3.message-header,
 .slide-contents .base {
   z-index: 300;
 }
+.slide-contents select.field,
+.slide-contents textarea.field,
 .slide-contents iframe {
   position: relative;
 }
