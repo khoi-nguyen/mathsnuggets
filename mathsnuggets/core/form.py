@@ -102,7 +102,7 @@ class Form:
             attrs = " ".join([f'{prop}="{val}"' for prop, val in attrs.items()])
             return f"<form-field {attrs} />"
 
-        return "<div>" + re.sub(r"`([a-z0-9_]*)`", field_to_xml, string) + "</div>"
+        return "<div>" + re.sub(r"`([a-zA-Z0-9_]*)`", field_to_xml, string) + "</div>"
 
     def get_fields_as_template(self, field_type):
         fields = [f"`{attr}`" for attr, _ in self._fields(lambda f: f.get(field_type))]
