@@ -7,7 +7,13 @@ class ConstantAcceleration(form.Form):
     """Constant acceleration"""
 
     template = """
-        s: `s`, u: `u`, v: `v`, a: `a`, t: `t`
+        <ul>
+            <li>Displacement: `s`</li>
+            <li>Initial velocity: `u`</li>
+            <li>Velocity: `v`</li>
+            <li>Acceleration: `a`</li>
+            <li>Time: `t`</li>
+        </ul>
         `answer`
     """
 
