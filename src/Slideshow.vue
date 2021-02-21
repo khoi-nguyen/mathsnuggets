@@ -23,6 +23,8 @@
       b-icon(pack="fas" icon="drafting-compass")
     b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn")
       b-icon(pack="fas" icon="edit")
+    b-button(@click="solverModal = true" type="is-link")
+      b-icon(pack="fab" icon="python")
     b-dropdown(position="is-top-right" :mobile-modal="false")
       b-button(slot="trigger" type="is-info")
         b-icon(pack="fas" icon="calculator")
@@ -47,6 +49,12 @@
         header.modal-card-head Geometry
         .modal-card-body
           iframe(src="https://www.geogebra.org/geometry" width="100%" height="100%")
+    b-modal(:active.sync="solverModal" has-modal-card :destroy-on-hide="false")
+      .modal-card
+        header.modal-card-head Solver
+        .modal-card-body
+          widget-select(@select:widget="changeWidget")
+          widget(:type="widget" :config="{edit: true}" :state="{}" :payload="widgetPayload")
   .clipboard
     draggable(v-model="clipboard" group="widgets")
       node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
@@ -61,6 +69,8 @@ import { auth } from './auth.js'
 import api from './ajax'
 import FormField from './FormField'
 import Node from './Node'
+import Widget from './Widget'
+import WidgetSelect from './WidgetSelect'
 
 export default {
   title: 'Slideshow builder',
@@ -85,7 +95,10 @@ export default {
       displayChat: false,
       nickname: '',
       newMessages: false,
-      saveStack: []
+      saveStack: [],
+      solverModal: false,
+      widget: 'QuadraticEquations',
+      widgetPayload: {}
     }
   },
   computed: {
@@ -104,6 +117,10 @@ export default {
     window.removeEventListener('paste', this.onPaste.bind(this))
   },
   methods: {
+    changeWidget (widget) {
+      this.payload = {}
+      this.widget = widget
+    },
     deleteChatMessage (index) {
       if (this.config.authState.loggedIn) {
         api('chat/delete', 'POST', this.chat[index])
@@ -212,7 +229,9 @@ export default {
   components: {
     draggable,
     FormField,
-    Node
+    Node,
+    Widget,
+    WidgetSelect
   }
 }
 </script>
