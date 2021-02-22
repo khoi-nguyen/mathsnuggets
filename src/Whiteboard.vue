@@ -48,13 +48,13 @@ export default {
       return 'is-inverted ' + style[this.color]
     }
   },
-  sockets: {
-    writingReceived (data) {
-      if (data.url === this.$route.path && data.name === this.name && this.readOnly) {
-        this.$emit('input', data.value)
-      }
-    }
-  },
+  // sockets: {
+  //   writingReceived (data) {
+  //     if (data.url === this.$route.path && data.name === this.name && this.readOnly) {
+  //       this.$emit('input', data.value)
+  //     }
+  //   }
+  // },
   data () {
     return {
       color: 'darkblue',
