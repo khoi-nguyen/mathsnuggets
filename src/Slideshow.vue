@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     changeWidget (widget) {
-      this.payload = {}
+      this.widgetPayload = {}
       this.widget = widget
     },
     deleteChatMessage (index) {
