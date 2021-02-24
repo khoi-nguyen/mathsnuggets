@@ -27,7 +27,7 @@ export default {
 .whiteboard {
   position: absolute;
   top: 0;
-  z-index: 200;
+  z-index: 1;
 }
 </style>
 
@@ -39,7 +39,7 @@ export default {
 .reveal .slide-contents iframe,
 .slide-contents h3.message-header,
 .slide-contents .base {
-  z-index: 300;
+  z-index: 2;
 }
 .slide-contents select.field,
 .slide-contents textarea.field,

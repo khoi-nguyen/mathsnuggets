@@ -263,7 +263,7 @@ export default {
 .tray {
   position: absolute;
   opacity: 1;
-  z-index: 10000;
+  z-index: 2;
   bottom: 25px;
   left: 20px;
 }
