@@ -182,6 +182,8 @@ class Boolean(Field):
     """Checkboxes"""
 
     def sanitize(self, expr):
+        if expr == "false":
+            return False
         return bool(expr)
 
     def export(self, value):

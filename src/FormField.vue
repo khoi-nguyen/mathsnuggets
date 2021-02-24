@@ -2,9 +2,9 @@
 span(:name="name" v-if="!hidden")
   b-field(:label="label" v-if="random" horizontal)
     b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
-  .field(v-if="constraint")
+  .field(v-if="constraint || type == 'Boolean'")
     b-checkbox(v-model="checkboxValue" :disabled="protected") {{ label }}
-  span(v-if="!computed && !constraint && !random")
+  span(v-if="!computed && !constraint && !random && type != 'Boolean'")
     component.field(
       v-if="editing || !html"
       v-bind="attrs"
