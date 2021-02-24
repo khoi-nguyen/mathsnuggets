@@ -51,10 +51,12 @@
           iframe(src="https://www.geogebra.org/geometry" width="100%" height="100%")
     b-modal(:active.sync="solverModal" has-modal-card :destroy-on-hide="false")
       .modal-card
-        header.modal-card-head Solver
+        header.modal-card-head
+          p.modal-card-title Solver
+          button.delete(type="button" @click="solverModal = false")
         .modal-card-body
           widget-select(@select:widget="changeWidget")
-          widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload")
+          widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload" if="widget")
   .clipboard
     draggable(v-model="clipboard" group="widgets")
       node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
@@ -97,7 +99,7 @@ export default {
       newMessages: false,
       saveStack: [],
       solverModal: false,
-      widget: 'QuadraticEquations',
+      widget: '',
       widgetPayload: {}
     }
   },
