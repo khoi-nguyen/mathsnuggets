@@ -17,11 +17,12 @@ class Plot(form.Form):
     x = fields.Expression("Variable", default="x")
     x_min = fields.Expression("x min", default="-10")
     x_max = fields.Expression("x max", default="10")
-    equal_aspect = fields.Boolean("Equal aspect", default=True)
+    equal_aspect = fields.Boolean("Equal aspect", default=False)
 
     template = """
         <div v-if="config.edit">
             Plot `functions` for `x` between `x_min` and `x_max`
+            `equal_aspect`
         </div>
         `plot`
     """
