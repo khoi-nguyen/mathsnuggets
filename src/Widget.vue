@@ -1,7 +1,7 @@
 <template lang="pug">
 form.avoid-column
   v-runtime-template.is-size-3(:template="widgetData.template")
-  div(v-if="generator")
+  div(v-if="generator && hasGenerator")
     v-runtime-template(:template="generatorTemplate")
     b-button(type="is-primary" @click="solve(true)") Generate
   v-runtime-template(:template="generatorTemplateWithModal")
