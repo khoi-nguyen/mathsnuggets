@@ -54,7 +54,7 @@
         header.modal-card-head Solver
         .modal-card-body
           widget-select(@select:widget="changeWidget")
-          widget(:type="widget" :config="{edit: true}" :state="{}" :payload="widgetPayload")
+          widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload")
   .clipboard
     draggable(v-model="clipboard" group="widgets")
       node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")

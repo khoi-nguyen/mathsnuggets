@@ -1,7 +1,10 @@
 <template lang="pug">
 form.avoid-column
   v-runtime-template.is-size-3(:template="widgetData.template")
-  v-runtime-template(:template="generatorTemplate")
+  div(v-if="generator")
+    v-runtime-template(:template="generatorTemplate")
+    b-button(type="is-primary" @click="solve(true)") Generate
+  v-runtime-template(:template="generatorTemplateWithModal")
   error-message(v-bind="error" v-if="error")
 </template>
 
@@ -18,6 +21,7 @@ export default {
   props: {
     blacklist: Array,
     config: Object,
+    generator: Boolean,
     payload: Object,
     state: Object,
     type: String
@@ -57,7 +61,7 @@ export default {
         return field.random || field.constraint
       })
     },
-    generatorTemplate () {
+    generatorTemplateWithModal () {
       return `
         <b-modal :active.sync="state.showGenerator">
           <div class="modal-card">
@@ -67,12 +71,7 @@ export default {
             </header>
             <section class="modal-card-body">
               <p class="is-size-3">${this.widgetData.template}</p>
-              <hr />
-              ${this.widgetData.generator_template}
-              <div class="columns">
-                  <div class="column">${this.widgetData.random_numbers}</div>
-                  <div class="column">${this.widgetData.constraints}</div>
-              </div>
+              ${this.generatorTemplate}
             </section>
             <footer class="modal-card-foot buttons">
               <b-button type="is-primary" @click="solve(true)">Generate</b-button>
@@ -80,6 +79,18 @@ export default {
             </footer>
           </div>
         </b-modal>
+      `
+    },
+    generatorTemplate () {
+      return `
+        <div>
+          <hr />
+          ${this.widgetData.generator_template}
+          <div class="columns">
+              <div class="column">${this.widgetData.random_numbers}</div>
+              <div class="column">${this.widgetData.constraints}</div>
+          </div>
+        </div>
       `
     },
     hasGenerator () {
