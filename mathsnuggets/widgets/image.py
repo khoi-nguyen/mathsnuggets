@@ -20,9 +20,7 @@ class Image(form.Form):
         <div v-if="config.edit">
             Zoom: `zoom`
         </div>
-        <div>
-            `image`
-        </div>
+        <p>`image`</p>
     """
 
     @fields.computed("Image", field=fields.Html, nohide=True)
