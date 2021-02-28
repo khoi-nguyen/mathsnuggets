@@ -9,8 +9,8 @@ class EulerMethod(form.Form):
         <ul>
             <li><span class="katex">f(x, y) =</span> `function`</li>
             <li>Initial condition: `x0`, `y0`</li>
-            <hi><span class="katex">h = </span> `h`</li>
-            <hi><span class="katex">n = </span> `n`</li>
+            <li><span class="katex">h = </span> `h`</li>
+            <li><span class="katex">n = </span> `n`</li>
         </ul>
         `solution`
     """
