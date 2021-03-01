@@ -34,4 +34,4 @@ class EulerMethod(form.Form):
             else:
                 y += grad * self.h
             x += self.h
-        return (x, y)
+        return (x.evalf(), y.evalf())
