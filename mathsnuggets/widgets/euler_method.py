@@ -11,7 +11,7 @@ class EulerMethod(form.Form):
             <li>Initial condition: `x0`, `y0`</li>
             <li><span class="katex">h = </span> `h`</li>
             <li><span class="katex">n = </span> `n`</li>
-            <li>`midpoint`</li>
+            <li v-if="config.edit">`midpoint`</li>
         </ul>
         `solution`
     """
