@@ -30,4 +30,4 @@ class Integrate(form.Form):
         if self.a != None and self.b != None:
             params = (self.x, self.a, self.b)
         integral = sympy.Integral(self.function, params)
-        return sympy.Eq(integral, integral.doit())
+        return sympy.Eq(integral, sympy.simplify(integral.doit()))
