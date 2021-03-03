@@ -6,7 +6,7 @@ test = {"expression": "x^2 - 5x + 6"}
 
 
 class Simplify(form.Form):
-    """Factorise"""
+    """Simplify"""
 
     expression = fields.Expression("Expression")
     template = "Simplify `expression` `simplify`"
