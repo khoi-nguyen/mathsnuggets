@@ -220,9 +220,11 @@ export default {
       width: '100%'
     })
     if (this.apiUrl) {
-      const data = await api(this.apiUrl)
-      if (data.length) {
-        this.children = data
+      const n = await api(this.apiUrl)
+      if (n) {
+        for (var i = 0; i < n; i++) {
+          this.$set(this.children, i, await api(this.apiUrl + '/' + i))
+        }
       }
     }
     const identity = await api('auth/nickname')
