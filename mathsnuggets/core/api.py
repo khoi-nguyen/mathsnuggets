@@ -108,7 +108,11 @@ def list_slideshows():
 @cache.memoize()
 def load_slideshow(teacher=False, year=False, slug=False):
     params = {"teacher": teacher, "year": year, "slug": slug}
-    return flask.jsonify(models.Slideshow(**params).children)
+    slideshow = models.Slideshow(**params).children
+    for slide in slideshow:
+        if "payload" in slide and "canvas" in slide["payload"]:
+            del slide["payload"]["canvas"]
+    return flask.jsonify(slideshow)
 
 
 @api.route("/slideshows/", methods=["POST"])
