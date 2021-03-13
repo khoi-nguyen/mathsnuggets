@@ -108,14 +108,7 @@ def list_slideshows():
 @cache.memoize()
 def load_slideshow(teacher=False, year=False, slug=False):
     params = {"teacher": teacher, "year": year, "slug": slug}
-    return flask.jsonify(len(models.Slideshow(**params).children))
-
-
-@api.route("/slideshows/<teacher>/<year>/<slug>/<slide>", methods=["GET"])
-@cache.memoize()
-def load_slide(teacher=False, year=False, slug=False, slide=False):
-    params = {"teacher": teacher, "year": year, "slug": slug}
-    return flask.jsonify(models.Slideshow(**params).children[int(slide)])
+    return flask.jsonify(models.Slideshow(**params).children)
 
 
 @api.route("/slideshows/", methods=["POST"])
