@@ -14,7 +14,7 @@ class Geogebra(form.Form):
     name = "Geogebra"
     url = fields.Field("URL", required=True)
     width = fields.Expression("Width", default=800)
-    height = fields.Expression("Width", default=600)
+    height = fields.Expression("Height", default=600)
     template = """
         <div v-if="config.edit">
             `url` (`width`x`height`)
