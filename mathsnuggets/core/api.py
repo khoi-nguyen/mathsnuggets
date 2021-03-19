@@ -228,7 +228,7 @@ def login():
     user = models.User(email=payload["email"])
     if not user.email or not user.check_password(payload["password"]):
         raise InvalidUsage("Incorrect email or password")
-    flask_login.login_user(user)
+    flask_login.login_user(user, remember=payload.get("remember", False))
     return flask.jsonify({"success": True})
 
 
