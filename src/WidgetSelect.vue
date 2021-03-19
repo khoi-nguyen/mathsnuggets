@@ -41,7 +41,7 @@ export default {
     }
   },
   async mounted () {
-    this.list = await api('widgets')
+    this.list = await api('widgets', 'GET', false, true)
   },
   data () {
     return {
