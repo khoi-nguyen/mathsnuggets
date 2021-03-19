@@ -22,7 +22,7 @@ div
       b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="registrationPassword")
     b-field(v-if="tab === 'login'")
       b-checkbox(v-model="remember") Remember me
-    b-button(type="is-primary" expanded @click="login" v-if="tab === 'login'") Login
+    b-button(type="is-primary" expanded @click="login(false)" v-if="tab === 'login'") Login
     b-button(type="is-success" expanded @click="login(true)" v-else) Register
     b-message(v-if="authState.error != ''" type="is-danger") {{ authState.error }}
 </template>
