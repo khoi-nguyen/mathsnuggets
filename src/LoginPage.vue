@@ -11,18 +11,18 @@ div
         h1.title Logged In
         h2.subtitle You have successfully logged in!
   .box.container(v-if="!authState.loggedIn")
-    b-tabs(v-model="register")
-      b-tab-item(label="Login")
-      b-tab-item(label="Register")
+    b-tabs(v-model="tab" type="is-boxed")
+      b-tab-item(label="Login" value="login")
+      b-tab-item(label="Register" value="register")
     b-field(label="Email")
       b-input(icon="envelope" icon-pack="fas" type="email" v-model="email")
     b-field(label="Password")
       b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="password")
-    b-field(label="Registration password" v-if="register")
+    b-field(label="Registration password" v-if="tab === 'register'")
       b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="registrationPassword")
-    b-field(v-if="!register")
+    b-field(v-if="tab === 'login'")
       b-checkbox(v-model="remember") Remember me
-    b-button(type="is-primary" expanded @click="login" v-if="!register") Login
+    b-button(type="is-primary" expanded @click="login" v-if="tab === 'login'") Login
     b-button(type="is-success" expanded @click="login(true)" v-else) Register
     b-message(v-if="authState.error != ''" type="is-danger") {{ authState.error }}
 </template>
@@ -46,9 +46,9 @@ export default {
       authState: auth.state,
       email: '',
       password: '',
-      register: false,
       registrationPassword: '',
-      remember: true
+      remember: true,
+      tab: 'login'
     }
   }
 }
