@@ -2,6 +2,7 @@ import sympy
 
 from mathsnuggets.core import fields, form
 
+
 class EulerMethod(form.Form):
     """Euler method"""
 
