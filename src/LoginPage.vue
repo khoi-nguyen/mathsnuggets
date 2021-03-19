@@ -22,13 +22,10 @@ div
 </template>
 
 <script>
-import NavBar from './NavBar'
 import { auth } from './auth.js'
 
 export default {
-  components: { NavBar },
   title: 'Login',
-  name: 'Login',
   methods: {
     login () {
       auth.login(this.email, this.password, this.remember)
