@@ -18,8 +18,7 @@ div
     b-field
       b-checkbox(v-model="remember") Remember me
     b-button(type="is-info" expanded @click="login") Login
-    article.message.is-danger(v-if="authState.error != ''")
-      div.message-body {{ authState.error }}
+    b-message(v-if="authState.error != ''" type="is-danger") {{ authState.error }}
 </template>
 
 <script>
