@@ -11,13 +11,19 @@ div
         h1.title Logged In
         h2.subtitle You have successfully logged in!
   .box.container(v-if="!authState.loggedIn")
+    b-tabs(v-model="register")
+      b-tab-item(label="Login")
+      b-tab-item(label="Register")
     b-field(label="Email")
       b-input(icon="envelope" icon-pack="fas" type="email" v-model="email")
     b-field(label="Password")
       b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="password")
-    b-field
+    b-field(label="Registration password" v-if="register")
+      b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="registrationPassword")
+    b-field(v-if="!register")
       b-checkbox(v-model="remember") Remember me
-    b-button(type="is-info" expanded @click="login") Login
+    b-button(type="is-primary" expanded @click="login" v-if="!register") Login
+    b-button(type="is-success" expanded @click="login(true)" v-else) Register
     b-message(v-if="authState.error != ''" type="is-danger") {{ authState.error }}
 </template>
 
@@ -27,8 +33,12 @@ import { auth } from './auth.js'
 export default {
   title: 'Login',
   methods: {
-    login () {
-      auth.login(this.email, this.password, this.remember)
+    login (register = false) {
+      if (register) {
+        auth.register(this.email, this.password, this.registrationPassword)
+      } else {
+        auth.login(this.email, this.password, this.remember)
+      }
     }
   },
   data () {
@@ -36,6 +46,8 @@ export default {
       authState: auth.state,
       email: '',
       password: '',
+      register: false,
+      registrationPassword: '',
       remember: true
     }
   }
