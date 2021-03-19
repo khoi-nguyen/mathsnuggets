@@ -16,7 +16,7 @@ div
     b-field(label="Password")
       b-input(icon="lock" icon-pack="fas" type="password" ref="fields" v-model="password")
     b-field
-      b-checkbox Remember me
+      b-checkbox(v-model="remember") Remember me
     b-button(type="is-info" expanded @click="login") Login
     article.message.is-danger(v-if="authState.error != ''")
       div.message-body {{ authState.error }}
@@ -32,14 +32,15 @@ export default {
   name: 'Login',
   methods: {
     login () {
-      auth.login(this.email, this.password)
+      auth.login(this.email, this.password, this.remember)
     }
   },
   data () {
     return {
       authState: auth.state,
       email: '',
-      password: ''
+      password: '',
+      remember: true
     }
   }
 }
