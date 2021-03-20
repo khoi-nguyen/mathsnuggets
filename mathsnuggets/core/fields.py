@@ -140,7 +140,10 @@ class Expression(Field):
 
     def sanitize(self, expr):
         """Transform expr into a real mathematical expression"""
-        return parse(expr)
+        expr = parse(expr)
+        if getattr(self, "numeric", False):
+            expr = float(expr.evalf())
+        return expr
 
     def export(self, value):
         return {
