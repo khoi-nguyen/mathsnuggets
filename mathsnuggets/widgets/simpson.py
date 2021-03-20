@@ -1,4 +1,5 @@
 import numpy
+import scipy.integrate
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -27,12 +28,14 @@ class Simpson(form.Form):
     def n(self):
         return sympy.ceiling((self.b - self.a) / self.h)
 
+    @property
+    def f(self):
+        return sympy.lambdify(self.x, self.function, "numpy")
+
     @fields.computed("Integral")
     def integral(self):
-        f = sympy.lambdify(self.x, self.function, "numpy")
         x = numpy.linspace(self.a, self.b, self.n + 1)
-        y = f(x)
-        return self.h / 3 * numpy.sum(y[0:-1:2] + 4 * y[1::2] + y[2::2])
+        return scipy.integrate.simps(self.f(x), x)
 
     def validate(self):
         if self.n % 2 == 1:

@@ -26,5 +26,6 @@ pytest-cov
 pytest-mongodb
 pytest-xdist
 python-slugify
+scipy
 sphinx-rtd-theme
 sympy==1.6.2
