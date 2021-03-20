@@ -6,7 +6,7 @@ import VueSocketIO from 'vue-socket.io'
 
 import titleMixin from './titleMixin'
 
-const Vue = require('vue/dist/vue.js')
+const Vue = require('vue/dist/vue.min.js')
 const App = () => import('./App')
 const About = () => import('./About')
 const HomePage = () => import('./HomePage')
