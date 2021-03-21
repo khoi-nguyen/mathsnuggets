@@ -99,7 +99,6 @@ export default {
     })
   },
   beforeDestroy () {
-    this.save()
     window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
