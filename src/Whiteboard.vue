@@ -108,6 +108,7 @@ export default {
     })
   },
   beforeDestroy () {
+    this.$emit('input', this.canvas.toJSON())
     window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
