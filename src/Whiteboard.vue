@@ -26,7 +26,6 @@ div
 <script>
 import { fabric } from 'fabric'
 import 'fabric-history'
-import _ from 'lodash'
 
 export default {
   props: {
@@ -66,12 +65,7 @@ export default {
       this.canvas.setHeight(window.innerHeight)
     },
     save () {
-      this.$nextTick(() => {
-        const json = this.canvas.toJSON()
-        if (!_.isEqual(this.value, json)) {
-          this.$emit('input', this.canvas.toJSON())
-        }
-      })
+      this.$emit('input', this.canvas.toJSON())
     },
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
@@ -88,9 +82,7 @@ export default {
       handler (json, oldValue) {
         if (json && (this.readOnly || !oldValue)) {
           this.$nextTick(() => {
-            this.canvas.loadFromJSON(json, () => {
-              this.canvas.renderAll()
-            })
+            this.canvas.loadFromJSON(json)
           })
         }
       }
@@ -101,14 +93,13 @@ export default {
     if (!this.readOnly) {
       this.toggleDrawingMode()
     }
-    this.canvas.renderAll()
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowDimensions)
       this.getWindowDimensions()
     })
   },
   beforeDestroy () {
-    this.$emit('input', this.canvas.toJSON())
+    this.save()
     window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
