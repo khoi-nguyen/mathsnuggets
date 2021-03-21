@@ -2,7 +2,7 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="!config.edit" v-model="payload.canvas" :read-only="!config.authState.loggedIn")
+    whiteboard.whiteboard(:name="position" v-if="!config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!config.authState.loggedIn")
     slot
 </template>
 
@@ -19,6 +19,11 @@ export default {
     config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: String
+  },
+  computed: {
+    showWhiteboard () {
+      return this.config.currentSlide === parseInt(this.position.split('.')[1])
+    }
   }
 }
 </script>

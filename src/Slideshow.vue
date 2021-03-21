@@ -86,6 +86,7 @@ export default {
       clipboard: [],
       config: {
         authState: auth.state,
+        currentSlide: 0,
         edit: false,
         columns: false,
         graphPaper: false,
@@ -227,6 +228,9 @@ export default {
     }
     const identity = await api('auth/nickname')
     this.nickname = identity.nickname || ''
+    Reveal.on('slidechanged', event => {
+      this.$set(this.config, 'currentSlide', event.indexh)
+    })
   },
   components: {
     draggable,
