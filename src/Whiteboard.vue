@@ -12,6 +12,8 @@ div
       b-icon(pack="fas" icon="undo")
     b-button(@click="canvas.redo()" type="is-link is-inverted")
       b-icon(pack="fas" icon="redo")
+    b-button(@click="save" type="is-success is-inverted")
+      b-icon(pack="fas" icon="save")
     b-dropdown(v-model="color" :triggers="['hover']")
       b-button(slot="trigger" :type="colorButtonType")
         b-icon(pack="fas" icon="palette")
@@ -25,8 +27,6 @@ div
 import { fabric } from 'fabric'
 import 'fabric-history'
 import _ from 'lodash'
-
-import api from './ajax'
 
 export default {
   props: {
@@ -48,13 +48,6 @@ export default {
       return 'is-inverted ' + style[this.color]
     }
   },
-  // sockets: {
-  //   writingReceived (data) {
-  //     if (data.url === this.$route.path && data.name === this.name && this.readOnly) {
-  //       this.$emit('input', data.value)
-  //     }
-  //   }
-  // },
   data () {
     return {
       color: 'darkblue',
@@ -76,11 +69,6 @@ export default {
       this.$nextTick(() => {
         const json = this.canvas.toJSON()
         if (!_.isEqual(this.value, json)) {
-          api('whiteboard', 'POST', {
-            name: this.name,
-            url: this.$route.path,
-            value: json
-          })
           this.$emit('input', this.canvas.toJSON())
         }
       })
@@ -114,9 +102,6 @@ export default {
       this.toggleDrawingMode()
     }
     this.canvas.renderAll()
-    this.canvas.on('object:added', this.save.bind(this))
-    this.canvas.on('object:removed', this.save.bind(this))
-    this.canvas.on('object:modified', this.save.bind(this))
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowDimensions)
       this.getWindowDimensions()
