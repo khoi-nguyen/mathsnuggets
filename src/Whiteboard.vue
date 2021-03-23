@@ -26,6 +26,7 @@ div
 <script>
 import { fabric } from 'fabric'
 import 'fabric-history'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -65,7 +66,9 @@ export default {
       this.canvas.setHeight(window.innerHeight)
     },
     save () {
-      this.$emit('input', this.canvas.toJSON())
+      if (!_.isEqual(this.value, this.canvas.toJSON())) {
+        this.$emit('input', this.canvas.toJSON())
+      }
     },
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
@@ -99,6 +102,7 @@ export default {
     })
   },
   beforeDestroy () {
+    this.save()
     window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
