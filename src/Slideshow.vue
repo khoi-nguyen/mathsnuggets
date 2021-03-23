@@ -208,6 +208,12 @@ export default {
     }
   },
   async mounted () {
+    if (this.apiUrl) {
+      const data = await api(this.apiUrl)
+      if (data.length) {
+        this.children = data
+      }
+    }
     Reveal.initialize({
       center: false,
       hash: true,
@@ -220,12 +226,6 @@ export default {
       transition: 'none',
       width: '100%'
     })
-    if (this.apiUrl) {
-      const data = await api(this.apiUrl)
-      if (data.length) {
-        this.children = data
-      }
-    }
     const identity = await api('auth/nickname')
     this.nickname = identity.nickname || ''
     Reveal.on('slidechanged', event => {
