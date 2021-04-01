@@ -75,7 +75,7 @@ export default {
       this.error = ''
       this.editing = false
       if ('latex' in data) {
-        return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed })
+        return katex.renderToString(data.latex, { displayMode: this.displayMode || this.computed, throwOnError: false })
       }
       return data.html || data.value
     }
@@ -139,7 +139,7 @@ export default {
       var displayMode = !mathElements[i].classList.contains('inline')
       var texText = mathElements[i].firstChild
       if (texText && texText.data) {
-        katex.render(texText.data, mathElements[i], { displayMode })
+        katex.render(texText.data, mathElements[i], { displayMode, throwOnError: false })
       }
     }
   },
