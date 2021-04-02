@@ -19,6 +19,7 @@ div
         b-icon(pack="fas" icon="palette")
       b-dropdown-item(value="darkblue") Blue
       b-dropdown-item(value="darkred") Red
+      b-dropdown-item(value="darkorange") Orange
       b-dropdown-item(value="darkgreen") Green
       b-dropdown-item(value="black") Black
 </template>
