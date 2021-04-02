@@ -28,16 +28,22 @@ export default {
   watch: {
     'config.currentSlide': {
       immediate: true,
-      handler (currentSlide) {
-        if (currentSlide === parseInt(this.position.split('.')[1])) {
-          this.showWhiteboard = true
+      handler (currentSlide, previousSlide) {
+        const position = parseInt(this.position.split('.')[1])
+        if (!this.showWhiteboard) {
+          if (currentSlide === position) {
+            this.timeout = setTimeout(() => { this.showWhiteboard = true }, 2000)
+          } else if (previousSlide === position) {
+            clearTimeout(this.timeOut)
+          }
         }
       }
     }
   },
   data () {
     return {
-      showWhiteboard: false
+      showWhiteboard: false,
+      timeout: false
     }
   }
 }
