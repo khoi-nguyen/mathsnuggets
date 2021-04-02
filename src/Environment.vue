@@ -13,14 +13,6 @@ import FormField from './FormField'
 
 export default {
   props: { config: Object, payload: { type: Object, default: () => {} } },
-  methods: {
-    blur (event) {
-      this.updateTitle(event.target.innerText)
-    },
-    updateTitle (value) {
-      this.$set(this.payload, 'title', value)
-    }
-  },
   components: {
     FormField
   }
