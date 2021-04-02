@@ -31,6 +31,7 @@ import _ from 'lodash'
 
 export default {
   props: {
+    active: Boolean,
     name: String,
     readOnly: Boolean,
     value: Object
@@ -78,6 +79,11 @@ export default {
     }
   },
   watch: {
+    active (newValue, oldValue) {
+      if (oldValue && !newValue) {
+        this.save()
+      }
+    },
     color (newColor) {
       this.canvas.freeDrawingBrush.color = newColor
     },
@@ -103,7 +109,6 @@ export default {
     })
   },
   beforeDestroy () {
-    this.save()
     window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
