@@ -3,7 +3,7 @@ div.box
   h2.title
     .columns.is-vcentered
       .column
-        form-field(:editable="config.authState.loggedIn" @input="$emit('input', $event)" :value="value" type="Markdown")
+        form-field(:editable="config.edit" @input="$emit('input', $event)" :value="value" type="Markdown")
       .column.is-narrow.date
         div {{ today }}
         div {{ time }}
