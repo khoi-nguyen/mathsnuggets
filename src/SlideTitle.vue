@@ -2,12 +2,8 @@
 div.box
   h2.title
     .columns.is-vcentered
-      .column.slide-title(
-        @blur="$emit('input', $event.target.innerText)"
-        @keydown.enter.prevent="$event.target.blur()"
-        :contenteditable="config.authState.loggedIn"
-        v-text="value"
-      )
+      .column
+        form-field(:editable="config.authState.loggedIn" @input="$emit('input', $event)" :value="value" type="Markdown")
       .column.is-narrow.date
         div {{ today }}
         div {{ time }}
@@ -15,6 +11,9 @@ div.box
 
 <script>
 import 'typeface-fira-sans'
+
+import FormField from './FormField'
+
 var moment = require('moment')
 
 export default {
@@ -37,6 +36,9 @@ export default {
     updateTime () {
       this.time = moment().format('h.mma')
     }
+  },
+  components: {
+    FormField
   }
 }
 </script>
