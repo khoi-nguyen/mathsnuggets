@@ -9,13 +9,14 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
           @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
           @insert-slide="$emit('insert-slide')"
+          @delete-slide="$emit('delete-slide')"
           @save="$emit('save', $event)"
           v-bind="child"
           v-if="child.component"
           :class="{invisible: config.whiteboardMode}"
         )
   vue-context(ref="menu" :close-on-click="false")
-    context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" v-bind="attrs")
+    context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" @delete-slide="$emit('delete-slide')" v-bind="attrs")
 </template>
 
 <script>

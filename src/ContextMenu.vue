@@ -37,6 +37,9 @@ div.dropdown-content
   hr.dropdown-divider
   li.dropdown-item(@click="$emit('insert-slide')")
     span Insert slide before
+  li.dropdown-item(@click="$emit('delete-slide')")
+    b-icon(pack="fas" icon="trash")
+    span Delete slide
 </template>
 
 <script>

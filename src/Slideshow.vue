@@ -8,6 +8,7 @@
         v-bind="slide"
         :position="`children.${index}`"
         @insert-slide="insertSlide(index)"
+        @delete-slide="deleteSlide(index)"
         @save="save"
       )
   tool-bar(:config="config")
@@ -55,6 +56,10 @@ export default {
     insertSlide (index) {
       this.save({ action: 'insert', [`children.${index}`]: _.cloneDeep(this.emptySlide) })
       this.children.splice(index, 0, _.cloneDeep(this.emptySlide))
+    },
+    deleteSlide (index) {
+      this.save({ action: 'delete', [`children.${index}`]: '' })
+      this.children.splice(index, 1)
     },
     save (payload) {
       if (!_.isEqual(this.children[this.children.length - 1], this.emptySlide)) {
