@@ -29,8 +29,13 @@ class Equation(form.Form):
     @fields.computed("Plot", field=fields.Html, nohide=True)
     def graph(self):
         args = {"functions": [self.equation.args[0], self.equation.args[1]]}
-        if isinstance(self.solution, list) and len(self.solution) == 1:
-            solution = self.solution[0].args[1]
+        if isinstance(self.solution, list) and len(self.solution) in [1, 2]:
+            if len(self.solution) == 1:
+                solution = self.solution[0].args[1]
+            if len(self.solution) == 2:
+                x1, x2 = self.solution[0].args[1], self.solution[1].args[1]
+                solution = (x1 + x2) / 2
+                self.h = x2 - solution + 2
             args.update({"x_min": solution - self.h, "x_max": solution + self.h})
         return plot.Plot(**args).plot
 
