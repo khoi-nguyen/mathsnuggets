@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 import SlideTitle from './SlideTitle'
 import Whiteboard from './Whiteboard'
 
@@ -32,9 +34,10 @@ export default {
         const position = parseInt(this.position.split('.')[1])
         if (!this.showWhiteboard) {
           if (currentSlide === position) {
-            this.timeout = setTimeout(() => { this.showWhiteboard = true }, 2000)
-          } else if (previousSlide === position) {
-            clearTimeout(this.timeOut)
+            this.debounced = _.debounce(() => { this.showWhiteboard = true }, 2000)
+            this.debounced()
+          } else if (previousSlide === position && this.debounced) {
+            this.debounced.cancel()
           }
         }
       }
@@ -43,7 +46,7 @@ export default {
   data () {
     return {
       showWhiteboard: false,
-      timeout: false
+      debounced: false
     }
   }
 }
