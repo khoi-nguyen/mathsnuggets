@@ -34,7 +34,6 @@ export default {
         const position = parseInt(this.position.split('.')[1])
         if (!this.showWhiteboard) {
           if (currentSlide === position) {
-            this.debounced = _.debounce(() => { this.showWhiteboard = true }, 2000)
             this.debounced()
           } else if (previousSlide === position && this.debounced) {
             this.debounced.cancel()
@@ -46,7 +45,7 @@ export default {
   data () {
     return {
       showWhiteboard: false,
-      debounced: false
+      debounced: _.debounce(() => { this.showWhiteboard = true }, 2000)
     }
   }
 }
