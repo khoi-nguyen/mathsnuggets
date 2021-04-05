@@ -1,4 +1,5 @@
 <template lang="pug">
+div
   .tray.buttons.are-medium
     b-button(@click="graphing = true" type="is-link")
       b-icon(pack="fas" icon="chart-line")
@@ -46,9 +47,9 @@
         .modal-card-body
           widget-select(@select:widget="changeWidget")
           widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload" if="widget")
-    .clipboard
-      draggable(v-model="clipboard" group="widgets")
-        node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
+  .clipboard
+    draggable(v-model="clipboard" group="widgets")
+      node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
 </template>
 
 <script>
@@ -57,6 +58,7 @@ import draggable from 'vuedraggable'
 
 import api from './ajax'
 import FormField from './FormField'
+import Node from './Node'
 import Widget from './Widget'
 import WidgetSelect from './WidgetSelect'
 
@@ -165,6 +167,7 @@ export default {
   components: {
     draggable,
     FormField,
+    Node,
     Widget,
     WidgetSelect
   }
