@@ -7,7 +7,7 @@ div
       b-icon(pack="fas" icon="chalkboard")
     b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger")
       b-icon(pack="fas" icon="th")
-    b-button(type="is-warning" @click="config.columns = !config.columns")
+    b-button(type="is-warning" @click="$set(slidePayload, 'split', !slidePayload.split)")
       b-icon(pack="fas" icon="columns")
     b-button(@click="geometry = true")
       b-icon(pack="fas" icon="drafting-compass")
@@ -64,7 +64,8 @@ import WidgetSelect from './WidgetSelect'
 
 export default {
   props: {
-    config: Object
+    config: Object,
+    slidePayload: Object
   },
   data () {
     return {

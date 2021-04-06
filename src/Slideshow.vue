@@ -11,7 +11,7 @@
         @delete-slide="deleteSlide(index)"
         @save="save"
       )
-  tool-bar(:config="config")
+  tool-bar(:config="config" :slide-payload="slidePayload")
 </template>
 
 <script>
@@ -33,7 +33,6 @@ export default {
         authState: auth.state,
         currentSlide: 0,
         edit: false,
-        columns: false,
         graphPaper: false,
         whiteboardMode: false
       },
@@ -45,10 +44,13 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
+    },
+    slidePayload () {
+      return this.children[this.config.currentSlide].payload
     }
   },
   watch: {
-    'config.columns' (newValue) {
+    'slidePayload.split' (newValue) {
       Reveal.configure({ width: newValue ? '50%' : '100%' })
     }
   },
