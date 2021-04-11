@@ -70,7 +70,7 @@ export default {
 .slide-contents select.field,
 .reveal .slide-contents iframe,
 .slide-contents h3.message-header,
-.slide-contents .base {
+.slide-contents .computed-field .base {
   z-index: 2;
 }
 .slide-contents select.field,
