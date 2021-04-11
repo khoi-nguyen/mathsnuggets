@@ -3,7 +3,8 @@
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
     whiteboard.whiteboard(:name="position" v-if="!config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!config.authState.loggedIn" :active="active")
-    slot
+    div(:class="{split: payload.split}")
+      slot
 </template>
 
 <script>
@@ -56,6 +57,9 @@ export default {
   position: absolute;
   top: 0;
   z-index: 1;
+}
+.split {
+  width: 960px;
 }
 </style>
 

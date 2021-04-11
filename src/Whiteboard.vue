@@ -63,10 +63,6 @@ export default {
       })
       this.canvas.discardActiveObject().renderAll()
     },
-    getWindowDimensions () {
-      this.canvas.setWidth(window.innerWidth)
-      this.canvas.setHeight(window.innerHeight)
-    },
     save () {
       if (!_.isEqual(this.value, this.canvas.toJSON())) {
         this.$emit('input', this.canvas.toJSON())
@@ -100,17 +96,13 @@ export default {
   },
   mounted () {
     this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
+    this.canvas.setDimensions({ width: 1920, height: 1080 })
     if (!this.readOnly) {
       this.toggleDrawingMode()
     }
-    this.$nextTick(function () {
-      window.addEventListener('resize', this.getWindowDimensions)
-      this.getWindowDimensions()
-    })
   },
   beforeDestroy () {
     this.save()
-    window.removeEventListener('resize', this.getWindowDimensions)
   }
 }
 </script>

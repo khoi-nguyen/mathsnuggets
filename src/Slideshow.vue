@@ -49,11 +49,6 @@ export default {
       return this.children[this.config.currentSlide].payload
     }
   },
-  watch: {
-    'slidePayload.split' (newValue) {
-      Reveal.configure({ width: newValue ? '50%' : '100%' })
-    }
-  },
   methods: {
     insertSlide (index) {
       this.save({ action: 'insert', [`children.${index}`]: _.cloneDeep(this.emptySlide) })
@@ -90,13 +85,13 @@ export default {
       center: false,
       hash: true,
       help: false,
-      height: '100%',
+      height: 1080,
       margin: 0,
       pause: false,
       slideNumber: 'c/t',
       touch: false,
       transition: 'none',
-      width: '100%'
+      width: 1920
     })
     Reveal.on('slidechanged', event => {
       this.$set(this.config, 'currentSlide', event.indexh)
