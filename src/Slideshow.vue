@@ -89,6 +89,7 @@ export default {
       help: false,
       height: 1080,
       margin: 0,
+      navigationMode: 'grid',
       pause: false,
       touch: false,
       transition: 'none',
