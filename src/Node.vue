@@ -23,7 +23,6 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
 import _ from 'lodash'
 import draggable from 'vuedraggable'
 import { VueContext } from 'vue-context'
-import { cloneDeep } from 'lodash'
 
 import ContextMenu from './ContextMenu'
 import Environment from './Environment'
@@ -51,7 +50,7 @@ export default {
   watch: {
     payload: {
       handler () {
-        const payload = cloneDeep(this.payload)
+        const payload = _.cloneDeep(this.payload)
         for (var i = 0; i < this.blacklist.length; i++) {
           delete payload[this.blacklist[i]]
         }
