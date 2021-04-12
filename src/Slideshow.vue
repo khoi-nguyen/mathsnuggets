@@ -2,15 +2,17 @@
 .reveal(:class="{graphPaper: config.graphPaper}")
   .slides
     section(v-for="(slide, index) in children")
-      node(
-        component="slide"
-        :config="config"
-        v-bind="slide"
-        :position="`children.${index}`"
-        @insert-slide="insertSlide(index)"
-        @delete-slide="deleteSlide(index)"
-        @save="save"
-      )
+      section(v-for="vpos in [0, 1]")
+        node(
+          :additionalAttrs="{ vpos }"
+          component="slide"
+          :config="config"
+          v-bind="slide"
+          :position="`children.${index}`"
+          @insert-slide="insertSlide(index)"
+          @delete-slide="deleteSlide(index)"
+          @save="save"
+        )
   tool-bar(:config="config" :slide-payload="slidePayload")
 </template>
 
@@ -88,7 +90,6 @@ export default {
       height: 1080,
       margin: 0,
       pause: false,
-      slideNumber: 'c/t',
       touch: false,
       transition: 'none',
       width: 1920

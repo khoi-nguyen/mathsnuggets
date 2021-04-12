@@ -20,6 +20,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
 </template>
 
 <script>
+import _ from 'lodash'
 import draggable from 'vuedraggable'
 import { VueContext } from 'vue-context'
 import { cloneDeep } from 'lodash'
@@ -33,6 +34,7 @@ import Widget from './Widget'
 export default {
   name: 'node',
   props: {
+    additionalAttrs: { type: Object, default: () => {} },
     children: { type: Array, default: () => [] },
     component: { type: String, default: '' },
     config: { type: Object, default: () => {} },
@@ -70,7 +72,7 @@ export default {
       }
     },
     attrs () {
-      return {
+      return _.assign({
         children: this.children || [],
         component: this.component,
         config: this.config || {},
@@ -78,7 +80,7 @@ export default {
         position: this.position,
         state: this.state,
         type: this.type
-      }
+      }, this.additionalAttrs)
     },
     childComponent () {
       return this.component === 'list' ? 'li' : 'div'

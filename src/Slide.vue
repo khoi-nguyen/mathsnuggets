@@ -2,7 +2,7 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="!config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!config.authState.loggedIn" :active="active")
+    whiteboard.whiteboard(:name="position" v-if="vpos && !config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!config.authState.loggedIn" :active="active")
     div(:class="{split: payload.split}")
       slot
 </template>
@@ -21,7 +21,8 @@ export default {
   props: {
     config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
-    position: String
+    position: String,
+    vpos: Number
   },
   computed: {
     active () {
