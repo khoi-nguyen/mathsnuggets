@@ -1,0 +1,54 @@
+import sympy
+
+from mathsnuggets.core import fields, form
+
+
+class FractionRepresentation(form.Form):
+    """Fraction representation"""
+
+    fraction_1 = fields.Expression("Fraction (horizontal)", default="1")
+    fraction_2 = fields.Expression("Fraction (vertical)", default="1")
+    height = fields.Expression("Figure height", default="360")
+    width = fields.Expression("Figure width", default="360")
+
+    template = """
+        <div v-if="config.edit">
+            <p>`fraction_1` x `fraction_2`</p>
+            <p>Dimensions: `width` x `height`</p>
+        </div>
+        `figure`
+    """
+
+    @fields.computed("Figure", field=fields.Html, nohide=True)
+    def figure(self):
+        num1, den1 = (
+            [1, self.fraction_1]
+            if self.fraction_1.func == sympy.Pow
+            else self.fraction_1.args
+        )
+        num2, den2 = (
+            [1, self.fraction_2]
+            if self.fraction_2.func == sympy.Pow
+            else self.fraction_2.args
+        )
+        x_inc, y_inc = sympy.floor(self.width * den2), sympy.floor(self.height * den1)
+        x_inc, y_inc = int(x_inc), int(y_inc)
+        lines = [
+            (k, 0, k, self.height) for k in range(0, self.width + x_inc, x_inc)
+        ] + [(0, k, self.width, k) for k in range(0, self.height + y_inc, y_inc)]
+        lines = [
+            f"""<line x1="{c[0]}" y1="{c[1]}" x2="{c[2]}" y2="{c[3]}" """
+            + """style="stroke:#333333;stroke-width:2" />"""
+            for c in lines
+        ]
+        return f"""
+            <svg height="{self.height}" width="{self.width}">
+            <rect x="0" y="0" style="fill:#255994;opacity:0.5"
+                width="{self.fraction_2 * self.width}"
+                height="{self.height}" />
+            <rect x="0" y="0" style="fill:#2e6b53;opacity:0.5"
+                width="{self.width}"
+                height="{self.fraction_1 * self.height}" />
+                {"".join(lines)}
+            </svg>
+        """
