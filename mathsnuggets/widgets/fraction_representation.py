@@ -3,6 +3,14 @@ import sympy
 from mathsnuggets.core import fields, form
 
 
+def parse_fraction(expression):
+    if expression == 1:
+        return [1, 1]
+    if expression.func == sympy.Pow:
+        return [1, expression]
+    return expression.args
+
+
 class FractionRepresentation(form.Form):
     """Fraction representation"""
 
@@ -21,16 +29,8 @@ class FractionRepresentation(form.Form):
 
     @fields.computed("Figure", field=fields.Html, nohide=True)
     def figure(self):
-        num1, den1 = (
-            [1, self.fraction_1]
-            if self.fraction_1.func == sympy.Pow
-            else self.fraction_1.args
-        )
-        num2, den2 = (
-            [1, self.fraction_2]
-            if self.fraction_2.func == sympy.Pow
-            else self.fraction_2.args
-        )
+        num1, den1 = parse_fraction(self.fraction_1)
+        num2, den2 = parse_fraction(self.fraction_2)
         x_inc, y_inc = sympy.floor(self.width * den2), sympy.floor(self.height * den1)
         x_inc, y_inc = int(x_inc), int(y_inc)
         lines = [
