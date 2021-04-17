@@ -1,7 +1,6 @@
 <template lang="pug">
   .container
-    p(v-if="!showStats")
-      span Your answer: &nbsp;
+    p
       slot
       span &nbsp;
       b-icon.has-text-success(pack="fas" icon="check" v-if="correct")

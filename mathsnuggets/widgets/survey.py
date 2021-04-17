@@ -12,18 +12,25 @@ class Survey(form.Form):
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     correct_answer = fields.Expression("Correct Answer", required=True)
     max_error = fields.Expression("Maximal error", default=0)
+    before = fields.Markdown("Before field text", default="Your answer:")
+    after = fields.Markdown("After field text")
+    question = fields.Markdown("Question")
 
     template = """
         <p v-if="config.edit">
             Correct answer: `correct_answer`
             Tolerated error: `max_error`
+            `before` `answer` `after`
         </p>
+        <p v-if="config.edit || payload.question">`question`</p>
         <survey
             :name="payload.name"
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
+            <span v-if="payload.before">`before`</span>
             `answer`
+            <span v-if="payload.after">`after`</span>
         </survey>
     """
 
