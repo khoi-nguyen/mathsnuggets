@@ -1,10 +1,11 @@
 <template lang="pug">
-.container.columns
-  .column.is-narrow
-    img(src="assets/tuxie.svg" :width="width")
-  .column
-    .speech-bubble
-      slot
+.container
+  .columns
+    .column.is-narrow
+      img(src="assets/tuxie.svg" :width="width")
+    .column
+      .speech-bubble
+        slot
 </template>
 
 <script>
