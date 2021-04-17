@@ -13,7 +13,7 @@ class SimplificationQuestion(form.Form):
     expression = fields.Expression("Expression")
 
     template = """
-        <p>Simplify `expression`</p>
+        <div>Simplify `expression`</div>
         <survey
             :name="payload.name"
             :showStats="config.authState.loggedIn"
