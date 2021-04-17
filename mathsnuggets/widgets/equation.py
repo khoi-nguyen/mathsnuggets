@@ -1,3 +1,4 @@
+import uuid
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -9,15 +10,39 @@ test = {"equation": "x^2 - 5x + 6"}
 class Equation(form.Form):
     """Equation"""
 
+    name = fields.Field("Survey name")
+    answer = fields.ExpressionList("Your answer", nosave=True, editable=True)
     equation = fields.Equation("Equation", required=True)
     x = fields.Expression("Solve for", default="x", required=True)
     template = """
-        Solve `equation` for `x` `solution`
-        <span v-if="config.edit">`show_graph`</span>
+        Solve `equation` <span v-if="config.edit || payload.x !== 'x'">for `x`</span>
+        <div v-if="!payload.marked_question">`solution`</div>
+        <div v-else>
+            <survey
+                :name="payload.name"
+                :showStats="config.authState.loggedIn"
+                :correct="computed.correct"
+                :value="payload.answer">
+                Solution(s): `answer`
+            </survey>
+        </div>
+        <ddiv v-if="config.edit">
+            `show_graph`
+            `marked_question`
+        </div>
         <div v-if="payload.show_graph">`graph`</div>
     """
     show_graph = fields.Boolean("Show graph", default=False)
+    marked_question = fields.Boolean("Marked question", default=False)
     h = fields.Expression("h", default="3")
+
+    @fields.computed("Correct", field=fields.Boolean)
+    def correct(self):
+        if not self.answer:
+            return False
+        solution = sympy.solveset(self.equation, self.x)
+        sol_count = len(solution.args)
+        return len(solution.intersect(sympy.FiniteSet(*self.answer)).args) >= sol_count
 
     @fields.computed("Solution")
     def solution(self):
@@ -28,6 +53,8 @@ class Equation(form.Form):
 
     @fields.computed("Plot", field=fields.Html, nohide=True)
     def graph(self):
+        if not self.show_graph:
+            return ""
         args = {"functions": [self.equation.args[0], self.equation.args[1]]}
         if isinstance(self.solution, list) and len(self.solution) in [1, 2]:
             if len(self.solution) == 1:
@@ -38,6 +65,12 @@ class Equation(form.Form):
                 self.h = x2 - solution + 2
             args.update({"x_min": solution - self.h, "x_max": solution + self.h})
         return plot.Plot(**args).plot
+
+    def validate(self):
+        if self.marked_question:
+            self.show_graph = False
+            if not self.name:
+                self.name = str(uuid.uuid1())
 
 
 def test_equation():
