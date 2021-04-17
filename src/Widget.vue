@@ -16,6 +16,7 @@ import api from './ajax'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 import Survey from './Survey'
+import Tuxie from './Tuxie'
 
 export default {
   props: {
@@ -157,6 +158,7 @@ export default {
     ErrorMessage,
     FormField,
     Survey,
+    Tuxie,
     VRuntimeTemplate
   }
 }
