@@ -19,12 +19,15 @@ export default async function api (url, method = 'GET', payload = false, cache =
     }
     const cached = localStorage.getItem(sessionKey)
     if (cached !== null && cache) {
-      return JSON.parse(cached)
+      const cachedValue = JSON.parse(cached)
+      if (Array.isArray(cachedValue) && Date.now() < cachedValue[0]) {
+        return cachedValue[1]
+      }
     }
   }
   const data = await fetch(`/api/${url}`, obj).then(r => r.json())
   if (method === 'GET' && cache) {
-    localStorage.setItem(sessionKey, JSON.stringify(data))
+    localStorage.setItem(sessionKey, JSON.stringify([Date.now() + 5 * 60, data]))
   }
   return data
 }
