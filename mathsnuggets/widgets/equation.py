@@ -72,7 +72,8 @@ class Equation(form.Form):
 
     def validate(self):
         if self.marked_question:
-            self.show_graph = False
+            if self.show_graph:
+                self.show_graph = False
             if not self.name:
                 self.name = str(uuid.uuid1())
 
