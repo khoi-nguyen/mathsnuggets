@@ -120,8 +120,10 @@ export default {
     }
   },
   watch: {
-    value () {
-      this.inputValue = this.value
+    value (newValue) {
+      if (newValue !== this.inputValue) {
+        this.inputValue = newValue
+      }
     }
   },
   data () {
