@@ -13,7 +13,7 @@ class FactoriseQuestion(form.Form):
     expression = fields.Expression("Expression")
 
     template = """
-        <p>Factorise `expression`</p>
+        <div>Factorise `expression`</div>
         <survey
             :name="payload.name"
             :showStats="config.authState.loggedIn"

@@ -1,6 +1,6 @@
 <template lang="pug">
   .container
-    p
+    div
       slot
       span &nbsp;
       b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
