@@ -40,6 +40,10 @@ class Equation(form.Form):
     def correct(self):
         if not self.answer:
             return False
+        # Prevent user from just copying the equation
+        for sol in self.answer:
+            if len(sol.atoms(sympy.Symbol)):
+                return False
         solution = sympy.solveset(self.equation, self.x)
         sol_count = len(solution.args)
         return len(solution.intersect(sympy.FiniteSet(*self.answer)).args) >= sol_count
