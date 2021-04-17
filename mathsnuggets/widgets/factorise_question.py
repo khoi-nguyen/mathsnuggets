@@ -19,7 +19,7 @@ class FactoriseQuestion(form.Form):
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
-            `answer`
+            Your answer: `answer`
         </survey>
     """
 
