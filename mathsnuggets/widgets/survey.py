@@ -20,7 +20,6 @@ class Survey(form.Form):
         <p v-if="config.edit">
             Correct answer: `correct_answer`
             Tolerated error: `max_error`
-            `before` `answer` `after`
         </p>
         <p v-if="config.edit || payload.question">`question`</p>
         <survey
@@ -28,9 +27,9 @@ class Survey(form.Form):
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
-            <span v-if="payload.before">`before`</span>
+            <span v-if="config.edit || payload.before">`before`</span>
             `answer`
-            <span v-if="payload.after">`after`</span>
+            <span v-if="config.edit || payload.after">`after`</span>
         </survey>
     """
 
