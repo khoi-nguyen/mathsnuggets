@@ -2,10 +2,9 @@
 .container.columns
   .column.is-narrow
     img(src="assets/tuxie.svg" :width="width")
-  .column.is-narrow
+  .column
     .speech-bubble
       slot
-  tuxie
 </template>
 
 <script>
