@@ -160,9 +160,12 @@ class ExpressionList(Field):
         return parse(expr)
 
     def export(self, value):
+        latex = sympy.latex(value)
+        latex = latex.replace("\\left[", "")
+        latex = latex.replace("\\right]", "")
         return {
             "value": f"{','.join([str(v) for v in value])}",
-            "latex": sympy.latex(value),
+            "latex": latex,
             "valid": value is not None,
         }
 
