@@ -317,6 +317,13 @@ class Markdown(Field):
             format="md",
             extra_args=["--katex", "--highlight-style", "pygments"],
         ).rstrip()
+        if (
+            html.count("<p>") == 1
+            and not html.count("math display")
+            and not html.count("<ul>")
+        ):
+            html = html.replace("<p>", "")
+            html = html.replace("</p>", "")
         return {
             "html": html,
             "value": value,
