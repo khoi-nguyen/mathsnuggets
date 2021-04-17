@@ -8,7 +8,8 @@ class MultipleChoice(form.Form):
 
     name = fields.Field("Survey name")
     answer = fields.Select("Your answer", nosave=True, options=["", "A", "B", "C", "D"])
-    correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D"])
+    correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D"], default="A")
+    question = fields.Markdown("Question")
 
     option_a = fields.Markdown("Option A")
     option_b = fields.Markdown("Option B")
@@ -39,19 +40,19 @@ class MultipleChoice(form.Form):
             """
             )
         return f"""
+            <p v-if="config.edit || payload.question">`question`</p>
             <ul v-if="config.edit">
                 Correct answer: `correct_answer`
             </ul>
-            <div class="container buttons are-large">
-                {"".join(buttons)}
-            </div>
             <survey
                 :name="payload.name"
                 :showStats="config.authState.loggedIn"
                 :correct="computed.correct"
                 :max-attempts="1"
                 :value="payload.answer">
-                `answer`
+                <span class="buttons are-large">
+                    {"".join(buttons)}
+                </span>
             </survey>
     """
 
