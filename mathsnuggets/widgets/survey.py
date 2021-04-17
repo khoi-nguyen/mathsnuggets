@@ -17,11 +17,11 @@ class Survey(form.Form):
     question = fields.Markdown("Question")
 
     template = """
+        <p v-if="config.edit || payload.question">`question`</p>
         <p v-if="config.edit">
             Correct answer: `correct_answer`
             Tolerated error: `max_error`
         </p>
-        <p v-if="config.edit || payload.question">`question`</p>
         <survey
             :name="payload.name"
             :showStats="config.authState.loggedIn"
