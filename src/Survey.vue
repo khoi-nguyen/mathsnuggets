@@ -7,7 +7,7 @@
       b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
     .survey.columns(v-if="showStats")
       .column
-        b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true") {{ correctAnswers }} / {{ totalAnswers }}
+        b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true" size="is-large" :type="type") {{ correctAnswers }} / {{ totalAnswers }}
       .column.is-narrow.buttons
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
@@ -40,6 +40,15 @@ export default {
     },
     percentageCorrectAnswers () {
       return this.totalAnswers ? this.correctAnswers * 100 / this.totalAnswers : 0
+    },
+    type () {
+      if (this.percentageCorrectAnswers > 66) {
+        return 'is-success'
+      }
+      if (this.percentageCorrectAnswers < 33) {
+        return 'is-danger'
+      }
+      return 'is-primary'
     }
   },
   sockets: {
