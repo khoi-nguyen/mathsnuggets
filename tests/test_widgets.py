@@ -8,8 +8,8 @@ def test_widgets():
         form._validate()
 
         for name, field in form._fields():
-            if field.get("computed") or field.get("required"):
-                assert dict(form)[name]
+            if (field.get("computed") or field.get("required")):
+                assert dict(form)[name] is not None
 
 
 def test_generators():

@@ -10,6 +10,8 @@
           payload:
             equation: x^2
     - title: Second slide
+  teacher: tuxie
+  year: Y9
 - authors:
     - Khoi Nguyen
   title: Title test
@@ -20,3 +22,5 @@
         - type: Equation
           component: widget
     - title: Second slide
+  teacher: tuxie
+  year: Y9

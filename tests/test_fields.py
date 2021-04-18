@@ -119,7 +119,7 @@ def test_markdown_field():
 
     export = type(test).markdown.export(test.markdown)
     assert export["valid"]
-    assert export["html"] == "<p><strong>strong</strong></p>"
+    assert export["html"] == "<strong>strong</strong>"
 
 
 def test_matrix():

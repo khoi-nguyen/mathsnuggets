@@ -106,21 +106,22 @@ def test_list_slideshows(client, mock_mongo):
 def test_retrieve_slideshow(client, mock_mongo):
     slideshow = db.slideshows.find_one({})
     assert slideshow["_id"]
-    response, data = get(client, f"/api/slideshows/{slideshow['slug']}")
+    url = f"{slideshow['teacher']}/{slideshow['year']}/{slideshow['slug']}"
+    response, data = get(client, f"/api/slideshows/{url}")
     assert response.status_code == 200
     assert isinstance(data, list)
 
 
 def test_save_slideshow(client, mock_mongo):
     slideshow = db.slideshows.find_one({})
-    assert slideshow["_id"]
+    url = f"{slideshow['teacher']}/{slideshow['year']}/{slideshow['slug']}"
 
     response, data = get(client, "/api/auth/login")
     assert response.status_code == 200
     assert not data["is_authenticated"]
     response = post(
         client,
-        f"/api/slideshows/{str(slideshow['_id'])}",
+        f"/api/slideshows/{url}",
         {"key": "1", "patch": {"title": "Hello"}},
         False,
     )
@@ -132,13 +133,13 @@ def test_save_slideshow(client, mock_mongo):
     assert response.status_code == 200
     response, data = post(
         client,
-        f"/api/slideshows/{str(slideshow['_id'])}",
+        f"/api/slideshows/{url}",
         {"key": "1", "patch": {"title": "Hello"}},
     )
     assert response.status_code == 200
     response, data = post(
         client,
-        f"/api/slideshows/{str(slideshow['_id'])}",
+        f"/api/slideshows/{url}",
         {"title": "Hello"},
     )
     assert response.status_code == 200
@@ -146,7 +147,7 @@ def test_save_slideshow(client, mock_mongo):
     db.slideshows.delete_many({})
     response, data = post(
         client,
-        f"/api/slideshows/{str(slideshow['_id'])}",
+        f"/api/slideshows/{url}",
         {"key": "1", "patch": {"title": "Hello"}},
     )
     assert response.status_code == 200
@@ -162,12 +163,14 @@ def test_save_slideshow(client, mock_mongo):
 
 
 def test_delete_slideshow(client, mock_mongo):
+    slideshow = db.slideshows.find_one({})
+    url = f"{slideshow['teacher']}/{slideshow['year']}/{slideshow['slug']}"
 
     response, data = get(client, "/api/auth/login")
     assert response.status_code == 200
     assert not data["is_authenticated"]
 
-    response = delete(client, "/api/slideshows/delete")
+    response = delete(client, f"/api/slideshows/{url}")
     assert response.status_code == 401
 
     response, data = post(
@@ -176,7 +179,7 @@ def test_delete_slideshow(client, mock_mongo):
     assert response.status_code == 200
 
     count = db.slideshows.count_documents({})
-    response = delete(client, "/api/slideshows/delete")
+    response = delete(client, f"/api/slideshows/{url}")
     assert response.status_code == 204
     assert db.slideshows.count_documents({}) == count - 1
 
