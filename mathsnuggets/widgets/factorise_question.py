@@ -10,7 +10,7 @@ class FactoriseQuestion(form.Form):
 
     name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
-    expression = fields.Expression("Expression")
+    expression = fields.Expression("Expression", required=True)
 
     template = """
         <div>Factorise `expression`</div>
