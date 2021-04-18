@@ -125,8 +125,7 @@ export default {
           return f.required && !f.default && !this.payload[f.name]
         }))
         if (isValid && !_.isEqual(newValue, oldValue)) {
-          const debouncedSolver = _.debounced(() => { this.solve() }, 100)
-          debouncedSolver()
+          this.solve()
         }
       },
       deep: true
