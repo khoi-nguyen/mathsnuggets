@@ -70,7 +70,9 @@ export default {
       this.$socket.emit('join', this.name)
     }
     if (this.value) {
-      api(`surveys/${this.name}`, 'POST', { value: this.correct, maxAttempts: this.maxAttempts })
+      // API calls are performed twice
+      // since correct and value are not updated simultaneously
+      api(`surveys/${this.name}`, 'POST', { value: this.correct, maxAttempts: 2 * this.maxAttempts })
     }
   }
 }
