@@ -9,7 +9,7 @@ form.avoid-column
 </template>
 
 <script>
-import { isEmpty, isEqual, filter, forEach, map, pickBy } from 'lodash'
+import _ from 'lodash'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
@@ -39,7 +39,7 @@ export default {
       if (!(this.widgetData || {}).fields) {
         return {}
       }
-      return pickBy(this.payload, (value, fieldName) => {
+      return _.pickBy(this.payload, (value, fieldName) => {
         const field = this.widgetData.fields[fieldName]
         if (!field) {
           return false
@@ -57,7 +57,7 @@ export default {
       if (!(this.widgetData || {}).fields) {
         return {}
       }
-      return pickBy(this.payload, (value, fieldName) => {
+      return _.pickBy(this.payload, (value, fieldName) => {
         const field = this.widgetData.fields[fieldName]
         return field.random || field.constraint
       })
@@ -95,7 +95,7 @@ export default {
       `
     },
     hasGenerator () {
-      return !isEmpty(filter(this.widgetData.fields, f => f.random || f.constraint))
+      return !_.isEmpty(_.filter(this.widgetData.fields, f => f.random || f.constraint))
     }
   },
   methods: {
@@ -104,7 +104,7 @@ export default {
       const payload = generator ? this.generatorPayload : this.solverPayload
       const data = await api(`widgets/${this.type}`, method, payload)
       this.error = data.error ? data : {}
-      forEach(data, (value, fieldName) => {
+      _.forEach(data, (value, fieldName) => {
         if (!(fieldName in this.widgetData.fields)) {
           return false
         }
@@ -121,17 +121,18 @@ export default {
         if (!this.widgetData) {
           return false
         }
-        const isValid = !isEmpty(this.widgetData.fields) && isEmpty(filter(this.widgetData.fields, f => {
+        const isValid = !_.isEmpty(this.widgetData.fields) && _.isEmpty(_.filter(this.widgetData.fields, f => {
           return f.required && !f.default && !this.payload[f.name]
         }))
-        if (isValid && !isEqual(newValue, oldValue)) {
-          this.solve()
+        if (isValid && !_.isEqual(newValue, oldValue)) {
+          const debouncedSolver = _.debounced(() => { this.solve() }, 100)
+          debouncedSolver()
         }
       },
       deep: true
     },
     widgetData (data) {
-      this.$emit('update:blacklist', map(filter(this.widgetData.fields, f => f.nosave), f => f.name))
+      this.$emit('update:blacklist', _.map(_.filter(this.widgetData.fields, f => f.nosave), f => f.name))
     }
   },
   asyncComputed: {
