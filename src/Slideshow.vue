@@ -91,6 +91,7 @@ export default {
       margin: 0,
       navigationMode: 'grid',
       pause: false,
+      slideNumber: 'h.v',
       touch: false,
       transition: 'none',
       width: 1920
