@@ -2,7 +2,8 @@
 .container
   .columns
     .column.is-narrow
-      img(src="assets/tuxie.svg" :width="width")
+      img(src="assets/tuxie.svg" :width="width" v-if="image === 'tuxie'")
+      img(src="assets/jigglypuff.svg" :width="width" v-if="image === 'jigglypuff'")
     .column
       .speech-bubble
         slot
@@ -11,7 +12,8 @@
 <script>
 export default {
   props: {
-    width: Number
+    image: { type: String, default: 'tuxie' },
+    width: { type: Number, default: 400 }
   }
 }
 </script>

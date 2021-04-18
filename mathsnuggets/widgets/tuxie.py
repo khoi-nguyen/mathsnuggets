@@ -6,10 +6,12 @@ class Tuxie(form.Form):
 
     text = fields.Markdown("Text")
     width = fields.Expression("Tuxie width", default="400")
+    image = fields.Select("Image", options=["tuxie", "jigglypuff"], default="tuxie")
 
     template = """
         <div v-if="config.edit">
+            `image`
             Width: `width`
         </div>
-        <tuxie :width="payload.width">`text`</tuxie>
+        <tuxie :width="payload.width" :image="payload.image">`text`</tuxie>
     """
