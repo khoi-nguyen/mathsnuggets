@@ -7,7 +7,9 @@
       b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
     .survey.columns(v-if="showStats")
       .column
-        b-progress(:value="correctAnswers" :max="totalAnswers" :showValue="true" size="is-large" :type="type") {{ correctAnswers }} / {{ totalAnswers }}
+        b-progress(:value="correctAnswers" :max="totalAnswers" :type="type")
+      .column.is-narrow
+        span {{ correctAnswers }} / {{ totalAnswers }}
       .column.is-narrow.buttons
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
