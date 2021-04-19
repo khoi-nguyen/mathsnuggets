@@ -26,7 +26,7 @@ class Equation(form.Form):
                 Solution(s): `x` = `answer`
             </survey>
         </div>
-        <ddiv v-if="config.edit">
+        <div v-if="config.edit">
             `show_graph`
             `marked_question`
         </div>
