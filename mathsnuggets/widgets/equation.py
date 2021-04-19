@@ -23,7 +23,7 @@ class Equation(form.Form):
                 :showStats="config.authState.loggedIn"
                 :correct="computed.correct"
                 :value="payload.answer">
-                Solution(s): `answer`
+                Solution(s): `x` = `answer`
             </survey>
         </div>
         <ddiv v-if="config.edit">
