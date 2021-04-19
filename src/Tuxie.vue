@@ -4,6 +4,7 @@
     .column.is-narrow
       img(src="assets/tuxie.svg" :width="width" v-if="image === 'tuxie'")
       img(src="assets/jigglypuff.svg" :width="width" v-if="image === 'jigglypuff'")
+      img(src="assets/pikachu.svg" :width="width" v-if="image === 'pikachu'")
     .column
       .speech-bubble
         slot
