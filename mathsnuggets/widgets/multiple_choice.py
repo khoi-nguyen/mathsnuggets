@@ -7,19 +7,20 @@ class MultipleChoice(form.Form):
     """Multiple Choice"""
 
     name = fields.Field("Survey name")
-    answer = fields.Select("Your answer", nosave=True, options=["", "A", "B", "C", "D"])
-    correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D"], default="A")
+    answer = fields.Select("Your answer", nosave=True, options=["", "A", "B", "C", "D", "E"])
+    correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D", "E"], default="A")
     question = fields.Markdown("Question")
 
     option_a = fields.Markdown("Option A")
     option_b = fields.Markdown("Option B")
     option_c = fields.Markdown("Option C")
     option_d = fields.Markdown("Option D")
+    option_e = fields.Markdown("Option E")
 
     @property
     def template(self):
         buttons = []
-        for ltr in ["a", "b", "c", "d"]:
+        for ltr in ["a", "b", "c", "d", "e"]:
             buttons.append(
                 f"""
                 <span v-if="!config.edit">
