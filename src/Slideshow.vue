@@ -89,7 +89,6 @@ export default {
       help: false,
       height: 1080,
       margin: 0,
-      navigationMode: 'grid',
       pause: false,
       slideNumber: 'h.v',
       touch: false,
