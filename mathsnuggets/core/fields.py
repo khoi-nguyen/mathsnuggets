@@ -170,7 +170,7 @@ class ExpressionList(Field):
         }
 
 
-class NumberList(Field):
+class NumberList(ExpressionList):
     def sanitize(self, expr):
         if isinstance(expr, str):
             return [int(e) for e in expr.split(",")]
