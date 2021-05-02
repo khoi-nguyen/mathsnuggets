@@ -16,6 +16,7 @@ import api from './ajax'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 import Survey from './Survey'
+import TimesTable from './TimesTable'
 import Tuxie from './Tuxie'
 
 export default {
@@ -158,6 +159,7 @@ export default {
     ErrorMessage,
     FormField,
     Survey,
+    TimesTable,
     Tuxie,
     VRuntimeTemplate
   }
