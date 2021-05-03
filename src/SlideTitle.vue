@@ -1,10 +1,10 @@
 <template lang="pug">
-div.box
-  h2.title
+div(:class="{ form: config.form, slide: !config.form, box: !config.form }")
+  h2.title(:class="{ 'is-1': config.form }")
     .columns.is-vcentered
       .column
         form-field(:editable="config.edit" @input="$emit('input', $event)" :value="value" type="Markdown")
-      .column.is-narrow.date
+      .column.is-narrow.date(v-if="!config.form")
         div {{ today }}
         div {{ time }}
 </template>
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style scoped>
-div h2 {
+.box.slide h2.title {
   background-color: #172838;
   color: #ebf0ef;
   font-size: 3em;
@@ -57,7 +57,12 @@ div h2 {
   text-align: right;
   margin-right: 0.4em;
 }
-.box {
+.slide.box {
   padding: 0;
+}
+.form h2.title {
+  border-bottom: 1px solid #dddddd;
+  padding: 0.3em 0;
+  margin: 0.5em 0;
 }
 </style>

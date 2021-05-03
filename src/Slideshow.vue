@@ -1,8 +1,8 @@
 <template lang="pug">
-.reveal(:class="{graphPaper: config.graphPaper}")
+div(:class="{graphPaper: config.graphPaper, reveal: !form, container: form, form: form}")
   .slides
     section(v-for="(slide, index) in children")
-      section(v-for="vpos in [0, 1]")
+      section(v-for="vpos in range")
         node(
           :additionalAttrs="{ vpos }"
           component="slide"
@@ -27,6 +27,9 @@ import ToolBar from './ToolBar'
 
 export default {
   title: 'Slideshow builder',
+  props: {
+    form: Boolean
+  },
   data () {
     const emptySlide = { payload: {}, children: [] }
     return {
@@ -35,6 +38,7 @@ export default {
         authState: auth.state,
         currentSlide: 0,
         edit: false,
+        form: this.form,
         graphPaper: false,
         whiteboardMode: false
       },
@@ -46,6 +50,12 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
+    },
+    range () {
+      if (this.form) {
+        return [0]
+      }
+      return [0, 1]
     },
     slidePayload () {
       return this.children[this.config.currentSlide].payload
@@ -119,5 +129,8 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
+}
+.form {
+  margin-bottom: 100px;
 }
 </style>

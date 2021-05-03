@@ -188,7 +188,7 @@ export default {
   right: 0;
 }
 .tray {
-  position: absolute;
+  position: fixed;
   opacity: 1;
   z-index: 2;
   bottom: 25px;
