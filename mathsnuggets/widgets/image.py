@@ -15,21 +15,24 @@ class Image(form.Form):
     height = fields.Expression("Original height", default=0)
     width = fields.Expression("Original width", default=0)
     zoom = fields.Expression("Zoom", default=1)
+    position = fields.Select("Position", options=["left", "right", "center"], default="center")
 
     template = """
-        <div v-if="config.edit">
-            Zoom: `zoom`
-        </div>
-        <p>`image`</p>
+        <ul v-if="config.edit">
+            <li>Zoom: `zoom`</li>
+            <li>Position: `position`</li>
+        </ul>
+        `image`
     """
 
     @fields.computed("Image", field=fields.Html, nohide=True)
     def image(self):
-        return (
-            f"""<img src="{self.src}" """
-            + f"""width="{self.zoom * self.width}" """
-            + f"""height="{self.zoom * self.height}"/>"""
-        )
+        style = f"float:{self.position}" if self.position != "center" else ""
+        return f"""
+            <img src="{self.src}"
+                width="{self.zoom * self.width}"
+                style="{style}"
+                height="{self.zoom * self.height}"/>"""
 
     def validate(self):
         if "," in self.src:
