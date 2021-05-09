@@ -15,7 +15,7 @@ div(:class="{graphPaper: config.graphPaper, reveal: !form, container: form, form
         )
     .container(v-if="form")
       marked-form(:config="config" :url="apiUrl" :form="children")
-  tool-bar(:config="config" :slide-payload="slidePayload")
+  tool-bar(:config="config" :slide-payload="slidePayload" v-if="config.authState.loggedIn || !form")
 </template>
 
 <script>
