@@ -10,6 +10,8 @@
       b-input(v-model="email")
   b-field(grouped position="is-centered")
     b-button(type="is-primary" @click="submitForm") Submit
+  b-message(type="is-success" v-if="score.length")
+    p You have obtained {{score[0]}} / {{score[1]}}
 </template>
 
 <script>
@@ -25,13 +27,14 @@ export default {
     return {
       email: '',
       firstName: '',
-      lastName: ''
+      lastName: '',
+      score: []
     }
   },
   methods: {
-    submitForm () {
+    async submitForm () {
       this.config.feedback = true
-      api('mark', 'POST', {
+      this.score = await api('mark', 'POST', {
         email: this.email,
         form: this.form,
         firstName: this.firstName,

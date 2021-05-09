@@ -14,7 +14,7 @@ div(:class="{graphPaper: config.graphPaper, reveal: !form, container: form, form
           @save="save"
         )
     .container(v-if="form")
-      marked-form(:config="config" url="apiUrl" :form="children")
+      marked-form(:config="config" :url="apiUrl" :form="children")
   tool-bar(:config="config" :slide-payload="slidePayload")
 </template>
 

@@ -87,7 +87,11 @@ def mark():
         "marks": marks,
         "url": payload["url"],
     })
-    return flask.jsonify(dict(form))
+    score, total = 0, 0
+    for m in marks:
+        score += m["marks"]
+        total += m["total"]
+    return flask.jsonify([score, total])
 
 
 @socketio.on("join")
