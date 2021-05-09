@@ -38,6 +38,7 @@ export default {
         authState: auth.state,
         currentSlide: 0,
         edit: false,
+        feedback: !this.form,
         form: this.form,
         graphPaper: false,
         whiteboardMode: false

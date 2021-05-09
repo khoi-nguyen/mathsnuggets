@@ -23,6 +23,7 @@ class Survey(form.Form):
             Tolerated error: `max_error`
         </p>
         <survey
+            :config="config"
             :name="payload.name"
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"

@@ -15,6 +15,7 @@ class StandardFormQuestion(form.Form):
     template = """
         <p>Convert `expression` to standard form</p>
         <survey
+            :config="config"
             :name="payload.name"
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"

@@ -2,9 +2,10 @@
   .container
     div
       slot
-      span &nbsp;
-      b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
-      b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
+      span(v-config="config.feedback")
+        span &nbsp;
+        b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
+        b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
     .survey.columns(v-if="showStats")
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :type="type")
@@ -20,6 +21,7 @@ import _ from 'lodash'
 
 export default {
   props: {
+    config: Object,
     name: String,
     showStats: Boolean,
     correct: Boolean,

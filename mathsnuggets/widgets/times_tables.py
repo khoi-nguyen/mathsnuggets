@@ -25,6 +25,7 @@ class TimesTables(form.Form):
                 <li>Rows: `rows`</li>
             </ul>
             <times-table
+                :config="config"
                 :value="payload.table || '{default}'"
                 :cols="payload.cols || '{cols_default}'"
                 :rows="payload.rows || '{rows_default}'"

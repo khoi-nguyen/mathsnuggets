@@ -19,6 +19,7 @@ import FormField from './FormField'
 export default {
   props: {
     cols: String,
+    config: Object,
     size: { type: Number, default: 10 },
     marking: String,
     rows: String,
@@ -44,7 +45,10 @@ export default {
   methods: {
     cellClass (i, j) {
       const mark = Number(this.markingArray[i * this.size + j])
-      return ['has-text-danger', '', 'has-text-success'][mark + 1]
+      if (this.config.feedback) {
+        return ['has-text-danger', '', 'has-text-success'][mark + 1]
+      }
+      return ''
     },
     input (key, val) {
       this.$emit('input', this.table.join(','))

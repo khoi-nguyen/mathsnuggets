@@ -15,6 +15,7 @@ class SimplificationQuestion(form.Form):
     template = """
         <div>Simplify `expression`</div>
         <survey
+            :config="config"
             :name="payload.name"
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"

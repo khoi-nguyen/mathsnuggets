@@ -46,6 +46,7 @@ class MultipleChoice(form.Form):
                 Correct answer: `correct_answer`
             </ul>
             <survey
+                :config="config"
                 :name="payload.name"
                 :showStats="config.authState.loggedIn"
                 :correct="computed.correct"

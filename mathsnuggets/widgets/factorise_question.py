@@ -15,6 +15,7 @@ class FactoriseQuestion(form.Form):
     template = """
         <div>Factorise `expression`</div>
         <survey
+            :config="config"
             :name="payload.name"
             :showStats="config.authState.loggedIn"
             :correct="computed.correct"
