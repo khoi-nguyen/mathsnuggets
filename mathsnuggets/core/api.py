@@ -72,7 +72,7 @@ def mark():
                 parse_form(child, marks)
         elif node.get("component") == "widget":
             widget = getattr(widgets, node["type"])(**node["payload"])
-            if widget._fields(lambda f: f.get("nosave")):
+            if len(dict(widget._fields(lambda f: f.get("nosave")))):
                 marks.append({
                     "marks": getattr(widget, "_marks"),
                     "total": getattr(widget, "_total_marks", 1),

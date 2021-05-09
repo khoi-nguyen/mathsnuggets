@@ -34,13 +34,14 @@ export default {
   methods: {
     async submitForm () {
       this.config.feedback = true
-      this.score = await api('mark', 'POST', {
+      const score = await api('mark', 'POST', {
         email: this.email,
         form: this.form,
         firstName: this.firstName,
         lastName: this.lastName,
         url: this.url
       })
+      this.$set(this, 'score', score)
     }
   }
 }
