@@ -1,14 +1,15 @@
 <template lang="pug">
-table.table.is-bordered.is-narrow.is-striped.is-hoverable
-  thead
-    tr
-      th
-      th(v-for="i in cols.split(',')") {{ i }}
-  tbody
-    tr(v-for="i in range")
-      th {{ rows.split(',')[i] }}
-      td(v-for="j in range" :class="cellClass(i, j)")
-        form-field(v-model="table[i * size + j]" type="Expression" @input="input(i * size + j, $event)" label=" ")
+.container
+  table.table.is-bordered.is-narrow.is-striped.is-hoverable
+    thead
+      tr
+        th
+        th(v-for="i in cols.split(',')") {{ i }}
+    tbody
+      tr(v-for="i in range")
+        th {{ rows.split(',')[i] }}
+        td(v-for="j in range" :class="cellClass(i, j)")
+          form-field(v-model="table[i * size + j]" type="Expression" @input="input(i * size + j, $event)" label=" ")
 </template>
 
 <script>
