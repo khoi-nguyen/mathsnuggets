@@ -14,6 +14,12 @@ class TimesTables(form.Form):
 
     x = fields.RandomNumber("x")
 
+    _total_marks = 100
+
+    @property
+    def _marks(self):
+        return self.marking.count(1)
+
     @property
     def template(self):
         default = "0," * 99 + "0"

@@ -13,6 +13,8 @@ div(:class="{graphPaper: config.graphPaper, reveal: !form, container: form, form
           @delete-slide="deleteSlide(index)"
           @save="save"
         )
+    .container(v-if="form")
+      marked-form(:config="config" url="apiUrl" :form="children")
   tool-bar(:config="config" :slide-payload="slidePayload")
 </template>
 
@@ -22,6 +24,7 @@ import Reveal from 'reveal.js'
 
 import { auth } from './auth.js'
 import api from './ajax'
+import MarkedForm from './MarkedForm'
 import Node from './Node'
 import ToolBar from './ToolBar'
 
@@ -112,6 +115,7 @@ export default {
     })
   },
   components: {
+    MarkedForm,
     Node,
     ToolBar
   }

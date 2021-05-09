@@ -228,6 +228,13 @@ class Slideshow(Model):
         return slugify.slugify(self.title) if self.title else None
 
 
+class Form(Model):
+    _collection = "forms"
+
+    email  = fields.Field("Email adress")
+    url  = fields.Field("Resource URL")
+
+
 class User(Model):
     """User model
 

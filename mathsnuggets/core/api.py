@@ -60,6 +60,36 @@ def cast_vote(survey):
     return flask.jsonify(dict(vote))
 
 
+@api.route("/mark", methods=["POST"])
+def mark():
+    payload = flask.request.get_json()
+    form = models.Form(email=payload["email"], url=payload["url"])
+    if form.email:
+        raise InvalidUsage("Form already submitted for " + form.email)
+    def parse_form(node, marks):
+        if "children" in node:
+            for child in node["children"]:
+                parse_form(child, marks)
+        elif node.get("component") == "widget":
+            widget = getattr(widgets, node["type"])(**node["payload"])
+            if widget._fields(lambda f: f.get("nosave")):
+                marks.append({
+                    "marks": getattr(widget, "_marks"),
+                    "total": getattr(widget, "_total_marks", 1),
+                })
+    marks = []
+    parse_form({"children": payload["form"]}, marks)
+    form.update({
+        "children": payload["form"],
+        "email": payload["email"],
+        "first_name": payload["firstName"],
+        "last_name": payload["lastName"],
+        "marks": marks,
+        "url": payload["url"],
+    })
+    return flask.jsonify(dict(form))
+
+
 @socketio.on("join")
 def join(survey):
     flask_socketio.join_room(survey)

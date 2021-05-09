@@ -2,7 +2,7 @@
   .container
     div
       slot
-      span(v-config="config.feedback")
+      span(v-if="config.feedback")
         span &nbsp;
         b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
         b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
