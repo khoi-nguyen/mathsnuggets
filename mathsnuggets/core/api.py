@@ -86,6 +86,7 @@ def mark():
         "last_name": payload["lastName"],
         "marks": marks,
         "url": payload["url"],
+        "year": payload["year"],
     })
     score, total = 0, 0
     for m in marks:

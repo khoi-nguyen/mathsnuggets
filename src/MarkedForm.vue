@@ -5,6 +5,9 @@
       b-input(v-model="firstName")
     b-field(label="Last name")
       b-input(v-model="lastName")
+    b-field(label="Form")
+      b-select(placeholder="Form" v-model="year")
+        option(v-for="y in years" :value="y") {{ y }}
   b-field(grouped position="is-centered")
     b-field(label="Email" position="is-centered")
       b-input(v-model="email")
@@ -28,7 +31,9 @@ export default {
       email: '',
       firstName: '',
       lastName: '',
-      score: []
+      score: [],
+      year: '',
+      years: ['4A', '4B', '4G', '4K', '4S', '4T', '5B', '5C', '5F', '5M', '5P', '5W', '6B', '6C', '6E', '6M', '6R', '6S', '6T']
     }
   },
   methods: {
@@ -39,7 +44,8 @@ export default {
         form: this.form,
         firstName: this.firstName,
         lastName: this.lastName,
-        url: this.url
+        url: this.url,
+        year: this.year
       })
       this.$set(this, 'score', score)
     }
