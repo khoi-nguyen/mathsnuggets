@@ -4,6 +4,7 @@
     thead
       tr
         th
+          form-field(type="Markdown" value="$\\times$")
         th(v-for="i in cols.split(',')") {{ i }}
     tbody
       tr(v-for="i in range")
