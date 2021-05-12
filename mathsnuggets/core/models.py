@@ -231,8 +231,8 @@ class Slideshow(Model):
 class Form(Model):
     _collection = "forms"
 
-    email  = fields.Field("Email adress")
-    url  = fields.Field("Resource URL")
+    email = fields.Field("Email adress")
+    url = fields.Field("Resource URL")
 
 
 class User(Model):

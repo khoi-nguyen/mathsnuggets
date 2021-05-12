@@ -1,4 +1,5 @@
 import uuid
+
 import sympy
 
 from mathsnuggets.core import fields, form

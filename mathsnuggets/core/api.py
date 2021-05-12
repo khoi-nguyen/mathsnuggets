@@ -70,6 +70,7 @@ def mark():
     form = models.Form(email=payload["email"], url=payload["url"])
     if form.email:
         raise InvalidUsage("Form already submitted for " + form.email)
+
     def parse_form(node, marks):
         if "children" in node:
             for child in node["children"]:
@@ -77,21 +78,26 @@ def mark():
         elif node.get("component") == "widget":
             widget = getattr(widgets, node["type"])(**node["payload"])
             if len(dict(widget._fields(lambda f: f.get("nosave")))):
-                marks.append({
-                    "marks": getattr(widget, "_marks"),
-                    "total": getattr(widget, "_total_marks", 1),
-                })
+                marks.append(
+                    {
+                        "marks": getattr(widget, "_marks"),
+                        "total": getattr(widget, "_total_marks", 1),
+                    }
+                )
+
     marks = []
     parse_form({"children": payload["form"]}, marks)
-    form.update({
-        "children": payload["form"],
-        "email": payload["email"],
-        "first_name": payload["firstName"],
-        "last_name": payload["lastName"],
-        "marks": marks,
-        "url": payload["url"],
-        "year": payload["year"],
-    })
+    form.update(
+        {
+            "children": payload["form"],
+            "email": payload["email"],
+            "first_name": payload["firstName"],
+            "last_name": payload["lastName"],
+            "marks": marks,
+            "url": payload["url"],
+            "year": payload["year"],
+        }
+    )
     score, total = 0, 0
     for m in marks:
         score += m["marks"]
@@ -127,9 +133,9 @@ def generate_excel(url):
     return flask.Response(
         stream,
         headers={
-            'Content-Disposition': 'attachment; filename=sheet.xlsx',
-            'Content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        }
+            "Content-Disposition": "attachment; filename=sheet.xlsx",
+            "Content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
     )
 
 

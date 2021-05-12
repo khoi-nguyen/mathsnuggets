@@ -6,7 +6,9 @@ class Tuxie(form.Form):
 
     text = fields.Markdown("Text")
     width = fields.Expression("Tuxie width", default="400")
-    image = fields.Select("Image", options=["tuxie", "jigglypuff", "pikachu"], default="tuxie")
+    image = fields.Select(
+        "Image", options=["tuxie", "jigglypuff", "pikachu"], default="tuxie"
+    )
 
     template = """
         <div v-if="config.edit">

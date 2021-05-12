@@ -7,8 +7,12 @@ class MultipleChoice(form.Form):
     """Multiple Choice"""
 
     name = fields.Field("Survey name")
-    answer = fields.Select("Your answer", nosave=True, options=["", "A", "B", "C", "D", "E"])
-    correct_answer = fields.Select("Correct Answer", options=["A", "B", "C", "D", "E"], default="A")
+    answer = fields.Select(
+        "Your answer", nosave=True, options=["", "A", "B", "C", "D", "E"]
+    )
+    correct_answer = fields.Select(
+        "Correct Answer", options=["A", "B", "C", "D", "E"], default="A"
+    )
     question = fields.Markdown("Question")
 
     option_a = fields.Markdown("Option A")
@@ -61,7 +65,6 @@ class MultipleChoice(form.Form):
     @property
     def _marks(self):
         return 1 if self.correct else 0
-
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):

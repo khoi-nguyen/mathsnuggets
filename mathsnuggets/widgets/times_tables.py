@@ -41,7 +41,6 @@ class TimesTables(form.Form):
                 />
         """
 
-
     @fields.computed("Marking", fields.ExpressionList, nohide=True)
     def marking(self):
         marks = []
@@ -58,11 +57,9 @@ class TimesTables(form.Form):
                 marks.append(value)
         return marks
 
-
     @fields.computed("Number of mistakes", fields.Expression, nohide=True)
     def mistakes_count(self):
         return self.marking.count(-1)
-
 
     def generator(self):
         possibilities = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

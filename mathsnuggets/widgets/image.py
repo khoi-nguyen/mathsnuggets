@@ -15,7 +15,9 @@ class Image(form.Form):
     height = fields.Expression("Original height", default=0)
     width = fields.Expression("Original width", default=0)
     zoom = fields.Expression("Zoom", default=1)
-    position = fields.Select("Position", options=["left", "right", "center"], default="center")
+    position = fields.Select(
+        "Position", options=["left", "right", "center"], default="center"
+    )
 
     template = """
         <ul v-if="config.edit">
