@@ -7,6 +7,8 @@ import flask
 import flask_login
 import flask_socketio
 import openpyxl
+import openpyxl.utils
+from openpyxl.formatting import rule
 
 from mathsnuggets import widgets
 from mathsnuggets.core import cache, fields, form, models
@@ -107,6 +109,15 @@ def generate_excel(url):
             cell = ws.cell(row=row, column=col)
             cell.value = getattr(form, field)
         for col, question in enumerate(form.marks, len(fields) + 1):
+            bar = rule.DataBarRule(
+                start_type="num",
+                start_value=0,
+                end_type="num",
+                end_value=question["total"],
+                color=openpyxl.styles.colors.BLUE,
+            )
+            letter = openpyxl.utils.get_column_letter(col)
+            ws.conditional_formatting.add(f"{letter}{row}", bar)
             cell = ws.cell(row=row, column=col)
             cell.value = question["marks"]
     with tempfile.NamedTemporaryFile() as tmp:
