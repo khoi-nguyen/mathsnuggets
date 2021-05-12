@@ -19,6 +19,7 @@ jedi
 matplotlib
 mock
 neovim
+openpyxl
 pep8-naming
 pymongo
 pypandoc

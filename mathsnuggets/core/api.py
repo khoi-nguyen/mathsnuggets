@@ -1,10 +1,12 @@
 import os
+import tempfile
 import traceback
 import uuid
 
 import flask
 import flask_login
 import flask_socketio
+import openpyxl
 
 from mathsnuggets import widgets
 from mathsnuggets.core import cache, fields, form, models
@@ -93,6 +95,31 @@ def mark():
         score += m["marks"]
         total += m["total"]
     return flask.jsonify([score, total])
+
+
+@api.route("excel/<path:url>", methods=["GET"])
+def generate_excel(url):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    for row, form in enumerate(models.Form.find({"url": url}), 1):
+        fields = ["email", "first_name", "last_name", "year"]
+        for col, field in enumerate(fields, 1):
+            cell = ws.cell(row=row, column=col)
+            cell.value = getattr(form, field)
+        for col, question in enumerate(form.marks, len(fields) + 1):
+            cell = ws.cell(row=row, column=col)
+            cell.value = question["marks"]
+    with tempfile.NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        stream = tmp.read()
+    return flask.Response(
+        stream,
+        headers={
+            'Content-Disposition': 'attachment; filename=sheet.xlsx',
+            'Content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+    )
 
 
 @socketio.on("join")
