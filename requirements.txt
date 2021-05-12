@@ -10,7 +10,7 @@ flake8-bugbear
 flake8-builtins
 flake8-rst-docstrings
 flake8-use-fstring
-flask
+flask==1.1.2
 flask-socketio==4.3.2
 flask_login
 gunicorn
