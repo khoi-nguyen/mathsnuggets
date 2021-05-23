@@ -20,7 +20,7 @@ div
         p.panel-tabs(v-if="$route.params.teacher")
           router-link(to="/resources") All year groups
           router-link(:to="`/resources/${$route.params.teacher}/` + group" v-for="group in yearGroups") {{ group }}
-        div(v-for="(lesson, index) in filteredLessons" v-if="index < lessons.length - 1")
+        div(v-for="(lesson, index) in filteredLessons" v-if="lesson['last_modified']")
           a(:href="`/resources/${lesson.teacher}/${lesson.year}/${lesson.slug}`").panel-block
             .columns.is-vcentered
               .column.is-narrow.is-narrow.has-text-centered
@@ -31,7 +31,7 @@ div
                     span.link(@click.stop.prevent="openModal(index)") Edit metadata
                   li
                     b-icon(pack="fas" icon="trash")
-                    span.link(@click.prevent="openDeleteModal(index, lesson.teacher, lesson.year, lesson.slug)") Delete slideshow
+                    span.link(@click.prevent="openDeleteModal(index)") Delete slideshow
               .column
                 h3.title {{ lesson.title }}
                 dl
@@ -39,7 +39,7 @@ div
                     dt {{ field.label }}
                     dd {{ Array.isArray(lesson[field.name]) ? lesson[field.name].join(', ') : lesson[field.name] }}
       div.panel-block(v-if="authState.loggedIn")
-        button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(lessons.length - 1, true)") Create slideshow
+        button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(filteredLessons.length - 1, true)") Create slideshow
   b-modal(:active.sync="modal" has-modal-card)
     .modal-card
       header.modal-card-head
@@ -47,7 +47,7 @@ div
         button.delete(@click="modal = false")
       section.modal-card-body
         b-field(:label="field.label" v-for="field in fields" v-if="field.editable")
-          b-input(:value="filteredLessons[lessonIndex][field.name]" ref="modalFields" :name="field.name")
+          b-input(:value="lesson[field.name]" ref="modalFields" :name="field.name")
       footer.modal-card-foot
         button.button.is-success(@click="editMetadata") Save
         button.button(@click="modal = false") Cancel
@@ -56,9 +56,9 @@ div
       header.modal-card-head
         h3.modal-card-title Delete
         button.delete(@click="deleteModal = false")
-      section.modal-card-body Are you sure you want to delete the slideshow {{ filteredLessons[lessonIndex].title }}?
+      section.modal-card-body Are you sure you want to delete the slideshow {{ lesson.title }}?
       footer.modal-card-foot
-        button.button.is-success(@click="deleteSlideshow(lessonIndex, teacher, year, slug)") Delete
+        button.button.is-success(@click="deleteSlideshow(lessonIndex)") Delete
         button.button(@click="deleteModal = false") Cancel
 </template>
 
@@ -85,17 +85,23 @@ export default {
           return lesson.title.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
         }
         return true
-      })
+      }).concat([{ title: '' }])
+    },
+    lesson () {
+      return this.realIndex > -1 ? this.lessons[this.realIndex] : {}
     },
     realIndex () {
-      if (this.filteredLessons && this.lessonIndex) {
-        return this.lessons.indexOf(this.filteredLessons[this.lessonIndex])
-      } else {
-        return -1
-      }
+      return this.lessons.indexOf(this.filteredLessons[this.lessonIndex])
     },
     teachers () {
       return _.uniq(this.lessons.map((lesson) => lesson.teacher))
+    },
+    url () {
+      let url = 'slideshows/'
+      if (!this.create) {
+        url += `${this.lesson.teacher}/${this.lesson.year}/${this.lesson.slug}`
+      }
+      return url
     },
     yearGroups () {
       if (this.$route.params.teacher) {
@@ -110,16 +116,13 @@ export default {
       this.modal = true
       this.create = create
     },
-    openDeleteModal (index, teacher, year, slug) {
+    openDeleteModal (index) {
       this.deleteModal = true
       this.lessonIndex = index
-      this.teacher = teacher
-      this.year = year
-      this.slug = slug
     },
-    deleteSlideshow (index, teacher, year, slug) {
-      api(`slideshows/${teacher}/${year}/${slug}`, 'DELETE')
+    deleteSlideshow (index) {
       this.lessonIndex = index
+      api(this.url, 'DELETE')
       this.lessons.splice(this.realIndex, 1)
       this.deleteModal = false
     },
@@ -128,13 +131,8 @@ export default {
       _.forEach(this.$refs.modalFields, function (field) {
         payload[field.$attrs.name] = field.$el.children[0].value
       })
-      let url = 'slideshows/'
-      if (!this.create) {
-        const lesson = this.lessons[this.realIndex]
-        url += `${lesson.teacher}/${lesson.year}/${lesson.slug}`
-      }
-      const data = await api(url, 'POST', payload)
-      this.$set(this.lessons, this.realIndex, data)
+      const data = await api(this.url, 'POST', payload)
+      this.$set(this.lessons, this.create ? this.lessons.length : this.realIndex, data)
       if (this.create) {
         this.$set(this.lessons, this.lessons.length, { title: '' })
       }
