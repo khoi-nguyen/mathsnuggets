@@ -1,5 +1,5 @@
 <template lang="pug">
-form.avoid-column
+form.avoid-column.widget
   v-runtime-template.is-size-3(:template="widgetData.template")
   div(v-if="generator && hasGenerator")
     v-runtime-template(:template="generatorTemplate")
@@ -13,11 +13,13 @@ import _ from 'lodash'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
+import ConfigOption from './ConfigOption'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 import Survey from './Survey'
 import TimesTable from './TimesTable'
 import Tuxie from './Tuxie'
+import WidgetSettings from './WidgetSettings'
 
 export default {
   props: {
@@ -156,12 +158,20 @@ export default {
     }
   },
   components: {
+    ConfigOption,
     ErrorMessage,
     FormField,
     Survey,
     TimesTable,
     Tuxie,
-    VRuntimeTemplate
+    VRuntimeTemplate,
+    WidgetSettings
   }
 }
 </script>
+
+<style scoped>
+.widget {
+  position: relative;
+}
+</style>

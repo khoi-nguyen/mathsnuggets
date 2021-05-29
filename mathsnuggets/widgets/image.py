@@ -20,10 +20,10 @@ class Image(form.Form):
     )
 
     template = """
-        <ul v-if="config.edit">
-            <li>Zoom: `zoom`</li>
-            <li>Position: `position`</li>
-        </ul>
+        <widget-settings v-if="config.edit">
+            <config-option name="Zoom">`zoom`</config-option>
+            <config-option name="Position">`position`</config-option>
+        </widget-settings>
         `image`
     """
 
