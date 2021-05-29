@@ -2,7 +2,7 @@
 div.control
   div.tags.has-addons
     span.tag.is-dark.is-medium {{ name }}
-    span.tag.is-info.is-medium
+    span.tag.is-medium
       slot
 </template>
 
