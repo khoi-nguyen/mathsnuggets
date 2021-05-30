@@ -1,18 +1,25 @@
 <template lang="pug">
 div
   .tray.buttons.are-medium
-    b-button(@click="graphing = true" type="is-link" :inverted="true")
-      b-icon(pack="fas" icon="chart-line")
+    b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn" type="is-danger" :inverted="!config.edit")
+      b-icon(pack="fas" icon="edit")
+    b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
+      b-icon(pack="fas" icon="columns")
     b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success" :inverted="!config.whiteboardMode")
       b-icon(pack="fas" icon="chalkboard")
-    b-button(type="is-warning" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
-      b-icon(pack="fas" icon="columns")
-    b-button(@click="geometry = true" type="is-info" :inverted="true")
-      b-icon(pack="fas" icon="drafting-compass")
-    b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn" type="is-primary" :inverted="!config.edit")
-      b-icon(pack="fas" icon="edit")
-    b-button(@click="solverModal = true" type="is-link" :inverted="true")
+    b-button(@click="solverModal = true" type="is-warning" :inverted="true")
       b-icon(pack="fab" icon="python")
+    b-dropdown(position="is-top-right")
+      b-button(slot="trigger" :inverted="true" type="is-primary")
+        b-icon(pack="fas" icon="tools")
+      b-dropdown-item
+        b-button(@click="graphing = true" type="is-link" :inverted="true")
+          b-icon(pack="fas" icon="chart-line")
+          span Grapher
+      b-dropdown-item
+        b-button(@click="geometry = true" type="is-info" :inverted="true")
+          b-icon(pack="fas" icon="drafting-compass")
+          span Geometry
     b-dropdown(position="is-top-right" :mobile-modal="false")
       b-button(slot="trigger" type="is-info" :inverted="true")
         b-icon(pack="fas" icon="calculator")
