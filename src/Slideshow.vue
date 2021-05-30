@@ -15,7 +15,7 @@ div(:class="{reveal: !form, container: form, form: form}")
         )
     .container(v-if="form")
       marked-form(:config="config" :url="apiUrl" :form="children")
-  tool-bar(:config="config" :slide-payload="slidePayload" v-if="config.authState.loggedIn || !form")
+  tool-bar(:config="config" :slide-payload="slidePayload" v-if="config.authState.loggedIn || !form" @refresh-slideshow="loadSlideshow")
 </template>
 
 <script>
@@ -73,6 +73,14 @@ export default {
       this.save({ action: 'delete', [`children.${index}`]: '' })
       this.children.splice(index, 1)
     },
+    async loadSlideshow () {
+      if (this.apiUrl) {
+        const data = await api(this.apiUrl)
+        if (data.length) {
+          this.children = data
+        }
+      }
+    },
     save (payload) {
       if (!_.isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(_.cloneDeep(this.emptySlide))
@@ -90,12 +98,7 @@ export default {
     }
   },
   async mounted () {
-    if (this.apiUrl) {
-      const data = await api(this.apiUrl)
-      if (data.length) {
-        this.children = data
-      }
-    }
+    await this.loadSlideshow()
     Reveal.initialize({
       center: false,
       hash: true,
