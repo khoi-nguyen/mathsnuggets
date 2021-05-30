@@ -18,10 +18,10 @@ class Survey(form.Form):
 
     template = """
         <p v-if="config.edit || payload.question">`question`</p>
-        <p v-if="config.edit">
-            Correct answer: `correct_answer`
-            Tolerated error: `max_error`
-        </p>
+        <widget-settings v-if="config.edit">
+            <config-option name="Correct Answer">`correct_answer`</config-option>
+            <config-option name="Tolerated error">`max_error`</config-option>
+        </widget-settings>
         <survey
             :config="config"
             :name="payload.name"
