@@ -5,8 +5,6 @@ div
       b-icon(pack="fas" icon="chart-line")
     b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success" :inverted="!config.whiteboardMode")
       b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="config.graphPaper = !config.graphPaper" type="is-danger" :inverted="!config.graphPaper")
-      b-icon(pack="fas" icon="th")
     b-button(type="is-warning" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
       b-icon(pack="fas" icon="columns")
     b-button(@click="geometry = true" type="is-info" :inverted="true")

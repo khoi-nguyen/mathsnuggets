@@ -1,5 +1,5 @@
 <template lang="pug">
-div(:class="{graphPaper: config.graphPaper, reveal: !form, container: form, form: form}")
+div(:class="{reveal: !form, container: form, form: form}")
   .slides
     section(v-for="(slide, index) in children")
       section(v-for="vpos in range")
@@ -43,7 +43,6 @@ export default {
         edit: false,
         feedback: !this.form,
         form: this.form,
-        graphPaper: false,
         whiteboardMode: false
       },
       emptySlide: emptySlide,
@@ -123,9 +122,6 @@ export default {
 </script>
 
 <style scoped>
-.graphPaper {
-  background: url('https://upload.wikimedia.org/wikipedia/commons/9/9f/Graph-paper.svg');
-}
 .reveal .slides {
   margin-right: auto;
   margin-left: 0;
