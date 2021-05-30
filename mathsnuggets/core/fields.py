@@ -77,6 +77,7 @@ class Field:
             and (not hasattr(self, "default") or value != self.default)
         ):
             raise PermissionError(f"Field {repr(self.name)} is protected")
+        instance.__dict__[f"_{self.name}"] = value
         value = self.sanitize(value)
         instance.__dict__[self.name] = value
 

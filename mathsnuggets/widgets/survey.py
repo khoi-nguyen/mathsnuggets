@@ -1,3 +1,4 @@
+import re
 import uuid
 
 import sympy
@@ -15,12 +16,18 @@ class Survey(form.Form):
     before = fields.Markdown("Before field text", default="Your answer:")
     after = fields.Markdown("After field text")
     question = fields.Markdown("Question")
+    marking_type = fields.Select(
+        "Marking type",
+        options=["Default", "Numerical", "Fraction"],
+        default="Default",
+    )
 
     template = """
         <p v-if="config.edit || payload.question">`question`</p>
         <widget-settings v-if="config.edit">
             <config-option name="Correct Answer">`correct_answer`</config-option>
             <config-option name="Tolerated error">`max_error`</config-option>
+            <config-option name="Marking type">`marking_type`</config-option>
         </widget-settings>
         <survey
             :config="config"
@@ -44,6 +51,13 @@ class Survey(form.Form):
     def correct(self):
         if self.answer is None:
             return False
+        elif self.marking_type == "Numerical":
+            numbers = sympy.core.numbers
+            if not self.answer.func in [numbers.Float, numbers.Integer]:
+                return False
+        elif self.marking_type == "Fraction":
+            if not re.search(r"^[0-9\s/]*$", self._answer):
+                return False
         return (
             sympy.Abs(sympy.simplify(self.answer - self.correct_answer))
             <= self.max_error

@@ -111,7 +111,7 @@ class Form:
     def _fields(self, callback=None):
         """Iterates through all fields satisfying 'callback'"""
         for attr in self.__dir__():
-            if not isinstance(getattr(type(self), attr), fields.Field):
+            if not hasattr(type(self), attr) or not isinstance(getattr(type(self), attr), fields.Field):
                 continue
             field = dict(getattr(type(self), attr))
             if callable(callback) and not callback(field):
