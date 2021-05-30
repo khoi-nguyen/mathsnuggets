@@ -59,7 +59,7 @@ class Survey(form.Form):
             if not re.search(r"^[0-9\s/]*$", self._answer):
                 return False
         return (
-            sympy.Abs(sympy.simplify(self.answer - self.correct_answer))
+            sympy.Abs(sympy.nsimplify(self.answer - self.correct_answer))
             <= self.max_error
         )
 
