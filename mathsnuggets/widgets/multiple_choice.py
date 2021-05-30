@@ -46,9 +46,9 @@ class MultipleChoice(form.Form):
             )
         return f"""
             <p v-if="config.edit || payload.question">`question`</p>
-            <ul v-if="config.edit">
-                Correct answer: `correct_answer`
-            </ul>
+            <widget-settings v-if="config.edit">
+                <config-option name="Correct Answer">`correct_answer`</config-option>
+            </widget-settings>
             <survey
                 :config="config"
                 :name="payload.name"
