@@ -1,12 +1,15 @@
 <template lang="pug">
 .container
   .columns
+    .column(v-if="position === 'left'")
+      .speech-bubble-left
+        slot
     .column.is-narrow
       img(src="assets/tuxie.svg" :width="width" v-if="image === 'tuxie'")
       img(src="assets/jigglypuff.svg" :width="width" v-if="image === 'jigglypuff'")
       img(src="assets/pikachu.svg" :width="width" v-if="image === 'pikachu'")
-    .column
-      .speech-bubble
+    .column(v-if="position === 'right'")
+      .speech-bubble-right
         slot
 </template>
 
@@ -14,20 +17,21 @@
 export default {
   props: {
     image: { type: String, default: 'tuxie' },
+    position: { type: String, default: 'right' },
     width: { type: Number, default: 400 }
   }
 }
 </script>
 
 <style scoped>
-.speech-bubble {
+.speech-bubble-right, .speech-bubble-left {
   position: relative;
   background: #d2e8e9;
   border-radius: .4em;
   padding: 1em;
 }
 
-.speech-bubble:after {
+.speech-bubble-right:after {
   content: '';
   position: absolute;
   left: 0;
@@ -40,5 +44,20 @@ export default {
   border-top: 0;
   margin-top: -10px;
   margin-left: -20px;
+}
+
+.speech-bubble-left:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 35%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-left-color: #d2e8e9;
+  border-right: 0;
+  border-top: 0;
+  margin-top: -10px;
+  margin-right: -20px;
 }
 </style>

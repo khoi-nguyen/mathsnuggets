@@ -9,11 +9,16 @@ class Tuxie(form.Form):
     image = fields.Select(
         "Image", options=["tuxie", "jigglypuff", "pikachu"], default="tuxie"
     )
+    position = fields.Select(
+        "Bubble position", options=["left", "right"], default="right"
+    )
 
     template = """
         <widget-settings v-if="config.edit">
             <config-option name="Image">`image`</config-option>
             <config-option name="Width">`width`</config-option>
+            <config-option name="Bubble position">`position`</config-option>
         </widget-settings>
-        <tuxie :width="payload.width" :image="payload.image">`text`</tuxie>
+        <tuxie :width="payload.width" :image="payload.image"
+            :position="payload.position">`text`</tuxie>
     """
