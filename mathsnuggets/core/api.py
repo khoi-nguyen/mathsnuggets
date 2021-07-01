@@ -229,7 +229,7 @@ def validate_field(field):
         raise InvalidUsage(str(error), 400, payload)
 
 
-@api.route("/widgets/<path:form>", methods=["GET", "POST"])
+@api.route("/widgets/<path:widget>", methods=["GET", "POST"])
 @cache.cached(unless=is_post, query_string=True)
 def form_route(widget):
     payload = flask.request.args or flask.request.get_json()
