@@ -59,7 +59,6 @@ precommit:
 	@$(PYTHON) -m flake8
 	@npx eslint --ignore-path .gitignore src/*
 
-tests: env node_modules
+python_tests: env node_modules
 	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml -n 4
 	@$(PYTHON) -m coverage html
-	@npx jest
