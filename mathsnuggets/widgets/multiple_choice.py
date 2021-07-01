@@ -34,13 +34,16 @@ class MultipleChoice(form.Form):
                             v-if="'{ltr.upper()}' === payload.answer">
                             `option_{ltr}`
                         </b-button>
-                        <b-button @click="$set(payload, 'answer', '{ltr.upper()}')" v-else>
+                        <b-button
+                            @click="$set(payload, 'answer', '{ltr.upper()}')"
+                            v-else
+                        >
                             `option_{ltr}`
                         </b-button>
                     </span>
                 </span>
                 <span v-else>
-                    <b-button>`option_{ltr}`</b-button>
+                   <b-button>`option_{ltr}`</b-button>
                 </span>
             """
             )

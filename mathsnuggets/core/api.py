@@ -80,7 +80,7 @@ def mark():
             if len(dict(widget._fields(lambda f: f.get("nosave")))):
                 marks.append(
                     {
-                        "marks": getattr(widget, "_marks"),
+                        "marks": getattr(widget, "_marks", 0),
                         "total": getattr(widget, "_total_marks", 1),
                     }
                 )
@@ -109,12 +109,12 @@ def mark():
 def generate_excel(url):
     wb = openpyxl.Workbook()
     ws = wb.active
-    for row, form in enumerate(models.Form.find({"url": url}), 1):
+    for row, f in enumerate(models.Form.find({"url": url}), 1):
         fields = ["email", "first_name", "last_name", "year"]
         for col, field in enumerate(fields, 1):
             cell = ws.cell(row=row, column=col)
-            cell.value = getattr(form, field)
-        for col, question in enumerate(form.marks, len(fields) + 1):
+            cell.value = getattr(f, field)
+        for col, question in enumerate(f.marks, len(fields) + 1):
             bar = rule.DataBarRule(
                 start_type="num",
                 start_value=0,
@@ -134,7 +134,8 @@ def generate_excel(url):
         stream,
         headers={
             "Content-Disposition": "attachment; filename=sheet.xlsx",
-            "Content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-type": "application/vnd.openxmlformats-officedocument."
+            + "spreadsheetml.sheet",
         },
     )
 
@@ -230,28 +231,28 @@ def validate_field(field):
 
 @api.route("/widgets/<path:form>", methods=["GET", "POST"])
 @cache.cached(unless=is_post, query_string=True)
-def form_route(form):
+def form_route(widget):
     payload = flask.request.args or flask.request.get_json()
-    if form not in widget_names:
-        raise InvalidUsage(f"Widget {repr(form)} does not exist", 404, payload)
+    if widget not in widget_names:
+        raise InvalidUsage(f"Widget {repr(widget)} does not exist", 404, payload)
     try:
-        form = getattr(widgets, form)(**(payload if payload else {}))
+        widget = getattr(widgets, widget)(**(payload if payload else {}))
         if is_post():
-            form.generate()
+            widget.generate()
         if payload:
-            form._validate()
-            return flask.jsonify(dict(form))
+            widget._validate()
+            return flask.jsonify(dict(widget))
     except (AttributeError, ValueError, TypeError, PermissionError) as error:
         raise InvalidUsage(str(error), 400, payload)
     return flask.jsonify(
         {
-            "template": str(form),
-            "fields": dict(form._fields()),
-            "generator_template": form._template(
-                getattr(form, "generator_template", "")
+            "template": str(widget),
+            "fields": dict(widget._fields()),
+            "generator_template": widget._template(
+                getattr(widget, "generator_template", "")
             ),
-            "constraints": form.get_fields_as_template("constraint"),
-            "random_numbers": form.get_fields_as_template("random"),
+            "constraints": widget.get_fields_as_template("constraint"),
+            "random_numbers": widget.get_fields_as_template("random"),
         }
     )
 

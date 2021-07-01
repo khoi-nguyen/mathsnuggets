@@ -53,7 +53,7 @@ class Survey(form.Form):
             return False
         elif self.marking_type == "Numerical":
             numbers = sympy.core.numbers
-            if not self.answer.func in [numbers.Float, numbers.Integer]:
+            if self.answer.func not in [numbers.Float, numbers.Integer]:
                 return False
         elif self.marking_type == "Fraction":
             if not re.search(r"^[0-9\s/]*$", self._answer):

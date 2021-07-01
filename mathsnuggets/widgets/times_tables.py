@@ -1,7 +1,5 @@
 import random
 
-import sympy
-
 from mathsnuggets.core import fields, form
 
 
@@ -23,8 +21,8 @@ class TimesTables(form.Form):
     @property
     def template(self):
         default = "0," * 99 + "0"
-        cols_default = dict(getattr(type(self), "cols"))["default"]
-        rows_default = dict(getattr(type(self), "rows"))["default"]
+        cols_default = dict(getattr(type(self), "cols", 0))["default"]
+        rows_default = dict(getattr(type(self), "rows", 0))["default"]
         return f"""
             <ul v-if="config.edit">
                 <li>Cols: `cols`</li>

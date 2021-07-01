@@ -27,7 +27,7 @@ class Integrate(form.Form):
     @fields.computed("Integral")
     def integral(self):
         params = self.x
-        if self.a != None and self.b != None:
+        if self.a is not None and self.b is not None:
             params = (self.x, self.a, self.b)
         integral = sympy.Integral(self.function, params)
         return sympy.Eq(integral, sympy.simplify(integral.doit()))
