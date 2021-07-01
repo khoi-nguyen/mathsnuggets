@@ -44,11 +44,10 @@ hooks:
 	@echo "make precommit" > .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-lint: env node_modules
+python_lint: env node_modules
 	@$(ENV) isort . --skip env
 	@$(PYTHON) -m black .
 	@$(PYTHON) -m flake8
-	@npx eslint --fix --ignore-path .gitignore src/*
 
 node_modules: package.json
 	@npm install
