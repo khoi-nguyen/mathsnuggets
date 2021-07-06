@@ -15,17 +15,15 @@ b-navbar.container
 </template>
 
 <script>
-import { auth } from './auth.js'
-
 export default {
   methods: {
     logout () {
-      auth.logout()
+      this.$store.dispatch('auth/logout')
     }
   },
   data () {
     return {
-      authState: auth.state,
+      authState: this.$store.getters['auth/getState'],
       links: [
         {
           icon: { pack: 'fas', icon: 'home' },

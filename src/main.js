@@ -3,8 +3,11 @@ import AsyncComputed from 'vue-async-computed'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 import VueSocketIO from 'vue-socket.io'
+import Vuex from 'vuex'
 
 import titleMixin from './titleMixin'
+
+import auth from './store/auth'
 
 const Vue = require('vue/dist/vue.min.js')
 const App = () => import('./App')
@@ -21,6 +24,7 @@ Vue.use(new VueSocketIO({
   connection: window.location.origin
 }))
 Vue.mixin(titleMixin)
+Vue.use(Vuex)
 
 const routes = [
   { path: '/', component: HomePage },
@@ -42,7 +46,12 @@ const router = new VueRouter({
   routes
 })
 
+const store = new Vuex.Store({
+  modules: { auth }
+})
+
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

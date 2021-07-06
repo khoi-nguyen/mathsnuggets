@@ -22,7 +22,6 @@ div(:class="{reveal: !form, container: form, form: form}")
 import _ from 'lodash'
 import Reveal from 'reveal.js'
 
-import { auth } from './auth.js'
 import api from './ajax'
 import MarkedForm from './MarkedForm'
 import Node from './Node'
@@ -38,7 +37,7 @@ export default {
     return {
       children: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       config: {
-        authState: auth.state,
+        authState: this.$store.getters['auth/getState'],
         currentSlide: 0,
         edit: false,
         feedback: !this.form,

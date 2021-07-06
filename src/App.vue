@@ -7,7 +7,6 @@ div(v-else)
 </template>
 
 <script>
-import { auth } from './auth.js'
 import NavBar from './NavBar'
 import WebsiteFooter from './WebsiteFooter'
 import 'typeface-fira-sans'
@@ -25,7 +24,7 @@ export default {
     }
   },
   mounted () {
-    auth.isLoggedIn()
+    this.$store.dispatch('auth/checkAuthStatus')
   }
 }
 </script>

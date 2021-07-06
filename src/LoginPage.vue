@@ -28,22 +28,27 @@ div
 </template>
 
 <script>
-import { auth } from './auth.js'
-
 export default {
   title: 'Login',
   methods: {
     login (register = false) {
       if (register) {
-        auth.register(this.email, this.password, this.registrationPassword)
+        this.$store.dispatch('auth/register', {
+          email: this.email,
+          password: this.password,
+          registration_password: this.registrationPassword
+        })
       } else {
-        auth.login(this.email, this.password, this.remember)
+        this.$store.dispatch('auth/login', {
+          email: this.email,
+          password: this.password
+        })
       }
     }
   },
   data () {
     return {
-      authState: auth.state,
+      authState: this.$store.getters['auth/getState'],
       email: '',
       password: '',
       registrationPassword: '',

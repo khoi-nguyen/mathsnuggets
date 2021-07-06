@@ -59,12 +59,13 @@
     "typeface-fira-sans": "0.0.75",
     "v-runtime-template": "^1.10.0",
     "v-tooltip": "^2.0.3",
-    "vue": "^2.6.11",
+    "vue": "^2.6.14",
     "vue-async-computed": "^3.8.2",
     "vue-context": "^5.2.0",
     "vue-hot-reload-api": "^2.3.4",
     "vue-router": "^3.3.4",
     "vue-socket.io": "^3.0.10",
-    "vuedraggable": "^2.24.0"
+    "vuedraggable": "^2.24.0",
+    "vuex": "^3.6.2"
   }
 }
