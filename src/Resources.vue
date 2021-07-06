@@ -63,7 +63,6 @@ div
 </template>
 
 <script>
-import { auth } from './auth'
 import api from './ajax'
 import _ from 'lodash'
 
@@ -141,7 +140,7 @@ export default {
   },
   data () {
     return {
-      authState: auth.state,
+      authState: this.$store.getters['auth/getState'],
       create: false,
       deleteModal: false,
       searchString: '',
