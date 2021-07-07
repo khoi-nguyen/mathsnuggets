@@ -35,7 +35,7 @@ div
           form-field(type="Markdown" :value="message.message" :editable="false")
       b-input(v-model="chatMessage" @keydown.enter.native="sendMessage")
     span &nbsp;&nbsp;
-    form-field(:value="nickname" type="Field" @input="updateNickname" label="Enter your name here")
+    form-field(:value="$store.getters['auth/nickname']" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
       .modal-card
         header.modal-card-head Graphing calculator
@@ -81,7 +81,6 @@ export default {
       displayChat: false,
       geometry: false,
       graphing: false,
-      nickname: '',
       newMessages: false,
       solverModal: false,
       widgetPayload: {},
@@ -102,10 +101,6 @@ export default {
   },
   destroyed () {
     window.removeEventListener('paste', this.onPaste.bind(this))
-  },
-  async mounted () {
-    const identity = await api('auth/nickname')
-    this.nickname = identity.nickname || ''
   },
   methods: {
     changeWidget (widget) {
@@ -151,8 +146,7 @@ export default {
       }
     },
     updateNickname (nickname) {
-      this.nickname = nickname
-      api('auth/nickname', 'POST', { nickname })
+      this.$store.dispatch('auth/changeNickname', nickname)
     }
   },
   sockets: {

@@ -4,7 +4,8 @@ const auth = {
   namespaced: true,
   state: {
     error: '',
-    loggedIn: false
+    loggedIn: false,
+    nickname: ''
   },
   mutations: {
     login (state) {
@@ -15,15 +16,24 @@ const auth = {
       state.loggedIn = false
       state.error = ''
     },
+    nickname (state, nick) {
+      state.nickname = nick
+    },
     error (state, error) {
       state.loggedIn = false
       state.error = error
     }
   },
   actions: {
+    changeNickname ({ commit }, nickname) {
+      commit('nickname', nickname)
+      api('auth/nickname', 'POST', { nickname })
+    },
     async checkAuthStatus ({ commit, state }) {
       const data = await api('auth/login')
+      const identity = await api('auth/nickname')
       commit(data.is_authenticated ? 'login' : 'logout')
+      commit('nickname', identity.nickname)
     },
     async login ({ commit }, payload) {
       const data = await api('auth/login', 'POST', payload)
@@ -53,6 +63,9 @@ const auth = {
     getState (state) {
       return state
     },
+    nickname (state) {
+      return state.nickname
+    }
   }
 }
 
