@@ -1,5 +1,5 @@
 <template lang="pug">
-.is-overlay.field.is-grouped.is-grouped-right.is-grouped-multiline.widget-settings
+.field.is-grouped.is-grouped-right.is-grouped-multiline.widget-settings
   slot
 </template>
 
@@ -10,6 +10,9 @@ export default {
 
 <style scoped>
 .widget-settings {
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 1
 }
 </style>
