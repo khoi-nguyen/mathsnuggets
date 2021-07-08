@@ -145,32 +145,6 @@ def join(survey):
     flask_socketio.join_room(survey)
 
 
-@api.route("chat", methods=["POST"])
-def chat():
-    payload = flask.request.get_json()
-    anonymous_id = flask.request.cookies.get("voter_id")
-    user = getattr(flask_login.current_user, "email", anonymous_id)
-    nick = models.Identity(username=user).nickname
-    socketio.emit(
-        "messageReceived",
-        {
-            "user": user,
-            "nickname": nick or "Anonymous",
-            "message": payload["message"],
-            "url": payload["url"],
-        },
-    )
-    return flask.jsonify({"success": True})
-
-
-@api.route("chat/delete", methods=["POST"])
-def delete_message():
-    payload = flask.request.get_json()
-    if flask_login.current_user.is_authenticated:
-        socketio.emit("deleteMessage", payload)
-    return flask.jsonify({"success": True})
-
-
 @api.route("/slideshows", methods=["GET"])
 @cache.memoize()
 def list_slideshows():

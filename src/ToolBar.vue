@@ -26,14 +26,6 @@ div
       b-button(slot="trigger" type="is-info" :inverted="true")
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
-    b-dropdown(position="is-top-right" :mobile-modal="false" @active-change="openChat" :close-on-click="false")
-      b-button(:type="chatButtonType" slot="trigger" :inverted="!displayChat")
-        b-icon(pack="fas" icon="comment")
-      .chat
-        b-dropdown-item(v-for="(message, index) in chat" @click="deleteChatMessage(index)")
-          h5 {{ message.nickname }}
-          form-field(type="Markdown" :value="message.message" :editable="false")
-      b-input(v-model="chatMessage" @keydown.enter.native="sendMessage")
     span &nbsp;&nbsp;
     form-field(:value="$store.getters['auth/nickname']" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
@@ -60,10 +52,8 @@ div
 </template>
 
 <script>
-import _ from 'lodash'
 import draggable from 'vuedraggable'
 
-import api from './ajax'
 import FormField from './FormField'
 import Node from './Node'
 import Widget from './Widget'
@@ -76,12 +66,9 @@ export default {
   },
   data () {
     return {
-      chat: [],
       clipboard: [],
-      displayChat: false,
       geometry: false,
       graphing: false,
-      newMessages: false,
       solverModal: false,
       widgetPayload: {},
       widget: ''
@@ -91,9 +78,6 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
-    },
-    chatButtonType () {
-      return this.newMessages ? 'is-danger' : 'is-success'
     }
   },
   created () {
@@ -106,11 +90,6 @@ export default {
     changeWidget (widget) {
       this.widgetPayload = {}
       this.widget = widget
-    },
-    deleteChatMessage (index) {
-      if (this.config.authState.loggedIn) {
-        api('chat/delete', 'POST', this.chat[index])
-      }
     },
     onPaste (event) {
       const items = (event.clipboardData || event.originalEvent.clipboardData).items
@@ -133,37 +112,8 @@ export default {
         }
       }
     },
-    openChat (event) {
-      this.displayChat = event
-      if (event) {
-        this.newMessages = false
-      }
-    },
-    sendMessage () {
-      if (this.chatMessage !== '') {
-        api('chat', 'POST', { message: this.chatMessage, url: this.apiUrl })
-        this.chatMessage = ''
-      }
-    },
     updateNickname (nickname) {
       this.$store.dispatch('auth/changeNickname', nickname)
-    }
-  },
-  sockets: {
-    deleteMessage (data) {
-      for (var i = 0; i < this.chat.length; i++) {
-        if (_.isEqual(this.chat[i], data)) {
-          this.chat.splice(i, 1)
-        }
-      }
-    },
-    messageReceived (data) {
-      if (!_.isEqual(this.chat[this.chat.length - 1], data) && data.url === this.apiUrl) {
-        this.$set(this.chat, this.chat.length, data)
-        if (!this.displayChat) {
-          this.newMessages = true
-        }
-      }
     }
   },
   components: {
@@ -177,10 +127,6 @@ export default {
 </script>
 
 <style scoped>
-.chat {
-  max-height: 400px;
-  overflow-y: auto;
-}
 .clipboard {
   position: absolute;
   opacity: 1;
