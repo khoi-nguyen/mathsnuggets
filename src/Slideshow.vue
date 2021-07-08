@@ -2,17 +2,15 @@
 div(:class="{reveal: !form, container: form, form: form}")
   .slides
     section(v-for="(slide, index) in children")
-      section(v-for="vpos in range")
-        node(
-          :additionalAttrs="{ vpos }"
-          component="slide"
-          :config="config"
-          v-bind="slide"
-          :position="`children.${index}`"
-          @insert-slide="insertSlide(index)"
-          @delete-slide="deleteSlide(index)"
-          @save="save"
-        )
+      node(
+        component="slide"
+        :config="config"
+        v-bind="slide"
+        :position="`children.${index}`"
+        @insert-slide="insertSlide(index)"
+        @delete-slide="deleteSlide(index)"
+        @save="save"
+      )
     .container(v-if="form")
       marked-form(:config="config" :url="apiUrl" :form="children")
   tool-bar(:config="config" :slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
@@ -42,7 +40,7 @@ export default {
         edit: false,
         feedback: !this.form,
         form: this.form,
-        whiteboardMode: false
+        showWhiteboard: true
       },
       emptySlide: emptySlide,
       saveStack: []
@@ -52,12 +50,6 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
-    },
-    range () {
-      if (this.form) {
-        return [0]
-      }
-      return [0, 1]
     },
     slidePayload () {
       return this.children[this.config.currentSlide].payload

@@ -5,7 +5,7 @@ div
       b-icon(pack="fas" icon="edit")
     b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
       b-icon(pack="fas" icon="columns")
-    b-button(@click="config.whiteboardMode = !config.whiteboardMode" type="is-success" :inverted="!config.whiteboardMode")
+    b-button(@click="config.showWhiteboard = !config.showWhiteboard" type="is-success" :inverted="!config.showWhiteboard")
       b-icon(pack="fas" icon="chalkboard")
     b-button(@click="$emit('refresh-slideshow')" type="is-warning" :inverted="true")
       b-icon(pack="fas" icon="sync")

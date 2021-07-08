@@ -13,7 +13,6 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
           @save="$emit('save', $event)"
           v-bind="child"
           v-if="child.component"
-          :class="{invisible: config.whiteboardMode}"
         )
   vue-context(ref="menu" :close-on-click="false")
     context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" @delete-slide="$emit('delete-slide')" v-bind="attrs")
@@ -33,7 +32,6 @@ import Widget from './Widget'
 export default {
   name: 'node',
   props: {
-    additionalAttrs: { type: Object, default: () => {} },
     children: { type: Array, default: () => [] },
     component: { type: String, default: '' },
     config: { type: Object, default: () => {} },
@@ -71,7 +69,7 @@ export default {
       }
     },
     attrs () {
-      return _.assign({
+      return {
         children: this.children || [],
         component: this.component,
         config: this.config || {},
@@ -79,7 +77,7 @@ export default {
         position: this.position,
         state: this.state,
         type: this.type
-      }, this.additionalAttrs)
+      }
     },
     childComponent () {
       return this.component === 'list' ? 'li' : 'div'
