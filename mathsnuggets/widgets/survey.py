@@ -32,7 +32,7 @@ class Survey(form.Form):
         <survey
             :config="config"
             :name="payload.name"
-            :showStats="config.authState.loggedIn"
+            :showStats="loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
             <span v-if="config.edit || payload.before">`before`</span>

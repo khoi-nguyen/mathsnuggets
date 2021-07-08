@@ -55,17 +55,6 @@ const auth = {
         dispatch('login', payload)
       }
     }
-  },
-  getters: {
-    isLoggedIn (state) {
-      return state.loggedIn
-    },
-    getState (state) {
-      return state
-    },
-    nickname (state) {
-      return state.nickname
-    }
   }
 }
 

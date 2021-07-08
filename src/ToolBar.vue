@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .tray.buttons.are-medium
-    b-button(@click="config.edit = !config.edit" v-if="config.authState.loggedIn" type="is-danger" :inverted="!config.edit")
+    b-button(@click="config.edit = !config.edit" v-if="loggedIn" type="is-danger" :inverted="!config.edit")
       b-icon(pack="fas" icon="edit")
     b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
       b-icon(pack="fas" icon="columns")
@@ -27,7 +27,7 @@ div
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
     span &nbsp;&nbsp;
-    form-field(:value="$store.getters['auth/nickname']" type="Field" @input="updateNickname" label="Enter your name here")
+    form-field(:value="this.nickname" type="Field" @input="updateNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
       .modal-card
         header.modal-card-head Graphing calculator
@@ -46,14 +46,13 @@ div
         .modal-card-body
           widget-select(@select:widget="changeWidget")
           widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload" if="widget")
-  .clipboard
-    draggable(v-model="clipboard" group="widgets")
-      node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
+  clipboard.clipboard(:config="config")
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import { mapState } from 'vuex'
 
+import Clipboard from './Clipboard'
 import FormField from './FormField'
 import Node from './Node'
 import Widget from './Widget'
@@ -66,7 +65,6 @@ export default {
   },
   data () {
     return {
-      clipboard: [],
       geometry: false,
       graphing: false,
       solverModal: false,
@@ -78,46 +76,20 @@ export default {
     apiUrl () {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
-    }
-  },
-  created () {
-    window.addEventListener('paste', this.onPaste.bind(this))
-  },
-  destroyed () {
-    window.removeEventListener('paste', this.onPaste.bind(this))
+    },
+    ...mapState('auth', ['loggedIn', 'nickname'])
   },
   methods: {
     changeWidget (widget) {
       this.widgetPayload = {}
       this.widget = widget
     },
-    onPaste (event) {
-      const items = (event.clipboardData || event.originalEvent.clipboardData).items
-
-      for (const index in items) {
-        const item = items[index]
-        if (item.kind === 'file') {
-          const blob = item.getAsFile()
-          const reader = new FileReader()
-          reader.onload = function (e) {
-            this.clipboard.push({
-              component: 'widget',
-              type: 'Image',
-              payload: {
-                src: e.target.result
-              }
-            })
-          }.bind(this)
-          reader.readAsDataURL(blob)
-        }
-      }
-    },
     updateNickname (nickname) {
       this.$store.dispatch('auth/changeNickname', nickname)
     }
   },
   components: {
-    draggable,
+    Clipboard,
     FormField,
     Node,
     Widget,

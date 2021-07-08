@@ -10,20 +10,18 @@ b-navbar.container
       span  {{ link.text }}
   template(slot="end")
     b-navbar-item(tag="div").buttons
-      b-button(tag="router-link" to="/login" type="is-link" v-if="!authState.loggedIn") Login
-      b-button(@click="logout" v-else="authState.loggedIn" type="logout") Logout
+      b-button(tag="router-link" to="/login" type="is-link" v-if="!loggedIn") Login
+      b-button(@click="logout" v-else type="logout") Logout
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  methods: {
-    logout () {
-      this.$store.dispatch('auth/logout')
-    }
-  },
+  methods: mapActions('auth', ['logout']),
+  computed: mapState('auth', ['loggedIn']),
   data () {
     return {
-      authState: this.$store.getters['auth/getState'],
       links: [
         {
           icon: { pack: 'fas', icon: 'home' },

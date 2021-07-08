@@ -15,12 +15,13 @@ div(:class="{reveal: !form, container: form, form: form}")
         )
     .container(v-if="form")
       marked-form(:config="config" :url="apiUrl" :form="children")
-  tool-bar(:config="config" :slide-payload="slidePayload" v-if="config.authState.loggedIn || !form" @refresh-slideshow="loadSlideshow")
+  tool-bar(:config="config" :slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
 </template>
 
 <script>
 import _ from 'lodash'
 import Reveal from 'reveal.js'
+import { mapState } from 'vuex'
 
 import api from './ajax'
 import MarkedForm from './MarkedForm'
@@ -37,7 +38,6 @@ export default {
     return {
       children: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       config: {
-        authState: this.$store.getters['auth/getState'],
         currentSlide: 0,
         edit: false,
         feedback: !this.form,
@@ -61,7 +61,8 @@ export default {
     },
     slidePayload () {
       return this.children[this.config.currentSlide].payload
-    }
+    },
+    ...mapState('auth', ['loggedIn'])
   },
   methods: {
     insertSlide (index) {
@@ -84,13 +85,13 @@ export default {
       if (!_.isEqual(this.children[this.children.length - 1], this.emptySlide)) {
         this.children.push(_.cloneDeep(this.emptySlide))
       }
-      if (this.apiUrl && this.config.authState.loggedIn) {
+      if (this.apiUrl && this.loggedIn) {
         this.saveStack.push(payload)
         setTimeout(this.sendSaveStack, 200)
       }
     },
     sendSaveStack () {
-      if (this.saveStack.length && this.apiUrl && this.config.authState.loggedIn) {
+      if (this.saveStack.length && this.apiUrl && this.loggedIn) {
         api(this.apiUrl, 'POST', this.saveStack)
         this.saveStack = []
       }

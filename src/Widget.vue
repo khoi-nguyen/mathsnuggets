@@ -10,6 +10,7 @@ form.avoid-column.widget
 
 <script>
 import _ from 'lodash'
+import { mapState } from 'vuex'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
@@ -99,7 +100,8 @@ export default {
     },
     hasGenerator () {
       return !_.isEmpty(_.filter(this.widgetData.fields, f => f.random || f.constraint))
-    }
+    },
+    ...mapState('auth', ['loggedIn'])
   },
   methods: {
     async solve (generator = false) {

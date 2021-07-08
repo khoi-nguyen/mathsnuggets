@@ -2,13 +2,14 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="!config.form && vpos && !config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!config.authState.loggedIn" :active="active")
+    whiteboard.whiteboard(:name="position" v-if="!config.form && vpos && !config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!loggedIn" :active="active")
     div(:class="{split: payload.split && vpos}")
       slot
 </template>
 
 <script>
 import _ from 'lodash'
+import { mapState } from 'vuex'
 
 import SlideTitle from './SlideTitle'
 import Whiteboard from './Whiteboard'
@@ -27,7 +28,8 @@ export default {
   computed: {
     active () {
       return this.config.currentSlide === parseInt(this.position.split('.')[1])
-    }
+    },
+    ...mapState('auth', ['loggedIn'])
   },
   watch: {
     'config.currentSlide': {

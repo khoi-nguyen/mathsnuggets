@@ -25,7 +25,7 @@ div
             .columns.is-vcentered
               .column.is-narrow.is-narrow.has-text-centered
                 i.fa-4x.fas.fa-chalkboard-teacher
-                ul.is-small(v-if="authState.loggedIn")
+                ul.is-small(v-if="loggedIn")
                   li
                     b-icon(pack="fas" icon="edit")
                     span.link(@click.stop.prevent="openModal(index)") Edit metadata
@@ -38,7 +38,7 @@ div
                   div(v-for="field in fields" v-if="lesson[field.name]")
                     dt {{ field.label }}
                     dd {{ Array.isArray(lesson[field.name]) ? lesson[field.name].join(', ') : lesson[field.name] }}
-      div.panel-block(v-if="authState.loggedIn")
+      div.panel-block(v-if="loggedIn")
         button.button.is-primary.is-outlined.is-fullwidth(@click="openModal(filteredLessons.length - 1, true)") Create slideshow
   b-modal(:active.sync="modal" has-modal-card)
     .modal-card
@@ -65,6 +65,7 @@ div
 <script>
 import api from './ajax'
 import _ from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
   title: 'Teaching Resources',
@@ -107,7 +108,8 @@ export default {
         return _.uniq(this.lessons.filter(l => l.teacher === this.$route.params.teacher).map(l => l.year))
       }
       return _.uniq(this.lessons.map((lesson) => lesson.year))
-    }
+    },
+    ...mapState('auth', ['loggedIn'])
   },
   methods: {
     openModal (index, create = false) {
@@ -140,7 +142,6 @@ export default {
   },
   data () {
     return {
-      authState: this.$store.getters['auth/getState'],
       create: false,
       deleteModal: false,
       searchString: '',

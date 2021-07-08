@@ -17,7 +17,7 @@ class StandardFormQuestion(form.Form):
         <survey
             :config="config"
             :name="payload.name"
-            :showStats="config.authState.loggedIn"
+            :showStats="loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
             `answer`
