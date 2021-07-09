@@ -1,5 +1,5 @@
 <template lang="pug">
-div(:class="{reveal: !form, container: form, form: form}")
+.reveal
   .slides
     section(v-for="(slide, index) in children")
       node(
@@ -11,8 +11,6 @@ div(:class="{reveal: !form, container: form, form: form}")
         @delete-slide="deleteSlide(index)"
         @save="save"
       )
-    .container(v-if="form")
-      marked-form(:config="config" :url="apiUrl" :form="children")
   tool-bar(:config="config" :slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
 </template>
 
@@ -22,7 +20,6 @@ import Reveal from 'reveal.js'
 import { mapState } from 'vuex'
 
 import api from './ajax'
-import MarkedForm from './MarkedForm'
 import Node from './Node'
 import ToolBar from './ToolBar'
 
@@ -109,7 +106,6 @@ export default {
     })
   },
   components: {
-    MarkedForm,
     Node,
     ToolBar
   }
@@ -125,8 +121,5 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
-}
-.form {
-  margin-bottom: 100px;
 }
 </style>

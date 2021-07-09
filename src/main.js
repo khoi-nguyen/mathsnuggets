@@ -37,7 +37,6 @@ const routes = [
   { path: '/resources/:teacher/:year', component: Resources },
   { path: '/resources/:teacher/:year/', component: Resources },
   { path: '/resources/:teacher/:year/:slug', component: Slideshow },
-  { path: '/forms/:teacher/:year/:slug', component: Slideshow, props: { form: true } },
   { path: '/slideshow_builder', component: Slideshow }
 ]
 

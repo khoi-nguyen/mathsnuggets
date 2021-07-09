@@ -65,10 +65,6 @@ class MultipleChoice(form.Form):
             </survey>
     """
 
-    @property
-    def _marks(self):
-        return 1 if self.correct else 0
-
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
         return self.answer == self.correct_answer

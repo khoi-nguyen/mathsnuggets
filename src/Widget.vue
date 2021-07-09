@@ -18,7 +18,6 @@ import ConfigOption from './ConfigOption'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
 import Survey from './Survey'
-import TimesTable from './TimesTable'
 import Tuxie from './Tuxie'
 import WidgetSettings from './WidgetSettings'
 
@@ -164,7 +163,6 @@ export default {
     ErrorMessage,
     FormField,
     Survey,
-    TimesTable,
     Tuxie,
     VRuntimeTemplate,
     WidgetSettings

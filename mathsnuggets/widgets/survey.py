@@ -41,12 +41,6 @@ class Survey(form.Form):
         </survey>
     """
 
-    _total_marks = 1
-
-    @property
-    def _marks(self):
-        return 1 if self.correct else 0
-
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
         if self.answer is None:
