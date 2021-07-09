@@ -4,7 +4,6 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
     draggable(:value="children" @input="updateChildren" v-bind="draggableOptions")
       component(:is="childComponent" v-for="(child, index) in children")
         node.mb-2(
-          :config="config"
           :position="`${position}.children.${index}`"
           @add-child="insertChildAfter(index, $event)"
           @delete="deleteChild(index)"
@@ -22,6 +21,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
 import _ from 'lodash'
 import draggable from 'vuedraggable'
 import { VueContext } from 'vue-context'
+import { mapState } from 'vuex'
 
 import ContextMenu from './ContextMenu'
 import Environment from './Environment'
@@ -34,7 +34,6 @@ export default {
   props: {
     children: { type: Array, default: () => [] },
     component: { type: String, default: '' },
-    config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: { type: String, default: '' },
     type: { type: String, default: '' }
@@ -72,7 +71,6 @@ export default {
       return {
         children: this.children || [],
         component: this.component,
-        config: this.config || {},
         payload: this.payload || {},
         position: this.position,
         state: this.state,
@@ -81,7 +79,8 @@ export default {
     },
     childComponent () {
       return this.component === 'list' ? 'li' : 'div'
-    }
+    },
+    ...mapState(['config'])
   },
   methods: {
     addChild (event) {

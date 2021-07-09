@@ -8,6 +8,7 @@ import Vuex from 'vuex'
 import titleMixin from './titleMixin'
 
 import auth from './store/auth'
+import config from './store/config'
 
 const Vue = require('vue/dist/vue.min.js')
 const App = () => import('./App')
@@ -46,7 +47,7 @@ const router = new VueRouter({
 })
 
 const store = new Vuex.Store({
-  modules: { auth }
+  modules: { auth, config }
 })
 
 new Vue({

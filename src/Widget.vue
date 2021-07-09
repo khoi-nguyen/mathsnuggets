@@ -24,7 +24,6 @@ import WidgetSettings from './WidgetSettings'
 export default {
   props: {
     blacklist: Array,
-    config: Object,
     generator: Boolean,
     payload: Object,
     state: Object,
@@ -100,7 +99,8 @@ export default {
     hasGenerator () {
       return !_.isEmpty(_.filter(this.widgetData.fields, f => f.random || f.constraint))
     },
-    ...mapState('auth', ['loggedIn'])
+    ...mapState('auth', ['loggedIn']),
+    ...mapState(['config'])
   },
   methods: {
     async solve (generator = false) {

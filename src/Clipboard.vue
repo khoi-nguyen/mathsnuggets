@@ -1,7 +1,7 @@
 <template lang="pug">
 .clipboard
   draggable(v-model="clipboard" group="widgets")
-    node(v-bind="image" v-for="(image, i) in clipboard" component="widget" :config="config")
+    node(v-bind="image" v-for="(image, i) in clipboard" component="widget")
 </template>
 
 <script>
@@ -9,9 +9,6 @@ import draggable from 'vuedraggable'
 import Node from './Node'
 
 export default {
-  props: {
-    config: Object
-  },
   created () {
     window.addEventListener('paste', this.onPaste.bind(this))
   },

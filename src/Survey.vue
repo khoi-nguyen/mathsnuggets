@@ -2,7 +2,7 @@
   .container
     div
       slot
-      span(v-if="config.feedback")
+      span
         span &nbsp;
         b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
         b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
@@ -16,12 +16,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import api from './ajax'
 import _ from 'lodash'
 
 export default {
   props: {
-    config: Object,
     name: String,
     showStats: Boolean,
     correct: Boolean,
@@ -53,7 +53,8 @@ export default {
         return 'is-danger'
       }
       return 'is-primary'
-    }
+    },
+    ...mapState(['config'])
   },
   sockets: {
     voteReceived (data) {

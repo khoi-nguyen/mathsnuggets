@@ -16,12 +16,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ConfigOption from './ConfigOption'
 import FormField from './FormField'
 import WidgetSettings from './WidgetSettings'
 
 export default {
-  props: { config: Object, payload: { type: Object, default: () => {} } },
+  props: { payload: { type: Object, default: () => {} } },
+  computed: mapState(['config']),
   components: {
     ConfigOption,
     FormField,

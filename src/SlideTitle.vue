@@ -1,15 +1,16 @@
 <template lang="pug">
-div(:class="{ form: config.form, slide: !config.form, box: !config.form }")
-  h2.title(:class="{ 'is-1': config.form }")
+.slide.box
+  h2.title
     .columns.is-vcentered
       .column
         form-field(:editable="config.edit" @input="$emit('input', $event)" :value="value" type="Markdown")
-      .column.is-narrow.date(v-if="!config.form")
+      .column.is-narrow.date
         div {{ today }}
         div {{ time }}
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import 'typeface-fira-sans'
 
 import FormField from './FormField'
@@ -18,7 +19,6 @@ var moment = require('moment')
 
 export default {
   props: {
-    config: Object,
     value: String
   },
   data () {
@@ -28,6 +28,7 @@ export default {
       time: moment().format('hh:mm a')
     }
   },
+  computed: mapState(['config']),
   mounted () {
     this.updateTime()
     this.interval = setInterval(this.updateTime, 1000)
@@ -59,10 +60,5 @@ export default {
 }
 .slide.box {
   padding: 0;
-}
-.form h2.title {
-  border-bottom: 1px solid #dddddd;
-  padding: 0.3em 0;
-  margin: 0.5em 0;
 }
 </style>

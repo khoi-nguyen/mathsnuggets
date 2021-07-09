@@ -2,8 +2,8 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="!config.form && config.showWhiteboard && !config.edit && showWhiteboard" v-model="payload.canvas" :read-only="!loggedIn" :active="active")
-    div(:class="{split: payload.split && config.showWhiteboard}")
+    whiteboard.whiteboard(:name="position" v-if="config.whiteboard && showWhiteboard" v-model="payload.canvas" :read-only="!loggedIn" :active="active")
+    div(:class="{split: payload.split && config.whiteboard}")
       slot
 </template>
 
@@ -20,7 +20,6 @@ export default {
     Whiteboard
   },
   props: {
-    config: { type: Object, default: () => {} },
     payload: { type: Object, default: () => {} },
     position: String
   },
@@ -28,7 +27,8 @@ export default {
     active () {
       return this.config.currentSlide === parseInt(this.position.split('.')[1])
     },
-    ...mapState('auth', ['loggedIn'])
+    ...mapState('auth', ['loggedIn']),
+    ...mapState(['config'])
   },
   watch: {
     'config.currentSlide': {

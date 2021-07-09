@@ -1,11 +1,11 @@
 <template lang="pug">
 div
   .tray.buttons.are-medium
-    b-button(@click="config.edit = !config.edit" v-if="loggedIn" type="is-danger" :inverted="!config.edit")
+    b-button(@click="toggleEdit" v-if="loggedIn" type="is-danger" :inverted="!config.edit")
       b-icon(pack="fas" icon="edit")
-    b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split")
+    b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split" v-if="loggedIn")
       b-icon(pack="fas" icon="columns")
-    b-button(@click="config.showWhiteboard = !config.showWhiteboard" type="is-success" :inverted="!config.showWhiteboard")
+    b-button(@click="toggleWhiteboard" type="is-success" :inverted="!config.whiteboard")
       b-icon(pack="fas" icon="chalkboard")
     b-button(@click="$emit('refresh-slideshow')" type="is-warning" :inverted="true")
       b-icon(pack="fas" icon="sync")
@@ -50,7 +50,7 @@ div
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 import Clipboard from './Clipboard'
 import FormField from './FormField'
@@ -60,7 +60,6 @@ import WidgetSelect from './WidgetSelect'
 
 export default {
   props: {
-    config: Object,
     slidePayload: Object
   },
   data () {
@@ -77,7 +76,8 @@ export default {
       const params = this.$route.params
       return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
     },
-    ...mapState('auth', ['loggedIn', 'nickname'])
+    ...mapState('auth', ['loggedIn', 'nickname']),
+    ...mapState(['config'])
   },
   methods: {
     changeWidget (widget) {
@@ -86,7 +86,8 @@ export default {
     },
     updateNickname (nickname) {
       this.$store.dispatch('auth/changeNickname', nickname)
-    }
+    },
+    ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard'])
   },
   components: {
     Clipboard,

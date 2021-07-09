@@ -4,20 +4,19 @@
     section(v-for="(slide, index) in children")
       node(
         component="slide"
-        :config="config"
         v-bind="slide"
         :position="`children.${index}`"
         @insert-slide="insertSlide(index)"
         @delete-slide="deleteSlide(index)"
         @save="save"
       )
-  tool-bar(:config="config" :slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
+  tool-bar(:slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
 </template>
 
 <script>
 import _ from 'lodash'
 import Reveal from 'reveal.js'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 import api from './ajax'
 import Node from './Node'
@@ -32,13 +31,6 @@ export default {
     const emptySlide = { payload: {}, children: [] }
     return {
       children: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
-      config: {
-        currentSlide: 0,
-        edit: false,
-        feedback: !this.form,
-        form: this.form,
-        showWhiteboard: true
-      },
       emptySlide: emptySlide,
       saveStack: []
     }
@@ -51,7 +43,8 @@ export default {
     slidePayload () {
       return this.children[this.config.currentSlide].payload
     },
-    ...mapState('auth', ['loggedIn'])
+    ...mapState('auth', ['loggedIn']),
+    ...mapState(['config'])
   },
   methods: {
     insertSlide (index) {
@@ -84,7 +77,8 @@ export default {
         api(this.apiUrl, 'POST', this.saveStack)
         this.saveStack = []
       }
-    }
+    },
+    ...mapMutations('config', ['changeSlide'])
   },
   async mounted () {
     await this.loadSlideshow()
@@ -101,9 +95,7 @@ export default {
       transition: 'none',
       width: 1920
     })
-    Reveal.on('slidechanged', event => {
-      this.$set(this.config, 'currentSlide', event.indexh)
-    })
+    Reveal.on('slidechanged', this.changeSlide)
   },
   components: {
     Node,
