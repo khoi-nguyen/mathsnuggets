@@ -11,7 +11,7 @@
         b-progress(:value="correctAnswers" :max="totalAnswers" :type="type")
       .column.is-narrow
         span {{ correctAnswers }} / {{ totalAnswers }}
-      .column.is-narrow.buttons
+      .column.is-narrow.buttons(v-if="config.edit")
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
 
