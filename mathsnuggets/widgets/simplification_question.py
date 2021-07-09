@@ -1,14 +1,11 @@
-import uuid
-
 import sympy
 
 from mathsnuggets.core import fields, form
 
 
-class SimplificationQuestion(form.Form):
+class SimplificationQuestion(form.MarkedForm):
     """Simplification Question"""
 
-    name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression")
 
@@ -29,7 +26,3 @@ class SimplificationQuestion(form.Form):
         if not self.answer:
             return False
         return str(self.answer) == str(sympy.simplify(self.expression))
-
-    def validate(self):
-        if not self.name:
-            self.name = str(uuid.uuid1())

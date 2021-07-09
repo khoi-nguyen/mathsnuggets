@@ -1,5 +1,3 @@
-import uuid
-
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -8,10 +6,9 @@ from mathsnuggets.widgets import plot
 test = {"equation": "x^2 - 5x + 6"}
 
 
-class Equation(form.Form):
+class Equation(form.MarkedForm):
     """Equation"""
 
-    name = fields.Field("Survey name")
     answer = fields.ExpressionList("Your answer", nosave=True, editable=True)
     equation = fields.Equation("Equation", required=True)
     x = fields.Expression("Solve for", default="x", required=True)
@@ -77,7 +74,7 @@ class Equation(form.Form):
             if self.show_graph:
                 self.show_graph = False
             if not self.name:
-                self.name = str(uuid.uuid1())
+                super().validate()
 
 
 def test_equation():

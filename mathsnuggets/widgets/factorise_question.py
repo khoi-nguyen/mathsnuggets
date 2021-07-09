@@ -1,5 +1,3 @@
-import uuid
-
 import sympy
 
 from mathsnuggets.core import fields, form
@@ -8,7 +6,6 @@ from mathsnuggets.core import fields, form
 class FactoriseQuestion(form.Form):
     """Factorisation Question"""
 
-    name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression", required=True)
 
@@ -39,5 +36,4 @@ class FactoriseQuestion(form.Form):
 
     def validate(self):
         self.expression = sympy.expand(self.expression)
-        if not self.name:
-            self.name = str(uuid.uuid1())
+        super().validate()

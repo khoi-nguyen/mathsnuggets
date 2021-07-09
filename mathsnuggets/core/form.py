@@ -5,6 +5,8 @@ Form
 """
 import random
 import re
+import uuid
+
 
 from mathsnuggets.core import fields
 
@@ -119,3 +121,11 @@ class Form:
             if callable(callback) and not callback(field):
                 continue
             yield (attr, field)
+
+
+class MarkedForm(Form):
+    name = fields.Field("Form identifier")
+
+    def validate(self):
+        if not self.name:
+            self.name = str(uuid.uuid1())

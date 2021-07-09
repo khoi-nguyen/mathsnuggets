@@ -1,14 +1,11 @@
-import uuid
-
 import sympy
 
 from mathsnuggets.core import fields, form
 
 
-class StandardFormQuestion(form.Form):
+class StandardFormQuestion(form.MarkedForm):
     """Standard form question"""
 
-    name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression")
 
@@ -42,7 +39,3 @@ class StandardFormQuestion(form.Form):
             ):
                 return False
         return sympy.simplify(self.answer - self.expression) == 0
-
-    def validate(self):
-        if not self.name:
-            self.name = str(uuid.uuid1())

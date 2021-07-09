@@ -1,15 +1,13 @@
 import re
-import uuid
 
 import sympy
 
 from mathsnuggets.core import fields, form
 
 
-class Survey(form.Form):
+class Survey(form.MarkedForm):
     """Marked question"""
 
-    name = fields.Field("Survey name")
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     correct_answer = fields.Expression("Correct Answer", required=True)
     max_error = fields.Expression("Maximal error", default=0)
@@ -56,7 +54,3 @@ class Survey(form.Form):
             sympy.Abs(sympy.nsimplify(self.answer - self.correct_answer))
             <= self.max_error
         )
-
-    def validate(self):
-        if not self.name:
-            self.name = str(uuid.uuid1())

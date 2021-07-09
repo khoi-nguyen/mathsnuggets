@@ -1,12 +1,9 @@
-import uuid
-
 from mathsnuggets.core import fields, form
 
 
-class MultipleChoice(form.Form):
+class MultipleChoice(form.MarkedForm):
     """Multiple Choice"""
 
-    name = fields.Field("Survey name")
     answer = fields.Select(
         "Your answer", nosave=True, options=["", "A", "B", "C", "D", "E"]
     )
@@ -68,7 +65,3 @@ class MultipleChoice(form.Form):
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
         return self.answer == self.correct_answer
-
-    def validate(self):
-        if not self.name:
-            self.name = str(uuid.uuid1())
