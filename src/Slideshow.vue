@@ -95,7 +95,7 @@ export default {
       transition: 'none',
       width: 1920
     })
-    Reveal.on('slidechanged', this.changeSlide)
+    Reveal.on('slidechanged', event => this.changeSlide(event.indexh))
   },
   components: {
     Node,
