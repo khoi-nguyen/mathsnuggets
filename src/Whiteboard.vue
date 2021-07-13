@@ -1,29 +1,31 @@
 <template lang="pug">
 div
   canvas(:id="canvasId")
-  .bar.buttons.are-medium(v-if="!readOnly")
-    b-button(@click="toggleDrawingMode" type="is-success is-inverted")
-      b-icon(pack="fas" icon="pen")
-    b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
-      b-icon(pack="fas" icon="eraser")
-    b-button(@click="canvas.clear(); save()" type="is-danger is-inverted")
-      b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="canvas.undo()" type="is-warning is-inverted")
-      b-icon(pack="fas" icon="undo")
-    b-button(@click="canvas.redo()" type="is-link is-inverted")
-      b-icon(pack="fas" icon="redo")
-    b-button(@click="save" type="is-success is-inverted")
-      b-icon(pack="fas" icon="save")
-    b-dropdown(v-model="color" :triggers="['hover']")
-      b-button(slot="trigger" :type="colorButtonType")
-        b-icon(pack="fas" icon="palette")
-      b-dropdown-item(value="darkblue") Blue
-      b-dropdown-item(value="darkred") Red
-      b-dropdown-item(value="darkorange") Orange
-      b-dropdown-item(value="darkgreen") Green
-      b-dropdown-item(value="black") Black
+  .bar.are-medium.buttons
     b-field
-      b-numberinput(icon-pack="fas" :value="config.currentCanvas" type="is-success" @input="changeCanvas")
+      b-numberinput(icon-pack="fas" :min="0" :max="9" :value="config.currentCanvas" type="is-success" @input="changeCanvas")
+    span &nbsp;
+    div(v-if="!readOnly")
+      b-button(@click="toggleDrawingMode" type="is-success is-inverted")
+        b-icon(pack="fas" icon="pen")
+      b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
+        b-icon(pack="fas" icon="eraser")
+      b-button(@click="canvas.clear(); save()" type="is-danger is-inverted")
+        b-icon(pack="fas" icon="chalkboard")
+      b-button(@click="canvas.undo()" type="is-warning is-inverted")
+        b-icon(pack="fas" icon="undo")
+      b-button(@click="canvas.redo()" type="is-link is-inverted")
+        b-icon(pack="fas" icon="redo")
+      b-button(@click="save" type="is-success is-inverted")
+        b-icon(pack="fas" icon="save")
+      b-dropdown(v-model="color" :triggers="['hover']")
+        b-button(slot="trigger" :type="colorButtonType")
+          b-icon(pack="fas" icon="palette")
+        b-dropdown-item(value="darkblue") Blue
+        b-dropdown-item(value="darkred") Red
+        b-dropdown-item(value="darkorange") Orange
+        b-dropdown-item(value="darkgreen") Green
+        b-dropdown-item(value="black") Black
 </template>
 
 <script>
