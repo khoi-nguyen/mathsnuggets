@@ -1,14 +1,10 @@
 import os
-import tempfile
 import traceback
 import uuid
 
 import flask
 import flask_login
 import flask_socketio
-import openpyxl
-import openpyxl.utils
-from openpyxl.formatting import rule
 
 from mathsnuggets import widgets
 from mathsnuggets.core import cache, fields, form, models
