@@ -1,5 +1,5 @@
 <template lang="pug">
-form.avoid-column.widget
+form.widget
   v-runtime-template.is-size-3(:template="widgetData.template")
   div(v-if="generator && hasGenerator")
     v-runtime-template(:template="generatorTemplate")

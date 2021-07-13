@@ -28,7 +28,7 @@ export default {
     form: Boolean
   },
   data () {
-    const emptySlide = { payload: {}, children: [] }
+    const emptySlide = { payload: {}, children: [[]] }
     return {
       children: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
       emptySlide: emptySlide,

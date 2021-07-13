@@ -1,5 +1,5 @@
 <template lang="pug">
-.container.avoid-column
+.container
   widget-settings(v-if="config.edit")
     config-option(name="Icon")
       form-field(:editable="true" v-model="payload.icon" type="Field")
