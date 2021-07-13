@@ -22,9 +22,12 @@ div
       b-dropdown-item(value="darkorange") Orange
       b-dropdown-item(value="darkgreen") Green
       b-dropdown-item(value="black") Black
+    b-field
+      b-numberinput(icon-pack="fas" :value="config.currentCanvas" type="is-success" @input="changeCanvas")
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import { fabric } from 'fabric'
 import 'fabric-history'
 import _ from 'lodash'
@@ -48,7 +51,8 @@ export default {
         black: ''
       }
       return 'is-inverted ' + style[this.color]
-    }
+    },
+    ...mapState(['config'])
   },
   data () {
     return {
@@ -57,6 +61,10 @@ export default {
     }
   },
   methods: {
+    changeCanvas (index) {
+      this.save()
+      this.changeCurrentCanvasIndex(index)
+    },
     deleteObjects () {
       this.canvas.getActiveObjects().forEach((obj) => {
         this.canvas.remove(obj)
@@ -72,11 +80,12 @@ export default {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
       this.canvas.freeDrawingBrush.color = this.color
       this.canvas.freeDrawingBrush.width = 3
-    }
+    },
+    ...mapMutations('config', ['changeCurrentCanvasIndex'])
   },
   watch: {
     active (newValue, oldValue) {
-      if (oldValue && !newValue) {
+      if (!newValue) {
         this.save()
       }
     },
@@ -100,9 +109,6 @@ export default {
     if (!this.readOnly) {
       this.toggleDrawingMode()
     }
-  },
-  beforeDestroy () {
-    this.save()
   }
 }
 </script>

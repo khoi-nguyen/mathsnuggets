@@ -2,7 +2,14 @@
 .slide
   slide-title(v-model="payload.title" :config="config")
   .slide-contents
-    whiteboard.whiteboard(:name="position" v-if="config.whiteboard && showWhiteboard" v-model="payload.canvas" :read-only="!loggedIn" :active="active")
+    whiteboard.whiteboard(
+      :name="position + config.currentCanvas"
+      v-if="config.whiteboard && showWhiteboard"
+      v-model="payload.canvasses[config.currentCanvas]"
+      :read-only="!loggedIn"
+      :active="true"
+      :key="position + config.currentCanvas"
+    )
     div(:class="{split: payload.split && config.whiteboard}")
       slot
 </template>
