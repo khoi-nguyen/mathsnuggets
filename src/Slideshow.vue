@@ -2,12 +2,7 @@
 .reveal
   .slides
     section(v-for="(slide, index) in children")
-      node(
-        component="slide"
-        v-bind="slide"
-        :position="`children.${index}`"
-        @save="save"
-      )
+      node(component="slide" v-bind="slide" :position="`children.${index}`")
 </template>
 
 <script>

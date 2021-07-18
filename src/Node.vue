@@ -1,6 +1,6 @@
 <template lang="pug">
 div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
-  component(:is="component" @save="$emit('save', $event)" v-bind="attrs" :blacklist.sync="blacklist")
+  component(:is="component" v-bind="attrs" :blacklist.sync="blacklist")
     .columns
       .column(v-for="col in columnIndices")
         draggable(:value="col < children.length ? children[col] : []" @input="updateChildren(col, $event)" v-bind="draggableOptions")
@@ -9,7 +9,6 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
               :position="`${position}.children.${col}.${index}`"
               @add-child="insertChildAfter(col, index, $event)"
               @delete="deleteChild(col, index)"
-              @save="$emit('save', $event)"
               v-bind="child"
               v-if="child.component"
             )
@@ -21,7 +20,7 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
 import _ from 'lodash'
 import draggable from 'vuedraggable'
 import { VueContext } from 'vue-context'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 import ContextMenu from './ContextMenu'
 import Environment from './Environment'
@@ -54,7 +53,7 @@ export default {
         while (this.children.length < this.columnCount) {
           this.children.push([])
         }
-        this.$emit('save', { action: 'update', [`${this.position}.payload`]: payload })
+        this.save({ action: 'update', [`${this.position}.payload`]: payload })
       },
       deep: true
     }
@@ -100,7 +99,7 @@ export default {
       }
       const lastColIndex = this.children.length - 1
       const colIndex = this.children[lastColIndex].length
-      this.$emit('save', {
+      this.save({
         action: 'update',
         [`${this.position}.children.${lastColIndex}.${colIndex}`]: child
       })
@@ -112,11 +111,11 @@ export default {
       this.$refs.menu.close()
     },
     insertChildAfter (col, position, child) {
-      this.$emit('save', { action: 'insert', [`${this.position}.children.${col}.${position + 1}`]: child })
+      this.save({ action: 'insert', [`${this.position}.children.${col}.${position + 1}`]: child })
       this.children[col].splice(position + 1, 0, child)
     },
     deleteChild (col, index) {
-      this.$emit('save', { action: 'delete', [`${this.position}.children.${col}.${index}`]: '' })
+      this.save({ action: 'delete', [`${this.position}.children.${col}.${index}`]: '' })
       this.children[col].splice(index, 1)
     },
     openMenu (event) {
@@ -127,7 +126,7 @@ export default {
       }
     },
     updateChildren (col, event) {
-      this.$emit('save', {
+      this.save({
         action: 'update',
         [`${this.position}.children.${col}`]: event
       })
@@ -137,7 +136,8 @@ export default {
       if (this.children[col].length > event.length) {
         this.children[col].splice(event.length, this.children[col].length - event.length)
       }
-    }
+    },
+    ...mapActions('resource', ['save'])
   },
   components: {
     ContextMenu,
