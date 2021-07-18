@@ -65,34 +65,40 @@ export default {
   },
   computed: {
     buttons () {
-      return [{
-        click: this.toggleEdit,
-        icon: 'edit',
-        inverted: !this.config.edit,
-        type: 'is-danger',
-        hide: !this.auth.loggedIn
-      }, {
-        click: () => this.$set(this.payload, 'split', !this.payload.split),
-        icon: 'columns',
-        inverted: !this.payload.split,
-        type: 'is-link'
-      }, {
-        click: this.toggleWhiteboard,
-        icon: 'chalkboard',
-        inverted: !this.config.whiteboard,
-        type: 'is-success'
-      }, {
-        click: this.loadSlideshow,
-        icon: 'sync',
-        inverted: true,
-        type: 'is-warning'
-      }, {
-        click: () => { this.solverModal = true },
-        icon: 'python',
-        inverted: true,
-        pack: 'fab',
-        type: 'is-link'
-      }]
+      return [
+        {
+          click: this.toggleEdit,
+          icon: 'edit',
+          inverted: !this.config.edit,
+          type: 'is-danger',
+          hide: !this.auth.loggedIn
+        },
+        {
+          click: () => this.$set(this.payload, 'split', !this.payload.split),
+          icon: 'columns',
+          inverted: !this.payload.split,
+          type: 'is-link'
+        },
+        {
+          click: this.toggleWhiteboard,
+          icon: 'chalkboard',
+          inverted: !this.config.whiteboard,
+          type: 'is-success'
+        },
+        {
+          click: this.loadSlideshow,
+          icon: 'sync',
+          inverted: true,
+          type: 'is-warning'
+        },
+        {
+          click: () => { this.solverModal = true },
+          icon: 'python',
+          inverted: true,
+          pack: 'fab',
+          type: 'is-link'
+        }
+      ]
     },
     ...mapState(['auth', 'config'])
   },
