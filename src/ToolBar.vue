@@ -7,7 +7,7 @@ div
       b-icon(pack="fas" icon="columns")
     b-button(@click="toggleWhiteboard" type="is-success" :inverted="!config.whiteboard")
       b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="$emit('refresh-slideshow')" type="is-warning" :inverted="true")
+    b-button(@click="loadSlideshow" type="is-warning" :inverted="true")
       b-icon(pack="fas" icon="sync")
     b-button(@click="solverModal = true" type="is-link" :inverted="true")
       b-icon(pack="fab" icon="python")
@@ -50,7 +50,7 @@ div
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 import Clipboard from './Clipboard'
 import FormField from './FormField'
@@ -87,7 +87,8 @@ export default {
     updateNickname (nickname) {
       this.$store.dispatch('auth/changeNickname', nickname)
     },
-    ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard'])
+    ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard']),
+    ...mapActions('resource', ['loadSlideshow'])
   },
   components: {
     Clipboard,

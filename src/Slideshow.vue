@@ -8,10 +8,7 @@
         :position="`children.${index}`"
         @save="save"
       )
-  tool-bar(
-    :slide-payload="children[config.currentSlide].payload"
-    @refresh-slideshow="loadSlideshow"
-  )
+  tool-bar(:slide-payload="children[config.currentSlide].payload")
 </template>
 
 <script>
