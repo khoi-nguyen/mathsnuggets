@@ -1,16 +1,8 @@
 <template lang="pug">
 div
   .tray.buttons.are-medium
-    b-button(@click="toggleEdit" v-if="auth.loggedIn" type="is-danger" :inverted="!config.edit")
-      b-icon(pack="fas" icon="edit")
-    b-button(type="is-link" @click="$set(payload, 'split', !payload.split)" :inverted="!payload.split" v-if="auth.loggedIn")
-      b-icon(pack="fas" icon="columns")
-    b-button(@click="toggleWhiteboard" type="is-success" :inverted="!config.whiteboard")
-      b-icon(pack="fas" icon="chalkboard")
-    b-button(@click="loadSlideshow" type="is-warning" :inverted="true")
-      b-icon(pack="fas" icon="sync")
-    b-button(@click="solverModal = true" type="is-link" :inverted="true")
-      b-icon(pack="fab" icon="python")
+    b-button(v-for="button in buttons" v-bind="button" v-if="!button.hide" @click="button.click")
+      b-icon(:pack="button.pack || 'fas'" :icon="button.icon")
     b-dropdown(position="is-top-right")
       b-button(slot="trigger" :inverted="true" type="is-primary")
         b-icon(pack="fas" icon="tools")
@@ -71,7 +63,39 @@ export default {
       widget: ''
     }
   },
-  computed: mapState(['auth', 'config']),
+  computed: {
+    buttons () {
+      return [{
+        click: this.toggleEdit,
+        icon: 'edit',
+        inverted: !this.config.edit,
+        type: 'is-danger',
+        hide: !this.auth.loggedIn
+      }, {
+        click: () => this.$set(this.payload, 'split', !this.payload.split),
+        icon: 'columns',
+        inverted: !this.payload.split,
+        type: 'is-link'
+      }, {
+        click: this.toggleWhiteboard,
+        icon: 'chalkboard',
+        inverted: !this.config.whiteboard,
+        type: 'is-success'
+      }, {
+        click: this.loadSlideshow,
+        icon: 'sync',
+        inverted: true,
+        type: 'is-warning'
+      }, {
+        click: () => { this.solverModal = true },
+        icon: 'python',
+        inverted: true,
+        pack: 'fab',
+        type: 'is-link'
+      }]
+    },
+    ...mapState(['auth', 'config'])
+  },
   methods: {
     changeWidget (widget) {
       this.widgetPayload = {}
