@@ -10,75 +10,27 @@
         @delete-slide="deleteSlide(index)"
         @save="save"
       )
-  tool-bar(:slide-payload="slidePayload" @refresh-slideshow="loadSlideshow")
+  tool-bar(
+    :slide-payload="children[config.currentSlide].payload"
+    @refresh-slideshow="loadSlideshow"
+  )
 </template>
 
 <script>
-import _ from 'lodash'
 import Reveal from 'reveal.js'
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
-import api from './ajax'
 import Node from './Node'
 import ToolBar from './ToolBar'
 
 export default {
-  title: 'Slideshow builder',
-  props: {
-    form: Boolean
-  },
-  data () {
-    const emptySlide = { payload: { canvasses: [{}, {}] }, children: [[]] }
-    return {
-      children: [_.cloneDeep(emptySlide), _.cloneDeep(emptySlide)],
-      emptySlide: emptySlide,
-      saveStack: []
-    }
-  },
   computed: {
-    apiUrl () {
-      const params = this.$route.params
-      return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
-    },
-    slidePayload () {
-      return this.children[this.config.currentSlide].payload
-    },
-    ...mapState('auth', ['loggedIn']),
-    ...mapState(['config'])
+    ...mapState(['auth', 'config']),
+    ...mapState('resource', ['children'])
   },
   methods: {
-    insertSlide (index) {
-      this.save({ action: 'insert', [`children.${index}`]: _.cloneDeep(this.emptySlide) })
-      this.children.splice(index, 0, _.cloneDeep(this.emptySlide))
-    },
-    deleteSlide (index) {
-      this.save({ action: 'delete', [`children.${index}`]: '' })
-      this.children.splice(index, 1)
-    },
-    async loadSlideshow () {
-      if (this.apiUrl) {
-        const data = await api(this.apiUrl)
-        if (data.length) {
-          this.children = data
-        }
-      }
-    },
-    save (payload) {
-      if (!_.isEqual(this.children[this.children.length - 1], this.emptySlide)) {
-        this.children.push(_.cloneDeep(this.emptySlide))
-      }
-      if (this.apiUrl && this.loggedIn) {
-        this.saveStack.push(payload)
-        setTimeout(this.sendSaveStack, 200)
-      }
-    },
-    sendSaveStack () {
-      if (this.saveStack.length && this.apiUrl && this.loggedIn) {
-        api(this.apiUrl, 'POST', this.saveStack)
-        this.saveStack = []
-      }
-    },
-    ...mapMutations('config', ['changeSlide'])
+    ...mapMutations('config', ['changeSlide']),
+    ...mapActions('resource', ['insertSlide', 'deleteSlide', 'loadSlideshow', 'save'])
   },
   async mounted () {
     await this.loadSlideshow()

@@ -4,11 +4,13 @@ import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 import VueSocketIO from 'vue-socket.io'
 import Vuex from 'vuex'
+import { sync } from 'vuex-router-sync'
 
 import titleMixin from './titleMixin'
 
 import auth from './store/auth'
 import config from './store/config'
+import resource from './store/resource'
 
 const Vue = require('vue/dist/vue.min.js')
 const App = () => import('./App')
@@ -47,8 +49,10 @@ const router = new VueRouter({
 })
 
 const store = new Vuex.Store({
-  modules: { auth, config }
+  modules: { auth, config, resource }
 })
+
+sync(store, router)
 
 new Vue({
   router,
