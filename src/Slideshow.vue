@@ -6,8 +6,6 @@
         component="slide"
         v-bind="slide"
         :position="`children.${index}`"
-        @insert-slide="insertSlide(index)"
-        @delete-slide="deleteSlide(index)"
         @save="save"
       )
   tool-bar(
@@ -30,7 +28,7 @@ export default {
   },
   methods: {
     ...mapMutations('config', ['changeSlide']),
-    ...mapActions('resource', ['insertSlide', 'deleteSlide', 'loadSlideshow', 'save'])
+    ...mapActions('resource', ['loadSlideshow', 'save'])
   },
   async mounted () {
     await this.loadSlideshow()

@@ -35,15 +35,16 @@ div.dropdown-content
     b-icon(pack="fas" icon="trash")
     span Delete
   hr.dropdown-divider
-  li.dropdown-item(@click="$emit('insert-slide')")
+  li.dropdown-item(@click="insertSlide")
     span Insert slide before
-  li.dropdown-item(@click="$emit('delete-slide')")
+  li.dropdown-item(@click="deleteSlide")
     b-icon(pack="fas" icon="trash")
     span Delete slide
 </template>
 
 <script>
 import WidgetSelect from './WidgetSelect'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -57,7 +58,8 @@ export default {
   methods: {
     addChild (component, type = undefined) {
       this.$emit('add-child', { component, type })
-    }
+    },
+    ...mapActions('resource', ['insertSlide', 'deleteSlide'])
   }
 }
 </script>

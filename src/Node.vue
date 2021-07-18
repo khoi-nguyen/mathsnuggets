@@ -9,14 +9,12 @@ div(:class="{ slide: component === 'slide' }" @contextmenu="openMenu")
               :position="`${position}.children.${col}.${index}`"
               @add-child="insertChildAfter(col, index, $event)"
               @delete="deleteChild(col, index)"
-              @insert-slide="$emit('insert-slide')"
-              @delete-slide="$emit('delete-slide')"
               @save="$emit('save', $event)"
               v-bind="child"
               v-if="child.component"
             )
   vue-context(ref="menu" :close-on-click="false")
-    context-menu(@add-child="addChild" @delete="$emit('delete')" @insert-slide="$emit('insert-slide')" @delete-slide="$emit('delete-slide')" v-bind="attrs")
+    context-menu(@add-child="addChild" @delete="$emit('delete')" v-bind="attrs")
 </template>
 
 <script>
