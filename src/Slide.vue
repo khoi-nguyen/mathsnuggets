@@ -12,6 +12,7 @@
     )
     div(:class="{split: payload.split && config.whiteboard}")
       slot
+  tool-bar(:payload="payload")
 </template>
 
 <script>
@@ -19,11 +20,13 @@ import _ from 'lodash'
 import { mapState } from 'vuex'
 
 import SlideTitle from './SlideTitle'
+import ToolBar from './ToolBar'
 import Whiteboard from './Whiteboard'
 
 export default {
   components: {
     SlideTitle,
+    ToolBar,
     Whiteboard
   },
   props: {

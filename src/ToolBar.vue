@@ -1,9 +1,9 @@
 <template lang="pug">
 div
   .tray.buttons.are-medium
-    b-button(@click="toggleEdit" v-if="loggedIn" type="is-danger" :inverted="!config.edit")
+    b-button(@click="toggleEdit" v-if="auth.loggedIn" type="is-danger" :inverted="!config.edit")
       b-icon(pack="fas" icon="edit")
-    b-button(type="is-link" @click="$set(slidePayload, 'split', !slidePayload.split)" :inverted="!slidePayload.split" v-if="loggedIn")
+    b-button(type="is-link" @click="$set(payload, 'split', !payload.split)" :inverted="!payload.split" v-if="auth.loggedIn")
       b-icon(pack="fas" icon="columns")
     b-button(@click="toggleWhiteboard" type="is-success" :inverted="!config.whiteboard")
       b-icon(pack="fas" icon="chalkboard")
@@ -27,7 +27,7 @@ div
         b-icon(pack="fas" icon="calculator")
       iframe(src="https://www.desmos.com/testing/virginia/scientific" width="600" height="600")
     span &nbsp;&nbsp;
-    form-field(:value="this.nickname" type="Field" @input="updateNickname" label="Enter your name here")
+    form-field(:value="auth.nickname" type="Field" @input="changeNickname" label="Enter your name here")
     b-modal(:active.sync="graphing" full-screen has-modal-card :destroy-on-hide="false")
       .modal-card
         header.modal-card-head Graphing calculator
@@ -60,7 +60,7 @@ import WidgetSelect from './WidgetSelect'
 
 export default {
   props: {
-    slidePayload: Object
+    payload: Object
   },
   data () {
     return {
@@ -71,22 +71,13 @@ export default {
       widget: ''
     }
   },
-  computed: {
-    apiUrl () {
-      const params = this.$route.params
-      return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
-    },
-    ...mapState('auth', ['loggedIn', 'nickname']),
-    ...mapState(['config'])
-  },
+  computed: mapState(['auth', 'config']),
   methods: {
     changeWidget (widget) {
       this.widgetPayload = {}
       this.widget = widget
     },
-    updateNickname (nickname) {
-      this.$store.dispatch('auth/changeNickname', nickname)
-    },
+    ...mapActions('auth', ['changeNickname']),
     ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard']),
     ...mapActions('resource', ['loadSlideshow'])
   },

@@ -8,7 +8,6 @@
         :position="`children.${index}`"
         @save="save"
       )
-  tool-bar(:slide-payload="children[config.currentSlide].payload")
 </template>
 
 <script>
@@ -16,7 +15,6 @@ import Reveal from 'reveal.js'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
 import Node from './Node'
-import ToolBar from './ToolBar'
 
 export default {
   computed: {
@@ -45,8 +43,7 @@ export default {
     Reveal.on('slidechanged', event => this.changeSlide(event.indexh))
   },
   components: {
-    Node,
-    ToolBar
+    Node
   }
 }
 </script>
