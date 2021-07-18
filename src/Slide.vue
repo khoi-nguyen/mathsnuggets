@@ -80,6 +80,7 @@ export default {
 .slide-contents button,
 .slide-contents textarea.field,
 .slide-contents select.field,
+.reveal .slide-contents span[nosave="true"] span.field.content .base,
 .reveal .slide-contents iframe,
 .slide-contents h3.message-header,
 .slide-contents .computed-field .base {
