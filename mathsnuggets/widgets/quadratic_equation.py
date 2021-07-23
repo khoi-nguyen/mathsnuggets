@@ -6,7 +6,7 @@ from mathsnuggets.widgets import equation
 test = {"equation": "x^2 - 3x + 2"}
 
 
-class QuadraticEquations(equation.Equation):
+class QuadraticEquation(equation.Equation):
     """Quadratic Equations"""
 
     a = fields.RandomNumber("a", default="-3,3")
