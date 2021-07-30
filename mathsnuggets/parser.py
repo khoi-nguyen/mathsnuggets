@@ -15,6 +15,21 @@ from sympy.parsing.sympy_parser import (
 )
 
 
+def simplify(expr):
+    if expr.func == sympy.Mul:
+        change_sign = False
+        args = list(expr.args)
+        for index, term in enumerate(args):
+            if term.is_number and term.is_negative:
+                args[index] *= -1
+                change_sign = not change_sign
+        return sympy.Mul(-1, sympy.Mul(*args, evaluate=False), evaluate=False) if change_sign else expr
+    elif len(expr.args) > 1:
+        return expr.func(*[simplify(arg) for arg in expr.args], evaluate=False)
+    else:
+        return expr
+
+
 def parse(expr, evaluate=False):
     """SymPy expression parser"""
     if isinstance(expr, sympy.Basic):
@@ -40,7 +55,7 @@ def parse(expr, evaluate=False):
         function_exponentiation,
     )
     try:
-        result = parse_expr(expr, transformations=transformations, evaluate=evaluate)
+        result = simplify(parse_expr(expr, transformations=transformations, evaluate=evaluate))
     except (SyntaxError, TokenError, RecursionError):
         raise ValueError(f"{repr(expr)} is not a valid mathematical expression.")
     return result
