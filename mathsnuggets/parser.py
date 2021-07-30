@@ -55,7 +55,9 @@ def parse(expr, evaluate=False):
         function_exponentiation,
     )
     try:
-        result = simplify(parse_expr(expr, transformations=transformations, evaluate=evaluate))
+        result = simplify(
+            parse_expr(expr, transformations=transformations, evaluate=evaluate)
+        )
     except (SyntaxError, TokenError, RecursionError):
         raise ValueError(f"{repr(expr)} is not a valid mathematical expression.")
     return result

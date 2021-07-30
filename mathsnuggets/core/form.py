@@ -7,7 +7,6 @@ import random
 import re
 import uuid
 
-
 from mathsnuggets.core import fields
 
 
