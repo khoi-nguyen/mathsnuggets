@@ -17,13 +17,13 @@ from sympy.parsing.sympy_parser import (
 
 def simplify(expr):
     if expr.func == sympy.Mul:
-        change_sign = False
+        sign = 1
         args = list(expr.args)
         for index, term in enumerate(args):
             if term.is_number and term.is_negative:
                 args[index] *= -1
-                change_sign = not change_sign
-        return sympy.Mul(-1, sympy.Mul(*args, evaluate=False), evaluate=False) if change_sign else expr
+                sign *= -1
+        return sympy.Mul(sign, sympy.Mul(*args, evaluate=False), evaluate=False)
     elif len(expr.args) > 1:
         return expr.func(*[simplify(arg) for arg in expr.args], evaluate=False)
     else:
