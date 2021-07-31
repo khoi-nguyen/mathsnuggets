@@ -3,7 +3,7 @@ import sympy
 from mathsnuggets.core import fields, form
 
 
-class StandardFormQuestion(form.MarkedForm):
+class StandardForm(form.MarkedForm):
     """Standard form question"""
 
     answer = fields.Expression("Your answer", nosave=True, editable=True)
