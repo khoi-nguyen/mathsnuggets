@@ -44,7 +44,7 @@ hooks:
 	@echo "make precommit" > .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-python_lint: env node_modules
+python_lint: env
 	@$(ENV) isort . --skip env
 	@$(PYTHON) -m black .
 	@$(PYTHON) -m flake8
@@ -58,6 +58,6 @@ precommit:
 	@$(PYTHON) -m flake8
 	@npx eslint --ignore-path .gitignore src/*
 
-python_tests: env node_modules
+python_tests: env
 	@$(PYTHON) -m pytest -v --cov=. --cov-report=xml -n 4
 	@$(PYTHON) -m coverage html
