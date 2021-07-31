@@ -37,3 +37,10 @@ class StandardForm(form.MarkedForm):
             ):
                 return False
         return sympy.simplify(self.answer - self.expression) == 0
+
+
+def test_standard_form():
+    assert StandardForm(expression="0.3", answer="3*10^-1")
+    assert StandardForm(expression="0.3", answer="3E-1")
+    assert StandardForm(expression="300", answer="3*10^2")
+    assert StandardForm(expression="635", answer="6.35*10**2")
