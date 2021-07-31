@@ -26,7 +26,7 @@ class StandardFormQuestion(form.MarkedForm):
         if not self.answer:
             return False
         if self.answer.func == sympy.Pow:
-            if self.answer.args[0] != 10:
+            if self.answer.args[0] != sympy.UnevaluatedExpr(10):
                 return False
         else:
             if self.answer.func != sympy.Mul or len(self.answer.args) != 2:
