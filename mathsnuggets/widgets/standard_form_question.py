@@ -35,7 +35,7 @@ class StandardFormQuestion(form.MarkedForm):
             if (
                 x not in sympy.Interval.Ropen(1, 10)
                 or power.func != sympy.Pow
-                or power.args[0] != 10
+                or power.args[0] != sympy.UnevaluatedExpr(10)
             ):
                 return False
         return sympy.simplify(self.answer - self.expression) == 0
