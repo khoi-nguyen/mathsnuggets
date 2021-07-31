@@ -19,7 +19,7 @@ from sympy.parsing.sympy_parser import (
 
 
 def simplify(expr):
-    if expr.func == sympy.Mul:
+    if hasattr(expr, "func") and expr.func == sympy.Mul:
         sign = 1
         args = list(expr.args)
         for index, term in enumerate(args):
@@ -27,7 +27,7 @@ def simplify(expr):
                 args[index] *= -1
                 sign *= -1
         return sympy.Mul(sign, sympy.Mul(*args, evaluate=False), evaluate=False)
-    elif len(expr.args) > 1:
+    elif hasattr(expr, "args") and len(expr.args) > 1:
         return expr.func(*[simplify(arg) for arg in expr.args], evaluate=False)
     else:
         return expr
@@ -35,7 +35,7 @@ def simplify(expr):
 
 def auto_number(tokens, local_dict, global_dict):
     result = []
-    for toknum, tokval in tokens:
+    for (toknum, tokval), next_tok in zip(tokens, tokens[1:]):
         if toknum == tokenize.NUMBER:
             number = tokval
             postfix = []
@@ -46,28 +46,33 @@ def auto_number(tokens, local_dict, global_dict):
 
             if "e" in number or "E" in number:
                 index = max(number.find("E"), number.find("e"))
-                mantissa, power = number[0:index], number[index + 1:]
+                mantissa, power = number[0:index], number[index + 1 :]
                 seq = [
                     (tokenize.NAME, "Float"),
                     (tokenize.OP, "("),
                     (tokenize.NUMBER, repr(mantissa)),
                     (tokenize.OP, ")"),
-                    (tokenize.OP, '*'),
+                    (tokenize.OP, "*"),
                     (tokenize.NAME, "UnevaluatedExpr"),
                     (tokenize.OP, "("),
                     (tokenize.NUMBER, "10"),
                     (tokenize.OP, ")"),
-                    (tokenize.OP, '**'),
+                    (tokenize.OP, "**"),
                     (tokenize.NUMBER, power),
                 ]
-            elif "." in number and not (number.startswith("0x") or number.startswith("0X")):
+            elif "." in number and not (
+                number.startswith("0x") or number.startswith("0X")
+            ):
                 seq = [
                     (tokenize.NAME, "Float"),
                     (tokenize.OP, "("),
                     (tokenize.NUMBER, repr(str(number))),
                     (tokenize.OP, ")"),
                 ]
-            elif str(tokval) == "10":
+            elif str(tokval) == "10" and next_tok in [
+                (tokenize.OP, "^"),
+                (tokenize.OP, "**"),
+            ]:
                 seq = [
                     (tokenize.NAME, "UnevaluatedExpr"),
                     (tokenize.OP, "("),
