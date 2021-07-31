@@ -3,15 +3,18 @@
 Parser
 ======
 """
-from tokenize import TokenError
+import tokenize
 
 import sympy
 from sympy.parsing.sympy_parser import (
+    auto_symbol,
     convert_xor,
+    factorial_notation,
     function_exponentiation,
     implicit_multiplication_application,
+    lambda_notation,
     parse_expr,
-    standard_transformations,
+    repeated_decimals,
 )
 
 
@@ -28,6 +31,62 @@ def simplify(expr):
         return expr.func(*[simplify(arg) for arg in expr.args], evaluate=False)
     else:
         return expr
+
+
+def auto_number(tokens, local_dict, global_dict):
+    result = []
+    for toknum, tokval in tokens:
+        if toknum == tokenize.NUMBER:
+            number = tokval
+            postfix = []
+
+            if number.endswith("j") or number.endswith("J"):
+                number = number[:-1]
+                postfix = [(tokenize.OP, "*"), (tokenize.NAME, "I")]
+
+            if "e" in number or "E" in number:
+                index = max(number.find("E"), number.find("e"))
+                mantissa, power = number[0:index], number[index + 1:]
+                seq = [
+                    (tokenize.NAME, "Float"),
+                    (tokenize.OP, "("),
+                    (tokenize.NUMBER, repr(mantissa)),
+                    (tokenize.OP, ")"),
+                    (tokenize.OP, '*'),
+                    (tokenize.NAME, "UnevaluatedExpr"),
+                    (tokenize.OP, "("),
+                    (tokenize.NUMBER, "10"),
+                    (tokenize.OP, ")"),
+                    (tokenize.OP, '**'),
+                    (tokenize.NUMBER, power),
+                ]
+            elif "." in number and not (number.startswith("0x") or number.startswith("0X")):
+                seq = [
+                    (tokenize.NAME, "Float"),
+                    (tokenize.OP, "("),
+                    (tokenize.NUMBER, repr(str(number))),
+                    (tokenize.OP, ")"),
+                ]
+            elif str(tokval) == "10":
+                seq = [
+                    (tokenize.NAME, "UnevaluatedExpr"),
+                    (tokenize.OP, "("),
+                    (tokenize.NUMBER, "10"),
+                    (tokenize.OP, ")"),
+                ]
+            else:
+                seq = [
+                    (tokenize.NAME, "Integer"),
+                    (tokenize.OP, "("),
+                    (tokenize.NUMBER, number),
+                    (tokenize.OP, ")"),
+                ]
+
+            result.extend(seq + postfix)
+        else:
+            result.append((toknum, tokval))
+
+    return result
 
 
 def parse(expr, evaluate=False):
@@ -49,7 +108,12 @@ def parse(expr, evaluate=False):
             ]
         )
         return system[0] if len(system) == 1 else system
-    transformations = standard_transformations + (
+    transformations = (
+        lambda_notation,
+        auto_symbol,
+        repeated_decimals,
+        auto_number,
+        factorial_notation,
         convert_xor,
         implicit_multiplication_application,
         function_exponentiation,
@@ -58,6 +122,6 @@ def parse(expr, evaluate=False):
         result = simplify(
             parse_expr(expr, transformations=transformations, evaluate=evaluate)
         )
-    except (SyntaxError, TokenError, RecursionError):
+    except (SyntaxError, tokenize.TokenError, RecursionError):
         raise ValueError(f"{repr(expr)} is not a valid mathematical expression.")
     return result
