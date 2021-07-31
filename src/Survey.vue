@@ -6,7 +6,7 @@
         span &nbsp;
         b-icon.has-text-success(pack="fas" icon="check" v-if="correct")
         b-icon.has-text-danger(pack="fas" icon="times" v-if="value && !correct")
-    .survey.columns(v-if="showStats")
+    .survey.columns(v-if="auth.loggedIn")
       .column
         b-progress(:value="correctAnswers" :max="totalAnswers" :type="type")
       .column.is-narrow
@@ -23,7 +23,6 @@ import _ from 'lodash'
 export default {
   props: {
     name: String,
-    showStats: Boolean,
     correct: Boolean,
     maxAttempts: { type: Number, default: 3 },
     value: String
@@ -54,7 +53,7 @@ export default {
       }
       return 'is-primary'
     },
-    ...mapState(['config'])
+    ...mapState(['auth', 'config'])
   },
   sockets: {
     voteReceived (data) {
@@ -79,7 +78,7 @@ export default {
     }
   },
   async mounted () {
-    if (this.name && this.showStats) {
+    if (this.name && this.auth.loggedIn) {
       await this.getVoteData()
       this.$socket.emit('join', this.name)
     }

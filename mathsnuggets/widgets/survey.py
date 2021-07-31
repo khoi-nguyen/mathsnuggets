@@ -28,9 +28,7 @@ class Survey(form.MarkedForm):
             <config-option name="Marking type">`marking_type`</config-option>
         </widget-settings>
         <survey
-            :config="config"
             :name="payload.name"
-            :showStats="loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
             <span v-if="config.edit || payload.before">`before`</span>

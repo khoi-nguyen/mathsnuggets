@@ -12,9 +12,7 @@ class FactoriseQuestion(form.Form):
     template = """
         <div>Factorise `expression`</div>
         <survey
-            :config="config"
             :name="payload.name"
-            :showStats="loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
             Your answer: `answer`

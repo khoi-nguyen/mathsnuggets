@@ -12,9 +12,7 @@ class SimplificationQuestion(form.MarkedForm):
     template = """
         <div>Simplify `expression`</div>
         <survey
-            :config="config"
             :name="payload.name"
-            :showStats="loggedIn"
             :correct="computed.correct"
             :value="payload.answer">
             Your answer: `answer`
