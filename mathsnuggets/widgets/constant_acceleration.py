@@ -1,7 +1,6 @@
 import sympy
 
 from mathsnuggets.core import fields, form
-from mathsnuggets.parser import parse
 
 
 class ConstantAcceleration(form.Form):
