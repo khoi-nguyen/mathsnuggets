@@ -1,6 +1,7 @@
 import sympy
 
 from mathsnuggets.core import fields, form
+from mathsnuggets.parser import parse
 
 
 class ConstantAcceleration(form.Form):
@@ -44,3 +45,20 @@ class ConstantAcceleration(form.Form):
         if self.missing.issubset({"t"}):
             equations.append(self.u ** 2 + 2 * self.a * self.s - self.v ** 2)
         return sympy.solve(equations)
+
+
+def test_constant_acceleration():
+    exercise = ConstantAcceleration(s="s", u=15, v=25, a="a", t=12)
+    assert len(exercise.answer) == 1
+    assert exercise.answer[0][exercise.a] == 10 / 12
+    assert exercise.answer[0][exercise.s] == 240
+
+    exercise = ConstantAcceleration(s=240, u="u", v=34, a="a", t=10)
+    assert len(exercise.answer) == 1
+    assert exercise.answer[0][exercise.u] == 14
+    assert exercise.answer[0][exercise.a] == 2
+
+    exercise = ConstantAcceleration(s=120, u=14, a=2, t="t")
+    assert len(exercise.answer) == 2
+    assert exercise.answer[0][exercise.t] == -20
+    assert exercise.answer[1][exercise.t] == 6
