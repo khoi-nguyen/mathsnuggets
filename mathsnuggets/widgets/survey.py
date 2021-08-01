@@ -22,7 +22,7 @@ class Survey(form.MarkedForm):
 
     template = """
         <p v-if="config.edit || payload.question">`question`</p>
-        <widget-settings v-if="config.edit">
+        <widget-settings>
             <config-option name="Correct Answer">`correct_answer`</config-option>
             <config-option name="Tolerated error">`max_error`</config-option>
             <config-option name="Marking type">`marking_type`</config-option>

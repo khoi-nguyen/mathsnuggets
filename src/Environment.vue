@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  widget-settings(v-if="config.edit")
+  widget-settings
     config-option(name="Icon")
       form-field(:editable="true" v-model="payload.icon" type="Field")
   b-collapse.message.is-medium(:class="`is-${payload.style || 'primary'}`" :open="!payload.collapsed")

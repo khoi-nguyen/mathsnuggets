@@ -1,10 +1,13 @@
 <template lang="pug">
-.field.is-grouped.is-grouped-right.is-grouped-multiline.widget-settings
+.field.is-grouped.is-grouped-right.is-grouped-multiline.widget-settings(v-if="config.edit")
   slot
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  computed: mapState(['config'])
 }
 </script>
 

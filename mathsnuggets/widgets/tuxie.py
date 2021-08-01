@@ -14,7 +14,7 @@ class Tuxie(form.Form):
     )
 
     template = """
-        <widget-settings v-if="config.edit">
+        <widget-settings>
             <config-option name="Image">`image`</config-option>
             <config-option name="Width">`width`</config-option>
             <config-option name="Bubble position">`position`</config-option>
