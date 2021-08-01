@@ -45,6 +45,45 @@ class CircleEquation(form.Form):
     def radius(self):
         return self.solution["radius"]
 
+    r = fields.RandomNumber("r")
+    a = fields.RandomNumber("a")
+    b = fields.RandomNumber("b")
+    c = fields.RandomNumber("c")
+    d = fields.RandomNumber("d")
+    e = fields.RandomNumber("e")
+    f = fields.RandomNumber("f")
+    g = fields.RandomNumber("g")
+
+    generator_template = """
+        The generator expands the left-hand side of:
+        <span class="math">
+            (x - a)^2 + (y - b)^2 + cx^2 + dy^2 + ex + fy + g
+            = r^2 + cx^2 + dy^2 + ex + fy + g
+        </span>
+    """
+
+    def generator(self):
+        x, y = sympy.symbols("x y")
+        self.info = "centre"
+        self.equation = sympy.Eq(
+            sympy.expand(
+                (x - self.a) ** 2 + (y - self.b) ** 2
+                + self.c * x ** 2 + self.d * y ** 2
+                + self.e * x + self.f * y
+                + self.g
+            ),
+            self.c * x ** 2 + self.d * y ** 2
+            + self.e * x + self.f * y
+            + self.g + self.r ** 2
+        )
+
+    @fields.range_constraint("Only constant terms on RHS")
+    def constant_rhs(self):
+        self.c = 0
+        self.d = 0
+        self.e = 0
+        self.f = 0
+
 
 def test_circle_equation():
     with pytest.raises(ValueError):
