@@ -1,24 +1,39 @@
 <template lang="pug">
 .container
+  widget-settings
+    config-option(name="Image")
+      form-field(v-model="payload.image" :options="images" type="Select")
+    config-option(name="Width")
+      form-field(v-model="payload.width" type="Expression")
+    config-option(name="Bubble position")
+      form-field(v-model="payload.position" :options="['left', 'right']" type="Select")
   .columns
-    .column(v-if="position === 'left'")
+    .column(v-if="payload.position === 'left'")
       .speech-bubble-left
         slot
     .column.is-narrow
-      img(src="assets/tuxie.svg" :width="width" v-if="image === 'tuxie'")
-      img(src="assets/jigglypuff.svg" :width="width" v-if="image === 'jigglypuff'")
-      img(src="assets/pikachu.svg" :width="width" v-if="image === 'pikachu'")
-    .column(v-if="position === 'right'")
+      img(:src="`/static/${payload.image}.svg`" :width="payload.width" v-if="payload.image")
+    .column(v-if="payload.position === 'right'")
       .speech-bubble-right
         slot
 </template>
 
 <script>
+import ConfigOption from './ConfigOption'
+import FormField from './FormField'
+import WidgetSettings from './WidgetSettings'
+
 export default {
-  props: {
-    image: { type: String, default: 'tuxie' },
-    position: { type: String, default: 'right' },
-    width: { type: Number, default: 400 }
+  props: { payload: { type: Object, default: () => {} } },
+  data () {
+    return {
+      images: ['tuxie', 'jigglypuff', 'pikachu']
+    }
+  },
+  components: {
+    ConfigOption,
+    FormField,
+    WidgetSettings
   }
 }
 </script>

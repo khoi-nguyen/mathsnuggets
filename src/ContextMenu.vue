@@ -30,6 +30,9 @@ div.dropdown-content
   li.dropdown-item(@click="addChild('environment')")
     b-icon(pack="fas" icon="cube")
     span Add a block
+  li.dropdown-item(@click="addChild('tuxie', undefined, {width: 400, image: 'tuxie', position: 'right'})")
+    b-icon(pack="fas" icon="comment")
+    span Add a speech bubble
   hr.dropdown-divider
   li.dropdown-item(@click="$emit('delete')" v-if="component !== 'slide'")
     b-icon(pack="fas" icon="trash")
@@ -56,8 +59,8 @@ export default {
     WidgetSelect
   },
   methods: {
-    addChild (component, type = undefined) {
-      this.$emit('add-child', { component, type })
+    addChild (component, type = undefined, payload = undefined) {
+      this.$emit('add-child', { component, type, payload })
     },
     ...mapActions('resource', ['insertSlide', 'deleteSlide'])
   }

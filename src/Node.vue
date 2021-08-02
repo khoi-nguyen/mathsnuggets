@@ -26,6 +26,7 @@ import ContextMenu from './ContextMenu'
 import Environment from './Environment'
 import List from './List'
 import Slide from './Slide'
+import Tuxie from './Tuxie'
 import Widget from './Widget'
 
 export default {
@@ -94,7 +95,7 @@ export default {
       const child = {
         children: event.component !== 'widget' ? [[]] : undefined,
         component: event.component,
-        payload: {},
+        payload: event.payload || {},
         type: event.component === 'widget' ? event.type : undefined
       }
       const lastColIndex = this.children.length - 1
@@ -144,6 +145,7 @@ export default {
     Environment,
     List,
     Slide,
+    Tuxie,
     VueContext,
     Widget,
     draggable
