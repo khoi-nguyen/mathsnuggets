@@ -3,7 +3,7 @@ div
   canvas(:id="canvasId")
   .bar.are-medium.buttons
     b-field
-      b-numberinput(icon-pack="fas" :min="0" :max="9" :value="config.currentCanvas" type="is-success" @input="changeCanvas")
+      b-numberinput(icon-pack="fas" :min="0" :max="9" :value="index" type="is-success" @input="changeCanvas")
     span &nbsp;
     div(v-if="!readOnly")
       b-button(@click="toggleDrawingMode" type="is-success is-inverted")
@@ -29,17 +29,14 @@ div
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { fabric } from 'fabric'
 import 'fabric-history'
-import _ from 'lodash'
 
 export default {
   props: {
-    active: Boolean,
-    name: String,
-    readOnly: Boolean,
-    value: Object
+    boards: Array,
+    name: String
   },
   computed: {
     canvasId () {
@@ -54,18 +51,29 @@ export default {
       }
       return 'is-inverted ' + style[this.color]
     },
-    ...mapState(['config'])
+    readOnly () {
+      return !this.auth.loggedIn
+    },
+    ...mapState(['auth', 'config'])
   },
   data () {
     return {
       color: 'darkblue',
-      canvas: false
+      canvas: false,
+      index: 0
     }
   },
   methods: {
-    changeCanvas (index) {
-      this.save()
-      this.changeCurrentCanvasIndex(index)
+    changeCanvas (index, save = true) {
+      if (save) {
+        this.save()
+      }
+      this.index = index
+      if (this.index < this.boards.length) {
+        this.canvas.loadFromJSON(this.boards[this.index])
+      } else {
+        this.canvas.clear()
+      }
     },
     deleteObjects () {
       this.canvas.getActiveObjects().forEach((obj) => {
@@ -74,34 +82,21 @@ export default {
       this.canvas.discardActiveObject().renderAll()
     },
     save () {
-      if (!_.isEqual(this.value, this.canvas.toJSON())) {
-        this.$emit('input', this.canvas.toJSON())
-      }
+      this.$set(this.boards, this.index, this.canvas.toJSON())
     },
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
       this.canvas.freeDrawingBrush.color = this.color
       this.canvas.freeDrawingBrush.width = 3
-    },
-    ...mapMutations('config', ['changeCurrentCanvasIndex'])
+    }
   },
   watch: {
-    active (newValue, oldValue) {
-      if (!newValue) {
-        this.save()
-      }
-    },
     color (newColor) {
       this.canvas.freeDrawingBrush.color = newColor
     },
-    value: {
-      immediate: true,
-      handler (json, oldValue) {
-        if (json && (this.readOnly || !oldValue)) {
-          this.$nextTick(() => {
-            this.canvas.loadFromJSON(json)
-          })
-        }
+    'config.currentSlide' (newValue, oldValue) {
+      if (oldValue === parseInt(this.name.split('.')[1])) {
+        this.save()
       }
     }
   },
@@ -111,6 +106,7 @@ export default {
     if (!this.readOnly) {
       this.toggleDrawingMode()
     }
+    this.changeCanvas(0, false)
   }
 }
 </script>

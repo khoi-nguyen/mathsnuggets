@@ -1,14 +1,11 @@
 <template lang="pug">
 .slide
-  slide-title(v-model="payload.title" :config="config")
+  slide-title(v-model="payload.title")
   .slide-contents
     whiteboard.whiteboard(
-      :name="position + config.currentCanvas"
+      :name="position"
       v-if="config.whiteboard && showWhiteboard"
-      v-model="payload.canvasses[config.currentCanvas]"
-      :read-only="!loggedIn"
-      :active="true"
-      :key="position + config.currentCanvas"
+      :boards="payload.canvasses"
     )
     div(:class="{split: payload.split && config.whiteboard}")
       slot
@@ -33,13 +30,7 @@ export default {
     payload: { type: Object, default: () => {} },
     position: String
   },
-  computed: {
-    active () {
-      return this.config.currentSlide === parseInt(this.position.split('.')[1])
-    },
-    ...mapState('auth', ['loggedIn']),
-    ...mapState(['config'])
-  },
+  computed: mapState(['auth', 'config']),
   watch: {
     'config.currentSlide': {
       immediate: true,
