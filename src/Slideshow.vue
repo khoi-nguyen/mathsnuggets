@@ -30,7 +30,7 @@ export default {
       margin: 0,
       navigationMode: 'grid',
       pause: false,
-      slideNumber: 'h.v',
+      slideNumber: 'c/t',
       touch: false,
       transition: 'none',
       width: 1920
