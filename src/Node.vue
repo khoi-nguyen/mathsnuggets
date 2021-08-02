@@ -26,7 +26,7 @@ import ContextMenu from './ContextMenu'
 import Environment from './Environment'
 import List from './List'
 import Slide from './Slide'
-import Tuxie from './Tuxie'
+import SpeechBubble from './SpeechBubble'
 import Widget from './Widget'
 
 export default {
@@ -145,7 +145,7 @@ export default {
     Environment,
     List,
     Slide,
-    Tuxie,
+    SpeechBubble,
     VueContext,
     Widget,
     draggable
