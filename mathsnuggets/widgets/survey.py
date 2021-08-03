@@ -2,7 +2,7 @@ import re
 
 import sympy
 
-from mathsnuggets.core import fields, form
+from mathsnuggets.core import fields, form, tools
 
 
 class Survey(form.MarkedForm):
@@ -48,7 +48,4 @@ class Survey(form.MarkedForm):
         elif self.marking_type == "Fraction":
             if not re.search(r"^[0-9\s/]*$", self._answer):
                 return False
-        return (
-            sympy.Abs(sympy.nsimplify(self.answer - self.correct_answer))
-            <= self.max_error
-        )
+        return tools.isequal(self.answer, self.correct_answer, self.max_error)

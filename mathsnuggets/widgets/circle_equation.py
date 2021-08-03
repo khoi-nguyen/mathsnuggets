@@ -67,14 +67,20 @@ class CircleEquation(form.Form):
         self.info = "centre"
         self.equation = sympy.Eq(
             sympy.expand(
-                (x - self.a) ** 2 + (y - self.b) ** 2
-                + self.c * x ** 2 + self.d * y ** 2
-                + self.e * x + self.f * y
+                (x - self.a) ** 2
+                + (y - self.b) ** 2
+                + self.c * x ** 2
+                + self.d * y ** 2
+                + self.e * x
+                + self.f * y
                 + self.g
             ),
-            self.c * x ** 2 + self.d * y ** 2
-            + self.e * x + self.f * y
-            + self.g + self.r ** 2
+            self.c * x ** 2
+            + self.d * y ** 2
+            + self.e * x
+            + self.f * y
+            + self.g
+            + self.r ** 2,
         )
 
     @fields.range_constraint("Only constant terms on RHS")

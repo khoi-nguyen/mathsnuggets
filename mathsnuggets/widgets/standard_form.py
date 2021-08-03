@@ -1,6 +1,6 @@
 import sympy
 
-from mathsnuggets.core import fields, form
+from mathsnuggets.core import fields, form, tools
 
 
 class StandardForm(form.MarkedForm):
@@ -36,11 +36,12 @@ class StandardForm(form.MarkedForm):
                 or power.args[0] != sympy.UnevaluatedExpr(10)
             ):
                 return False
-        return sympy.simplify(self.answer - self.expression) == 0
+        return tools.isequal(self.answer, self.expression)
 
 
 def test_standard_form():
-    assert StandardForm(expression="0.3", answer="3*10^-1")
-    assert StandardForm(expression="0.3", answer="3E-1")
-    assert StandardForm(expression="300", answer="3*10^2")
-    assert StandardForm(expression="635", answer="6.35*10**2")
+    assert StandardForm(expression="0.3", answer="3*10^-1").correct
+    assert StandardForm(expression="0.3", answer="3E-1").correct
+    assert StandardForm(expression="300", answer="3*10^2").correct
+    assert StandardForm(expression="635", answer="6.35*10**2").correct
+    assert StandardForm(expression="3401", answer="3.401*10^3").correct
