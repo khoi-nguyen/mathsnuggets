@@ -32,6 +32,7 @@ div
 import { mapState } from 'vuex'
 import { fabric } from 'fabric'
 import 'fabric-history'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -50,6 +51,9 @@ export default {
         black: ''
       }
       return 'is-inverted ' + style[this.color]
+    },
+    currentBoard () {
+      return this.boards[this.index]
     },
     readOnly () {
       return !this.auth.loggedIn
@@ -98,6 +102,14 @@ export default {
       if (oldValue === parseInt(this.name.split('.')[1])) {
         this.save()
       }
+    },
+    currentBoard: {
+      handler (newValue) {
+        if (!_.isEqual(newValue[this.index], this.canvas.toJSON())) {
+          this.changeCanvas(this.index, false)
+        }
+      },
+      deep: true
     }
   },
   mounted () {
