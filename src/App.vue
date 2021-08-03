@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     slides () {
-      return /^\/((resources|forms)\/.*\/.*\/.|slideshow)/.test(this.$route.path)
+      return /^\/resources\/.+/.test(this.$route.path)
     }
   },
   mounted () {

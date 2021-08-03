@@ -208,24 +208,15 @@ class Slideshow(Model):
 
     Attributes
     ----------
-    title : str
-        Title of the whole slideshow
-    authors :
-        Authors (format to be determined)
-    children : list
-        Slides exactly as they are stored in the database
-        (i.e. without the solutions or the fields' data).
+    url : str
+        URL of the presentation
     """
 
     _collection = "slideshows"
 
-    title = fields.Field("Title")
-    authors = fields.Field("Authors")
+    url = fields.Field("URL")
+    private = fields.Boolean("Show only to admins")
     children = []
-
-    @fields.computed("Slug", field=fields.Field)
-    def slug(self):
-        return slugify.slugify(self.title) if self.title else None
 
 
 class Form(Model):

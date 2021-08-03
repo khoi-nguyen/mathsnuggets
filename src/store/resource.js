@@ -13,7 +13,7 @@ const resource = {
   getters: {
     url (state, getters, rootState) {
       const params = rootState.route.params
-      return params.slug ? `slideshows/${params.teacher}/${params.year}/${params.slug}` : false
+      return params.url ? `slideshows/${params.url}` : false
     }
   },
   mutations: {
