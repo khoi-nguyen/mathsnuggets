@@ -1,7 +1,4 @@
-- authors:
-    - Khoi Nguyen
-  title: Title
-  slug: slug
+- url: tuxie/Y9/slug
   children:
     - title: First slide
       children:
@@ -10,17 +7,10 @@
           payload:
             equation: x^2
     - title: Second slide
-  teacher: tuxie
-  year: Y9
-- authors:
-    - Khoi Nguyen
-  title: Title test
-  slug: delete
+- url: tuxie/Y9/delete
   children:
     - title: First slide
       children:
         - type: Equation
           component: widget
     - title: Second slide
-  teacher: tuxie
-  year: Y9

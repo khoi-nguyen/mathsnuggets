@@ -34,8 +34,7 @@ def test_user(mock_mongo):
 
 
 def test_slideshow(mock_mongo):
-    slideshow = models.Slideshow(slug="slug")
-    assert slideshow.title == "Title"
+    slideshow = models.Slideshow(url="tuxie/Y9/slug")
     assert len(slideshow.children) == 2
 
     slideshow.update({"children.2.title": "New slide"})

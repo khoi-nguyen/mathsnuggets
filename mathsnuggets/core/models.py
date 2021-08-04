@@ -1,7 +1,5 @@
 import datetime
 
-import slugify
-
 from mathsnuggets.core import db, fields
 
 
