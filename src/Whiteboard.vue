@@ -10,8 +10,10 @@ div
         b-icon(pack="fas" icon="pen")
       b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
         b-icon(pack="fas" icon="eraser")
-      b-button(@click="canvas.clear(); save()" type="is-danger is-inverted")
-        b-icon(pack="fas" icon="chalkboard")
+      b-button(@click="insertEmptyBoard" type="is-inverted")
+        b-icon(pack="fas" icon="plus")
+      b-button(@click="clearCanvas" type="is-danger is-inverted")
+        b-icon(pack="fas" icon="trash")
       b-button(@click="canvas.undo()" type="is-warning is-inverted")
         b-icon(pack="fas" icon="undo")
       b-button(@click="canvas.redo()" type="is-link is-inverted")
@@ -79,11 +81,23 @@ export default {
         this.canvas.clear()
       }
     },
+    clearCanvas () {
+      this.boards.splice(this.index, 1)
+      if (this.index) {
+        this.changeCanvas(this.index - 1, false)
+      } else {
+        this.changeCanvas(0, false)
+      }
+    },
     deleteObjects () {
       this.canvas.getActiveObjects().forEach((obj) => {
         this.canvas.remove(obj)
       })
       this.canvas.discardActiveObject().renderAll()
+    },
+    insertEmptyBoard () {
+      this.boards.splice(this.index, 0, {})
+      this.canvas.clear()
     },
     save () {
       this.$set(this.boards, this.index, this.canvas.toJSON())
