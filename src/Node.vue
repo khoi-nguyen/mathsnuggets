@@ -63,10 +63,9 @@ export default {
     draggableOptions () {
       return {
         delay: 200,
-        fallBackOnBody: true,
+        emptyInsertThreshold: 50,
         ghostClass: 'has-background-white-ter',
-        group: 'widgets',
-        invertSwap: true
+        group: 'widgets'
       }
     },
     attrs () {
