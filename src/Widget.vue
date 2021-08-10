@@ -140,7 +140,7 @@ export default {
   asyncComputed: {
     widgetData: {
       async get () {
-        return await api(`widgets/${this.type}`)
+        return await api(`widgets/${this.type}`, 'GET', false, true)
       },
       default: {
         template: '',
