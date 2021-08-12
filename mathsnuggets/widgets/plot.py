@@ -20,10 +20,12 @@ class Plot(form.Form):
     equal_aspect = fields.Boolean("Equal aspect", default=False)
 
     template = """
-        <div v-if="config.edit">
-            Plot `functions` for `x` between `x_min` and `x_max`
-            `equal_aspect`
-        </div>
+        <widget-settings>
+            <config-option name="Functions">`functions`</config-option>
+            <config-option name="x min">`x_min`</config-option>
+            <config-option name="x max">`x_max`</config-option>
+            <config-option name="Equal aspect">`equal_aspect`</config-option>
+        </widget-settings>
         `plot`
     """
 
