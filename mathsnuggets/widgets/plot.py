@@ -17,14 +17,16 @@ class Plot(form.Form):
     x = fields.Expression("Variable", default="x")
     x_min = fields.Expression("x min", default="-10")
     x_max = fields.Expression("x max", default="10")
-    equal_aspect = fields.Boolean("Equal aspect", default=False)
+    y_min = fields.Expression("y min", default="-10")
+    y_max = fields.Expression("y max", default="10")
 
     template = """
         <widget-settings>
             <config-option name="Functions">`functions`</config-option>
             <config-option name="x min">`x_min`</config-option>
             <config-option name="x max">`x_max`</config-option>
-            <config-option name="Equal aspect">`equal_aspect`</config-option>
+            <config-option name="y min">`y_min`</config-option>
+            <config-option name="y max">`y_max`</config-option>
         </widget-settings>
         `plot`
     """
@@ -44,7 +46,5 @@ class Plot(form.Form):
         backend.process_series()
         backend.fig.tight_layout()
         ax = backend.ax[0]
-        if self.equal_aspect:
-            ax.axis("tight")
-            ax.set_aspect("equal")
+        ax.set_ylim([float(self.y_min), float(self.y_max)])
         ax.grid(True)
