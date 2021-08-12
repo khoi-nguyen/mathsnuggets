@@ -15,10 +15,12 @@ class Plot(form.Form):
 
     functions = fields.ExpressionList("Functions", required=True)
     x = fields.Expression("Variable", default="x")
-    x_min = fields.Expression("x min", default="-10")
-    x_max = fields.Expression("x max", default="10")
-    y_min = fields.Expression("y min", default="-10")
-    y_max = fields.Expression("y max", default="10")
+    x_min = fields.Expression("x min", default="-10", numeric=True)
+    x_max = fields.Expression("x max", default="10", numeric=True)
+    y_min = fields.Expression("y min", default="-10", numeric=True)
+    y_max = fields.Expression("y max", default="10", numeric=True)
+    width = fields.Expression("Width", default="5", numeric=True)
+    height = fields.Expression("Height", default="5", numeric=True)
 
     template = """
         <widget-settings>
@@ -27,6 +29,8 @@ class Plot(form.Form):
             <config-option name="x max">`x_max`</config-option>
             <config-option name="y min">`y_min`</config-option>
             <config-option name="y max">`y_max`</config-option>
+            <config-option name="Width">`width`</config-option>
+            <config-option name="Height">`height`</config-option>
         </widget-settings>
         `plot`
     """
@@ -45,6 +49,7 @@ class Plot(form.Form):
         backend.matplotlib.use("agg")
         backend.process_series()
         backend.fig.tight_layout()
+        backend.fig.set_size_inches(self.width, self.height)
         ax = backend.ax[0]
-        ax.set_ylim([float(self.y_min), float(self.y_max)])
+        ax.set_ylim([self.y_min, self.y_max])
         ax.grid(True)
