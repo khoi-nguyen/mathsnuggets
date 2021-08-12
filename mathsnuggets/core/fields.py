@@ -154,6 +154,16 @@ class Expression(Field):
         }
 
 
+class StringList(Field):
+    def sanitize(self, expr):
+        return [e.strip() for e in expr.split(",")]
+
+    def export(self, value):
+        return {
+            "value": f"{','.join([str(v) for v in value])}",
+            "valid": value is not None,
+        }
+
 class ExpressionList(Field):
     def sanitize(self, expr):
         if isinstance(expr, str):
