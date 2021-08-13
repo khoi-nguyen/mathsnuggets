@@ -3,6 +3,7 @@
 Fields
 ======
 """
+import csv
 import io
 import re
 
@@ -164,6 +165,24 @@ class StringList(Field):
             "valid": value is not None,
         }
 
+
+class CSVData(Field):
+
+    csv = True
+
+    def sanitize(self, expr):
+        f = io.StringIO(expr)
+        return list(csv.reader(f, delimiter=","))
+
+    def export(self, value):
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerows(value)
+        return {
+            "value": output.getvalue(),
+            "valid": value is not None
+        }
+
 class ExpressionList(Field):
     def sanitize(self, expr):
         if isinstance(expr, str):
@@ -179,7 +198,6 @@ class ExpressionList(Field):
             "latex": latex,
             "valid": value is not None,
         }
-
 
 class NumberList(ExpressionList):
     def sanitize(self, expr):
