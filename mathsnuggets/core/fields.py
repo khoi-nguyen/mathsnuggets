@@ -172,7 +172,14 @@ class CSVData(Field):
 
     def sanitize(self, expr):
         f = io.StringIO(expr)
-        return list(csv.reader(f, delimiter=","))
+        data = list(csv.reader(f, delimiter=","))
+        for row in data:
+            for index, el in enumerate(row):
+                try:
+                    row[index] = float(el)
+                except ValueError:
+                    row[index] = el
+        return data
 
     def export(self, value):
         output = io.StringIO()
