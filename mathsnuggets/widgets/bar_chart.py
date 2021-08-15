@@ -1,11 +1,12 @@
-from matplotlib import pyplot
 import sympy
+from matplotlib import pyplot
 
 from mathsnuggets.core import fields, form
 
 
 class BarChart(form.Form):
     """Bar Chart"""
+
     data = fields.CSVData("Data", required=True)
     size = fields.Expression("Figure size", default="6.4", numeric=True)
     template = """

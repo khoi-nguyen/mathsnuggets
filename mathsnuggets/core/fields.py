@@ -171,6 +171,8 @@ class CSVData(Field):
     csv = True
 
     def sanitize(self, expr):
+        if isinstance(expr, list):
+            return expr
         f = io.StringIO(expr)
         data = list(csv.reader(f, delimiter=","))
         for row in data:
@@ -185,10 +187,8 @@ class CSVData(Field):
         output = io.StringIO()
         writer = csv.writer(output)
         writer.writerows(value)
-        return {
-            "value": output.getvalue(),
-            "valid": value is not None
-        }
+        return {"value": output.getvalue(), "valid": value is not None}
+
 
 class ExpressionList(Field):
     def sanitize(self, expr):
@@ -205,6 +205,7 @@ class ExpressionList(Field):
             "latex": latex,
             "valid": value is not None,
         }
+
 
 class NumberList(ExpressionList):
     def sanitize(self, expr):
