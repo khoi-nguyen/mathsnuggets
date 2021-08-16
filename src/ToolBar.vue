@@ -38,7 +38,7 @@ div
         .modal-card-body
           widget-select(@select:widget="changeWidget")
           widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload" if="widget")
-  clipboard.clipboard(:config="config")
+  clipboard.clipboard
 </template>
 
 <script>

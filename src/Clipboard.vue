@@ -1,12 +1,12 @@
 <template lang="pug">
 .clipboard
   draggable(v-model="clipboard" group="widgets")
-    node(v-bind="image" v-for="(image, i) in clipboard" component="widget")
+    widget(v-bind="image" v-for="(image, i) in clipboard" :state="{}")
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-import Node from './Node'
+import Widget from './Widget'
 
 export default {
   created () {
@@ -45,7 +45,7 @@ export default {
   },
   components: {
     draggable,
-    Node
+    Widget
   }
 }
 </script>
