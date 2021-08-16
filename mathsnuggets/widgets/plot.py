@@ -24,13 +24,13 @@ class Plot(form.Form):
 
     template = """
         <widget-settings>
-            <config-option name="Functions">`functions`</config-option>
-            <config-option name="x min">`x_min`</config-option>
-            <config-option name="x max">`x_max`</config-option>
-            <config-option name="y min">`y_min`</config-option>
-            <config-option name="y max">`y_max`</config-option>
-            <config-option name="Width">`width`</config-option>
-            <config-option name="Height">`height`</config-option>
+            ~functions~
+            ~x_min~
+            ~x_max~
+            ~y_min~
+            ~y_max~
+            ~width~
+            ~height~
         </widget-settings>
         `plot`
     """

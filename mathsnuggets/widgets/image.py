@@ -21,8 +21,8 @@ class Image(form.Form):
 
     template = """
         <widget-settings>
-            <config-option name="Zoom">`zoom`</config-option>
-            <config-option name="Position">`position`</config-option>
+            ~zoom~
+            ~position~
         </widget-settings>
         `image`
     """

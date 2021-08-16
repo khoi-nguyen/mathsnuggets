@@ -47,7 +47,7 @@ class MultipleChoice(form.MarkedForm):
         return f"""
             <p v-if="config.edit || payload.question">`question`</p>
             <widget-settings>
-                <config-option name="Correct Answer">`correct_answer`</config-option>
+                ~correct_answer~
             </widget-settings>
             <survey
                 :name="payload.name"

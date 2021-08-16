@@ -86,6 +86,15 @@ class Form:
         return self._template(self.template)
 
     def _template(self, string):
+        def option_to_field(match):
+            field = dict(getattr(type(self), match.group(1)))
+            return f"""
+                <config-option name="{field['label']}">
+                    `{match.group(1)}`
+                </config-option>
+            """
+        string = re.sub(r"~([a-zA-Z0-9_]*)~", option_to_field, string)
+
         def field_to_xml(match):
             field = dict(getattr(type(self), match.group(1)))
             payload = "computed" if field.get("computed") else "payload"

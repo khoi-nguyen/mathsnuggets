@@ -13,7 +13,7 @@ class Factorise(form.MarkedForm):
     marked_question = fields.Boolean("Marked question", default=False)
     template = """
         <widget-settings>
-            <config-option name="Marked Question">`marked_question`</config-option>
+            ~marked_question~
         </widget-settings>
         <div>Factorise `expression`</div>
         <div v-if="!payload.marked_question">`solution`</div>

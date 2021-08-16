@@ -11,8 +11,8 @@ class PieChart(form.Form):
     size = fields.Expression("Figure size", default="6.4", numeric=True)
     template = """
         <widget-settings>
-            <config-option name="Data">`data`</config-option>
-            <config-option name="Size">`size`</config-option>
+            ~data~
+            ~size~
         </widget-settings>
         `pie_chart`
     """
