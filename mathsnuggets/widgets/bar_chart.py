@@ -1,4 +1,3 @@
-import sympy
 from matplotlib import pyplot
 
 from mathsnuggets.core import fields, form

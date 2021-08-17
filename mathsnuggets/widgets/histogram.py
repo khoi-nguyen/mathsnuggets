@@ -2,6 +2,7 @@ from matplotlib import pyplot
 
 from mathsnuggets.core import fields, form
 
+
 class Histogram(form.Form):
     """Histogram"""
 
@@ -21,6 +22,6 @@ class Histogram(form.Form):
         bins = [r[0] for r in self.data]
         bins.append(self.data[-1][1])
         x = []
-        for left, right, frequency in self.data:
+        for left, _, frequency in self.data:
             x += [left] * int(frequency)
         pyplot.hist(x, density=True, bins=bins)

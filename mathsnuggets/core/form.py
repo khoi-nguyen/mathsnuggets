@@ -93,6 +93,7 @@ class Form:
                     `{match.group(1)}`
                 </config-option>
             """
+
         string = re.sub(r"~([a-zA-Z0-9_]*)~", option_to_field, string)
 
         def field_to_xml(match):
