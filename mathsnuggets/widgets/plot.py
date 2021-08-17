@@ -19,8 +19,8 @@ class Plot(form.Form):
     x_max = fields.Expression("x max", default="10", numeric=True)
     y_min = fields.Expression("y min", default="-10", numeric=True)
     y_max = fields.Expression("y max", default="10", numeric=True)
-    width = fields.Expression("Width", default="5", numeric=True)
     height = fields.Expression("Height", default="5", numeric=True)
+    ratio = fields.Expression("Ratio", default="1", numeric=True)
 
     template = """
         <widget-settings>
@@ -29,11 +29,20 @@ class Plot(form.Form):
             ~x_max~
             ~y_min~
             ~y_max~
-            ~width~
             ~height~
+            ~ratio~
         </widget-settings>
         `plot`
     """
+
+    @property
+    def width(self):
+        return float(
+            (self.x_max - self.x_min)
+            / self.ratio
+            * self.height
+            / (self.y_max - self.y_min)
+        )
 
     @fields.computed("Plot", field=fields.Html, nohide=True)
     @fields.figure
