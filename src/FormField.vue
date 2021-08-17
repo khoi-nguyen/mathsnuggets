@@ -136,7 +136,11 @@ export default {
         displayMode: this.displayMode || this.computed,
         throwOnError: false,
         macros: {
-          '\\dd': '\\, \\mathrm{d}'
+          '\\dd': '{\\, \\mathrm{d}}',
+          '\\C': '{\\mathbb C}',
+          '\\N': '{\\mathbb N}',
+          '\\R': '{\\mathbb R}',
+          '\\Z': '{\\mathbb Z}'
         }
       }
     }
