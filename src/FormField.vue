@@ -4,7 +4,10 @@ span(:name="name" v-if="!hidden")
     b-slider(:min="-12" :max="12" :ticks="true" v-model="rangeValue" lazy)
   .field(v-if="constraint || type == 'Boolean'")
     b-checkbox(v-model="checkboxValue" :disabled="protected") {{ label }}
-  span(v-if="!computed && !constraint && !random && type != 'Boolean'")
+  span(v-if="type === 'CSVData'")
+    b-button(@click="modal = true")
+      b-icon(pack="fas" icon="edit")
+  span(v-if="!computed && !constraint && !random && type != 'Boolean' && type != 'CSVData'")
     component.field(
       v-if="editing || !html"
       v-bind="attrs"
@@ -28,6 +31,16 @@ span(:name="name" v-if="!hidden")
   .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success" v-if="!showComputed && !nohide" icon-left="square-root-alt" icon-pack="fas") {{ label }}
     .computed-field(v-html="html" v-if="showComputed || nohide")
+  b-modal(:active.sync="modal" has-modal-card)
+      .modal-card
+        header.modal-card-head
+          h3.modal-card-title {{ label }}
+          button.delete(@click="modal = false")
+        section.modal-card-body
+          textarea.is-family-monospace(:value="value" @input="inputValue = $event.target.value" rows="10")
+        footer.modal-card-foot
+          b-button(@click="$emit('input', inputValue); modal = false" type="is-success") Edit
+          b-button(@click="modal = false" type="is-danger") Cancel
 </template>
 
 <script>
@@ -140,6 +153,7 @@ export default {
       error: '',
       editing: !this.value && !this.default,
       inputValue: this.value,
+      modal: false,
       showComputed: false,
       traceback: ''
     }
