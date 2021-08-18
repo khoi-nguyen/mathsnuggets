@@ -3,7 +3,7 @@ import sympy
 from mathsnuggets.core import fields, form, tools
 
 
-class Integrate(form.Form):
+class Integrate(form.MarkedForm):
     """Integrate"""
 
     template = """
@@ -18,6 +18,13 @@ class Integrate(form.Form):
             between `a` and `b`
         </span>
         <span v-if="!payload.marked_question">`integral`</span>
+        <survey
+            :name="payload.name"
+            :correct="computed.correct"
+            v-if="payload.marked_question"
+            :value="payload.answer">
+            Solution(s): `answer`
+        </survey>
     """
 
     function = fields.Expression("Function")
