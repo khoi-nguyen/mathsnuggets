@@ -1,7 +1,5 @@
 import statistics
 
-import sympy
-
 from mathsnuggets.core import fields, form
 from mathsnuggets.widgets import table
 
@@ -28,11 +26,15 @@ class Mean(form.Form):
 
     @fields.computed("Mean")
     def mean(self):
-        if self.data and len(self.data[0]) == 2:
-            total = sum([row[1] for row in self.data])
-            return sum([f * x for x, f in self.data]) / total
-        elif self.data and len(self.data[0]) == 3:
-            total = sum([row[2] for row in self.data])
-            return sum([(l + r) / 2 * f for l, r, f in self.data]) / total
+        if self.data:
+            total = sum([row[-1] for row in self.data])
+            return (
+                sum([statistics.mean(row[:-1]) * row[-1] for row in self.data]) / total
+            )
         elif self.numbers:
             return statistics.mean(self.numbers)
+
+
+def test_mean():
+    assert Mean(numbers="1,2,3,4,5").mean == 3
+    assert Mean(data="1,2\n2,3\n4,1").mean == 2

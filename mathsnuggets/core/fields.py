@@ -167,7 +167,6 @@ class StringList(Field):
 
 
 class CSVData(Field):
-
     def sanitize(self, expr):
         if isinstance(expr, list):
             return expr
