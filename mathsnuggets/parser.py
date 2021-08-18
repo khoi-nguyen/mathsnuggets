@@ -28,7 +28,9 @@ def simplify(expr):
                 sign *= -1
         return sympy.Mul(sign, sympy.Mul(*args, evaluate=False), evaluate=False)
     elif hasattr(expr, "args") and len(expr.args) > 1:
-        return expr.func(*[simplify(arg) for arg in expr.args], evaluate=False)
+        blacklist = [sympy.Integral, sympy.Tuple]
+        params = {} if expr.func in blacklist else {"evaluate": False}
+        return expr.func(*[simplify(arg) for arg in expr.args], *params)
     else:
         return expr
 

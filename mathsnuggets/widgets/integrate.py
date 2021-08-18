@@ -9,15 +9,13 @@ class Integrate(form.MarkedForm):
     template = """
         <widget-settings>
             ~marked_question~
+            ~function~
+            ~x~
+            ~a~
+            ~b~
         </widget-settings>
-        Integrate `function`
-        <span v-if="config.edit || payload.x != 'x'">
-            with respect to `x`
-        </span>
-        <span v-if="config.edit || (payload.a && payload.b)">
-            between `a` and `b`
-        </span>
-        <span v-if="!payload.marked_question">`integral`</span>
+        Calculate `integral`
+        <span v-if="!payload.marked_question">`solution`</span>
         <survey
             :name="payload.name"
             :correct="computed.correct"
@@ -27,7 +25,7 @@ class Integrate(form.MarkedForm):
         </survey>
     """
 
-    function = fields.Expression("Function")
+    function = fields.Expression("Function", required=True)
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     x = fields.Expression("x", default="x")
     a = fields.Expression("a")
@@ -42,12 +40,16 @@ class Integrate(form.MarkedForm):
     def correct(self):
         if not self.answer:
             return False
-        return tools.isequal(sympy.simplify(self.answer), self.integral)
+        return tools.isequal(sympy.simplify(self.answer), self.solution)
 
-    @fields.computed("Integral")
+    @fields.computed("Integral", nohide=True)
     def integral(self):
         params = (self.x, self.a, self.b) if self.has_limits else self.x
-        integral = sympy.Integral(self.function, params)
+        return sympy.Integral(self.function, params)
+
+    @fields.computed("Solution")
+    def solution(self):
+        integral = self.integral
         if not self.has_limits:
             integral += sympy.Symbol("c")
         return sympy.simplify(integral.doit())
