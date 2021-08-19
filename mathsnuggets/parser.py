@@ -30,7 +30,7 @@ def simplify(expr):
     elif hasattr(expr, "args") and len(expr.args) > 1:
         blacklist = [sympy.Integral, sympy.Tuple]
         params = {} if expr.func in blacklist else {"evaluate": False}
-        return expr.func(*[simplify(arg) for arg in expr.args], *params)
+        return expr.func(*[simplify(arg) for arg in expr.args], **params)
     else:
         return expr
 
