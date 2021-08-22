@@ -27,13 +27,15 @@ class SolutionBank(form.Form):
             "decision-maths-2",
         ],
     )
+    embed = fields.Boolean("Embed", default=False)
     exercise = fields.Field("Exercise", required=True)
+    height = fields.Expression("PDF height", default=600, numeric=True)
 
     template = """
         <widget-settings>
-            ~book~ ~exercise~
+            ~book~ ~exercise~ ~embed~ ~height~
         </widget-settings>
-        `link`
+        `solution_bank`
     """
 
     @property
@@ -45,7 +47,7 @@ class SolutionBank(form.Form):
         )
 
     @fields.computed("Solution bank", field=fields.Html, nohide=True)
-    def link(self):
+    def solution_bank(self):
         page = requests.get(self.scrap_url)
         if page.status_code != 200:
             raise ValueError(f"The book {self.book} does not exist")
@@ -54,6 +56,12 @@ class SolutionBank(form.Form):
         if not search:
             raise ValueError(f"The exercise {self.exercise} cannot be found")
         url = search.parent.get("href")
+        if self.embed:
+            return f"""
+                <object data="{url}" type="application/pdf" width="80%" height="{int(self.height)}">
+                    <embed src="{url}" type="application/pdf"/>
+                </object>
+            """
         return f"""
             <a href="{url}" target="_blank">Solution {self.exercise}</a>
         """
