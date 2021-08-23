@@ -58,8 +58,12 @@ class SolutionBank(form.Form):
         url = search.parent.get("href")
         if self.embed:
             return f"""
-                <object data="{url}" type="application/pdf" width="80%" height="{int(self.height)}">
-                    <embed src="{url}" type="application/pdf"/>
+                <object data="{url}"
+                    type="application/pdf"
+                    width="80%" height="{int(self.height)}"
+                    style="position:relative; z-index: 2">
+                        <embed src="{url}" type="application/pdf">
+                        </embed>
                 </object>
             """
         return f"""
