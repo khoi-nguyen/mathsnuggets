@@ -18,7 +18,7 @@ export default async function api (url, method = 'GET', payload = false, cache =
       }
     }
     const cached = localStorage.getItem(sessionKey)
-    if (cached !== null && cache) {
+    if (cached !== null && cache && !window.location.origin.includes('localhost')) {
       const cachedValue = JSON.parse(cached)
       if (Array.isArray(cachedValue) && Date.now() < cachedValue[0]) {
         return cachedValue[1]
