@@ -17,7 +17,7 @@ class Factorise(form.MarkedForm):
         </widget-settings>
         <div>Factorise `expression`</div>
         <div v-if="!payload.marked_question">`solution`</div>
-        <survey :name="payload.name"
+        <survey
             :correct="computed.correct"
             :value="payload.answer" v-else>
             Your answer: `answer`

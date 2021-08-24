@@ -17,7 +17,6 @@ class Integrate(form.MarkedForm):
         Calculate `integral`
         <span v-if="!payload.marked_question">`solution`</span>
         <survey
-            :name="payload.name"
             :correct="computed.correct"
             v-if="payload.marked_question"
             :value="payload.answer">

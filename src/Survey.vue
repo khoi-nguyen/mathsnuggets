@@ -1,6 +1,6 @@
 <template lang="pug">
   .container
-    div
+    div(v-if="config.edit || !lock")
       slot
       span
         span &nbsp;
@@ -11,6 +11,9 @@
         b-progress(:value="correctAnswers" :max="totalAnswers" :type="type")
       .column.is-narrow
         span {{ correctAnswers }} / {{ totalAnswers }}
+      .column.is-narrow
+        b-button(@click.prevent="toggleLockSurvey" :type="lock ? 'is-success' : 'is-danger'")
+          b-icon(pack="fas" :icon="lock ? 'lock-open' : 'lock'")
       .column.is-narrow.buttons(v-if="config.edit")
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
@@ -24,6 +27,7 @@ export default {
   props: {
     name: String,
     correct: Boolean,
+    lock: Boolean,
     maxAttempts: { type: Number, default: 3 },
     value: String
   },
@@ -60,9 +64,17 @@ export default {
       if (data.survey === this.name) {
         this.$set(this.voteData, data.user, data.value)
       }
+    },
+    lockToggled (data) {
+      if (data.survey === this.name) {
+        this.$emit('update:lock', data.value)
+      }
     }
   },
   methods: {
+    toggleLockSurvey () {
+      api(`surveys/${this.name}/lock`, 'POST', { value: !this.lock })
+    },
     deleteVotes () {
       api(`surveys/${this.name}`, 'DELETE')
       this.voteData = {}
@@ -80,8 +92,8 @@ export default {
   async mounted () {
     if (this.name && this.auth.loggedIn) {
       await this.getVoteData()
-      this.$socket.emit('join', this.name)
     }
+    this.$socket.emit('join', this.name)
     if (this.value) {
       // API calls are performed twice
       // since correct and value are not updated simultaneously

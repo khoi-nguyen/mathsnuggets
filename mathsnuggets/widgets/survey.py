@@ -28,7 +28,6 @@ class Survey(form.MarkedForm):
             ~marking_type~
         </widget-settings>
         <survey
-            :name="payload.name"
             :correct="computed.correct"
             :value="payload.answer">
             <span v-if="config.edit || payload.before">`before`</span>

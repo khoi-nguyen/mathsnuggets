@@ -17,7 +17,6 @@ class Equation(form.MarkedForm):
         <div v-if="!payload.marked_question">`solution`</div>
         <div v-else>
             <survey
-                :name="payload.name"
                 :correct="computed.correct"
                 :value="payload.answer">
                 Solution(s): `x` = `answer`

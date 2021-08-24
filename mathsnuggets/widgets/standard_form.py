@@ -12,7 +12,6 @@ class StandardForm(form.MarkedForm):
     template = """
         <p>Convert `expression` to standard form</p>
         <survey
-            :name="payload.name"
             :correct="computed.correct"
             :value="payload.answer">
             `answer`

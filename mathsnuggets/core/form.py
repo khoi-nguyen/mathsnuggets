@@ -134,6 +134,13 @@ class Form:
 
 class MarkedForm(Form):
     name = fields.Field("Form identifier")
+    lock = fields.Boolean("Lock", default=False)
+
+    def _template(self, string):
+        string = super()._template(string)
+        return string.replace(
+            "<survey", """<survey :name="payload.name" :lock.sync="payload.lock" """
+        )
 
     def validate(self):
         if not self.name:

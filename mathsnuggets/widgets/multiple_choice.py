@@ -50,7 +50,6 @@ class MultipleChoice(form.MarkedForm):
                 ~correct_answer~
             </widget-settings>
             <survey
-                :name="payload.name"
                 :correct="computed.correct"
                 :max-attempts="1"
                 :value="payload.answer">

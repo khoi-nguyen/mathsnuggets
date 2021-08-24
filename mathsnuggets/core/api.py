@@ -60,6 +60,14 @@ def cast_vote(survey):
     return flask.jsonify(dict(vote))
 
 
+@api.route("/surveys/<survey>/lock", methods=["POST"])
+def toggle_lock_survey(survey):
+    payload = flask.request.get_json()
+    payload["survey"] = survey
+    socketio.emit("lockToggled", payload, room=survey)
+    return flask.jsonify(payload)
+
+
 @socketio.on("join")
 def join(survey):
     flask_socketio.join_room(survey)
