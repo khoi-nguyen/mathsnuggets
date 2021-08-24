@@ -12,11 +12,11 @@ class MultipleChoice(form.MarkedForm):
     )
     question = fields.Markdown("Question")
 
-    option_a = fields.Markdown("Option A")
-    option_b = fields.Markdown("Option B")
-    option_c = fields.Markdown("Option C")
-    option_d = fields.Markdown("Option D")
-    option_e = fields.Markdown("Option E")
+    option_a = fields.Markdown("A")
+    option_b = fields.Markdown("B")
+    option_c = fields.Markdown("C")
+    option_d = fields.Markdown("D")
+    option_e = fields.Markdown("E")
 
     @property
     def template(self):
