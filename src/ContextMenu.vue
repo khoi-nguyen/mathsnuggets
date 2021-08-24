@@ -30,7 +30,7 @@ div.dropdown-content
   li.dropdown-item(@click="addChild('environment')")
     b-icon(pack="fas" icon="cube")
     span Add a block
-  li.dropdown-item(@click="addChild('speech-bubble', undefined, {width: 400, image: 'tuxie', position: 'right'})")
+  li.dropdown-item(@click="addChild('speech-bubble', undefined, {width: '400', image: 'tuxie', position: 'right'})")
     b-icon(pack="fas" icon="comment")
     span Add a speech bubble
   hr.dropdown-divider
