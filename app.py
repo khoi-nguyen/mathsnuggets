@@ -21,7 +21,6 @@ cache.cache.init_app(app)
 @app.route("/plot")
 @app.route("/resources")
 @app.route("/resources/")
-@app.route("/forms/<path:identifier>")
 @app.route("/resources/<path:identifier>")
 @app.route("/slideshow_builder")
 def frontend(identifier=False):
