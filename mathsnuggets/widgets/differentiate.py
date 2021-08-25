@@ -28,7 +28,7 @@ class Differentiate(form.Form):
     x = fields.Expression("x", default="x")
     n = fields.Expression("n", default="1")
 
-    @fields.computed("Derivative")
+    @fields.computed("Solution")
     def derivative(self):
         derivative = sympy.Derivative(self.function, self.x, self.n)
-        return sympy.Eq(derivative, derivative.doit())
+        return derivative.doit()
