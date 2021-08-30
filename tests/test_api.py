@@ -257,6 +257,6 @@ def test_delete_test_user(client, mock_mongo):
 
 
 def test_static_routes(client):
-    for route in ["/docs/", "/_static/jquery.js", "/slideshow_builder", "/favicon.ico"]:
+    for route in ["/docs/", "/_static/jquery.js", "/favicon.ico"]:
         response = get(client, route, False)
         assert response.status_code == 200
