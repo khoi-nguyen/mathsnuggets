@@ -38,13 +38,11 @@ div
         .modal-card-body
           widget-select(@select:widget="changeWidget")
           widget(:type="widget" :generator="true" :config="{edit: true}" :state="{}" :payload="widgetPayload" if="widget")
-  clipboard.clipboard
 </template>
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 
-import Clipboard from './Clipboard'
 import FormField from './FormField'
 import Node from './Node'
 import Widget from './Widget'
@@ -112,7 +110,6 @@ export default {
     ...mapActions('resource', ['loadSlideshow'])
   },
   components: {
-    Clipboard,
     FormField,
     Node,
     Widget,
@@ -122,13 +119,6 @@ export default {
 </script>
 
 <style scoped>
-.clipboard {
-  position: absolute;
-  opacity: 1;
-  z-index: 10000;
-  bottom: 0;
-  right: 0;
-}
 .tray {
   position: fixed;
   opacity: 1;

@@ -3,12 +3,14 @@
   .slides
     section(v-for="(slide, index) in children")
       node(component="slide" v-bind="slide" :position="`children.${index}`")
+  clipboard.clipboard
 </template>
 
 <script>
 import Reveal from 'reveal.js'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
+import Clipboard from './Clipboard'
 import Node from './Node'
 
 export default {
@@ -38,6 +40,7 @@ export default {
     Reveal.on('slidechanged', event => this.changeSlide(event.indexh))
   },
   components: {
+    Clipboard,
     Node
   }
 }
@@ -52,5 +55,12 @@ export default {
   height: 100%;
   padding: 0;
   text-align: left;
+}
+.clipboard {
+  position: absolute;
+  opacity: 1;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
 }
 </style>
