@@ -1,11 +1,14 @@
 from mathsnuggets.core import fields, form
 
+
 class Binary(form.MarkedForm):
     """Binary conversion"""
 
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression", required=True)
-    convert_to = fields.Select("Convert to", options=["binary", "decimal"], default="binary", required=True)
+    convert_to = fields.Select(
+        "Convert to", options=["binary", "decimal"], default="binary", required=True
+    )
 
     template = """
         Convert `expression` to `convert_to`
