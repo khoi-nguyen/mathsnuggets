@@ -15,10 +15,10 @@ class Youtube(form.Form):
     url = fields.Field("URL")
     zoom = fields.Expression("Zoom", default="1.0")
     template = """
-        <div v-if="config.edit">
-            URL: `url`
-            Zoom: `zoom`
-        </div>
+        <widget-settings>
+            ~url~
+            ~zoom~
+        </widget-settings>
         `video`
     """
 
