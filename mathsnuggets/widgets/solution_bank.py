@@ -27,9 +27,9 @@ class SolutionBank(form.Form):
             "decision-maths-2",
         ],
     )
-    embed = fields.Boolean("Embed", default=False)
+    embed = fields.Boolean("Embed", default=True)
     exercise = fields.Field("Exercise", required=True)
-    height = fields.Expression("PDF height", default=600, numeric=True)
+    height = fields.Expression("PDF height", default=800, numeric=True)
 
     template = """
         <widget-settings>
