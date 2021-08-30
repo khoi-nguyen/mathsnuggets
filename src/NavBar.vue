@@ -32,11 +32,6 @@ export default {
           icon: { pack: 'fas', icon: 'chalkboard-teacher' },
           attrs: { tag: 'router-link', to: '/resources' },
           text: 'Resources'
-        },
-        {
-          icon: { pack: 'fas', icon: 'info-circle' },
-          attrs: { tag: 'router-link', to: '/about' },
-          text: 'About'
         }
       ]
     }

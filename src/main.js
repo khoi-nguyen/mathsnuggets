@@ -14,7 +14,6 @@ import resource from './store/resource'
 
 const Vue = require('vue/dist/vue.min.js')
 const App = () => import('./App')
-const About = () => import('./About')
 const HomePage = () => import('./HomePage')
 const LoginPage = () => import('./LoginPage')
 const Resources = () => import('./Resources')
@@ -31,7 +30,6 @@ Vue.use(Vuex)
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/about', component: About },
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
   { path: '/resources/', component: Resources },

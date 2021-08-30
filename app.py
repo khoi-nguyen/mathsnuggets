@@ -16,13 +16,10 @@ api.socketio.init_app(app)
 cache.cache.init_app(app)
 
 
-@app.route("/about")
 @app.route("/login")
-@app.route("/plot")
 @app.route("/resources")
 @app.route("/resources/")
 @app.route("/resources/<path:identifier>")
-@app.route("/slideshow_builder")
 def frontend(identifier=False):
     return flask.send_from_directory("dist/", "index.html")
 
