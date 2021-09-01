@@ -54,7 +54,9 @@ export default {
         while (this.children.length < this.columnCount) {
           this.children.push([])
         }
-        this.save({ action: 'update', [`${this.position}.payload`]: payload })
+        if (this.position) {
+          this.save({ action: 'update', [`${this.position}.payload`]: payload })
+        }
       },
       deep: true
     }
