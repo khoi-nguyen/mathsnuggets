@@ -30,7 +30,6 @@ export default {
           const blob = item.getAsFile()
           const reader = new FileReader()
           reader.onload = function (e) {
-            console.log('Hello')
             this.clipboard.push({
               component: 'widget',
               type: 'Image',
