@@ -63,7 +63,7 @@ export default {
     draggableOptions () {
       return {
         delay: 200,
-        emptyInsertThreshold: 50,
+        emptyInsertThreshold: 100,
         ghostClass: 'has-background-white-ter',
         group: 'widgets'
       }

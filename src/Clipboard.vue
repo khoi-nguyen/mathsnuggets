@@ -1,12 +1,12 @@
 <template lang="pug">
 .clipboard
   draggable(v-model="clipboard" group="widgets")
-    widget(v-bind="image" v-for="(image, i) in clipboard" :state="{}")
+    node(v-bind="image" v-for="(image, i) in clipboard" :state="{}")
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-import Widget from './Widget'
+import Node from './Node'
 
 export default {
   created () {
@@ -30,6 +30,7 @@ export default {
           const blob = item.getAsFile()
           const reader = new FileReader()
           reader.onload = function (e) {
+            console.log('Hello')
             this.clipboard.push({
               component: 'widget',
               type: 'Image',
@@ -45,7 +46,7 @@ export default {
   },
   components: {
     draggable,
-    Widget
+    Node
   }
 }
 </script>
