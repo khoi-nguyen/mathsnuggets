@@ -1,6 +1,6 @@
 <template lang="pug">
   .container
-    div(v-if="config.edit || (!lock && !auth.loggedIn)")
+    div(v-if="config.edit || !lock")
       slot
       span
         span &nbsp;
