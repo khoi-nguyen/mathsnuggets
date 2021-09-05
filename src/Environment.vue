@@ -3,16 +3,15 @@
   widget-settings
     config-option(name="Icon")
       form-field(:editable="true" v-model="payload.icon" type="Field")
-  b-collapse.message.is-medium(:class="`is-${payload.style || 'primary'}`" :open="!payload.collapsed")
+  article.message(:class="`is-${payload.style || 'primary'}`")
     h3.message-header(slot="trigger")
       .columns
         .column.is-narrow(v-if="payload.icon")
           b-icon(pack="fas" :icon="payload.icon" :key="payload.icon")
         .column
           form-field(:editable="config.edit" v-model="payload.title" type="Markdown")
-    article
-      .message-body
-        slot
+    .message-body
+      slot
 </template>
 
 <script>
