@@ -42,9 +42,19 @@ class Survey(form.MarkedForm):
             return False
         elif self.marking_type == "Numerical":
             numbers = sympy.core.numbers
-            if self.answer.func not in [numbers.Float, numbers.Integer]:
+            if self.answer.func not in [
+                numbers.Float,
+                numbers.Integer,
+                numbers.One,
+                numbers.Zero,
+            ]:
                 return False
         elif self.marking_type == "Fraction":
             if not re.search(r"^[0-9\s/]*$", self._answer):
                 return False
         return tools.isequal(self.answer, self.correct_answer, self.max_error)
+
+
+def test_survey():
+    assert Survey(correct_answer="1", marking_type="Numerical", answer="1").correct
+    assert Survey(correct_answer="0", marking_type="Numerical", answer="0").correct
