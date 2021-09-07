@@ -8,7 +8,8 @@ const emptySlide = function () {
 const resource = {
   namespaced: true,
   state: {
-    children: [emptySlide(), emptySlide()]
+    children: [emptySlide(), emptySlide()],
+    saveStack: []
   },
   getters: {
     url (state, getters, rootState) {
@@ -19,6 +20,12 @@ const resource = {
   mutations: {
     addSlide (state) {
       state.children.push(emptySlide())
+    },
+    addToStack (state, element) {
+      state.saveStack.push(element)
+    },
+    clearStack (state) {
+      state.saveStack = []
     },
     insertSlide (state, index) {
       state.children.splice(index, 0, emptySlide())
@@ -54,7 +61,11 @@ const resource = {
       if (!_.isEqual(lastSlide, emptySlide())) {
         commit('addSlide')
       }
-      await api(getters.url, 'POST', patch)
+      commit('addToStack', patch)
+      setTimeout(async () => {
+        await api(getters.url, 'POST', state.saveStack)
+        commit('clearStack')
+      }, 200)
     }
   }
 }
