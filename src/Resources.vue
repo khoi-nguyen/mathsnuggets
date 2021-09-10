@@ -21,7 +21,7 @@ div
                 i.fa-4x.fas.fa-chalkboard-teacher
               .column
                 h3.title
-                  form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)")
+                  form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)" :editable="auth.loggedIn")
                 ul.is-small(v-if="auth.loggedIn")
                   li
                     form-field(type="Boolean" :value="slideshow.private" @input="editSlideshow(slideshow, 'private', $event)" label="Private")
