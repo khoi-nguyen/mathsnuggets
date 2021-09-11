@@ -1,11 +1,12 @@
 <template lang="pug">
 .clipboard
-  draggable(v-model="clipboard" group="widgets")
+  draggable(v-model="clipboard" :group="'widgets-slide-' + config.currentSlide")
     node(v-bind="image" v-for="(image, i) in clipboard" :state="{}")
 </template>
 
 <script>
 import draggable from 'vuedraggable'
+import { mapState } from 'vuex'
 import Node from './Node'
 
 export default {
@@ -19,6 +20,9 @@ export default {
     return {
       clipboard: []
     }
+  },
+  computed: {
+    ...mapState(['config'])
   },
   methods: {
     onPaste (event) {

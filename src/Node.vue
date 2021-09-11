@@ -67,7 +67,7 @@ export default {
         delay: 200,
         emptyInsertThreshold: 100,
         ghostClass: 'has-background-white-ter',
-        group: 'widgets'
+        group: 'widgets-slide-' + this.slide
       }
     },
     attrs () {
@@ -88,6 +88,9 @@ export default {
     },
     columnIndices () {
       return _.range(this.columnCount)
+    },
+    slide () {
+      return this.position ? this.position.split('.')[1] : this.config.currentSlide
     },
     ...mapState(['config'])
   },
