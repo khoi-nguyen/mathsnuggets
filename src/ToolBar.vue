@@ -65,6 +65,13 @@ export default {
     buttons () {
       return [
         {
+          click: this.saveSlideshow,
+          icon: 'save',
+          inverted: true,
+          type: 'is-primary',
+          hide: !this.auth.loggedIn
+        },
+        {
           click: this.toggleEdit,
           icon: 'edit',
           inverted: !this.config.edit,
@@ -107,7 +114,7 @@ export default {
     },
     ...mapActions('auth', ['changeNickname']),
     ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard']),
-    ...mapActions('resource', ['loadSlideshow'])
+    ...mapActions('resource', ['loadSlideshow', 'saveSlideshow'])
   },
   components: {
     FormField,
