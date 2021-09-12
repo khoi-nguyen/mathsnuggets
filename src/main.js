@@ -33,7 +33,8 @@ const routes = [
   { path: '/login', component: LoginPage },
   { path: '/resources', component: Resources },
   { path: '/resources/', component: Resources },
-  { path: '/resources/:url(.*)', component: Slideshow }
+  { path: '/resources/:url(.*/)', component: Resources },
+  { path: '/resources/:url(.*[^/])', component: Slideshow }
 ]
 
 const router = new VueRouter({

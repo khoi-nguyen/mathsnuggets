@@ -104,7 +104,7 @@ export default {
       deleteModal: false,
       modal: false,
       newUrl: '',
-      searchString: '',
+      searchString: this.$route.params.url || '',
       slideshows: []
     }
   },
