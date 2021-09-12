@@ -258,6 +258,19 @@ class Equation(Expression):
         return equation
 
 
+class Ratio(Field):
+    def sanitize(self, expr):
+        if isinstance(expr, str):
+            return [parse(e) for e in expr.split(":")]
+        return expr
+
+    def export(self, value):
+        return {
+            "value": f"{':'.join([str(v) for v in value])}",
+            "latex": f"{':'.join([sympy.latex(v) for v in value])}",
+            "valid": value is not None
+        }
+
 class RandomNumber(Field):
     """Random Number field"""
 
