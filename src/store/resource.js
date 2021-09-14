@@ -67,7 +67,7 @@ const resource = {
           await api(getters.url, 'POST', state.saveStack)
           commit('clearStack')
         }
-      }, 200)
+      }, 600)
       sendSaveStack()
     },
     async saveSlideshow ({ state, dispatch }) {
