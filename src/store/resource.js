@@ -40,13 +40,13 @@ const resource = {
   actions: {
     async insertSlide ({ commit, dispatch, rootState }) {
       const index = rootState.config.currentSlide
-      commit('insertSlide', index)
       dispatch('save', { action: 'insert', [`children.${index}`]: emptySlide() })
+      commit('insertSlide', index)
     },
     async deleteSlide ({ commit, dispatch, rootState }) {
       const index = rootState.config.currentSlide
-      commit('deleteSlide', index)
       dispatch('save', { action: 'delete', [`children.${index}`]: '' })
+      commit('deleteSlide', index)
     },
     async loadSlideshow ({ commit, state, getters }) {
       if (getters.url) {
@@ -62,10 +62,13 @@ const resource = {
         commit('addSlide')
       }
       commit('addToStack', patch)
-      setTimeout(async () => {
-        await api(getters.url, 'POST', state.saveStack)
-        commit('clearStack')
+      const sendSaveStack = _.debounce(async () => {
+        if (state.saveStack) {
+          await api(getters.url, 'POST', state.saveStack)
+          commit('clearStack')
+        }
       }, 200)
+      sendSaveStack()
     },
     async saveSlideshow ({ state, dispatch }) {
       await dispatch('save', {
