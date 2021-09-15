@@ -2,12 +2,9 @@ from mathsnuggets.core import fields, form
 
 
 def bin2float(binary):
-    if "." in binary:
-        pos = binary.find(".")
-        power = len(binary) - 1 - pos
-        return int(binary[:pos] + binary[pos + 1 :], 2) / 2 ** power
-    else:
-        return int(binary, 2)
+    pos = binary.find(".")
+    power = len(binary) - 1 - pos if pos > 0 else 0
+    return int(binary.replace(".", ""), 2) / 2 ** power
 
 
 class Binary(form.MarkedForm):
