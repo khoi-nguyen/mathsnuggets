@@ -1,6 +1,15 @@
 from mathsnuggets.core import fields, form
 
 
+def bin2float(binary):
+    if "." in binary:
+        pos = binary.find(".")
+        power = len(binary) - 1 - pos
+        return int(binary[:pos] + binary[pos + 1 :], 2) / 2 ** power
+    else:
+        return int(binary, 2)
+
+
 class Binary(form.MarkedForm):
     """Binary conversion"""
 
@@ -21,14 +30,16 @@ class Binary(form.MarkedForm):
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
-        if not self.answer:
+        if not self._answer:
             return False
         if self.convert_to == "binary":
-            return self.answer == int(bin(self.expression)[2:])
+            return bin2float(self._answer) == self.expression
         else:
-            return self.answer == int(self._expression, 2)
+            return self.answer == bin2float(self._expression)
 
 
 def test_binary():
     assert Binary(expression="8", convert_to="binary", answer="1000").correct
+    assert Binary(expression="0", convert_to="binary", answer="0").correct
     assert Binary(expression="1000", convert_to="decimal", answer="8").correct
+    assert Binary(expression="0.5", convert_to="binary", answer="0.1").correct
