@@ -62,7 +62,10 @@ const resource = {
         }
       }
     },
-    async save ({ state, commit, getters }, patch) {
+    async save ({ state, commit, getters, rootState }, patch) {
+      if (!rootState.auth.loggedIn) {
+        return false
+      }
       const lastSlide = state.children[state.children.length - 1]
       if (!_.isEqual(lastSlide, emptySlide())) {
         commit('addSlide')
