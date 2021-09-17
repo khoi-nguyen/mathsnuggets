@@ -268,8 +268,9 @@ class Ratio(Field):
         return {
             "value": f"{':'.join([str(v) for v in value])}",
             "latex": f"{':'.join([sympy.latex(v) for v in value])}",
-            "valid": value is not None
+            "valid": value is not None,
         }
+
 
 class RandomNumber(Field):
     """Random Number field"""
