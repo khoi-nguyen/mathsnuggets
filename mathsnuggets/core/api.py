@@ -68,6 +68,14 @@ def toggle_lock_survey(survey):
     return flask.jsonify(payload)
 
 
+@api.route("/change_slide", methods=["POST"])
+@flask_login.login_required
+def change_slide():
+    payload = flask.request.get_json()
+    socketio.emit("forceSlideChange", payload, room=payload["url"])
+    return flask.jsonify(payload)
+
+
 @socketio.on("join")
 def join(survey):
     flask_socketio.join_room(survey)

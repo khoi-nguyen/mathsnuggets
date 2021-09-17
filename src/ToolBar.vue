@@ -97,6 +97,14 @@ export default {
           type: 'is-warning'
         },
         {
+          click: this.forceSlideChange,
+          icon: 'slideshare',
+          inverted: true,
+          pack: 'fab',
+          type: 'is-success',
+          hide: !this.auth.loggedIn
+        },
+        {
           click: () => { this.solverModal = true },
           icon: 'python',
           inverted: true,
@@ -114,7 +122,7 @@ export default {
     },
     ...mapActions('auth', ['changeNickname']),
     ...mapMutations('config', ['toggleEdit', 'toggleWhiteboard']),
-    ...mapActions('resource', ['loadSlideshow', 'saveSlideshow'])
+    ...mapActions('resource', ['loadSlideshow', 'saveSlideshow', 'forceSlideChange'])
   },
   components: {
     FormField,

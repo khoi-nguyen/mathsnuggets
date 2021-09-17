@@ -48,6 +48,12 @@ const resource = {
       dispatch('save', { action: 'delete', [`children.${index}`]: '' })
       commit('deleteSlide', index)
     },
+    async forceSlideChange ({ rootState, getters }) {
+      await api('change_slide', 'POST', {
+        url: getters.url,
+        slide: rootState.config.currentSlide
+      })
+    },
     async loadSlideshow ({ commit, state, getters }) {
       if (getters.url) {
         const data = await api(getters.url)

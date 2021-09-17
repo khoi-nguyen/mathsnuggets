@@ -8,13 +8,14 @@
 
 <script>
 import Reveal from 'reveal.js'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 import Clipboard from './Clipboard'
 import Node from './Node'
 
 export default {
   computed: {
+    ...mapGetters('resource', ['url']),
     ...mapState(['auth', 'config']),
     ...mapState('resource', ['children'])
   },
@@ -22,8 +23,14 @@ export default {
     ...mapMutations('config', ['changeSlide']),
     ...mapActions('resource', ['loadSlideshow', 'save'])
   },
+  sockets: {
+    forceSlideChange (data) {
+      Reveal.slide(data.slide, 0, 0)
+    }
+  },
   async mounted () {
     await this.loadSlideshow()
+    this.$socket.emit('join', this.url)
     Reveal.initialize({
       center: false,
       hash: true,
