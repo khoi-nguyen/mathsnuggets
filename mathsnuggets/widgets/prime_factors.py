@@ -1,3 +1,4 @@
+import re
 import sympy
 
 from mathsnuggets.core import fields, form, tools
@@ -31,6 +32,8 @@ class PrimeFactors(form.MarkedForm):
     def correct(self):
         if self.answer is None or not is_prime_decomposition(self.answer):
             return False
+        if re.search(r"\b1\b", self._answer):
+            return False
         return tools.isequal(self.answer, self.integer, 0)
 
 
@@ -42,3 +45,5 @@ def test_prime_decomposition():
     assert not PrimeFactors(integer="13", answer="2^2*3").correct
     assert not PrimeFactors(integer="12", answer="3*4").correct
     assert not PrimeFactors(integer="2", answer="2^(1/2) * 2^(1/2)").correct
+    assert not PrimeFactors(integer="4", answer="2^2*1").correct
+    assert not PrimeFactors(integer="4", answer="1*2^2").correct
