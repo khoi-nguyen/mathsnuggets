@@ -2,11 +2,17 @@ import sympy
 
 from mathsnuggets.core import fields, form, tools
 
+
 class LcmHcf(form.MarkedForm):
     """LCM/HCF"""
+
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     numbers = fields.NumberList("Integer", required=True)
-    sought_quantity = fields.Select("Sought quantity", options=["lowest common multiple", "highest common factor"], required=True)
+    sought_quantity = fields.Select(
+        "Sought quantity",
+        options=["lowest common multiple", "highest common factor"],
+        required=True,
+    )
 
     template = """
         Find the `sought_quantity` of `numbers`

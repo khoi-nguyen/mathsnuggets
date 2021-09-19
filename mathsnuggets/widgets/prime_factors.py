@@ -6,9 +6,12 @@ from mathsnuggets.core import fields, form, tools
 def is_prime_decomposition(expr):
     numbers = sympy.core.numbers
     if expr.func == sympy.Mul:
-        return not False in [is_prime_decomposition(a) for a in expr.args]
+        return False not in [is_prime_decomposition(a) for a in expr.args]
     elif expr.func == sympy.Pow:
-        return sympy.isprime(expr.args[0]) and expr.args[1].func in [numbers.Integer, numbers.One]
+        return sympy.isprime(expr.args[0]) and expr.args[1].func in [
+            numbers.Integer,
+            numbers.One,
+        ]
     elif expr.func in [numbers.Integer]:
         return sympy.isprime(expr)
     return False
