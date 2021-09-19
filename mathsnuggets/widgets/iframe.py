@@ -6,7 +6,7 @@ class Iframe(form.Form):
 
     url = fields.Field("URL", required=True)
     width = fields.Field("Width", default="90%")
-    height = fields.Field("Height", default="600")
+    height = fields.Field("Height", default="875")
 
     template = """
         <widget-settings>
