@@ -45,7 +45,7 @@ class CircleEquation(form.Form):
     def radius(self):
         return self.solution["radius"]
 
-    r = fields.RandomNumber("r")
+    r = fields.RandomNumber("r", default="1, 10")
     a = fields.RandomNumber("a")
     b = fields.RandomNumber("b")
     c = fields.RandomNumber("c")
