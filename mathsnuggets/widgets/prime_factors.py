@@ -27,7 +27,7 @@ class PrimeFactors(form.MarkedForm):
         </survey>
     """
 
-    @fields.computed("Correct", fields.Boolean)
+    @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
         if self.answer is None or not is_prime_decomposition(self.answer):
             return False
