@@ -36,12 +36,12 @@ class Equation(form.MarkedForm):
     def correct(self):
         if not self.answer:
             return False
-        # Prevent user from just copying the equation
-        for sol in self.answer:
-            if len(sol.atoms(sympy.Symbol)):
-                return False
         solution = sympy.solveset(self.equation, self.x)
         sol_count = len(solution.args)
+        # Prevent user from just copying the equation
+        for sol in self.answer:
+            if len(sol.atoms(sympy.Symbol)) or sol not in solution:
+                return False
         return len(solution.intersect(sympy.FiniteSet(*self.answer)).args) >= sol_count
 
     @fields.computed("Solution")
@@ -79,3 +79,5 @@ def test_equation():
     assert isinstance(Equation(equation="x^3 - 5x^2 + 6x").solution, list)
     assert isinstance(Equation(equation="x(x-1)(x-2)(x-3)").solution, sympy.FiniteSet)
     assert isinstance(Equation(equation="sin(x)").solution, sympy.Union)
+    assert Equation(equation="x(x-1)(x-2)(x-3)", answer="0,1,2,3").correct
+    assert not Equation(equation="x^2-5x+6", answer="2,3,0").correct
