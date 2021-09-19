@@ -3,6 +3,7 @@ import sympy
 from mathsnuggets.core import fields
 from mathsnuggets.widgets import survey
 
+
 class Ratio(survey.Survey):
     """Marked question with ratio"""
 
@@ -15,7 +16,9 @@ class Ratio(survey.Survey):
             return False
         if len(self.answer) != len(self.correct_answer):
             return False
-        coefficients = {sympy.simplify(a / b) for (a, b) in zip(self.answer, self.correct_answer)}
+        coefficients = {
+            sympy.simplify(a / b) for (a, b) in zip(self.answer, self.correct_answer)
+        }
         return len(coefficients) == 1
 
 
