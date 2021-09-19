@@ -204,6 +204,14 @@ class ExpressionList(Field):
         }
 
 
+class Set(ExpressionList):
+    def sanitize(self, expr):
+        if isinstance(expr, str):
+            expr = expr.replace('{', '').replace('}', '')
+            return {parse(e) for e in expr.split(",")}
+        return expr
+
+
 class NumberList(ExpressionList):
     def sanitize(self, expr):
         if isinstance(expr, str):
