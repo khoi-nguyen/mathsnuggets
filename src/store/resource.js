@@ -39,14 +39,12 @@ const resource = {
   },
   actions: {
     async insertSlide ({ commit, dispatch, rootState }) {
-      const index = rootState.config.currentSlide
-      dispatch('save', { action: 'insert', [`children.${index}`]: emptySlide() })
-      commit('insertSlide', index)
+      commit('insertSlide', rootState.config.currentSlide)
+      dispatch('saveSlideshow')
     },
     async deleteSlide ({ commit, dispatch, rootState }) {
-      const index = rootState.config.currentSlide
-      dispatch('save', { action: 'delete', [`children.${index}`]: '' })
-      commit('deleteSlide', index)
+      commit('deleteSlide', rootState.config.currentSlide)
+      dispatch('saveSlideshow')
     },
     async forceSlideChange ({ rootState, getters }) {
       await api('change_slide', 'POST', {
