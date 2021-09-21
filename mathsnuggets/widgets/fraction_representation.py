@@ -20,10 +20,12 @@ class FractionRepresentation(form.Form):
     width = fields.Expression("Figure width", default="360")
 
     template = """
-        <div v-if="config.edit">
-            <p>`fraction_1` x `fraction_2`</p>
-            <p>Dimensions: `width` x `height`</p>
-        </div>
+        <widget-settings>
+            ~fraction_1~
+            ~fraction_2~
+            ~width~
+            ~height~
+        </widget-settings>
         `figure`
     """
 
