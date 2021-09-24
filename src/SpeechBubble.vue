@@ -27,7 +27,7 @@ export default {
   props: { payload: { type: Object, default: () => {} } },
   data () {
     return {
-      images: ['tuxie', 'jigglypuff', 'pikachu', 'bacon', 'parrot', 'koi']
+      images: ['tuxie', 'jigglypuff', 'pikachu', 'bacon', 'parrot', 'koi', 'cat']
     }
   },
   components: {
