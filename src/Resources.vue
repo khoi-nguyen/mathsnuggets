@@ -14,10 +14,20 @@ div
           input.input(type="text" placeholder="Search" v-model="searchString")
           span.icon.is-left
             i.fas.fa-search(aria-hidden='true')
-      .panel-tabs
-        router-link(:to="parentFolder" v-if="parentFolder") ..
-        router-link(v-for="folder in folders" :to="`${urlPrefix}${folder}/`") {{ folder }}
-      div(v-for="slideshow in filteredSlideshows")
+      router-link(:to="parentFolder" v-if="parentFolder")
+        .columns.is-vcentered
+          .column.is-narrow.is-narrow.has-text-centered
+            i.fa-4x.fas.fa-folder
+          .column
+            h3.title ..
+      div(v-for="folder in folders")
+        router-link(:to="urlPrefix + folder + '/'")
+          .columns.is-vcentered
+            .column.is-narrow.is-narrow.has-text-centered
+              i.fa-4x.fas.fa-folder
+            .column
+              h3.title {{ folder }}
+      div(v-for="slideshow in slideshowsInFolder")
         a(:href="`/resources/${slideshow.url}`").panel-block
           .columns.is-vcentered
             .column.is-narrow.is-narrow.has-text-centered
@@ -81,6 +91,13 @@ export default {
           return slideshow.url.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
         }
         return true
+      })
+    },
+    slideshowsInFolder () {
+      return this.filteredSlideshows.filter((slideshow) => {
+        const relativeUrl = slideshow.url.replace(this.$route.params.url || '', '')
+        const folder = relativeUrl.substring(0, relativeUrl.indexOf('/'))
+        return !folder
       })
     },
     folders () {
