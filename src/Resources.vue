@@ -9,25 +9,28 @@ div
   .container
     .panel
       p.panel-heading Lessons
-        .panel-block
-          p.control.has-icons-left
-            input.input(type="text" placeholder="Search" v-model="searchString")
-            span.icon.is-left
-              i.fas.fa-search(aria-hidden='true')
-        div(v-for="slideshow in filteredSlideshows")
-          a(:href="`/resources/${slideshow.url}`").panel-block
-            .columns.is-vcentered
-              .column.is-narrow.is-narrow.has-text-centered
-                i.fa-4x.fas.fa-chalkboard-teacher
-              .column
-                h3.title
-                  form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)" :editable="auth.loggedIn")
-                ul.is-small(v-if="auth.loggedIn")
-                  li
-                    form-field(type="Boolean" :value="slideshow.private" @input="editSlideshow(slideshow, 'private', $event)" label="Private")
-                  li
-                    b-icon(pack="fas" icon="trash")
-                    span.link(@click.prevent="openDeleteModal(slideshow)") Delete slideshow
+      .panel-block
+        p.control.has-icons-left
+          input.input(type="text" placeholder="Search" v-model="searchString")
+          span.icon.is-left
+            i.fas.fa-search(aria-hidden='true')
+      .panel-tabs
+        router-link(:to="parentFolder" v-if="parentFolder") ..
+        router-link(v-for="folder in folders" :to="`${urlPrefix}${folder}/`") {{ folder }}
+      div(v-for="slideshow in filteredSlideshows")
+        a(:href="`/resources/${slideshow.url}`").panel-block
+          .columns.is-vcentered
+            .column.is-narrow.is-narrow.has-text-centered
+              i.fa-4x.fas.fa-chalkboard-teacher
+            .column
+              h3.title
+                form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)" :editable="auth.loggedIn")
+              ul.is-small(v-if="auth.loggedIn")
+                li
+                  form-field(type="Boolean" :value="slideshow.private" @input="editSlideshow(slideshow, 'private', $event)" label="Private")
+                li
+                  b-icon(pack="fas" icon="trash")
+                  span.link(@click.prevent="openDeleteModal(slideshow)") Delete slideshow
       div.panel-block(v-if="auth.loggedIn")
         button.button.is-primary.is-outlined.is-fullwidth(@click="modal = true") Create slideshow
   b-modal(:active.sync="modal" has-modal-card)
@@ -53,6 +56,7 @@ div
 </template>
 
 <script>
+import _ from 'lodash'
 import api from './ajax'
 import { mapState } from 'vuex'
 
@@ -69,13 +73,48 @@ export default {
         if (slideshow.private && !this.auth.loggedIn) {
           return false
         }
+        const url = this.$route.params.url
+        if (url && !slideshow.url.startsWith(url)) {
+          return false
+        }
         if (this.searchString) {
           return slideshow.url.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
         }
         return true
       })
     },
+    folders () {
+      return _.reduce(this.filteredSlideshows, (result, slideshow) => {
+        const relativeUrl = slideshow.url.replace(this.$route.params.url || '', '')
+        if (relativeUrl.indexOf('/')) {
+          const folder = relativeUrl.substring(0, relativeUrl.indexOf('/'))
+          if (!result.includes(folder) && folder) {
+            result.push(folder)
+          }
+        }
+        return result
+      }, [])
+    },
+    parentFolder () {
+      if (this.$route.params.url) {
+        const url = this.$route.params.url
+        const folder = url.substring(0, url.lastIndexOf('/', url.lastIndexOf('/') - 1))
+        return folder ? '/resources/' + folder + '/' : '/resources/'
+      }
+      return false
+    },
+    urlPrefix () {
+      if (this.$route.params.url) {
+        return `/resources/${this.$route.params.url}`
+      }
+      return '/resources/'
+    },
     ...mapState(['auth'])
+  },
+  watch: {
+    '$route.params.url' () {
+      this.searchString = ''
+    }
   },
   methods: {
     createSlideshow () {
@@ -104,7 +143,7 @@ export default {
       deleteModal: false,
       modal: false,
       newUrl: '',
-      searchString: this.$route.params.url || '',
+      searchString: '',
       slideshows: []
     }
   },
