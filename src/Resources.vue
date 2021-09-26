@@ -33,9 +33,11 @@ div
             .column.is-narrow.is-narrow.has-text-centered
               i.fa-4x.fas.fa-chalkboard-teacher
             .column
-              h3.title
-                form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)" :editable="auth.loggedIn")
+              h3.title {{ slideshow.url.split('/')[slideshow.url.split('/').length -1] }}
               ul.is-small(v-if="auth.loggedIn")
+                li
+                  b-icon(pack="fas" icon="location-arrow")
+                  form-field(type="Field" :value="slideshow.url" @input="editSlideshow(slideshow, 'url', $event)" :editable="auth.loggedIn")
                 li
                   form-field(type="Boolean" :value="slideshow.private" @input="editSlideshow(slideshow, 'private', $event)" label="Private")
                 li
@@ -98,7 +100,7 @@ export default {
         const relativeUrl = slideshow.url.replace(this.$route.params.url || '', '')
         const folder = relativeUrl.substring(0, relativeUrl.indexOf('/'))
         return !folder
-      })
+      }).sort()
     },
     folders () {
       return _.reduce(this.filteredSlideshows, (result, slideshow) => {
@@ -110,7 +112,7 @@ export default {
           }
         }
         return result
-      }, [])
+      }, []).sort()
     },
     parentFolder () {
       if (this.$route.params.url) {
