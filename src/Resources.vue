@@ -104,7 +104,8 @@ export default {
     },
     folders () {
       return _.reduce(this.filteredSlideshows, (result, slideshow) => {
-        const relativeUrl = slideshow.url.replace(this.$route.params.url || '', '')
+        const url = this.$route.params.url || ''
+        const relativeUrl = (slideshow.url || '').replace(url, '')
         if (relativeUrl.indexOf('/')) {
           const folder = relativeUrl.substring(0, relativeUrl.indexOf('/'))
           if (!result.includes(folder) && folder) {
