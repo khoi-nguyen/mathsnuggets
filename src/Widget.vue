@@ -14,6 +14,7 @@ import { mapState } from 'vuex'
 import VRuntimeTemplate from 'v-runtime-template'
 
 import api from './ajax'
+import BinaryConverter from './BinaryConverter.vue'
 import ConfigOption from './ConfigOption'
 import FormField from './FormField'
 import ErrorMessage from './ErrorMessage'
@@ -158,6 +159,7 @@ export default {
     }
   },
   components: {
+    BinaryConverter,
     ConfigOption,
     ErrorMessage,
     FormField,
