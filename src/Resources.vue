@@ -14,14 +14,14 @@ div
           input.input(type="text" placeholder="Search" v-model="searchString")
           span.icon.is-left
             i.fas.fa-search(aria-hidden='true')
-      router-link(:to="parentFolder" v-if="parentFolder")
+      router-link(:to="parentFolder" v-if="parentFolder").panel-block
         .columns.is-vcentered
           .column.is-narrow.is-narrow.has-text-centered
             i.fa-4x.fas.fa-folder
           .column
             h3.title ..
       div(v-for="folder in folders")
-        router-link(:to="urlPrefix + folder + '/'")
+        router-link.panel-block(:to="urlPrefix + folder + '/'")
           .columns.is-vcentered
             .column.is-narrow.is-narrow.has-text-centered
               i.fa-4x.fas.fa-folder
