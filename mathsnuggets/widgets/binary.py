@@ -27,7 +27,7 @@ class Binary(form.MarkedForm):
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
-        if not self._answer:
+        if not getattr(self, "_answer", False):
             return False
         if self.convert_to == "binary":
             return bin2float(self._answer) == self.expression
