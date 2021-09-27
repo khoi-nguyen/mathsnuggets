@@ -4,18 +4,19 @@ div.columns
     table.table.is-bordered.is-striped
       tr
         th.has-centered-text(v-for="(digit, i) in digits") {{ base ** (digits.length - 1 - i)  }}
-        th Decimal
+        th(v-if="showDecimal") Decimal
       tr
         td(v-for="(digit, i) in digits")
           b-button(@click="changeDigit(i)") {{ digit }}
-        td {{ decimalNumber }}
+        td(v-if="showDecimal") {{ decimalNumber }}
 </template>
 
 <script>
 export default {
   props: {
     bits: { type: Number, default: 4 },
-    base: { type: Number, default: 2 }
+    base: { type: Number, default: 2 },
+    showDecimal: { type: Boolean, default: true }
   },
   computed: {
     decimalNumber () {
