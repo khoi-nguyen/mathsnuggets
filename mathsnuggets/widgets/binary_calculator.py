@@ -1,5 +1,6 @@
 from mathsnuggets.core import fields, form
 
+
 class BinaryCalculator(form.MarkedForm):
     """Binary Calculator"""
 

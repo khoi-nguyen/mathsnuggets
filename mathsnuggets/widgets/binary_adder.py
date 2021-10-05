@@ -1,5 +1,6 @@
 from mathsnuggets.core import fields, form
 
+
 class BinaryAdder(form.Form):
     """Binary adder"""
 
