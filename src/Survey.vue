@@ -14,7 +14,7 @@
       .column.is-narrow
         b-button(@click.prevent="toggleLockSurvey" :type="lock ? 'is-success' : 'is-danger'")
           b-icon(pack="fas" :icon="lock ? 'lock-open' : 'lock'")
-      .column.is-narrow.buttons(v-if="config.edit")
+      .column.is-narrow.buttons
         b-button(@click.prevent="deleteVotes" type="is-danger") Reset
 </template>
 
