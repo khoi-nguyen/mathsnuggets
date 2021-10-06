@@ -28,7 +28,8 @@ div
         b-dropdown-item(value="darkorange") Orange
         b-dropdown-item(value="darkgreen") Green
         b-dropdown-item(value="black") Black
-        b-dropdown-item(value="rgba(241, 231, 64, 0.3)") Highlighter yellow
+        b-dropdown-item(value="rgba(241, 231, 64, 0.5)") Highlighter yellow
+        b-dropdown-item(value="rgba(93, 226, 60, 0.5)") Highlighter green
 </template>
 
 <script>
@@ -106,12 +107,13 @@ export default {
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
       this.canvas.freeDrawingBrush.color = this.color
-      this.canvas.freeDrawingBrush.width = 3
+      this.canvas.freeDrawingBrush.width = newColor.startsWith('rgba') ? 12 : 3
     }
   },
   watch: {
     color (newColor) {
       this.canvas.freeDrawingBrush.color = newColor
+      this.canvas.freeDrawingBrush.width = newColor.startsWith('rgba') ? 12 : 3
     },
     'config.currentSlide' (newValue, oldValue) {
       if (oldValue === parseInt(this.name.split('.')[1])) {
