@@ -28,6 +28,7 @@ div
         b-dropdown-item(value="darkorange") Orange
         b-dropdown-item(value="darkgreen") Green
         b-dropdown-item(value="black") Black
+        b-dropdown-item(value="rgba(241, 231, 64, 0.3)") Highlighter yellow
 </template>
 
 <script>
