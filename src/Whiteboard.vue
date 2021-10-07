@@ -107,13 +107,13 @@ export default {
     toggleDrawingMode () {
       this.canvas.isDrawingMode = !this.canvas.isDrawingMode
       this.canvas.freeDrawingBrush.color = this.color
-      this.canvas.freeDrawingBrush.width = newColor.startsWith('rgba') ? 30 : 3
+      this.canvas.freeDrawingBrush.width = this.color.startsWith('rgba') ? 30 : 2
     }
   },
   watch: {
     color (newColor) {
       this.canvas.freeDrawingBrush.color = newColor
-      this.canvas.freeDrawingBrush.width = newColor.startsWith('rgba') ? 30 : 3
+      this.canvas.freeDrawingBrush.width = newColor.startsWith('rgba') ? 30 : 2
     },
     'config.currentSlide' (newValue, oldValue) {
       if (oldValue === parseInt(this.name.split('.')[1])) {
