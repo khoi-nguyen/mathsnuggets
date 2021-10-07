@@ -30,6 +30,8 @@ div
         b-dropdown-item(value="black") Black
         b-dropdown-item(value="rgba(241, 231, 64, 0.3)") Highlighter yellow
         b-dropdown-item(value="rgba(93, 226, 60, 0.3)") Highlighter green
+        b-dropdown-item(value="rgba(243, 149, 57, 0.3)") Highlighter orange
+        b-dropdown-item(value="rgba(233, 79, 88, 0.3)") Highlighter red
 </template>
 
 <script>
