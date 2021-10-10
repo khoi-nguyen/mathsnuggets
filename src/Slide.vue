@@ -73,12 +73,15 @@ export default {
 .slide-contents select.field,
 .reveal .slide-contents span[nosave="true"] span.field.content .base,
 .reveal .slide-contents iframe,
+.slide-contents .thebelab-cell,
+.slide-contents button.thebelab-button,
 .slide-contents h3.message-header,
 .slide-contents .computed-field .base {
   z-index: 2;
 }
 .slide-contents select.field,
 .slide-contents textarea.field,
+.slide-contents .thebelab-cell,
 .slide-contents iframe {
   position: relative;
 }
