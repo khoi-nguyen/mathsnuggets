@@ -383,6 +383,16 @@ class Markdown(Field):
         }
 
 
+class Code(Markdown):
+    """Code field"""
+
+    def export(self, value):
+        original = value
+        value = "~~~python\n" + value + "\n~~~"
+        export = super().export(value)
+        export.update({"value": original})
+        return export
+
 class ObjectId(Field):
     """MongoDB object id"""
 
