@@ -42,6 +42,32 @@ def default(path="index.html"):
     return flask.send_from_directory(f"{folder}/{path[:slash]}", path[slash:])
 
 
+@app.route("/jupyter/<language>", methods=["GET"])
+def thebe(language):
+    config = """
+        <style type="text/css">
+        .CodeMirror {
+          font-size: 28px !important;
+        }
+        </style>
+        <script type="text/x-thebe-config">
+        {
+          bootstrap: true,
+          requestKernel: true,
+          binderOptions: {
+            repo: 'khoi-nguyen/teaching',
+            ref: 'main'
+          }
+        }
+        </script>
+        <script src="https://unpkg.com/thebe@latest/lib/index.js"></script>
+    """
+    return f"""{config}
+        <pre data-language="{language}" data-executable>
+            {flask.request.args.get("code", "")}
+        </pre>
+    """
+
 def init():
     if __name__ == "__main__":
         api.socketio.run(app, debug=True)

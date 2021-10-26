@@ -53,7 +53,4 @@ $weight-bold: 500;
 .title {
   font-weight: 400;
 }
-.CodeMirror {
-  font-size: 30px;
-}
 </style>
