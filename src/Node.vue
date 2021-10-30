@@ -102,7 +102,7 @@ export default {
         payload: event.payload || {},
         type: event.component === 'widget' ? event.type : undefined
       }
-      const lastColIndex = this.children.length - 1
+      const lastColIndex = this.columnCount - 1
       const colIndex = this.children[lastColIndex].length
       this.save({
         action: 'update',
