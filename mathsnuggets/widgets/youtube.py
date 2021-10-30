@@ -12,15 +12,9 @@ class Youtube(form.Form):
     """YouTube"""
 
     name = "YouTube"
-    url = fields.Field("URL")
-    zoom = fields.Expression("Zoom", default="1.0")
-    template = """
-        <widget-settings>
-            ~url~
-            ~zoom~
-        </widget-settings>
-        `video`
-    """
+    url = fields.Field("URL", setting=True)
+    zoom = fields.Expression("Zoom", default="1.0", setting=True)
+    template = "`video`"
 
     @property
     def height(self):

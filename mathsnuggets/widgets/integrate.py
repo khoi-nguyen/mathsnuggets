@@ -7,13 +7,6 @@ class Integrate(form.MarkedForm):
     """Integrate"""
 
     template = """
-        <widget-settings>
-            ~marked_question~
-            ~function~
-            ~x~
-            ~a~
-            ~b~
-        </widget-settings>
         Calculate `integral`
         <span v-if="!payload.marked_question">`solution`</span>
         <survey
@@ -24,12 +17,12 @@ class Integrate(form.MarkedForm):
         </survey>
     """
 
-    function = fields.Expression("Function", required=True)
+    function = fields.Expression("Function", required=True, setting=True)
     answer = fields.Expression("Your answer", nosave=True, editable=True)
-    x = fields.Expression("x", default="x")
-    a = fields.Expression("a")
-    b = fields.Expression("b")
-    marked_question = fields.Boolean("Marked question")
+    x = fields.Expression("x", default="x", setting=True)
+    a = fields.Expression("a", setting=True)
+    b = fields.Expression("b", setting=True)
+    marked_question = fields.Boolean("Marked question", setting=True)
 
     @property
     def has_limits(self):

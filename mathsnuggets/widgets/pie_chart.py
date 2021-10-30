@@ -6,15 +6,9 @@ from mathsnuggets.core import fields, form
 class PieChart(form.Form):
     """Pie Chart"""
 
-    data = fields.CSVData("Data", required=True)
-    size = fields.Expression("Figure size", default="6.4", numeric=True)
-    template = """
-        <widget-settings>
-            ~data~
-            ~size~
-        </widget-settings>
-        `pie_chart`
-    """
+    data = fields.CSVData("Data", required=True, setting=True)
+    size = fields.Expression("Figure size", default="6.4", numeric=True, setting=True)
+    template = "`pie_chart`"
 
     @fields.computed("Pie chart", field=fields.Html, nohide=True)
     @fields.figure

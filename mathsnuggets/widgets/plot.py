@@ -13,27 +13,16 @@ test = {"functions": "sin x"}
 class Plot(form.Form):
     """Plot functions"""
 
-    functions = fields.ExpressionList("Functions", required=True)
-    x = fields.Expression("Variable", default="x")
-    x_min = fields.Expression("x min", default="-10", numeric=True)
-    x_max = fields.Expression("x max", default="10", numeric=True)
-    y_min = fields.Expression("y min", default="-10", numeric=True)
-    y_max = fields.Expression("y max", default="10", numeric=True)
-    height = fields.Expression("Height", default="5", numeric=True)
-    ratio = fields.Expression("Ratio", default="1", numeric=True)
+    functions = fields.ExpressionList("Functions", required=True, setting=True)
+    x = fields.Expression("Variable", default="x", setting=True)
+    x_min = fields.Expression("x min", default="-10", numeric=True, setting=True)
+    x_max = fields.Expression("x max", default="10", numeric=True, setting=True)
+    y_min = fields.Expression("y min", default="-10", numeric=True, setting=True)
+    y_max = fields.Expression("y max", default="10", numeric=True, setting=True)
+    height = fields.Expression("Height", default="5", numeric=True, setting=True)
+    ratio = fields.Expression("Ratio", default="1", numeric=True, setting=True)
 
-    template = """
-        <widget-settings>
-            ~functions~
-            ~x_min~
-            ~x_max~
-            ~y_min~
-            ~y_max~
-            ~height~
-            ~ratio~
-        </widget-settings>
-        `plot`
-    """
+    template = "`plot`"
 
     @property
     def width(self):

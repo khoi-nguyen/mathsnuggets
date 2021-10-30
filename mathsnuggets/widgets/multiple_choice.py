@@ -8,7 +8,7 @@ class MultipleChoice(form.MarkedForm):
         "Your answer", nosave=True, options=["", "A", "B", "C", "D", "E"]
     )
     correct_answer = fields.Select(
-        "Correct Answer", options=["A", "B", "C", "D", "E"], default="A"
+        "Correct Answer", options=["A", "B", "C", "D", "E"], default="A", setting=True
     )
     question = fields.Markdown("Question")
 
@@ -46,9 +46,6 @@ class MultipleChoice(form.MarkedForm):
             )
         return f"""
             <p v-if="config.edit || payload.question">`question`</p>
-            <widget-settings>
-                ~correct_answer~
-            </widget-settings>
             <survey
                 :correct="computed.correct"
                 :max-attempts="1"

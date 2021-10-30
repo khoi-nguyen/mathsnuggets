@@ -9,8 +9,8 @@ class Survey(form.MarkedForm):
     """Marked question"""
 
     answer = fields.Expression("Your answer", nosave=True, editable=True)
-    correct_answer = fields.Expression("Correct Answer", required=True)
-    max_error = fields.Expression("Maximal error", default=0)
+    correct_answer = fields.Expression("Correct Answer", required=True, setting=True)
+    max_error = fields.Expression("Maximal error", default=0, setting=True)
     before = fields.Markdown("Before field text", default="Your answer:")
     after = fields.Markdown("After field text")
     question = fields.Markdown("Question")
@@ -18,15 +18,11 @@ class Survey(form.MarkedForm):
         "Marking type",
         options=["Default", "Numerical", "Fraction"],
         default="Default",
+        setting=True,
     )
 
     template = """
         <p v-if="config.edit || payload.question">`question`</p>
-        <widget-settings>
-            ~correct_answer~
-            ~max_error~
-            ~marking_type~
-        </widget-settings>
         <survey
             :correct="computed.correct"
             :value="payload.answer">

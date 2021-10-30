@@ -10,11 +10,8 @@ class Factorise(form.MarkedForm):
 
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression")
-    marked_question = fields.Boolean("Marked question", default=False)
+    marked_question = fields.Boolean("Marked question", default=False, setting=True)
     template = """
-        <widget-settings>
-            ~marked_question~
-        </widget-settings>
         <div>Factorise `expression`</div>
         <div v-if="!payload.marked_question">`solution`</div>
         <survey

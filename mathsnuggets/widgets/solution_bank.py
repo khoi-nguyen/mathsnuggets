@@ -10,6 +10,7 @@ class SolutionBank(form.Form):
     book = fields.Select(
         "Book",
         required=True,
+        setting=True,
         options=[
             "pure-maths-year-1",
             "pure-maths-year-2",
@@ -27,14 +28,11 @@ class SolutionBank(form.Form):
             "decision-maths-2",
         ],
     )
-    embed = fields.Boolean("Embed", default=True)
-    exercise = fields.Field("Exercise", required=True)
-    height = fields.Expression("PDF height", default=800, numeric=True)
+    embed = fields.Boolean("Embed", default=True, setting=True)
+    exercise = fields.Field("Exercise", required=True, setting=True)
+    height = fields.Expression("PDF height", default=800, numeric=True, setting=True)
 
     template = """
-        <widget-settings>
-            ~book~ ~exercise~ ~embed~ ~height~
-        </widget-settings>
         `solution_bank`
     """
 

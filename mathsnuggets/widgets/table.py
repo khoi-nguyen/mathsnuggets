@@ -4,14 +4,8 @@ from mathsnuggets.core import fields, form
 class Table(form.Form):
     "Table"
 
-    data = fields.CSVData("Data", required=True)
-
-    template = """
-        <widget-settings>
-            ~data~
-        </widget-settings>
-        `table`
-    """
+    data = fields.CSVData("Data", required=True, setting=True)
+    template = "`table`"
 
     @fields.computed("Table", field=fields.Html, nohide=True)
     def table(self):

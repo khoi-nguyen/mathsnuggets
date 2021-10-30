@@ -83,7 +83,12 @@ class Form:
 
     def __str__(self):
         """Transforms the object into a Vue template"""
-        return self._template(self.template)
+        template = self.template
+        settings = list(self._fields(lambda f: f.get("setting", False)))
+        if settings:
+            fields = " ".join([f"""~{name}~""" for name, _ in settings])
+            template = f"<widget-settings>{fields}</widget-settings>" + template
+        return self._template(template)
 
     def _template(self, string):
         def option_to_field(match):

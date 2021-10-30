@@ -14,20 +14,12 @@ def parse_fraction(expression):
 class FractionRepresentation(form.Form):
     """Fraction representation"""
 
-    fraction_1 = fields.Expression("Fraction (horizontal)", default="1")
-    fraction_2 = fields.Expression("Fraction (vertical)", default="1")
-    height = fields.Expression("Figure height", default="360")
-    width = fields.Expression("Figure width", default="360")
+    fraction_1 = fields.Expression("Fraction (horizontal)", default="1", setting=True)
+    fraction_2 = fields.Expression("Fraction (vertical)", default="1", setting=True)
+    height = fields.Expression("Figure height", default="360", setting=True)
+    width = fields.Expression("Figure width", default="360", setting=True)
 
-    template = """
-        <widget-settings>
-            ~fraction_1~
-            ~fraction_2~
-            ~width~
-            ~height~
-        </widget-settings>
-        `figure`
-    """
+    template = "`figure`"
 
     @fields.computed("Figure", field=fields.Html, nohide=True)
     def figure(self):

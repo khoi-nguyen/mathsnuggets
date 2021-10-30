@@ -14,18 +14,12 @@ class Image(form.Form):
     src = fields.Field("Image URL", required=True)
     height = fields.Expression("Original height", default=0)
     width = fields.Expression("Original width", default=0)
-    zoom = fields.Expression("Zoom", default=1)
+    zoom = fields.Expression("Zoom", default=1, setting=True)
     position = fields.Select(
-        "Position", options=["left", "right", "center"], default="center"
+        "Position", options=["left", "right", "center"], default="center", setting=True
     )
 
-    template = """
-        <widget-settings>
-            ~zoom~
-            ~position~
-        </widget-settings>
-        `image`
-    """
+    template = "`image`"
 
     @fields.computed("Image", field=fields.Html, nohide=True)
     def image(self):
