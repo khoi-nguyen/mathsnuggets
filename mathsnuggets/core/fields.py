@@ -367,7 +367,7 @@ class Markdown(Field):
             value,
             "html",
             format="md",
-            extra_args=["--katex", "--highlight-style", "pygments"],
+            extra_args=["-s", "--katex", "--highlight-style", "pygments"],
         ).rstrip()
         if (
             html.count("<p>") == 1
