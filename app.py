@@ -49,6 +49,9 @@ def thebe(language):
         .CodeMirror {
           font-size: 28px !important;
         }
+        .jp-OutputArea, .jp-RenderedText pre, .jp-RenderedLatex {
+          font-size: 25px !important;
+        }
         </style>
         <script type="text/x-thebe-config">
         {
