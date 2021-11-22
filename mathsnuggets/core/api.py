@@ -32,6 +32,13 @@ def count_votes(survey):
     return flask.jsonify([dict(s) for s in models.Vote.find({"survey": survey})])
 
 
+@api.route("/surveys/<survey>/value", methods=["GET"])
+def get_value(survey):
+    user = str(flask.request.cookies.get("voter_id"))
+    vote = models.Vote(user=user, survey=survey)
+    return flask.jsonify(dict(vote))
+
+
 @api.route("/surveys/<survey>", methods=["DELETE"])
 @flask_login.login_required
 def delete_votes(survey):
