@@ -123,7 +123,9 @@ export default {
         const surveyFieldName = surveyFields[0].name
         if (!(surveyFieldName in this.payload)) {
           const surveyData = await api(`surveys/${this.payload.name}/value`, 'GET', {}, false)
-          this.$set(this.payload, surveyFields[0].name, surveyData.value)
+          if (surveyData.value !== null) {
+            this.$set(this.payload, surveyFields[0].name, surveyData.value)
+          }
         }
       }
     }
