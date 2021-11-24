@@ -38,8 +38,8 @@ export default {
   },
   computed: {
     correctAnswers () {
-      return _.reduce(this.voteData, function (sum, value, user) {
-        return sum + (value ? 1 : 0)
+      return _.reduce(this.voteData, function (sum, correct, user) {
+        return sum + (correct ? 1 : 0)
       }, 0)
     },
     totalAnswers () {
@@ -62,7 +62,7 @@ export default {
   sockets: {
     voteReceived (data) {
       if (data.survey === this.name) {
-        this.$set(this.voteData, data.user, data.value)
+        this.$set(this.voteData, data.user, data.correct)
       }
     },
     lockToggled (data) {
@@ -97,7 +97,7 @@ export default {
     if (this.value) {
       // API calls are performed twice
       // since correct and value are not updated simultaneously
-      api(`surveys/${this.name}`, 'POST', { value: this.correct, maxAttempts: 2 * this.maxAttempts })
+      api(`surveys/${this.name}`, 'POST', { correct: this.correct, value: this.value, maxAttempts: 2 * this.maxAttempts })
     }
   }
 }

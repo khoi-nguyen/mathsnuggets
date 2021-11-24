@@ -57,11 +57,19 @@ def cast_vote(survey):
         vote.edit_count = -1
     vote.edit_count += 1
     payload = flask.request.get_json()
-    if not vote.value and vote.edit_count <= payload["maxAttempts"]:
+    if (
+        not getattr(vote, "correct", False)
+        and vote.edit_count <= payload["maxAttempts"]
+    ):
         vote.update(payload)
         socketio.emit(
             "voteReceived",
-            {"user": str(vote.user), "value": vote.value, "survey": survey},
+            {
+                "user": str(vote.user),
+                "correct": getattr(vote, "correct", False),
+                "value": vote.value,
+                "survey": survey,
+            },
             room=survey,
         )
     return flask.jsonify(dict(vote))

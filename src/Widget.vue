@@ -121,9 +121,9 @@ export default {
       const surveyFields = _.filter(this.widgetData.fields, f => f.nosave)
       if (surveyFields.length && this.payload.name) {
         const surveyFieldName = surveyFields[0].name
-        if (!(surveyFieldName in this.solverPayload)) {
+        if (!(surveyFieldName in this.payload)) {
           const surveyData = await api(`surveys/${this.payload.name}/value`, 'GET', {}, false)
-          this.$set(this.solverPayload, surveyFields[0].name, surveyData.value)
+          this.$set(this.payload, surveyFields[0].name, surveyData.value)
         }
       }
     }
