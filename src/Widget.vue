@@ -118,6 +118,14 @@ export default {
           this.$set(payload, fieldName, value)
         }
       })
+      const surveyFields = _.filter(this.widgetData.fields, f => f.nosave)
+      if (surveyFields.length && this.payload.name) {
+        const surveyFieldName = surveyFields[0].name
+        if (!(surveyFieldName in this.solverPayload)) {
+          const surveyData = await api(`survey/${this.payload.name}/value`, 'GET', {}, false)
+          this.$set(this.solverPayload, surveyFields[0].name, surveyData.value)
+        }
+      }
     }
   },
   watch: {
