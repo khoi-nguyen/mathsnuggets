@@ -5,7 +5,7 @@ div
     b-field
       b-numberinput(icon-pack="fas" :min="0" :max="9" :value="index" type="is-success" @input="changeCanvas")
     span &nbsp;
-    div(v-if="!readOnly")
+    div
       b-button(@click="toggleDrawingMode" type="is-success is-inverted")
         b-icon(pack="fas" icon="pen")
       b-button(@click="deleteObjects" type="is-danger is-inverted" v-if="!canvas.isDrawingMode")
@@ -60,9 +60,6 @@ export default {
     },
     currentBoard () {
       return this.boards[this.index]
-    },
-    readOnly () {
-      return !this.auth.loggedIn
     },
     ...mapState(['auth', 'config'])
   },
@@ -134,9 +131,7 @@ export default {
   mounted () {
     this.canvas = new fabric.Canvas(this.canvasId, { isDrawingMode: false })
     this.canvas.setDimensions({ width: 1920, height: 1080 })
-    if (!this.readOnly) {
-      this.toggleDrawingMode()
-    }
+    this.toggleDrawingMode()
     this.changeCanvas(0, false)
   }
 }
