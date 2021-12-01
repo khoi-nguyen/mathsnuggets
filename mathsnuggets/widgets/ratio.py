@@ -8,7 +8,7 @@ class Ratio(survey.Survey):
     """Marked question with ratio"""
 
     answer = fields.Ratio("Your answer", nosave=True, editable=True)
-    correct_answer = fields.Ratio("Correct Answer", required=True)
+    correct_answer = fields.Ratio("Correct Answer", required=True, setting=True)
 
     @fields.computed("Correct", field=fields.Boolean)
     def correct(self):
