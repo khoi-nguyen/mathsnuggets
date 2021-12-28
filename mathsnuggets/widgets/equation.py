@@ -22,14 +22,10 @@ class Equation(form.MarkedForm):
                 Solution(s): `x` = `answer`
             </survey>
         </div>
-        <div v-if="config.edit">
-            `show_graph`
-            `marked_question`
-        </div>
         <div v-if="payload.show_graph">`graph`</div>
     """
-    show_graph = fields.Boolean("Show graph", default=False)
-    marked_question = fields.Boolean("Marked question", default=False)
+    show_graph = fields.Boolean("Show graph", default=False, setting=True)
+    marked_question = fields.Boolean("Marked question", default=False, setting=True)
     h = fields.Expression("h", default="3")
 
     @fields.computed("Correct", field=fields.Boolean)
