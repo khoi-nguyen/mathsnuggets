@@ -57,9 +57,11 @@ def thebe(language):
         {
           bootstrap: true,
           requestKernel: true,
-          binderOptions: {
-            repo: 'khoi-nguyen/teaching',
-            ref: 'main'
+          kernelOptions: {
+            serverSettings: {
+             "baseUrl": "https://jupyter.mathsnuggets.co.uk",
+             "token": "token"
+            }
           }
         }
         </script>
