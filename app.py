@@ -5,6 +5,7 @@ BACK-END
 import os
 
 import flask
+import flask_login
 
 from mathsnuggets.core import api, cache
 
@@ -44,7 +45,25 @@ def default(path="index.html"):
 
 @app.route("/jupyter/<language>", methods=["GET"])
 def thebe(language):
-    config = """
+    repo = (
+        """
+        kernelOptions: {
+          serverSettings: {
+            baseUrl: "https://jupyter.mathsnuggets.co.uk",
+            token: "token"
+          }
+        }
+        """
+        if flask_login.current_user.is_authenticated
+        else """
+        binderOptions: {
+          repo: "khoi-nguyen/teaching",
+          ref: "main",
+        }
+    """
+    )
+    config = (
+        """
         <style type="text/css">
         .CodeMirror {
           font-size: 28px !important;
@@ -57,16 +76,14 @@ def thebe(language):
         {
           bootstrap: true,
           requestKernel: true,
-          kernelOptions: {
-            serverSettings: {
-             "baseUrl": "https://jupyter.mathsnuggets.co.uk",
-             "token": "token"
-            }
-          }
+          """
+        + repo
+        + """
         }
         </script>
         <script src="https://unpkg.com/thebe@latest/lib/index.js"></script>
     """
+    )
     return f"""{config}
         <pre data-language="{language}" data-executable>
             {flask.request.args.get("code", "")}
