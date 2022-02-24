@@ -28,9 +28,11 @@ span(:name="name" v-if="!hidden")
       @click="enterEditMode"
     )
     error-message(:message="error" :traceback="traceback" v-if="error")
-  .has-text-centered(v-if="computed && html" @click="showComputed = !showComputed")
+  .has-text-centered(v-if="computed && html && displayMode" @click="showComputed = !showComputed")
     b-button.computed-field(type="is-success" v-if="!showComputed && !nohide" icon-left="square-root-alt" icon-pack="fas") {{ label }}
     .computed-field(v-html="html" v-if="showComputed || nohide")
+  span(v-if="computed && html && !displayMode")
+    span.computed-field(v-html="html")
   b-modal(:active.sync="modal" has-modal-card)
       .modal-card
         header.modal-card-head
@@ -133,7 +135,7 @@ export default {
     },
     katexOptions () {
       return {
-        displayMode: this.displayMode || this.computed,
+        displayMode: this.displayMode,
         throwOnError: false,
         macros: {
           '\\dd': '{\\, \\mathrm{d}}',

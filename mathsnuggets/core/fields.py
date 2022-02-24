@@ -114,6 +114,7 @@ def computed(*args, **kwargs):
             """Computed Field"""
 
             computed = True
+            display_mode = True
             callback = staticmethod(function)
 
             def construct(self, *args, **kwargs):
