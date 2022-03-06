@@ -46,7 +46,7 @@ export default {
 
 <style scoped>
 .box.slide h2.title {
-  background-color: #172838;
+  background-color: #23373b;
   color: #ebf0ef;
   font-size: 3em;
   margin-bottom: 0.5em;
