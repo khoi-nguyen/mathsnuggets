@@ -140,8 +140,12 @@ export default {
         macros: {
           '\\dd': '{\\, \\mathrm{d}}',
           '\\C': '{\\mathbb C}',
+          '\\E': '{\\mathbb E}',
           '\\N': '{\\mathbb N}',
+          '\\P': '{\\mathbb P}',
+          '\\Q': '{\\mathbb Q}',
           '\\R': '{\\mathbb R}',
+          '\\V': '{\\mathbb V}',
           '\\Z': '{\\mathbb Z}'
         }
       }
