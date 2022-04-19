@@ -27,6 +27,7 @@ class SolutionBank(form.Form):
             "decision-maths-1",
             "decision-maths-2",
         ],
+        default="pure-maths-year-1",
     )
     embed = fields.Boolean("Embed", default=True, setting=True)
     exercise = fields.Field("Exercise", required=True, setting=True)
