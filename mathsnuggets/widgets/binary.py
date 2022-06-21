@@ -23,7 +23,7 @@ class Binary(form.MarkedForm):
         </survey>
     """
     
-    @fields.computed("Convert to", field=fields.Field)
+    @fields.computed("Convert to", field=fields.Field, nohide=True)
     def convert_to(self):
         if self.base == 2:
             return "binary"
