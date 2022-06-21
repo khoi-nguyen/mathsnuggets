@@ -39,7 +39,7 @@ class Binary(form.MarkedForm):
             return bin2float(self._answer) == self.expression
         if self.base == 10:
             return self.answer == bin2float(self._expression)
-        return int(self.answer, self.base) == self.expression
+        return int(self._answer, self.base) == self.expression
 
 
 def test_binary():
