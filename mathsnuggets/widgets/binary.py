@@ -12,10 +12,10 @@ class Binary(form.MarkedForm):
 
     answer = fields.Expression("Your answer", nosave=True, editable=True)
     expression = fields.Expression("Expression", required=True)
-    base = fields.Expression("Base", required=True, default="2", setting=True)
+    base = fields.Expression("Base", required=True, default="2")
 
     template = """
-        Convert `expression` to `convert_to`
+        Convert `expression` to base `base`
         <survey
             :correct="computed.correct"
             :value="payload.answer">
