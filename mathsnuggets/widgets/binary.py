@@ -43,8 +43,8 @@ class Binary(form.MarkedForm):
 
 
 def test_binary():
-    assert Binary(expression="8", convert_to="binary", answer="1000").correct
-    assert Binary(expression="0", convert_to="binary", answer="0").correct
-    assert Binary(expression="1000", convert_to="decimal", answer="8").correct
-    assert Binary(expression="0.5", convert_to="binary", answer="0.1").correct
+    assert Binary(expression="8", base="2", answer="1000").correct
+    assert Binary(expression="0", base="2", answer="0").correct
+    assert Binary(expression="1000", base="10", answer="8").correct
+    assert Binary(expression="0.5", base="2", answer="0.1").correct
     assert Binary(expression="7", base="7", answer="10").correct
