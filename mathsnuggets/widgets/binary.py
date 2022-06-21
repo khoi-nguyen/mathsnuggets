@@ -25,7 +25,7 @@ class Binary(form.MarkedForm):
     
     @fields.computed("Convert to", field=fields.Field, nohide=True)
     def convert_to(self):
-        if self.base == 2:
+        if self.base == 2 or not self.base:
             return "binary"
         if self.base == 10:
             return "decimal"
