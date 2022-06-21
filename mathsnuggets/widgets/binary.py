@@ -15,7 +15,7 @@ class Binary(form.MarkedForm):
     base = fields.Expression("Base", required=True, default="2")
 
     template = """
-        Convert `expression` to base `base`
+        Write `expression` in base `base`
         <survey
             :correct="computed.correct"
             :value="payload.answer">
