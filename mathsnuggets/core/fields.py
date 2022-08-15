@@ -10,6 +10,7 @@ import re
 import bcrypt
 import pypandoc
 import sympy
+from sympy.parsing import latex
 from bson import objectid as objectid
 from matplotlib import pyplot as pyplot
 
@@ -154,6 +155,13 @@ class Expression(Field):
             "latex": sympy.latex(value),
             "valid": value is not None,
         }
+    
+ 
+class LatexExpression(Expression):
+    """Mathematical expression entered as a LaTeX string"""
+    
+    def sanitize(self, expr):
+        return latex.parse(expr)
 
 
 class StringList(Field):
