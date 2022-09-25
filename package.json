@@ -54,7 +54,7 @@
     "fabric-history": "^1.6.0",
     "katex": "^0.12.0",
     "moment": "^2.27.0",
-    "reveal.js": "^4.1.3",
+    "reveal.js": "^4.3.0",
     "socket.io": "^3.0.4",
     "typeface-fira-sans": "0.0.75",
     "v-runtime-template": "^1.10.0",
