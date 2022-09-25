@@ -16,7 +16,7 @@ cycler==0.10.0
 dnspython==1.16.0
 docutils==0.16
 et-xmlfile==1.1.0
-eventlet==0.30.2
+eventlet==0.31.0
 execnet==1.8.0
 flake8==3.9.2
 flake8-absolute-import==1.0
