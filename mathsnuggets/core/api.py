@@ -112,9 +112,12 @@ def load_slideshow(url):
 @api.route("/slideshows/<path:url>", methods=["POST"])
 @flask_login.login_required
 def save_slideshow(url=False):
+    payload = flask.request.get_json()
+    metadata = payload.pop("metadata", False)
     slideshow = models.Slideshow(url=url)
-    slideshow.update(flask.request.get_json())
-    cache.delete_memoized(list_slideshows)
+    slideshow.update(payload)
+    if metadata:
+        cache.delete_memoized(list_slideshows)
     cache.delete_memoized(load_slideshow, url)
     return flask.jsonify(dict(slideshow))
 

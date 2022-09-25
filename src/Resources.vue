@@ -148,7 +148,7 @@ export default {
       this.deleteModal = false
     },
     async editSlideshow (slideshow, field, value) {
-      await api('slideshows/' + slideshow.url, 'POST', { [field]: value })
+      await api('slideshows/' + slideshow.url, 'POST', { [field]: value, metadata: true })
       this.$set(slideshow, field, value)
     },
     openDeleteModal (slideshow) {
