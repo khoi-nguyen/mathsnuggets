@@ -113,12 +113,13 @@ def load_slideshow(url):
 @flask_login.login_required
 def save_slideshow(url=False):
     payload = flask.request.get_json()
-    metadata = payload.pop("metadata", False)
+    metadata = payload.pop("metadata") if "metadata" in payload else False
     slideshow = models.Slideshow(url=url)
     slideshow.update(payload)
     if metadata:
         cache.delete_memoized(list_slideshows)
-    cache.delete_memoized(load_slideshow, url)
+    if url:
+        cache.delete_memoized(load_slideshow, url)
     return flask.jsonify(dict(slideshow))
 
 
