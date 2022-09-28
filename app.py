@@ -45,23 +45,6 @@ def default(path="index.html"):
 
 @app.route("/jupyter/<language>", methods=["GET"])
 def thebe(language):
-    repo = (
-        """
-        kernelOptions: {
-          serverSettings: {
-            baseUrl: "https://jupyter.mathsnuggets.co.uk",
-            token: "token"
-          }
-        }
-        """
-        if flask_login.current_user.is_authenticated
-        else """
-        binderOptions: {
-          repo: "khoi-nguyen/teaching",
-          ref: "main",
-        }
-    """
-    )
     config = (
         """
         <style type="text/css">
@@ -76,9 +59,10 @@ def thebe(language):
         {
           bootstrap: true,
           requestKernel: true,
-          """
-        + repo
-        + """
+          binderOptions: {
+            repo: "khoi-nguyen/teaching",
+            ref: "main",
+          }
         }
         </script>
         <script src="https://unpkg.com/thebe@latest/lib/index.js"></script>
