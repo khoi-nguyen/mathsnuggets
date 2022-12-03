@@ -97,7 +97,7 @@ def join(survey):
 
 
 @api.route("/slideshows", methods=["GET"])
-@cache.memoize(timeout=0)
+@cache.memoize()
 def list_slideshows():
     return flask.jsonify([dict(s) for s in models.Slideshow.find({})])
 
